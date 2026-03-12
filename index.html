@@ -187,6 +187,36 @@ textarea{resize:vertical;min-height:80px;}
 .contact-note{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mist);margin-top:14px;line-height:1.7;}
 .contact-note a{color:var(--gold);text-decoration:none;}
 
+/* ── CATEGORY TABS ──────────────────────────────────────────────────── */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.cat-tab{padding:7px 14px;border-radius:20px;border:1px solid var(--line);background:var(--surface);color:var(--mist);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s;}
+.cat-tab:hover{color:var(--ink);border-color:var(--gold);}
+.cat-tab.active{background:var(--gold-dim);color:var(--gold);border-color:rgba(200,168,75,.3);}
+
+/* ── UPSELL BLOCKS ───────────────────────────────────────────────────── */
+.upsell-block{margin-top:16px;padding:18px 20px;background:var(--cream);border:1px solid var(--line);border-radius:10px;text-align:left;}
+.upsell-label{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:8px;}
+.upsell-desc{font-size:.83rem;color:var(--mist);line-height:1.6;margin-bottom:12px;}
+.upsell-price-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-size:.84rem;color:var(--ink);font-weight:500;}
+.upsell-price-amt{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ink);}
+.upsell-btn{background:var(--ink) !important;color:var(--gold) !important;width:100%;}
+.upsell-btn-guia{background:var(--sage) !important;color:#fff !important;width:100%;}
+.upsell-btn-pack{background:transparent !important;border:1px solid var(--gold) !important;color:var(--gold) !important;width:100%;}
+
+/* ── MODALES ─────────────────────────────────────────────────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;max-width:520px;width:100%;padding:36px;box-shadow:0 8px 40px rgba(0,0,0,0.4);max-height:90vh;overflow-y:auto;}
+.modal-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:10px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.modal-body{font-size:.84rem;color:var(--mist);line-height:1.7;margin-bottom:18px;}
+.modal-body ul{margin-top:8px;padding-left:18px;list-style:disc;}
+.modal-body li{margin-bottom:6px;}
+.modal-body strong{color:var(--ink);}
+.modal-check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px;background:var(--cream);border-radius:8px;font-size:.83rem;color:var(--ink);cursor:pointer;}
+.modal-check-row input{width:16px;height:16px;margin-top:2px;flex-shrink:0;}
+
+/* ── FOOTER*/
 /* ── FOOTER ─────────────────────────────────────────────────────────────── */
 footer{background:var(--hdr-bg);padding:36px 40px;text-align:center;border-top:1px solid rgba(200,168,75,.12);}
 footer p{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2;}
@@ -314,18 +344,15 @@ footer a:hover{color:var(--gold);}
       <input class="doc-big" type="text" id="docInput"
         placeholder="Ej: contrato de alquiler de local comercial, NDA para startup, carta de renuncia...">
 
-      <div class="suggest-lbl">Opciones frecuentes — click para seleccionar:</div>
-      <div class="suggestions">
-        <span class="suggestion" onclick="setDoc('Contrato de alquiler de vivienda')">🏠 Alquiler vivienda</span>
-        <span class="suggestion" onclick="setDoc('Contrato de alquiler de local comercial')">🏪 Alquiler comercial</span>
-        <span class="suggestion" onclick="setDoc('Contrato freelance de servicios profesionales')">💼 Contrato freelance</span>
-        <span class="suggestion" onclick="setDoc('Acuerdo de confidencialidad NDA bilateral')">🔒 NDA / Confidencialidad</span>
-        <span class="suggestion" onclick="setDoc('Carta documento de reclamo fehaciente')">✉️ Carta documento</span>
-        <span class="suggestion" onclick="setDoc('Contrato de compraventa de vehículo automotor')">🚗 Compraventa vehículo</span>
-        <span class="suggestion" onclick="setDoc('Autorización de viaje para menor de edad')">✈️ Autorización menor</span>
-        <span class="suggestion" onclick="setDoc('Contrato de sociedad simple entre socios')">🤝 Sociedad simple</span>
-        <span class="suggestion" onclick="setDoc('Términos y condiciones para sitio web o app')">📱 Términos y condiciones</span>
-        <span class="suggestion" onclick="setDoc('Contrato de alquiler temporario turístico')">🏖️ Alquiler temporario</span>
+      <div class="suggest-lbl">Elegí una categoría o escribí directamente arriba:</div>
+      <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab active" onclick="setCat(this,'contratos')">📋 Contratos</button>
+        <button class="cat-tab" onclick="setCat(this,'freelance')">💼 Freelance</button>
+        <button class="cat-tab" onclick="setCat(this,'reclamos')">⚠️ Reclamos</button>
+        <button class="cat-tab" onclick="setCat(this,'personales')">👤 Personales</button>
+      </div>
+      <div class="suggestions" id="suggestBox">
+        <!-- se rellena por JS según categoría -->
       </div>
 
       <div class="suggest-lbl">País y provincia (para adaptar la legislación):</div>
@@ -405,10 +432,119 @@ footer a:hover{color:var(--gold);}
       <div class="success-box">
         <div class="success-icon">📄</div>
         <h2>¡Tu documento está listo!</h2>
-        <p>Fue generado exitosamente. Hacé click para descargarlo como PDF.</p>
+        <p>Fue generado exitosamente. Descargalo o mejorá tu versión.</p>
         <button class="btn gold" onclick="descargarPDF()">⬇ Descargar PDF</button>
-        <br>
-        <button class="btn ghost" style="max-width:300px;margin:14px auto 0;" onclick="empezarDeNuevo()">Generar otro documento</button>
+
+        <!-- UPSELL 1: Sin marca -->
+        <div class="upsell-block" id="upsellSinMarca">
+          <div class="upsell-label">✦ Versión profesional sin marca</div>
+          <p class="upsell-desc">El mismo documento sin encabezado LegalAI ni leyendas. Listo para presentar ante escribanos, juzgados o firmar directamente.</p>
+          <div class="upsell-price-row">
+            <span>Upgrade sin marca</span>
+            <span class="upsell-price-amt" id="precioSinMarcaAmt">—</span>
+          </div>
+          <button class="btn upsell-btn" onclick="abrirModalSinMarca()">Obtener versión sin marca →</button>
+        </div>
+
+        <!-- UPSELL 2: Guía de uso -->
+        <div class="upsell-block" id="upsellGuia">
+          <div class="upsell-label">📖 Guía de uso del documento</div>
+          <p class="upsell-desc">Cómo firmarlo, cuándo usarlo, errores frecuentes y si conviene certificar. Generada por IA para este documento específico.</p>
+          <div class="upsell-price-row">
+            <span>Guía de uso PDF</span>
+            <span class="upsell-price-amt" id="precioGuiaAmt">—</span>
+          </div>
+          <button class="btn upsell-btn-guia" onclick="abrirModalGuia()">Obtener guía de uso →</button>
+        </div>
+
+        <!-- UPSELL 3: Pack -->
+        <div class="upsell-block" id="upsellPack">
+          <div class="upsell-label">📦 Pack de 3 documentos — ahorrá 20%</div>
+          <p class="upsell-desc">Ya generaste 1. Elegí 2 más y pagá solo la diferencia con descuento. Sin cargar datos nuevos para el primero.</p>
+          <button class="btn upsell-btn-pack" onclick="abrirModalPack()">Armar mi pack →</button>
+        </div>
+
+        <button class="btn ghost" style="max-width:280px;margin:6px auto 0;" onclick="empezarDeNuevo()">Generar otro documento</button>
+      </div>
+    </div>
+
+    <!-- MODAL: Sin marca — descargo + pago -->
+    <div class="modal-overlay" id="modalDescargo">
+      <div class="modal-box">
+        <div class="modal-tag">Descargo de responsabilidad</div>
+        <h3 class="modal-title">Versión sin marca LegalAI</h3>
+        <div class="modal-body">
+          Al solicitar esta versión <strong>declarás haber leído y aceptado</strong> que:
+          <ul>
+            <li>Este documento es un <strong>modelo orientativo generado por IA</strong> y no constituye asesoramiento legal profesional.</li>
+            <li>LegalAI Arg <strong>no asume responsabilidad</strong> por el uso o consecuencias derivadas de este documento.</li>
+            <li>Para situaciones que requieran certeza jurídica consultá a un <strong>profesional matriculado</strong>.</li>
+            <li>Al continuar <strong>eximís expresamente</strong> a LegalAI Arg de toda responsabilidad civil y legal.</li>
+          </ul>
+        </div>
+        <div id="advertenciaLegalBloque" style="display:none;padding:10px 14px;background:rgba(200,80,60,0.08);border:1px solid rgba(200,80,60,0.2);border-radius:8px;margin-bottom:14px;font-size:.82rem;color:#c05030;line-height:1.5;">
+          ⚠️ <strong>Atención:</strong> Este tipo de documento (carta documento / reclamo / intimación) requiere que al menos una línea de advertencia legal permanezca en el pie de página, independientemente de la versión elegida. Esto te protege a vos también.
+        </div>
+        <div class="modal-check-row">
+          <input type="checkbox" id="checkDescargo" style="accent-color:var(--gold);">
+          <label for="checkDescargo">Entiendo y acepto. Eximo a LegalAI Arg de toda responsabilidad sobre el uso de este documento.</label>
+        </div>
+        <div class="alert err" id="alertDescargo"></div>
+        <button class="btn gold" onclick="confirmarSinMarca()">Confirmar y pagar <span id="btnSinMarcaMonto"></span> →</button>
+        <button class="btn ghost" style="margin-top:8px;" onclick="cerrarModal('modalDescargo')">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- MODAL: Guía de uso -->
+    <div class="modal-overlay" id="modalGuia">
+      <div class="modal-box">
+        <div class="modal-tag">Guía de uso</div>
+        <h3 class="modal-title">Guía personalizada para tu documento</h3>
+        <div class="modal-body">
+          Recibirás un PDF adicional con:
+          <ul>
+            <li>Para qué sirve y cuándo conviene usar este documento</li>
+            <li>Cómo completarlo y firmarlo correctamente</li>
+            <li>Errores frecuentes y qué revisar antes de entregarlo</li>
+            <li>Si conviene certificar firmas o tener testigos</li>
+          </ul>
+          <p style="margin-top:10px;">La guía siempre incluye marca LegalAI Arg como garantía de origen.</p>
+        </div>
+        <div class="upsell-price-row" style="margin-bottom:16px;">
+          <span>Guía de uso PDF</span>
+          <span class="upsell-price-amt" id="precioGuiaModal">—</span>
+        </div>
+        <div class="alert err" id="alertGuia"></div>
+        <button class="btn gold" onclick="confirmarGuia()">Confirmar y pagar →</button>
+        <button class="btn ghost" style="margin-top:8px;" onclick="cerrarModal('modalGuia')">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- MODAL: Pack de documentos -->
+    <div class="modal-overlay" id="modalPack">
+      <div class="modal-box" style="max-width:560px;">
+        <div class="modal-tag">Pack de documentos</div>
+        <h3 class="modal-title">Elegí 2 documentos más y ahorrá 20%</h3>
+        <div class="modal-body" style="margin-bottom:14px;">
+          Ya tenés: <strong id="packDocActual">—</strong><br>
+          Elegí 2 documentos adicionales. Se generan después del pago con los datos que ingreses en ese momento.
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:.82rem;font-weight:500;color:var(--ink);display:block;margin-bottom:6px;">Documento 2:</label>
+          <input type="text" id="packDoc2" placeholder="Ej: NDA para startup, carta documento por deuda..." style="width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:.88rem;">
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:.82rem;font-weight:500;color:var(--ink);display:block;margin-bottom:6px;">Documento 3:</label>
+          <input type="text" id="packDoc3" placeholder="Ej: Términos y condiciones para web, contrato freelance..." style="width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:.88rem;">
+        </div>
+        <div class="upsell-price-row" style="margin-bottom:6px;">
+          <span>Precio pack (3 docs)</span>
+          <span class="upsell-price-amt" id="precioPack">—</span>
+        </div>
+        <div style="font-size:.75rem;color:var(--mist);margin-bottom:16px;" id="packDetalle">Calculando...</div>
+        <div class="alert err" id="alertPack"></div>
+        <button class="btn gold" onclick="confirmarPack()">Confirmar y pagar pack →</button>
+        <button class="btn ghost" style="margin-top:8px;" onclick="cerrarModal('modalPack')">Cancelar</button>
       </div>
     </div>
 
@@ -416,7 +552,7 @@ footer a:hover{color:var(--gold);}
 </div>
 
 
-<!-- ═══════════════════ SUSCRIPCIÓN ═══════════════════ -->
+<!-- ═══════════════════ SUSCRIPCIÓN══════ SUSCRIPCIÓN ═══════════════════ -->
 <div class="section" id="sec-suscripcion">
   <div style="max-width:720px;margin:0 auto;padding:60px 40px 0;text-align:center;">
     <div class="sec-label">Plan ilimitado</div>
@@ -494,9 +630,82 @@ footer a:hover{color:var(--gold);}
 // ╚══════════════════════════════════════════════════════════════════╝
 const CONFIG = {
   WORKER_URL:    'https://legalai-worker.finmap-ia.workers.dev',
-  PRECIO_USD:    8,           // ← precio base en USD
-  CONTACT_EMAIL: 'finmap.ia@gmail.com',  // ← único lugar para cambiar el email
+  CONTACT_EMAIL: 'finmap.ia@gmail.com',  // ← único lugar para cambiar
+  PRECIO_GUIA_USD: 2.5,                  // ← precio fijo guía de uso
 };
+
+// ── CATEGORÍAS DE DOCUMENTOS ─────────────────────────────────────────
+const CATEGORIAS = {
+  contratos: {
+    label: '📋 Contratos',
+    docs: [
+      { txt: 'Contrato de alquiler de vivienda',                emoji: '🏠', sub: 'Residencial' },
+      { txt: 'Contrato de alquiler de local comercial',         emoji: '🏪', sub: 'Comercial' },
+      { txt: 'Contrato de alquiler temporario turístico',        emoji: '🏖️', sub: 'Temporario' },
+      { txt: 'Contrato de sociedad simple entre socios',        emoji: '🤝', sub: 'Sociedad' },
+      { txt: 'Contrato de compraventa de vehículo automotor',   emoji: '🚗', sub: 'Vehículo' },
+      { txt: 'Contrato de compraventa de inmueble',             emoji: '🏡', sub: 'Inmueble' },
+      { txt: 'Acuerdo de confidencialidad NDA bilateral',       emoji: '🔒', sub: 'NDA' },
+      { txt: 'Términos y condiciones para sitio web o app',     emoji: '📱', sub: 'T&C web' },
+      { txt: 'Política de privacidad para sitio web',           emoji: '🛡️', sub: 'Privacidad' },
+    ]
+  },
+  freelance: {
+    label: '💼 Freelance',
+    docs: [
+      { txt: 'Contrato freelance para diseñador gráfico',       emoji: '🎨', sub: 'Diseño' },
+      { txt: 'Contrato freelance para desarrollador web',       emoji: '💻', sub: 'Dev web' },
+      { txt: 'Contrato para community manager freelance',       emoji: '📲', sub: 'CM' },
+      { txt: 'Contrato freelance de servicios profesionales',   emoji: '💼', sub: 'General' },
+      { txt: 'Contrato de locación de servicios de consultoría',emoji: '📊', sub: 'Consultoría' },
+      { txt: 'NDA para emprendedores y startups',               emoji: '🚀', sub: 'Startup' },
+      { txt: 'Carta de propuesta comercial para cliente',       emoji: '📧', sub: 'Propuesta' },
+      { txt: 'Acuerdo de colaboración entre profesionales',     emoji: '🤝', sub: 'Colaboración' },
+    ]
+  },
+  reclamos: {
+    label: '⚠️ Reclamos',
+    docs: [
+      { txt: 'Carta documento por falta de pago de alquiler',   emoji: '🏠', sub: 'Alquiler' },
+      { txt: 'Carta documento por incumplimiento de contrato',  emoji: '📋', sub: 'Contrato' },
+      { txt: 'Carta documento por deuda impaga',                emoji: '💰', sub: 'Deuda' },
+      { txt: 'Carta documento por despido injustificado',       emoji: '👔', sub: 'Laboral' },
+      { txt: 'Reclamo por producto defectuoso o garantía',      emoji: '🔧', sub: 'Garantía' },
+      { txt: 'Reclamo por demora o incumplimiento en entrega',  emoji: '📦', sub: 'Entrega' },
+      { txt: 'Reclamo a empresa de servicios públicos',         emoji: '💡', sub: 'Servicios' },
+      { txt: 'Intimación de pago formal',                       emoji: '⚠️', sub: 'Intimación' },
+    ]
+  },
+  personales: {
+    label: '👤 Personales',
+    docs: [
+      { txt: 'Autorización de viaje para menor de edad',        emoji: '✈️', sub: 'Viaje menor' },
+      { txt: 'Autorización para acto médico de menor',          emoji: '🏥', sub: 'Médico' },
+      { txt: 'Declaración jurada de ingresos',                  emoji: '📜', sub: 'Ingresos' },
+      { txt: 'Carta de renuncia laboral voluntaria',            emoji: '📄', sub: 'Renuncia' },
+      { txt: 'Poder notarial simple para trámites',             emoji: '🔑', sub: 'Poder' },
+      { txt: 'Acuerdo de préstamo entre particulares',          emoji: '🤝', sub: 'Préstamo' },
+      { txt: 'Convenio de pago en cuotas',                      emoji: '💳', sub: 'Cuotas' },
+      { txt: 'Constancia de recibo de dinero',                  emoji: '🧾', sub: 'Recibo' },
+    ]
+  }
+};
+
+function setCat(btn, cat) {
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSugerencias(cat);
+}
+
+function renderSugerencias(cat) {
+  const box  = document.getElementById('suggestBox');
+  const docs = CATEGORIAS[cat]?.docs || [];
+  box.innerHTML = docs.map(d =>
+    `<span class="suggestion" onclick="setDoc('${d.txt.replace(/'/g,"\'")}')">
+      ${d.emoji} <span style="font-weight:500">${d.sub}</span>
+    </span>`
+  ).join('');
+}
 
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  COTIZACIÓN DÓLAR — MEP → Oficial → BNA (fallback en cadena)    ║
@@ -539,22 +748,42 @@ async function obtenerCotizacion() {
   return cotizacion;
 }
 
+function calcularPrecios() {
+  const precioDoc     = G.precio_usd;
+  const upgradeUSD    = +(precioDoc * G.upgrade_porcentaje / 100).toFixed(2);
+  const guiaUSD       = CONFIG.PRECIO_GUIA_USD;
+  const cot           = cotizacion?.valor;
+  const fuente        = cotizacion?.fuente || 'USD';
+
+  function toARS(usd) { return cot ? Math.ceil(usd * cot / 100) * 100 : null; }
+  function fmt(usd) {
+    const ars = toARS(usd);
+    return ars ? '$ ' + ars.toLocaleString('es-AR') : 'USD ' + usd;
+  }
+  function detalle(usd) {
+    return cot ? 'USD ' + usd + ' · dólar ' + fuente + ' $' + Math.round(cot) : '';
+  }
+
+  return { precioDoc, upgradeUSD, guiaUSD, fmt, detalle, toARS };
+}
+
 function formatearPrecio(cot) {
   const elAmt  = document.getElementById('precioARS');
   const elDesc = document.getElementById('precioDetalle');
   if (!elAmt) return;
+  const { precioDoc, upgradeUSD, guiaUSD, fmt, detalle } = calcularPrecios();
   const btn = document.getElementById('btnPagar');
-  if (cot && cot.valor) {
-    const totalARS = Math.ceil(CONFIG.PRECIO_USD * cot.valor / 100) * 100;
-    const arsStr = '$ ' + totalARS.toLocaleString('es-AR');
-    elAmt.textContent  = arsStr;
-    elDesc.textContent = 'USD ' + CONFIG.PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
-    if (btn) btn.textContent = 'Pagar ' + arsStr + ' con MercadoPago →';
-  } else {
-    elAmt.textContent  = 'USD ' + CONFIG.PRECIO_USD;
-    elDesc.textContent = 'por documento';
-    if (btn) btn.textContent = 'Pagar USD ' + CONFIG.PRECIO_USD + ' con MercadoPago →';
-  }
+
+  elAmt.textContent  = fmt(precioDoc);
+  elDesc.textContent = detalle(precioDoc);
+  if (btn) btn.textContent = 'Pagar ' + fmt(precioDoc) + ' con MercadoPago →';
+
+  const elSM = document.getElementById('precioSinMarcaAmt');
+  const elGu = document.getElementById('precioGuiaAmt');
+  const elGuM = document.getElementById('precioGuiaModal');
+  if (elSM)  elSM.textContent  = fmt(upgradeUSD);
+  if (elGu)  elGu.textContent  = fmt(guiaUSD);
+  if (elGuM) elGuM.textContent = fmt(guiaUSD);
 }
 
 // Inyectar email en todos los lugares
@@ -602,7 +831,15 @@ function showSec(name) {
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  ESTADO                                                          ║
 // ╚══════════════════════════════════════════════════════════════════╝
-let G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'' };
+let G = {
+  tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'',
+  paymentId: null,
+  // metadata dinámica devuelta por Claude vía /campos
+  precio_usd: 8,
+  upgrade_porcentaje: 40,
+  categoria: 'intermedio',
+  requiere_advertencia_legal: false,
+};
 
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
@@ -656,8 +893,12 @@ async function generarFormulario() {
     const data = await res.json();
     if (!data.campos?.length) throw new Error('No se pudieron generar los campos.');
 
-    G.form   = data;
-    G.campos = data.campos;
+    G.form                      = data;
+    G.campos                    = data.campos;
+    G.precio_usd                = data.precio_usd || 8;
+    G.upgrade_porcentaje        = data.upgrade_porcentaje || 40;
+    G.categoria                 = data.categoria || 'intermedio';
+    G.requiere_advertencia_legal = data.requiere_advertencia_legal || false;
 
     document.getElementById('formTitle').textContent = data.titulo || doc;
     document.getElementById('formDesc').textContent  = (data.descripcion || '') + ' Los campos con * son obligatorios.';
@@ -716,6 +957,13 @@ function irAlPago() {
   G.campos.forEach(c => { const el = document.getElementById(c.id); if (el) datos[c.id] = el.value; });
   sessionStorage.setItem('legalai_datos',  JSON.stringify(datos));
   sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
+  sessionStorage.setItem('legalai_meta',   JSON.stringify({
+    titulo:      G.form?.titulo || G.tipo,
+    categoria:   G.categoria,
+    precio_usd:  G.precio_usd,
+    upgrade_porcentaje: G.upgrade_porcentaje,
+    requiere_advertencia_legal: G.requiere_advertencia_legal,
+  }));
   document.getElementById('priceDocName').textContent = G.form?.titulo || G.tipo;
   document.getElementById('priceDocDesc').textContent = G.pais + (G.provincia !== 'No especificada' ? ' · ' + G.provincia : '');
   formatearPrecio(cotizacion);
@@ -743,14 +991,17 @@ async function generarDocumento(paymentId) {
   document.getElementById('loadingDoc').classList.add('visible');
   try {
     const datos = JSON.parse(sessionStorage.getItem('legalai_datos'));
+    const meta  = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
     const res   = await fetch(`${CONFIG.WORKER_URL}/generar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paymentId, datosDoc: datos })
+      body: JSON.stringify({ paymentId, datosDoc: datos, metadata: meta })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    G.texto = data.texto;
-    sessionStorage.setItem('legalai_texto', data.texto);
+    G.texto     = data.texto;
+    G.paymentId = data.paymentId || paymentId;
+    sessionStorage.setItem('legalai_texto',     data.texto);
+    sessionStorage.setItem('legalai_paymentId', G.paymentId);
     document.getElementById('loadingDoc').classList.remove('visible');
     showCard(4);
   } catch(err) {
@@ -767,34 +1018,204 @@ function descargarPDF() {
   const texto  = G.texto || sessionStorage.getItem('legalai_texto');
   const titulo = sessionStorage.getItem('legalai_titulo') || 'documento-legal';
   if (!texto) { alert('No se encontró el documento. Generalo de nuevo.'); return; }
+  _generarPDF(texto, titulo, true, false);
+}
 
+function abrirModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Cerrar modal clickeando overlay
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  UPSELL 1 — VERSIÓN SIN MARCA                                   ║
+// ╚══════════════════════════════════════════════════════════════════╝
+function abrirModalSinMarca() {
+  const { upgradeUSD, fmt } = calcularPrecios();
+  const monto = fmt(upgradeUSD);
+  document.getElementById('btnSinMarcaMonto').textContent = monto;
+  document.getElementById('precioSinMarcaAmt').textContent = monto;
+
+  // Mostrar advertencia legal si aplica
+  const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+  const adv  = document.getElementById('advertenciaLegalBloque');
+  if (adv) adv.style.display = meta.requiere_advertencia_legal ? 'block' : 'none';
+
+  document.getElementById('checkDescargo').checked = false;
+  hideErr('alertDescargo');
+  abrirModal('modalDescargo');
+}
+
+async function confirmarSinMarca() {
+  hideErr('alertDescargo');
+  if (!document.getElementById('checkDescargo').checked) {
+    showErr('alertDescargo', 'Debés aceptar los términos para continuar.');
+    return;
+  }
+  cerrarModal('modalDescargo');
+  const TEST_MODE = true; // ← cambiar a false cuando MP esté activo
+  if (TEST_MODE) {
+    const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    descargarPDFSinMarca(meta.requiere_advertencia_legal);
+  } else {
+    // Crear preferencia MP por el diferencial
+    // await iniciarPagoUpgrade('upgrade');
+    showErr('alertDescargo', 'Pago MP en configuración.');
+  }
+}
+
+function descargarPDFSinMarca(mantenerAdvertencia = false) {
+  const texto  = G.texto || sessionStorage.getItem('legalai_texto');
+  const titulo = sessionStorage.getItem('legalai_titulo') || 'documento-legal';
+  if (!texto) { alert('No se encontró el documento.'); return; }
+  _generarPDF(texto, titulo, false, mantenerAdvertencia);
+}
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  UPSELL 2 — GUÍA DE USO                                         ║
+// ╚══════════════════════════════════════════════════════════════════╝
+function abrirModalGuia() {
+  const { guiaUSD, fmt } = calcularPrecios();
+  const monto = fmt(guiaUSD);
+  document.getElementById('precioGuiaModal').textContent = monto;
+  document.getElementById('precioGuiaAmt').textContent   = monto;
+  hideErr('alertGuia');
+  abrirModal('modalGuia');
+}
+
+async function confirmarGuia() {
+  hideErr('alertGuia');
+  cerrarModal('modalGuia');
+  const TEST_MODE = true;
+  if (TEST_MODE) {
+    await generarYDescargarGuia('TEST_GUIA_' + Date.now());
+  } else {
+    // await iniciarPagoUpgrade('guia');
+    showErr('alertGuia', 'Pago MP en configuración.');
+  }
+}
+
+async function generarYDescargarGuia(paymentIdGuia) {
+  const paymentIdOriginal = G.paymentId || sessionStorage.getItem('legalai_paymentId');
+  if (!paymentIdOriginal) { alert('No se encontró el documento base.'); return; }
+
+  // Mostrar loading
+  const btnGuia = document.querySelector('.upsell-btn-guia');
+  if (btnGuia) { btnGuia.disabled = true; btnGuia.textContent = 'Generando guía...'; }
+
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/guia`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paymentId: paymentIdOriginal, paymentIdGuia })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    // Descargar guía como PDF con marca
+    const titulo = (data.titulo || 'documento') + ' - Guía de uso';
+    _generarPDF(data.guia, titulo, true, false);
+  } catch(err) {
+    alert('Error al generar la guía: ' + err.message);
+  } finally {
+    if (btnGuia) { btnGuia.disabled = false; btnGuia.textContent = 'Obtener guía de uso →'; }
+  }
+}
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  UPSELL 3 — PACK DE DOCUMENTOS                                  ║
+// ╚══════════════════════════════════════════════════════════════════╝
+function abrirModalPack() {
+  const titulo = sessionStorage.getItem('legalai_titulo') || 'Tu documento actual';
+  document.getElementById('packDocActual').textContent = titulo;
+  document.getElementById('packDoc2').value = '';
+  document.getElementById('packDoc3').value = '';
+  actualizarPrecioPack();
+  hideErr('alertPack');
+  abrirModal('modalPack');
+}
+
+function actualizarPrecioPack() {
+  const { precioDoc, fmt } = calcularPrecios();
+  // Pack = 3 docs con 20% descuento
+  const packTotal  = +(precioDoc * 3 * 0.80).toFixed(2);
+  const yaPagedo   = precioDoc;
+  const diferencia = +(packTotal - yaPagedo).toFixed(2);
+  document.getElementById('precioPack').textContent  = fmt(packTotal);
+  document.getElementById('packDetalle').textContent =
+    `Ya pagaste USD ${yaPagedo} · Pagás solo la diferencia: ${fmt(diferencia)} (20% de descuento)`;
+}
+
+async function confirmarPack() {
+  hideErr('alertPack');
+  const doc2 = document.getElementById('packDoc2').value.trim();
+  const doc3 = document.getElementById('packDoc3').value.trim();
+  if (!doc2 || !doc3) {
+    showErr('alertPack', 'Completá los dos documentos adicionales para armar el pack.');
+    return;
+  }
+  cerrarModal('modalPack');
+  const TEST_MODE = true;
+  if (TEST_MODE) {
+    // Guardar pack en sessionStorage para generar después
+    const packData = {
+      doc1: sessionStorage.getItem('legalai_titulo'),
+      doc2, doc3,
+      pais:     G.pais,
+      provincia: G.provincia,
+      paymentIdDoc1: G.paymentId || sessionStorage.getItem('legalai_paymentId'),
+    };
+    sessionStorage.setItem('legalai_pack', JSON.stringify(packData));
+    alert('Pack guardado. En modo TEST: generá los documentos 2 y 3 con el botón "Generar otro documento" buscando cada tipo. El descuento se aplica al pagar con MP real.');
+  } else {
+    // await iniciarPagoPack(doc2, doc3);
+  }
+}
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  MOTOR PDF UNIFICADO (_generarPDF)                              ║
+// ╚══════════════════════════════════════════════════════════════════╝
+function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ format: 'a4', unit: 'mm' });
 
-  const PW=210, PH=297, ML=25, MR=25, MT=28, MB=20;
+  const PW=210, PH=297, ML=25, MR=25, MT= conMarca ? 28 : 20, MB=20;
   const CW = PW - ML - MR;
   const YBOTTOM = PH - MB - 14;
   let y = MT;
 
   function agregarEncabezado() {
+    if (!conMarca) return;
     doc.setFillColor(248,247,244); doc.rect(0,0,PW,16,'F');
     doc.setDrawColor(200,168,75); doc.setLineWidth(0.3); doc.line(ML,16,PW-MR,16);
     doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(120,110,90);
-    doc.text('LegalAI Arg  \u00b7  Documento Orientativo', ML, 11);
+    doc.text('LegalAI Arg  ·  Documento Orientativo', ML, 11);
     doc.text(new Date().toLocaleDateString('es-AR'), PW-MR, 11, {align:'right'});
   }
 
   function agregarPie() {
+    if (!conMarca && !mantenerAdvertenciaLegal) return;
     doc.setDrawColor(180,160,100); doc.setLineWidth(0.25);
     doc.line(ML, PH-MB, PW-MR, PH-MB);
     doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
-    doc.text('Modelo orientativo \u00b7 No reemplaza asesoramiento legal profesional', PW/2, PH-MB+5, {align:'center'});
+    const msg = conMarca
+      ? 'Modelo orientativo · No reemplaza asesoramiento legal profesional'
+      : 'Documento orientativo · Consultá a un profesional matriculado para situaciones específicas';
+    doc.text(msg, PW/2, PH-MB+5, {align:'center'});
   }
 
   function nuevaPagina() {
     agregarPie();
-    doc.addPage();
-    y = MT;
+    doc.addPage(); y = MT;
     agregarEncabezado();
   }
 
@@ -810,65 +1231,48 @@ function descargarPDF() {
   }
 
   agregarEncabezado();
-  const lineas = texto.split('\n');
 
-  for (const raw of lineas) {
+  for (const raw of texto.split('
+')) {
     const l = limpiar(raw);
 
     if (raw.startsWith('# ')) {
-      checkY(20);
-      y += 4;
+      checkY(20); y+=4;
       doc.setFontSize(13); doc.setFont('times','bold'); doc.setTextColor(15,17,23);
       const wrp = doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(), CW);
       for (const p of wrp) { checkY(8); doc.text(p, PW/2, y, {align:'center'}); y+=7; }
       y+=3;
       doc.setDrawColor(200,168,75); doc.setLineWidth(0.5);
-      doc.line(ML+20, y, PW-MR-20, y);
-      y+=6;
+      doc.line(ML+20, y, PW-MR-20, y); y+=6;
       continue;
     }
-
     if (raw.startsWith('## ') || raw.startsWith('### ')) {
       y+=5; checkY(12);
       doc.setFontSize(10.5); doc.setFont('times','bold'); doc.setTextColor(20,20,20);
       const txt = l.replace(/^#{2,3} /,'');
       const wrp = doc.splitTextToSize(txt, CW);
-      const bh = wrp.length*6+6;
-      doc.setFillColor(245,243,238); doc.rect(ML-3, y-5, CW+6, bh,'F');
+      doc.setFillColor(245,243,238); doc.rect(ML-3, y-5, CW+6, wrp.length*6+6,'F');
       for (const p of wrp) { doc.text(p, ML, y); y+=6; }
-      y+=3;
-      continue;
+      y+=3; continue;
     }
-
     if (raw.trim().startsWith('---')) {
       y+=3; checkY(6);
       doc.setDrawColor(210,200,180); doc.setLineWidth(0.2);
-      doc.line(ML, y, PW-MR, y);
-      y+=5;
-      continue;
+      doc.line(ML,y,PW-MR,y); y+=5; continue;
     }
-
-    if (!l || raw.trim()==='') { y+=3; continue; }
-
+    if (!l) { y+=3; continue; }
     if (raw.trimStart().startsWith('- ') || raw.trimStart().startsWith('* ')) {
       doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
-      const wrp = doc.splitTextToSize('\u2022 ' + l.replace(/^[-*] /,''), CW-5);
+      const wrp = doc.splitTextToSize('• '+l.replace(/^[-*] /,''), CW-5);
       checkY(wrp.length*5.5+2);
       for (const p of wrp) { doc.text(p, ML+4, y); y+=5.5; }
-      y+=1;
-      continue;
+      y+=1; continue;
     }
-
-    // Línea de firma (__________)
     if (l.match(/^_{5,}$/)) {
       checkY(10); y+=2;
       doc.setDrawColor(40,40,40); doc.setLineWidth(0.4);
-      doc.line(ML, y, ML+80, y);
-      y+=7;
-      continue;
+      doc.line(ML, y, ML+80, y); y+=7; continue;
     }
-
-    // Texto normal
     doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
     const wrp = doc.splitTextToSize(l, CW);
     checkY(wrp.length*5.5+2);
@@ -878,19 +1282,16 @@ function descargarPDF() {
 
   agregarPie();
 
-  // Numeración
   const total = doc.internal.getNumberOfPages();
   for (let i=1;i<=total;i++) {
     doc.setPage(i);
     doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
-    doc.text('P\u00e1g '+i+' / '+total, PW-MR, PH-MB+5, {align:'right'});
+    doc.text('Pág '+i+' / '+total, PW-MR, PH-MB+5, {align:'right'});
   }
 
   doc.save(titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf');
 }
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  INIT                                                            ║
-// ╚══════════════════════════════════════════════════════════════════╝
+
 window.addEventListener('load', () => {
   // Tema
   const t = localStorage.getItem('theme') || 'system';
@@ -902,8 +1303,24 @@ window.addEventListener('load', () => {
   // Email
   injectEmail();
 
+  // Categorías de documentos — renderizar la primera
+  renderSugerencias('contratos');
+
   // Cotización (carga en background al iniciar)
   obtenerCotizacion();
+
+  // Restaurar metadata dinámica si se vuelve de un pago
+  const metaStr = sessionStorage.getItem('legalai_meta');
+  if (metaStr) {
+    try {
+      const m = JSON.parse(metaStr);
+      G.precio_usd                 = m.precio_usd || 8;
+      G.upgrade_porcentaje         = m.upgrade_porcentaje || 40;
+      G.categoria                  = m.categoria || 'intermedio';
+      G.requiere_advertencia_legal = m.requiere_advertencia_legal || false;
+    } catch(_) {}
+  }
+  G.paymentId = sessionStorage.getItem('legalai_paymentId') || null;
 
   // Retorno desde MercadoPago
   const p = new URLSearchParams(window.location.search);
