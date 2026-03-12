@@ -373,6 +373,22 @@ footer a:hover{color:var(--gold);}
         </div>
       </div>
 
+      <!-- Código de pack opcional -->
+      <div id="packCodeSection" style="margin-top:4px;">
+        <button type="button" onclick="togglePackCode()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:.05em;padding:0;">
+          ▸ ¿Tenés un código de pack? Ingresalo acá
+        </button>
+        <div id="packCodeBox" style="display:none;margin-top:10px;padding:14px;background:var(--cream);border:1px solid var(--line);border-radius:10px;">
+          <label style="font-size:.8rem;font-weight:500;color:var(--ink);display:block;margin-bottom:6px;">Código de pack</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="packCodeInput" placeholder="PACK-XXXX-XXXX"
+              style="flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Mono',monospace;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;">
+            <button class="btn" style="width:auto;padding:10px 18px;" onclick="consultarPack()">Verificar</button>
+          </div>
+          <div id="packCodeStatus" style="margin-top:8px;font-size:.82rem;display:none;"></div>
+        </div>
+      </div>
+
       <div class="alert err" id="alert1"></div>
       <button class="btn" onclick="generarFormulario()">Continuar — generar formulario →</button>
     </div>
@@ -833,7 +849,8 @@ function showSec(name) {
 // ╚══════════════════════════════════════════════════════════════════╝
 let G = {
   tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'',
-  paymentId: null,
+  paymentId:  null,
+  codigoPack: null,   // código de pack ingresado en card1
   // metadata dinámica devuelta por Claude vía /campos
   precio_usd: 8,
   upgrade_porcentaje: 40,
@@ -844,7 +861,14 @@ let G = {
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
 function empezarDeNuevo() {
-  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'' };
+  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
+  // Limpiar campo código pack si existe
+  const pci = document.getElementById('packCodeInput');
+  const pcs = document.getElementById('packCodeStatus');
+  const pcb = document.getElementById('packCodeBox');
+  if (pci) pci.value = '';
+  if (pcs) { pcs.style.display = 'none'; pcs.textContent = ''; }
+  if (pcb) pcb.style.display = 'none';
   document.getElementById('docInput').value = '';
   document.getElementById('formFields').innerHTML = '';
   showCard(1);
@@ -966,7 +990,18 @@ function irAlPago() {
   }));
   document.getElementById('priceDocName').textContent = G.form?.titulo || G.tipo;
   document.getElementById('priceDocDesc').textContent = G.pais + (G.provincia !== 'No especificada' ? ' · ' + G.provincia : '');
-  formatearPrecio(cotizacion);
+
+  if (G.codigoPack) {
+    // Tiene código de pack — mostrar como gratis y botón directo
+    const elAmt  = document.getElementById('precioARS');
+    const elDesc = document.getElementById('precioDetalle');
+    const btn    = document.getElementById('btnPagar');
+    if (elAmt)  elAmt.textContent  = 'GRATIS';
+    if (elDesc) elDesc.textContent = 'Incluido en tu pack · Código: ' + G.codigoPack;
+    if (btn)    btn.textContent    = 'Generar documento con código de pack →';
+  } else {
+    formatearPrecio(cotizacion);
+  }
   showCard(3);
 }
 
@@ -990,11 +1025,12 @@ async function generarDocumento(paymentId) {
   document.getElementById('card3').classList.remove('visible');
   document.getElementById('loadingDoc').classList.add('visible');
   try {
-    const datos = JSON.parse(sessionStorage.getItem('legalai_datos'));
-    const meta  = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    const datos     = JSON.parse(sessionStorage.getItem('legalai_datos'));
+    const meta      = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    const codigoPack = G.codigoPack || null;
     const res   = await fetch(`${CONFIG.WORKER_URL}/generar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paymentId, datosDoc: datos, metadata: meta })
+      body: JSON.stringify({ paymentId, datosDoc: datos, metadata: meta, codigoPack })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -1164,21 +1200,71 @@ async function confirmarPack() {
     return;
   }
   cerrarModal('modalPack');
-  const TEST_MODE = true;
-  if (TEST_MODE) {
-    // Guardar pack en sessionStorage para generar después
-    const packData = {
-      doc1: sessionStorage.getItem('legalai_titulo'),
-      doc2, doc3,
-      pais:     G.pais,
-      provincia: G.provincia,
-      paymentIdDoc1: G.paymentId || sessionStorage.getItem('legalai_paymentId'),
-    };
-    sessionStorage.setItem('legalai_pack', JSON.stringify(packData));
-    alert('Pack guardado. En modo TEST: generá los documentos 2 y 3 con el botón "Generar otro documento" buscando cada tipo. El descuento se aplica al pagar con MP real.');
-  } else {
+
+  const TEST_MODE = true; // ← cambiar a false cuando MP esté activo
+  const paymentIdPack = TEST_MODE ? 'TEST_PACK_' + Date.now() : null; // reemplazar con ID real de MP
+
+  if (!TEST_MODE && !paymentIdPack) {
     // await iniciarPagoPack(doc2, doc3);
+    return;
   }
+
+  // Crear el pack en el Worker
+  try {
+    const res = await fetch(`${CONFIG.WORKER_URL}/pack/crear`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        paymentIdPack,
+        paymentIdDoc1: G.paymentId || sessionStorage.getItem('legalai_paymentId'),
+        doc2, doc3,
+        pais:      G.pais,
+        provincia: G.provincia,
+      })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Error al crear el pack');
+
+    // Mostrar código al usuario
+    mostrarCodigoPack(data.codigo, data.creditos, data.expiraDias);
+
+  } catch(err) {
+    alert('Error al crear el pack: ' + err.message);
+  }
+}
+
+function mostrarCodigoPack(codigo, creditos, expiraDias) {
+  // Crear panel de éxito del pack dentro de card4
+  const successBox = document.querySelector('#card4 .success-box');
+  let panel = document.getElementById('packCodigoPanel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'packCodigoPanel';
+    panel.style.cssText = 'margin-top:16px;padding:20px;background:var(--cream);border:1px solid var(--line);border-radius:12px;text-align:left;';
+    successBox.appendChild(panel);
+  }
+  panel.innerHTML = `
+    <div style="font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--sage);margin-bottom:10px;">✓ Pack creado exitosamente</div>
+    <p style="font-size:.84rem;color:var(--mist);margin-bottom:12px;">Guardá este código — lo vas a necesitar para generar los próximos documentos sin pagar de nuevo:</p>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <div style="font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--ink);letter-spacing:.08em;padding:12px 18px;background:var(--surface);border:2px solid var(--gold);border-radius:8px;flex:1;text-align:center;">${codigo}</div>
+      <button onclick="copiarCodigo('${codigo}')" style="padding:12px 16px;background:var(--gold);color:var(--ink);border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:.85rem;white-space:nowrap;">Copiar</button>
+    </div>
+    <div style="font-size:.8rem;color:var(--mist);line-height:1.6;">
+      <strong style="color:var(--ink);">${creditos} créditos disponibles</strong> · Válido por ${expiraDias} días<br>
+      Ingresá este código en el paso 1 del generador al crear tus próximos documentos.
+    </div>
+  `;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copiarCodigo(codigo) {
+  navigator.clipboard.writeText(codigo).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copiado';
+    btn.style.background = 'var(--sage)';
+    btn.style.color = '#fff';
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; }, 2000);
+  });
 }
 
 // ╔══════════════════════════════════════════════════════════════════╗
@@ -1291,6 +1377,56 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
 
   doc.save(titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf');
 }
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  PACK — CÓDIGO EN CARD1                                         ║
+// ╚══════════════════════════════════════════════════════════════════╝
+function togglePackCode() {
+  const box = document.getElementById('packCodeBox');
+  const btn = box.previousElementSibling;
+  const visible = box.style.display !== 'none';
+  box.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible
+    ? '▸ ¿Tenés un código de pack? Ingresalo acá'
+    : '▾ ¿Tenés un código de pack? Ingresalo acá';
+  if (!visible) document.getElementById('packCodeInput').focus();
+}
+
+async function consultarPack() {
+  const codigo = document.getElementById('packCodeInput').value.trim().toUpperCase();
+  const status = document.getElementById('packCodeStatus');
+  if (!codigo) return;
+
+  status.style.display = 'block';
+  status.style.color = 'var(--mist)';
+  status.textContent = 'Verificando código...';
+
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/pack/consultar`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo })
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      status.style.color = '#c05030';
+      status.textContent = '✗ ' + (data.error || 'Código inválido');
+      G.codigoPack = null;
+    } else {
+      status.style.color = 'var(--sage)';
+      status.textContent = `✓ Pack válido · ${data.creditos} crédito${data.creditos !== 1 ? 's' : ''} disponible${data.creditos !== 1 ? 's' : ''} · Vence en ${data.expiraEn}`;
+      G.codigoPack = codigo; // guardar para usar en generarDocumento
+    }
+  } catch(err) {
+    status.style.color = '#c05030';
+    status.textContent = '✗ Error al verificar. Intentá de nuevo.';
+  }
+}
+
+// Permitir Enter en el campo de código
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('packCodeInput');
+  if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') consultarPack(); });
+});
 
 window.addEventListener('load', () => {
   // Tema
