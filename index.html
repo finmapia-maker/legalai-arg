@@ -761,7 +761,7 @@ async function generarDocumento(paymentId) {
 }
 
 // ╔══════════════════════════════════════════════════════════════════╗
-// ║  DESCARGAR PDF                                                   ║
+// ║  DESCARGAR PDF — motor robusto                                  ║
 // ╚══════════════════════════════════════════════════════════════════╝
 function descargarPDF() {
   const texto  = G.texto || sessionStorage.getItem('legalai_texto');
@@ -770,43 +770,124 @@ function descargarPDF() {
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ format: 'a4', unit: 'mm' });
-  const m = 25, aw = 210 - m * 2;
-  let y = 28;
 
-  doc.setFillColor(15,17,23); doc.rect(0,0,210,18,'F');
-  doc.setTextColor(200,168,75); doc.setFontSize(8); doc.setFont('helvetica','normal');
-  doc.text('LEGALAI ARG  ·  Documento Orientativo', m, 12);
-  doc.text(new Date().toLocaleDateString('es-AR'), 210-m, 12, { align:'right' });
-  y = 30;
+  const PW=210, PH=297, ML=25, MR=25, MT=28, MB=20;
+  const CW = PW - ML - MR;
+  const YBOTTOM = PH - MB - 14;
+  let y = MT;
 
-  for (const linea of texto.split('\n')) {
-    if (y > 272) { doc.addPage(); y = m; }
-    const l = linea.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1');
-    if (linea.startsWith('# ')) {
-      y+=4; doc.setFontSize(13); doc.setFont('times','bold'); doc.setTextColor(15,17,23);
-      const w = doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(), aw);
-      doc.text(w,105,y,{align:'center'}); y+=w.length*7+4;
-    } else if (linea.startsWith('## ')) {
-      y+=5; doc.setFontSize(10.5); doc.setFont('times','bold'); doc.setTextColor(15,17,23);
-      const w = doc.splitTextToSize(l.replace(/^## /,''), aw);
-      doc.text(w,m,y); y+=w.length*6+3;
-    } else if (linea.trim()) {
-      doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
-      const w = doc.splitTextToSize(l, aw);
-      doc.text(w,m,y,{align:'justify'}); y+=w.length*5.5+1;
-    } else { y+=3; }
+  function agregarEncabezado() {
+    doc.setFillColor(248,247,244); doc.rect(0,0,PW,16,'F');
+    doc.setDrawColor(200,168,75); doc.setLineWidth(0.3); doc.line(ML,16,PW-MR,16);
+    doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(120,110,90);
+    doc.text('LegalAI Arg  \u00b7  Documento Orientativo', ML, 11);
+    doc.text(new Date().toLocaleDateString('es-AR'), PW-MR, 11, {align:'right'});
   }
 
+  function agregarPie() {
+    doc.setDrawColor(180,160,100); doc.setLineWidth(0.25);
+    doc.line(ML, PH-MB, PW-MR, PH-MB);
+    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
+    doc.text('Modelo orientativo \u00b7 No reemplaza asesoramiento legal profesional', PW/2, PH-MB+5, {align:'center'});
+  }
+
+  function nuevaPagina() {
+    agregarPie();
+    doc.addPage();
+    y = MT;
+    agregarEncabezado();
+  }
+
+  function checkY(h) { if (y + h > YBOTTOM) nuevaPagina(); }
+
+  function limpiar(txt) {
+    return txt
+      .replace(/\*\*(.*?)\*\*/g,'$1')
+      .replace(/\*(.*?)\*/g,'$1')
+      .replace(/\[A completar[^\]]*\]/gi,'______________________________')
+      .replace(/\[[^\]]{0,40}\]/g,'______________________________')
+      .trim();
+  }
+
+  agregarEncabezado();
+  const lineas = texto.split('\n');
+
+  for (const raw of lineas) {
+    const l = limpiar(raw);
+
+    if (raw.startsWith('# ')) {
+      checkY(20);
+      y += 4;
+      doc.setFontSize(13); doc.setFont('times','bold'); doc.setTextColor(15,17,23);
+      const wrp = doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(), CW);
+      for (const p of wrp) { checkY(8); doc.text(p, PW/2, y, {align:'center'}); y+=7; }
+      y+=3;
+      doc.setDrawColor(200,168,75); doc.setLineWidth(0.5);
+      doc.line(ML+20, y, PW-MR-20, y);
+      y+=6;
+      continue;
+    }
+
+    if (raw.startsWith('## ') || raw.startsWith('### ')) {
+      y+=5; checkY(12);
+      doc.setFontSize(10.5); doc.setFont('times','bold'); doc.setTextColor(20,20,20);
+      const txt = l.replace(/^#{2,3} /,'');
+      const wrp = doc.splitTextToSize(txt, CW);
+      const bh = wrp.length*6+6;
+      doc.setFillColor(245,243,238); doc.rect(ML-3, y-5, CW+6, bh,'F');
+      for (const p of wrp) { doc.text(p, ML, y); y+=6; }
+      y+=3;
+      continue;
+    }
+
+    if (raw.trim().startsWith('---')) {
+      y+=3; checkY(6);
+      doc.setDrawColor(210,200,180); doc.setLineWidth(0.2);
+      doc.line(ML, y, PW-MR, y);
+      y+=5;
+      continue;
+    }
+
+    if (!l || raw.trim()==='') { y+=3; continue; }
+
+    if (raw.trimStart().startsWith('- ') || raw.trimStart().startsWith('* ')) {
+      doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
+      const wrp = doc.splitTextToSize('\u2022 ' + l.replace(/^[-*] /,''), CW-5);
+      checkY(wrp.length*5.5+2);
+      for (const p of wrp) { doc.text(p, ML+4, y); y+=5.5; }
+      y+=1;
+      continue;
+    }
+
+    // Línea de firma (__________)
+    if (l.match(/^_{5,}$/)) {
+      checkY(10); y+=2;
+      doc.setDrawColor(40,40,40); doc.setLineWidth(0.4);
+      doc.line(ML, y, ML+80, y);
+      y+=7;
+      continue;
+    }
+
+    // Texto normal
+    doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
+    const wrp = doc.splitTextToSize(l, CW);
+    checkY(wrp.length*5.5+2);
+    for (const p of wrp) { doc.text(p, ML, y); y+=5.5; }
+    y+=1;
+  }
+
+  agregarPie();
+
+  // Numeración
   const total = doc.internal.getNumberOfPages();
   for (let i=1;i<=total;i++) {
     doc.setPage(i);
-    doc.setDrawColor(200,168,75); doc.setLineWidth(.3); doc.line(m,283,210-m,283);
-    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(160,160,160);
-    doc.text(`Modelo orientativo · No reemplaza asesoramiento legal profesional · Pág ${i}/${total}`,105,288,{align:'center'});
+    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
+    doc.text('P\u00e1g '+i+' / '+total, PW-MR, PH-MB+5, {align:'right'});
   }
+
   doc.save(titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf');
 }
-
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  INIT                                                            ║
 // ╚══════════════════════════════════════════════════════════════════╝
