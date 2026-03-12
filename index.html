@@ -390,7 +390,7 @@ footer a:hover{color:var(--gold);}
       </div>
 
       <div class="alert err" id="alert3"></div>
-      <button class="btn gold" onclick="procesarPago()">Pagar USD 8 con MercadoPago →</button>
+      <button class="btn gold" id="btnPagar" onclick="procesarPago()">Pagar con MercadoPago →</button>
       <button class="btn ghost" onclick="volver()">← Volver y editar datos</button>
     </div>
 
@@ -543,13 +543,17 @@ function formatearPrecio(cot) {
   const elAmt  = document.getElementById('precioARS');
   const elDesc = document.getElementById('precioDetalle');
   if (!elAmt) return;
+  const btn = document.getElementById('btnPagar');
   if (cot && cot.valor) {
     const totalARS = Math.ceil(CONFIG.PRECIO_USD * cot.valor / 100) * 100;
-    elAmt.textContent  = '$ ' + totalARS.toLocaleString('es-AR');
+    const arsStr = '$ ' + totalARS.toLocaleString('es-AR');
+    elAmt.textContent  = arsStr;
     elDesc.textContent = 'USD ' + CONFIG.PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
+    if (btn) btn.textContent = 'Pagar ' + arsStr + ' con MercadoPago →';
   } else {
     elAmt.textContent  = 'USD ' + CONFIG.PRECIO_USD;
     elDesc.textContent = 'por documento';
+    if (btn) btn.textContent = 'Pagar USD ' + CONFIG.PRECIO_USD + ' con MercadoPago →';
   }
 }
 
