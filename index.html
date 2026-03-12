@@ -1232,8 +1232,8 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
 
   agregarEncabezado();
 
-  for (const raw of texto.split('
-')) {
+  for (const raw of texto.split('\n')) {
+
     const l = limpiar(raw);
 
     if (raw.startsWith('# ')) {
