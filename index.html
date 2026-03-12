@@ -377,9 +377,9 @@ footer a:hover{color:var(--gold);}
           <div class="price-name" id="priceDocName">—</div>
           <div class="price-loc"  id="priceDocDesc">—</div>
         </div>
-        <div>
-          <div class="price-amt">USD 8</div>
-          <div class="price-cur">por documento</div>
+        <div style="text-align:right;">
+          <div class="price-amt" id="precioARS">$ —</div>
+          <div class="price-cur" id="precioDetalle">cargando cotización...</div>
         </div>
       </div>
 
@@ -494,9 +494,64 @@ footer a:hover{color:var(--gold);}
 // ╚══════════════════════════════════════════════════════════════════╝
 const CONFIG = {
   WORKER_URL:    'https://legalai-worker.finmap-ia.workers.dev',
-  PRECIO_USD:    8,
+  PRECIO_USD:    8,           // ← precio base en USD
   CONTACT_EMAIL: 'finmap.ia@gmail.com',  // ← único lugar para cambiar el email
 };
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  COTIZACIÓN DÓLAR — MEP → Oficial → BNA (fallback en cadena)    ║
+// ╚══════════════════════════════════════════════════════════════════╝
+let cotizacion = { valor: null, fuente: null };
+
+async function obtenerCotizacion() {
+  // Fuente 1 — Dólar MEP
+  try {
+    const r = await fetch('https://dolarapi.com/v1/dolares/bolsa', { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    if (d && d.venta && d.venta > 0) {
+      cotizacion = { valor: d.venta, fuente: 'MEP' };
+      return cotizacion;
+    }
+  } catch(_) {}
+
+  // Fuente 2 — Dólar Oficial
+  try {
+    const r = await fetch('https://dolarapi.com/v1/dolares/oficial', { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    if (d && d.venta && d.venta > 0) {
+      cotizacion = { valor: d.venta, fuente: 'Oficial' };
+      return cotizacion;
+    }
+  } catch(_) {}
+
+  // Fuente 3 — BNA vía bluelytics
+  try {
+    const r = await fetch('https://api.bluelytics.com.ar/v2/latest', { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    if (d && d.official && d.official.value_sell > 0) {
+      cotizacion = { valor: d.official.value_sell, fuente: 'BNA' };
+      return cotizacion;
+    }
+  } catch(_) {}
+
+  // Sin cotización — mostrar USD
+  cotizacion = { valor: null, fuente: null };
+  return cotizacion;
+}
+
+function formatearPrecio(cot) {
+  const elAmt  = document.getElementById('precioARS');
+  const elDesc = document.getElementById('precioDetalle');
+  if (!elAmt) return;
+  if (cot && cot.valor) {
+    const totalARS = Math.ceil(CONFIG.PRECIO_USD * cot.valor / 100) * 100;
+    elAmt.textContent  = '$ ' + totalARS.toLocaleString('es-AR');
+    elDesc.textContent = 'USD ' + CONFIG.PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
+  } else {
+    elAmt.textContent  = 'USD ' + CONFIG.PRECIO_USD;
+    elDesc.textContent = 'por documento';
+  }
+}
 
 // Inyectar email en todos los lugares
 function injectEmail() {
@@ -659,6 +714,7 @@ function irAlPago() {
   sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
   document.getElementById('priceDocName').textContent = G.form?.titulo || G.tipo;
   document.getElementById('priceDocDesc').textContent = G.pais + (G.provincia !== 'No especificada' ? ' · ' + G.provincia : '');
+  formatearPrecio(cotizacion);
   showCard(3);
 }
 
@@ -760,6 +816,9 @@ window.addEventListener('load', () => {
 
   // Email
   injectEmail();
+
+  // Cotización (carga en background al iniciar)
+  obtenerCotizacion();
 
   // Retorno desde MercadoPago
   const p = new URLSearchParams(window.location.search);
