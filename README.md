@@ -20,7 +20,7 @@ Plataforma de generación automática de documentos legales con IA
 
 <br>
 
-**[→ Ir a LegalAI Arg]([https://bit.ly/m/LegalAi-Arg]**
+**[→ Ir a LegalAI Arg](https://finmapia-maker.github.io/legalai-arg/)**
 
 <br>
 
