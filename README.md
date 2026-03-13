@@ -115,11 +115,11 @@ El documento se genera al instante y se descarga directo en tu dispositivo. No s
 
 Los precios se muestran en **pesos argentinos** al tipo de cambio del momento.
 
-| Tipo de documento | Precio |
-|-------------------|--------|
+| Tipo de documento |
+|-------------------|
 | Simple *(cartas, autorizaciones, notas)* | 
-| Intermedio *(contratos freelance, NDA, T&C)* | 
-| Complejo *(alquileres, sociedades, compraventas)* | 
+| Intermedio *(contratos freelance, NDA, T&C)* |
+| Complejo *(alquileres, sociedades, compraventas)* |
 
 ---
 
