@@ -1055,14 +1055,47 @@ function irAlPago() {
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  PASO 3 → PROCESAR PAGO                                         ║
 // ╚══════════════════════════════════════════════════════════════════╝
+// ── Helper central: crea preferencia y redirige a MP ────────────
+async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPago, onError }) {
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo, montoARS, descripcion, externalRef, datosPago }),
+    });
+    const data = await res.json();
+    if (!data.init_point) throw new Error(data.detalle || data.error || 'Error al crear el pago');
+    // Redirigir al checkout de MercadoPago
+    window.location.href = data.init_point;
+  } catch(err) {
+    if (onError) onError(err.message);
+    else alert('Error al iniciar el pago: ' + err.message);
+  }
+}
+
 async function procesarPago() {
   hideErr('alert3');
-  const TEST_MODE = true; // ← cambiar a false cuando MP esté activo
-  if (TEST_MODE) {
-    await generarDocumento('TEST_' + Date.now());
+
+  // Si tiene código de pack activo → generar directo, sin pago
+  if (G.codigoPack) {
+    await generarDocumento('PACK_' + Date.now());
     return;
   }
-  showErr('alert3', 'Integración de pago en configuración.');
+
+  const { fmt, toARS } = calcularPrecios();
+  const montoARS = toARS(G.precio_usd) || Math.round(G.precio_usd * 1200);
+
+  // sessionId: identifica esta sesión de compra
+  const sessionId = 'sess_' + Date.now();
+  sessionStorage.setItem('legalai_sessionId', sessionId);
+
+  await iniciarPagoMP({
+    tipo:        'doc',
+    montoARS,
+    descripcion: `Documento legal: ${G.form?.titulo || G.tipo}`,
+    externalRef: `doc_${sessionId}`,
+    datosPago:   { titulo: G.form?.titulo || G.tipo, dolar_rate: cotizacion?.valor || 0 },
+    onError: msg => showErr('alert3', 'Error al conectar con MercadoPago: ' + msg),
+  });
 }
 
 // ╔══════════════════════════════════════════════════════════════════╗
@@ -1146,15 +1179,23 @@ async function confirmarSinMarca() {
     return;
   }
   cerrarModal('modalDescargo');
-  const TEST_MODE = true; // ← cambiar a false cuando MP esté activo
-  if (TEST_MODE) {
-    const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
-    descargarPDFSinMarca(meta.requiere_advertencia_legal);
-  } else {
-    // Crear preferencia MP por el diferencial
-    // await iniciarPagoUpgrade('upgrade');
-    showErr('alertDescargo', 'Pago MP en configuración.');
-  }
+
+  const { upgradeUSD, toARS } = calcularPrecios();
+  const montoARS      = toARS(upgradeUSD) || Math.round(upgradeUSD * 1200);
+  const paymentIdOrig = G.paymentId || sessionStorage.getItem('legalai_paymentId') || 'unknown';
+  const titulo        = sessionStorage.getItem('legalai_titulo') || 'documento';
+
+  // Guardar contexto para recuperar al volver de MP
+  sessionStorage.setItem('legalai_upgrade_pendiente', paymentIdOrig);
+
+  await iniciarPagoMP({
+    tipo:        'upgrade',
+    montoARS,
+    descripcion: `Versión sin marca: ${titulo}`,
+    externalRef: `upgrade_${paymentIdOrig}`,
+    datosPago:   { paymentIdOriginal: paymentIdOrig, dolar_rate: cotizacion?.valor || 0 },
+    onError: msg => showErr('alertDescargo', 'Error al conectar con MercadoPago: ' + msg),
+  });
 }
 
 function descargarPDFSinMarca(mantenerAdvertencia = false) {
@@ -1179,13 +1220,22 @@ function abrirModalGuia() {
 async function confirmarGuia() {
   hideErr('alertGuia');
   cerrarModal('modalGuia');
-  const TEST_MODE = true;
-  if (TEST_MODE) {
-    await generarYDescargarGuia('TEST_GUIA_' + Date.now());
-  } else {
-    // await iniciarPagoUpgrade('guia');
-    showErr('alertGuia', 'Pago MP en configuración.');
-  }
+
+  const { guiaUSD, toARS } = calcularPrecios();
+  const montoARS      = toARS(guiaUSD) || Math.round(guiaUSD * 1200);
+  const paymentIdOrig = G.paymentId || sessionStorage.getItem('legalai_paymentId') || 'unknown';
+  const titulo        = sessionStorage.getItem('legalai_titulo') || 'documento';
+
+  sessionStorage.setItem('legalai_guia_pendiente', paymentIdOrig);
+
+  await iniciarPagoMP({
+    tipo:        'guia',
+    montoARS,
+    descripcion: `Guía de uso: ${titulo}`,
+    externalRef: `guia_${paymentIdOrig}`,
+    datosPago:   { paymentIdOriginal: paymentIdOrig, dolar_rate: cotizacion?.valor || 0 },
+    onError: msg => showErr('alertGuia', 'Error al conectar con MercadoPago: ' + msg),
+  });
 }
 
 async function generarYDescargarGuia(paymentIdGuia) {
@@ -1330,13 +1380,35 @@ async function confirmarPack() {
   const doc2 = document.getElementById('packDoc2').value.trim();
   const doc3 = document.getElementById('packDoc3').value.trim();
 
-  const TEST_MODE = true; // ← cambiar a false cuando MP esté activo
-  const paymentIdPack = TEST_MODE ? 'TEST_PACK_' + Date.now() : null;
+  // Guardar cotización en sessionStorage para usarla al volver de MP
+  sessionStorage.setItem('legalai_pack_cot', JSON.stringify({
+    doc2, doc3,
+    precioDoc2:        packCotizacion.doc2.precio_usd,
+    precioDoc3:        packCotizacion.doc3.precio_usd,
+    totalConDescuento: packCotizacion.totalConDescuento,
+    token:             packCotizacion.token,
+    tokenTs:           packCotizacion.tokenTs,
+    paymentIdDoc1:     G.paymentId || sessionStorage.getItem('legalai_paymentId'),
+    pais:              G.pais || 'Argentina',
+    provincia:         G.provincia || '',
+  }));
 
-  if (!TEST_MODE && !paymentIdPack) {
-    // await iniciarPagoPack(packCotizacion.totalConDescuento);
-    return;
-  }
+  const { toARS } = calcularPrecios();
+  const montoARS = toARS(packCotizacion.totalConDescuento) || Math.round(packCotizacion.totalConDescuento * 1200);
+  const packRef  = `pack_${Date.now()}`;
+  sessionStorage.setItem('legalai_pack_ref', packRef);
+
+  cerrarModal('modalPack');
+
+  await iniciarPagoMP({
+    tipo:        'pack',
+    montoARS,
+    descripcion: `Pack 3 documentos (20% dto) — LegalAI Arg`,
+    externalRef: packRef,
+    datosPago:   { dolar_rate: cotizacion?.valor || 0 },
+    onError:     msg => alert('Error al iniciar el pago del pack: ' + msg),
+  });
+  return; // la función termina acá — el resto se ejecuta al volver de MP
 
   const btn = document.querySelector('#packPasoB .btn.gold');
   btn.disabled = true;
@@ -1407,6 +1479,69 @@ function copiarCodigo(codigo) {
     btn.style.color = '#fff';
     setTimeout(() => { btn.textContent = 'Copiar'; btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; }, 2000);
   });
+}
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  HELPERS DE RETORNO DESDE MP                                    ║
+// ╚══════════════════════════════════════════════════════════════════╝
+
+// Llamado al volver de MP después de pagar el upgrade sin marca
+async function habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal) {
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/habilitar`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo: 'upgrade', paymentIdUpgrade, paymentIdOriginal }),
+    });
+    const data = await res.json();
+    if (!data.habilitado) throw new Error(data.error || 'No se pudo habilitar');
+
+    // Restaurar texto y metadata
+    G.texto     = data.texto     || sessionStorage.getItem('legalai_texto') || '';
+    G.paymentId = paymentIdOriginal;
+    const meta  = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    showCard(4);
+    // Descarga automática
+    descargarPDFSinMarca(data.requiere_advertencia_legal || meta.requiere_advertencia_legal || false);
+    sessionStorage.removeItem('legalai_upgrade_pendiente');
+  } catch(err) {
+    showCard(4);
+    alert('Error al habilitar la versión sin marca: ' + err.message);
+  }
+}
+
+// Llamado al volver de MP después de pagar el pack
+async function crearPackTrasRetornoMP(paymentIdPack, cot) {
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/pack/crear`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        paymentIdPack,
+        paymentIdDoc1:     cot.paymentIdDoc1,
+        doc2:              cot.doc2,
+        doc3:              cot.doc3,
+        pais:              cot.pais,
+        provincia:         cot.provincia,
+        precioDoc2:        cot.precioDoc2,
+        precioDoc3:        cot.precioDoc3,
+        totalConDescuento: cot.totalConDescuento,
+        token:             cot.token,
+        tokenTs:           cot.tokenTs,
+      }),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Error al crear el pack');
+
+    // Restaurar card4 si hay documento previo
+    G.texto     = sessionStorage.getItem('legalai_texto') || '';
+    G.paymentId = cot.paymentIdDoc1 || null;
+    if (G.texto) showCard(4);
+
+    mostrarCodigoPack(data.codigo, data.creditos, data.expiraDias);
+    sessionStorage.removeItem('legalai_pack_cot');
+    sessionStorage.removeItem('legalai_pack_ref');
+  } catch(err) {
+    alert('Error al activar el pack: ' + err.message + '\nGuardá tu comprobante de pago y contactanos.');
+  }
 }
 
 // ╔══════════════════════════════════════════════════════════════════╗
@@ -1600,11 +1735,60 @@ window.addEventListener('load', () => {
   }
   G.paymentId = sessionStorage.getItem('legalai_paymentId') || null;
 
-  // Retorno desde MercadoPago
-  const p = new URLSearchParams(window.location.search);
-  if (p.get('status') === 'approved' && p.get('payment_id')) {
+  // ── Retorno desde MercadoPago ────────────────────────────────
+  const p    = new URLSearchParams(window.location.search);
+  const stat = p.get('status');
+  const tipo = p.get('tipo')  || '';
+  const ref  = p.get('ref')   || '';
+
+  if (stat === 'approved') {
+    // Limpiar params de la URL sin recargar
+    window.history.replaceState({}, '', window.location.pathname);
     showSec('generador');
-    generarDocumento(p.get('payment_id'));
+
+    if (tipo === 'doc') {
+      // Pago principal — MP pone el payment_id en la URL con auto_return
+      const paymentId = p.get('payment_id') || p.get('collection_id');
+      if (paymentId) generarDocumento(paymentId);
+
+    } else if (tipo === 'upgrade') {
+      // Upgrade sin marca — recuperar paymentId original y habilitar
+      const paymentIdUpgrade  = p.get('payment_id') || p.get('collection_id');
+      const paymentIdOriginal = sessionStorage.getItem('legalai_upgrade_pendiente');
+      if (paymentIdUpgrade && paymentIdOriginal) {
+        habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal);
+      }
+
+    } else if (tipo === 'guia') {
+      // Guía de uso — generar PDF con el pago aprobado
+      const paymentIdGuia     = p.get('payment_id') || p.get('collection_id');
+      const paymentIdOriginal = sessionStorage.getItem('legalai_guia_pendiente');
+      if (paymentIdGuia && paymentIdOriginal) {
+        // Restaurar texto si está en sessionStorage
+        G.texto     = sessionStorage.getItem('legalai_texto') || '';
+        G.paymentId = paymentIdOriginal;
+        showCard(4);
+        generarYDescargarGuia(paymentIdGuia);
+      }
+
+    } else if (tipo === 'pack') {
+      // Pack — crear el pack con el token de precio guardado
+      const paymentIdPack = p.get('payment_id') || p.get('collection_id');
+      const cotStr        = sessionStorage.getItem('legalai_pack_cot');
+      if (paymentIdPack && cotStr) {
+        crearPackTrasRetornoMP(paymentIdPack, JSON.parse(cotStr));
+      }
+    }
+
+  } else if (stat === 'failure') {
+    showSec('generador');
+    showCard(3);
+    showErr('alert3', 'El pago fue rechazado. Intentá de nuevo o usá otro medio de pago.');
+
+  } else if (stat === 'pending') {
+    showSec('generador');
+    showCard(3);
+    showErr('alert3', 'El pago está pendiente de acreditación. Te avisaremos cuando esté confirmado.');
   }
 });
 </script>
