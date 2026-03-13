@@ -113,15 +113,13 @@ El documento se genera al instante y se descarga directo en tu dispositivo. No s
 
 ## Precios
 
-Los precios se muestran en **pesos argentinos** al tipo de cambio del momento (dólar MEP).
+Los precios se muestran en **pesos argentinos** al tipo de cambio del momento.
 
 | Tipo de documento | Precio |
 |-------------------|--------|
-| Simple *(cartas, autorizaciones, notas)* | desde **$ 7.200** |
-| Intermedio *(contratos freelance, NDA, T&C)* | desde **$ 9.600** |
-| Complejo *(alquileres, sociedades, compraventas)* | desde **$ 13.200** |
-
-> Los precios son orientativos y se actualizan automáticamente con la cotización del dólar.
+| Simple *(cartas, autorizaciones, notas)* | 
+| Intermedio *(contratos freelance, NDA, T&C)* | 
+| Complejo *(alquileres, sociedades, compraventas)* | 
 
 ---
 
