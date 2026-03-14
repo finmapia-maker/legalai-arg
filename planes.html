@@ -8,465 +8,129 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --negro:   #0a0a0f;
-  --oscuro:  #111118;
-  --card:    #16161f;
-  --borde:   #23232f;
-  --texto:   #e8e8f0;
-  --gris:    #6b6b80;
-  --blanco:  #ffffff;
-  --oro:     #c9a84c;
-  --oro-luz: #f0c96e;
-  --verde:   #2dd4a0;
-  --rojo:    #e05252;
-  --azul:    #4f8ef7;
+  --negro:#0a0a0f; --oscuro:#111118; --card:#16161f; --borde:#23232f;
+  --texto:#e8e8f0; --gris:#6b6b80; --blanco:#ffffff;
+  --oro:#c9a84c; --oro-luz:#f0c96e; --verde:#2dd4a0; --rojo:#e05252; --azul:#4f8ef7;
 }
-
 html { scroll-behavior: smooth; }
+body { background:var(--negro); color:var(--texto); font-family:'DM Sans',sans-serif; font-weight:400; line-height:1.6; min-height:100vh; overflow-x:hidden; }
+body::before { content:''; position:fixed; top:-200px; left:50%; transform:translateX(-50%); width:800px; height:800px; background:radial-gradient(ellipse,rgba(201,168,76,.06) 0%,transparent 70%); pointer-events:none; z-index:0; }
 
-body {
-  background: var(--negro);
-  color: var(--texto);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 400;
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+nav { position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(10,10,15,.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--borde); }
+.nav-logo { font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--oro); text-decoration:none; letter-spacing:.02em; }
+.nav-back { font-size:.85rem; color:var(--gris); text-decoration:none; transition:color .2s; }
+.nav-back:hover { color:var(--texto); }
 
-/* ── Fondo decorativo ── */
-body::before {
-  content: '';
-  position: fixed;
-  top: -200px; left: 50%;
-  transform: translateX(-50%);
-  width: 800px; height: 800px;
-  background: radial-gradient(ellipse, rgba(201,168,76,.06) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
+.hero { text-align:center; padding:80px 20px 50px; position:relative; z-index:1; }
+.hero-eyebrow { display:inline-block; font-size:.78rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--oro); border:1px solid rgba(201,168,76,.3); padding:5px 14px; border-radius:20px; margin-bottom:24px; }
+.hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.4rem,5vw,3.8rem); line-height:1.15; color:var(--blanco); margin-bottom:18px; }
+.hero h1 em { font-style:italic; color:var(--oro); }
+.hero p { font-size:1.05rem; color:var(--gris); max-width:480px; margin:0 auto 36px; }
 
-/* ── Nav ── */
-nav {
-  position: sticky; top: 0; z-index: 50;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 40px;
-  background: rgba(10,10,15,.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--borde);
-}
-.nav-logo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.3rem; color: var(--oro);
-  text-decoration: none; letter-spacing: .02em;
-}
-.nav-back {
-  font-size: .85rem; color: var(--gris);
-  text-decoration: none; transition: color .2s;
-}
-.nav-back:hover { color: var(--texto); }
+.toggle-wrap { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:48px; position:relative; z-index:1; }
+.toggle-track { display:flex; background:var(--card); border:1px solid var(--borde); border-radius:40px; padding:4px; gap:4px; }
+.toggle-opt { padding:9px 22px; border-radius:32px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500; transition:all .25s; color:var(--gris); background:transparent; }
+.toggle-opt.on { background:var(--oro); color:#000; }
+.ahorro-pill { background:rgba(45,212,160,.12); border:1px solid rgba(45,212,160,.25); color:var(--verde); font-size:.78rem; font-weight:600; padding:5px 12px; border-radius:20px; letter-spacing:.04em; }
 
-/* ── Hero ── */
-.hero {
-  text-align: center;
-  padding: 80px 20px 50px;
-  position: relative; z-index: 1;
-}
-.hero-eyebrow {
-  display: inline-block;
-  font-size: .78rem; font-weight: 600; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--oro);
-  border: 1px solid rgba(201,168,76,.3);
-  padding: 5px 14px; border-radius: 20px;
-  margin-bottom: 24px;
-}
-.hero h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
-  line-height: 1.15;
-  color: var(--blanco);
-  margin-bottom: 18px;
-}
-.hero h1 em {
-  font-style: italic; color: var(--oro);
-}
-.hero p {
-  font-size: 1.05rem; color: var(--gris);
-  max-width: 480px; margin: 0 auto 36px;
-}
+.planes-wrap { max-width:1180px; margin:0 auto; padding:0 20px 80px; position:relative; z-index:1; }
+.planes-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:end; }
+@media(max-width:1100px){ .planes-grid{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:700px) { .planes-grid{ grid-template-columns:1fr; } }
 
-/* ── Toggle pago ── */
-.toggle-wrap {
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px; margin-bottom: 48px;
-  position: relative; z-index: 1;
-}
-.toggle-track {
-  display: flex;
-  background: var(--card);
-  border: 1px solid var(--borde);
-  border-radius: 40px;
-  padding: 4px;
-  gap: 4px;
-}
-.toggle-opt {
-  padding: 9px 22px;
-  border-radius: 32px;
-  border: none; cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .88rem; font-weight: 500;
-  transition: all .25s;
-  color: var(--gris);
-  background: transparent;
-}
-.toggle-opt.on {
-  background: var(--oro);
-  color: #000;
-}
-.ahorro-pill {
-  background: rgba(45,212,160,.12);
-  border: 1px solid rgba(45,212,160,.25);
-  color: var(--verde);
-  font-size: .78rem; font-weight: 600;
-  padding: 5px 12px; border-radius: 20px;
-  letter-spacing: .04em;
-}
+.plan-card { background:var(--card); border:1px solid var(--borde); border-radius:16px; padding:28px 22px 24px; position:relative; transition:transform .25s,box-shadow .25s; display:flex; flex-direction:column; }
+.plan-card:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.4); }
+.plan-card.pro { border-color:var(--oro); background:linear-gradient(160deg,#1c1a10 0%,#16161f 60%); box-shadow:0 0 0 1px rgba(201,168,76,.2),0 20px 60px rgba(201,168,76,.08); transform:translateY(-8px) scale(1.02); z-index:2; }
+.plan-card.pro:hover { transform:translateY(-12px) scale(1.02); }
+.plan-card.business { border-color:rgba(79,142,247,.5); background:linear-gradient(160deg,#0f1420 0%,#16161f 60%); }
 
-/* ── Grid de planes ── */
-.planes-wrap {
-  max-width: 1180px; margin: 0 auto;
-  padding: 0 20px 80px;
-  position: relative; z-index: 1;
-}
-.planes-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  align-items: end;
-}
-@media (max-width: 1100px) {
-  .planes-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 700px) {
-  .planes-grid { grid-template-columns: 1fr; }
-}
+.badge { position:absolute; top:-13px; left:50%; transform:translateX(-50%); padding:3px 14px; border-radius:20px; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; white-space:nowrap; }
+.badge-oro  { background:var(--oro); color:#000; }
+.badge-azul { background:var(--azul); color:#fff; }
+.badge-gris { background:#2a2a38; color:var(--gris); border:1px solid var(--borde); }
 
-/* ── Card base ── */
-.plan-card {
-  background: var(--card);
-  border: 1px solid var(--borde);
-  border-radius: 16px;
-  padding: 28px 22px 24px;
-  position: relative;
-  transition: transform .25s, box-shadow .25s;
-  display: flex; flex-direction: column;
-}
-.plan-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0,0,0,.4);
-}
+.plan-nombre { font-size:.78rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--gris); margin-bottom:16px; }
+.plan-card.pro .plan-nombre { color:var(--oro); }
+.precio-tachado { font-size:.85rem; color:var(--gris); text-decoration:line-through; height:20px; }
+.precio-main { font-family:'DM Serif Display',serif; font-size:2.6rem; line-height:1; color:var(--blanco); margin:4px 0 2px; }
+.plan-card.pro .precio-main { color:var(--oro-luz); }
+.precio-sub { font-size:.78rem; color:var(--gris); margin-bottom:22px; }
+.features { list-style:none; flex:1; margin-bottom:22px; }
+.features li { font-size:.84rem; color:var(--gris); padding:5px 0; border-bottom:1px solid rgba(255,255,255,.04); display:flex; align-items:center; gap:8px; }
+.features li:last-child { border-bottom:none; }
+.features li .ico { font-size:.75rem; flex-shrink:0; }
+.features li.si { color:#c8c8d8; }
+.features li.no { color:#3a3a4a; text-decoration:line-through; }
+.features li.si .ico { color:var(--verde); }
+.features li.no .ico { color:#333; }
+.plan-card.pro .features li.si { color:#e8e0c0; }
+.plan-card.pro .features li.si .ico { color:var(--oro); }
+.btn-plan { width:100%; padding:12px; border-radius:10px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; transition:all .2s; letter-spacing:.02em; }
+.btn-primario  { background:var(--oro); color:#000; }
+.btn-primario:hover { background:var(--oro-luz); }
+.btn-secundario { background:rgba(79,142,247,.15); color:var(--azul); border:1px solid rgba(79,142,247,.3); }
+.btn-secundario:hover { background:rgba(79,142,247,.25); }
+.btn-basico { background:rgba(255,255,255,.04); color:var(--gris); border:1px solid var(--borde); }
+.btn-basico:hover { background:rgba(255,255,255,.08); color:var(--texto); }
 
-/* PRO — destacado */
-.plan-card.pro {
-  border-color: var(--oro);
-  background: linear-gradient(160deg, #1c1a10 0%, #16161f 60%);
-  box-shadow: 0 0 0 1px rgba(201,168,76,.2), 0 20px 60px rgba(201,168,76,.08);
-  transform: translateY(-8px) scale(1.02);
-  z-index: 2;
-}
-.plan-card.pro:hover {
-  transform: translateY(-12px) scale(1.02);
-}
+.nota-cripto { text-align:center; background:rgba(45,212,160,.05); border:1px solid rgba(45,212,160,.15); border-radius:12px; padding:14px 20px; font-size:.84rem; color:var(--verde); max-width:560px; margin:0 auto 40px; line-height:1.5; }
+.activar-seccion { text-align:center; padding:20px; position:relative; z-index:1; }
+.activar-link { background:none; border:none; color:var(--gris); font-size:.88rem; cursor:pointer; text-decoration:underline; font-family:'DM Sans',sans-serif; transition:color .2s; }
+.activar-link:hover { color:var(--texto); }
 
-/* Business — ideal */
-.plan-card.business {
-  border-color: rgba(79,142,247,.5);
-  background: linear-gradient(160deg, #0f1420 0%, #16161f 60%);
-}
+/* Modales */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(4px); z-index:100; align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.visible { display:flex; }
+.modal-box { background:var(--card); border:1px solid var(--borde); border-radius:20px; padding:44px 36px; width:100%; max-width:420px; text-align:center; animation:slideUp .3s ease; }
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.modal-box h3 { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--blanco); margin-bottom:8px; }
+.modal-sub { font-size:.88rem; color:var(--gris); margin-bottom:20px; }
+.modal-plan-tag { display:inline-block; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25); color:var(--oro); font-size:.78rem; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:20px; }
+.input-field { width:100%; background:var(--oscuro); border:1.5px solid var(--borde); border-radius:10px; padding:13px 16px; font-family:'DM Sans',sans-serif; font-size:.92rem; color:var(--texto); transition:border-color .2s; margin-bottom:12px; }
+.input-field:focus { outline:none; border-color:var(--oro); }
+.input-code { width:100%; background:var(--oscuro); border:1.5px solid var(--borde); border-radius:10px; padding:14px 16px; font-family:monospace; font-size:1rem; font-weight:600; text-align:center; letter-spacing:2px; color:var(--texto); text-transform:uppercase; transition:border-color .2s; margin-bottom:10px; }
+.input-code:focus { outline:none; border-color:var(--oro); }
+.btn-modal { width:100%; padding:14px; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.95rem; font-weight:700; cursor:pointer; transition:opacity .2s; margin-bottom:12px; }
+.btn-modal:hover { opacity:.85; }
+.btn-modal.oro   { background:var(--oro);   color:#000; }
+.btn-modal.verde { background:var(--verde); color:#000; }
+.btn-cerrar { background:none; border:none; color:var(--gris); font-size:.83rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:color .2s; }
+.btn-cerrar:hover { color:var(--texto); }
+.msg-resultado { display:none; border-radius:8px; padding:12px 16px; font-size:.86rem; margin-bottom:12px; line-height:1.5; }
+.msg-ok    { background:rgba(45,212,160,.1); color:var(--verde); border:1px solid rgba(45,212,160,.2); }
+.msg-error { background:rgba(224,82,82,.1);  color:var(--rojo);  border:1px solid rgba(224,82,82,.2); }
 
-/* ── Badge ── */
-.badge {
-  position: absolute;
-  top: -13px; left: 50%;
-  transform: translateX(-50%);
-  padding: 3px 14px;
-  border-radius: 20px;
-  font-size: .72rem; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase;
-  white-space: nowrap;
-}
-.badge-oro  { background: var(--oro); color: #000; }
-.badge-azul { background: var(--azul); color: #fff; }
-.badge-gris { background: #2a2a38; color: var(--gris); border: 1px solid var(--borde); }
+.banner-exito { display:none; background:rgba(45,212,160,.08); border-bottom:1px solid rgba(45,212,160,.2); padding:14px 20px; text-align:center; font-size:.9rem; color:var(--verde); position:sticky; top:57px; z-index:40; }
+.banner-exito.visible { display:block; }
 
-/* ── Contenido card ── */
-.plan-nombre {
-  font-size: .78rem; font-weight: 600; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--gris);
-  margin-bottom: 16px;
-}
-.plan-card.pro .plan-nombre { color: var(--oro); }
+.faq { max-width:620px; margin:0 auto 80px; padding:0 20px; position:relative; z-index:1; }
+.faq-titulo { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--blanco); text-align:center; margin-bottom:28px; }
+.faq-item { border-bottom:1px solid var(--borde); padding:16px 0; }
+.faq-item summary { font-size:.9rem; font-weight:500; color:var(--texto); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+.faq-item summary::after { content:'+'; color:var(--oro); font-size:1.2rem; }
+.faq-item[open] summary::after { content:'−'; }
+.faq-item p { font-size:.86rem; color:var(--gris); padding-top:10px; line-height:1.7; }
 
-.precio-tachado {
-  font-size: .85rem; color: var(--gris);
-  text-decoration: line-through;
-  height: 20px; /* reservar espacio aunque esté oculto */
-}
-.precio-main {
-  font-family: 'DM Serif Display', serif;
-  font-size: 2.6rem; line-height: 1;
-  color: var(--blanco);
-  margin: 4px 0 2px;
-}
-.plan-card.pro .precio-main { color: var(--oro-luz); }
-.precio-sub {
-  font-size: .78rem; color: var(--gris);
-  margin-bottom: 22px;
-}
-
-.features {
-  list-style: none;
-  flex: 1;
-  margin-bottom: 22px;
-}
-.features li {
-  font-size: .84rem; color: var(--gris);
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(255,255,255,.04);
-  display: flex; align-items: center; gap: 8px;
-}
-.features li:last-child { border-bottom: none; }
-.features li .ico { font-size: .75rem; flex-shrink: 0; }
-.features li.si { color: #c8c8d8; }
-.features li.no { color: #3a3a4a; text-decoration: line-through; }
-.features li.si .ico { color: var(--verde); }
-.features li.no .ico { color: #333; }
-.plan-card.pro .features li.si { color: #e8e0c0; }
-.plan-card.pro .features li.si .ico { color: var(--oro); }
-
-/* ── Botón ── */
-.btn-plan {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none; cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .9rem; font-weight: 600;
-  transition: all .2s;
-  letter-spacing: .02em;
-}
-.btn-primario {
-  background: var(--oro);
-  color: #000;
-}
-.btn-primario:hover { background: var(--oro-luz); }
-.btn-secundario {
-  background: rgba(79,142,247,.15);
-  color: var(--azul);
-  border: 1px solid rgba(79,142,247,.3);
-}
-.btn-secundario:hover { background: rgba(79,142,247,.25); }
-.btn-basico {
-  background: rgba(255,255,255,.04);
-  color: var(--gris);
-  border: 1px solid var(--borde);
-}
-.btn-basico:hover { background: rgba(255,255,255,.08); color: var(--texto); }
-
-/* ── Nota cripto ── */
-.nota-cripto {
-  text-align: center;
-  background: rgba(45,212,160,.05);
-  border: 1px solid rgba(45,212,160,.15);
-  border-radius: 12px;
-  padding: 14px 20px;
-  font-size: .84rem; color: var(--verde);
-  max-width: 560px; margin: 0 auto 40px;
-  line-height: 1.5;
-}
-
-/* ── Activar código ── */
-.activar-seccion {
-  text-align: center;
-  padding: 20px;
-  position: relative; z-index: 1;
-}
-.activar-link {
-  background: none; border: none;
-  color: var(--gris); font-size: .88rem;
-  cursor: pointer; text-decoration: underline;
-  font-family: 'DM Sans', sans-serif;
-  transition: color .2s;
-}
-.activar-link:hover { color: var(--texto); }
-
-/* ── Modal ── */
-.modal-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.75);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  align-items: center; justify-content: center;
-  padding: 20px;
-}
-.modal-overlay.visible { display: flex; }
-.modal-box {
-  background: var(--card);
-  border: 1px solid var(--borde);
-  border-radius: 20px;
-  padding: 44px 36px;
-  width: 100%; max-width: 420px;
-  text-align: center;
-  animation: slideUp .3s ease;
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.modal-box h3 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.6rem; color: var(--blanco);
-  margin-bottom: 8px;
-}
-.modal-box p {
-  font-size: .88rem; color: var(--gris);
-  margin-bottom: 24px;
-}
-.input-code {
-  width: 100%;
-  background: var(--oscuro);
-  border: 1.5px solid var(--borde);
-  border-radius: 10px;
-  padding: 14px 16px;
-  font-family: 'DM Sans', monospace;
-  font-size: 1rem; font-weight: 600;
-  text-align: center; letter-spacing: 2px;
-  color: var(--texto);
-  text-transform: uppercase;
-  transition: border-color .2s;
-  margin-bottom: 10px;
-}
-.input-code:focus { outline: none; border-color: var(--oro); }
-.input-email {
-  width: 100%;
-  background: var(--oscuro);
-  border: 1.5px solid var(--borde);
-  border-radius: 10px;
-  padding: 13px 16px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .92rem;
-  color: var(--texto);
-  transition: border-color .2s;
-  margin-bottom: 14px;
-  letter-spacing: 0;
-  text-transform: none;
-}
-.input-email:focus { outline: none; border-color: var(--oro); }
-.btn-activar {
-  width: 100%;
-  padding: 14px;
-  background: var(--verde);
-  color: #000;
-  border: none; border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .95rem; font-weight: 700;
-  cursor: pointer; transition: opacity .2s;
-  margin-bottom: 14px;
-}
-.btn-activar:hover { opacity: .85; }
-.btn-cerrar {
-  background: none; border: none;
-  color: var(--gris); font-size: .83rem;
-  cursor: pointer; font-family: 'DM Sans', sans-serif;
-  transition: color .2s;
-}
-.btn-cerrar:hover { color: var(--texto); }
-.msg-resultado {
-  display: none;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: .86rem;
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-.msg-ok    { background: rgba(45,212,160,.1); color: var(--verde); border: 1px solid rgba(45,212,160,.2); }
-.msg-error { background: rgba(224,82,82,.1);  color: var(--rojo);  border: 1px solid rgba(224,82,82,.2); }
-
-/* ── Banner de éxito post-pago ── */
-.banner-exito {
-  display: none;
-  background: rgba(45,212,160,.08);
-  border-bottom: 1px solid rgba(45,212,160,.2);
-  padding: 14px 20px;
-  text-align: center;
-  font-size: .9rem; color: var(--verde);
-  position: sticky; top: 57px; z-index: 40;
-}
-.banner-exito.visible { display: block; }
-
-/* ── FAQ mínima ── */
-.faq {
-  max-width: 620px; margin: 0 auto 80px;
-  padding: 0 20px;
-  position: relative; z-index: 1;
-}
-.faq-titulo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.5rem; color: var(--blanco);
-  text-align: center; margin-bottom: 28px;
-}
-.faq-item {
-  border-bottom: 1px solid var(--borde);
-  padding: 16px 0;
-}
-.faq-item summary {
-  font-size: .9rem; font-weight: 500; color: var(--texto);
-  cursor: pointer; list-style: none;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.faq-item summary::after { content: '+'; color: var(--oro); font-size: 1.2rem; }
-.faq-item[open] summary::after { content: '−'; }
-.faq-item p {
-  font-size: .86rem; color: var(--gris);
-  padding-top: 10px; line-height: 1.7;
-}
-
-/* ── Spinner ── */
-.spinner {
-  display: inline-block;
-  width: 16px; height: 16px;
-  border: 2px solid rgba(0,0,0,.3);
-  border-top-color: #000;
-  border-radius: 50%;
-  animation: spin .6s linear infinite;
-  margin-right: 8px; vertical-align: middle;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(0,0,0,.3); border-top-color:#000; border-radius:50%; animation:spin .6s linear infinite; margin-right:8px; vertical-align:middle; }
+@keyframes spin { to { transform:rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<!-- Nav -->
 <nav>
   <a class="nav-logo" href="index.html">LegalAI Arg</a>
   <a class="nav-back" href="index.html">← Volver al generador</a>
 </nav>
 
-<!-- Banner éxito post-pago -->
 <div class="banner-exito" id="bannerExito">
   ✅ Pago recibido. Tu código de activación llegará a tu email en unos minutos. También podés activarlo acá abajo.
 </div>
 
-<!-- Hero -->
 <section class="hero">
   <div class="hero-eyebrow">Planes y suscripciones</div>
   <h1>Documentos legales<br><em>sin límites</em></h1>
   <p>Elegí tu plan, pagá con tarjeta o cripto y activá tu acceso al instante.</p>
-
-  <!-- Toggle método de pago -->
   <div class="toggle-wrap">
     <div class="toggle-track">
       <button class="toggle-opt" id="btnTarjeta" onclick="setPago('tarjeta')">💳 Tarjeta</button>
@@ -474,216 +138,237 @@ nav {
     </div>
     <span class="ahorro-pill" id="pillAhorro">⚡ Precio más bajo pagando en cripto</span>
   </div>
-
-  <!-- Nota cripto -->
   <div class="nota-cripto" id="notaCripto">
     Pagás con USDT o USDC — stablecoins equivalentes al dólar. Sin volatilidad, sin cuenta extra, sin registro.
   </div>
 </section>
 
-<!-- Grid de planes -->
 <div class="planes-wrap">
   <div class="planes-grid" id="planesGrid"></div>
 </div>
 
-<!-- Activar código -->
 <div class="activar-seccion">
-  <button class="activar-link" onclick="abrirModal()">
+  <button class="activar-link" onclick="abrirModalActivar()">
     ¿Ya tenés un código de activación? Activalo acá →
   </button>
 </div>
 
-<!-- FAQ -->
 <section class="faq">
   <div class="faq-titulo">Preguntas frecuentes</div>
-
   <details class="faq-item">
     <summary>¿Cómo funciona el pago con cripto?</summary>
-    <p>Al elegir cripto, NOWPayments genera un checkout donde podés pagar con USDT, USDC u otras criptos. El precio está fijado en USD, sin sorpresas. No necesitás crear cuenta en ninguna plataforma.</p>
+    <p>Al elegir cripto, NOWPayments genera un checkout donde podés pagar con USDT. El precio está fijado en USD, sin sorpresas. No necesitás crear cuenta en ninguna plataforma.</p>
   </details>
-
   <details class="faq-item">
     <summary>¿Qué recibo después de pagar?</summary>
     <p>Un código de activación tipo <strong>PRO-XXXX-XXXX-XXXX</strong> que llega a tu email. Con ese código activás el plan ingresando tu email acá en la página, sin crear cuenta.</p>
   </details>
-
   <details class="faq-item">
     <summary>¿El plan se renueva automáticamente?</summary>
     <p>No. Cada plan es por el período contratado. Cuando vence, podés renovar con un nuevo pago. No hay cargos automáticos.</p>
   </details>
-
   <details class="faq-item">
     <summary>¿Cuánto tiempo tengo para activar el código?</summary>
     <p>90 días desde que se generó. Una vez activado, el plan corre desde ese momento por el período contratado.</p>
   </details>
-
   <details class="faq-item">
     <summary>¿Qué es "fair use" en el plan PRO?</summary>
     <p>Documentos ilimitados para uso profesional normal. No está pensado para generación masiva automatizada, sino para profesionales y estudios con volumen real de trabajo.</p>
   </details>
 </section>
 
-<!-- Modal activar plan -->
+<!-- Modal: ingreso de email para pagar -->
+<div class="modal-overlay" id="modalEmail">
+  <div class="modal-box">
+    <h3>Un paso más</h3>
+    <div class="modal-plan-tag" id="tagPlan"></div>
+    <p class="modal-sub">Ingresá tu email. Te enviamos el código de activación después del pago.</p>
+    <input class="input-field" id="inputEmailPago" type="email" placeholder="tu@email.com"
+           onkeydown="if(event.key==='Enter') confirmarEmail()">
+    <div class="msg-resultado" id="msgEmailError"></div>
+    <button class="btn-modal oro" id="btnConfirmarEmail" onclick="confirmarEmail()">
+      Continuar al pago →
+    </button>
+    <button class="btn-cerrar" onclick="cerrarModalEmail()">Cancelar</button>
+  </div>
+</div>
+
+<!-- Modal: activar código -->
 <div class="modal-overlay" id="modalActivar">
   <div class="modal-box">
     <h3>Activar plan</h3>
-    <p>Ingresá el código que recibiste y tu email para activar.</p>
-    <input class="input-code" id="inputCodigo" placeholder="PRO-XXXX-XXXX-XXXX" maxlength="24" oninput="this.value=this.value.toUpperCase()">
-    <input class="input-email" id="inputEmail" type="email" placeholder="tu@email.com">
+    <p class="modal-sub">Ingresá el código que recibiste y tu email para activar.</p>
+    <input class="input-code" id="inputCodigo" placeholder="PRO-XXXX-XXXX-XXXX" maxlength="24"
+           oninput="this.value=this.value.toUpperCase()">
+    <input class="input-field" id="inputEmail" type="email" placeholder="tu@email.com">
     <div class="msg-resultado" id="msgActivacion"></div>
-    <button class="btn-activar" id="btnActivar" onclick="activarCodigo()">Activar plan</button>
-    <button class="btn-cerrar" onclick="cerrarModal()">Cerrar</button>
+    <button class="btn-modal verde" id="btnActivar" onclick="activarCodigo()">Activar plan</button>
+    <button class="btn-cerrar" onclick="cerrarModalActivar()">Cerrar</button>
   </div>
 </div>
 
 <script>
-// ── Configuración ────────────────────────────────────────────────
 const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
 
 const PLANES = [
   {
-    id: 'starter', nombre: 'Starter',
-    cripto: 19, tarjeta: 22,
-    badge: null,
-    btn: 'basico',
-    features: [
-      { ok: true,  txt: '10 documentos por mes' },
-      { ok: true,  txt: 'Acceso básico' },
-      { ok: false, txt: 'Con marca de agua' },
-      { ok: false, txt: 'Sin guías incluidas' },
-      { ok: false, txt: 'Sin prioridad' },
+    id:'starter', nombre:'Starter', cripto:19, tarjeta:22, badge:null, btn:'basico',
+    features:[
+      {ok:true,  txt:'10 documentos por mes'},
+      {ok:true,  txt:'Acceso básico'},
+      {ok:false, txt:'Con marca de agua'},
+      {ok:false, txt:'Sin guías incluidas'},
+      {ok:false, txt:'Sin prioridad'},
     ]
   },
   {
-    id: 'standard', nombre: 'Standard',
-    cripto: 49, tarjeta: 55,
-    badge: null,
-    btn: 'basico',
-    features: [
-      { ok: true,  txt: '30 documentos por mes' },
-      { ok: true,  txt: 'Sin marca de agua' },
-      { ok: true,  txt: 'Acceso completo' },
-      { ok: false, txt: 'Sin guías incluidas' },
-      { ok: false, txt: 'Sin prioridad' },
+    id:'standard', nombre:'Standard', cripto:49, tarjeta:55, badge:null, btn:'basico',
+    features:[
+      {ok:true,  txt:'30 documentos por mes'},
+      {ok:true,  txt:'Sin marca de agua'},
+      {ok:true,  txt:'Acceso completo'},
+      {ok:false, txt:'Sin guías incluidas'},
+      {ok:false, txt:'Sin prioridad'},
     ]
   },
   {
-    id: 'pro', nombre: 'PRO',
-    cripto: 99, tarjeta: 112,
-    badge: { txt: '⭐ Más elegido', cls: 'badge-oro' },
-    claseCard: 'pro',
-    btn: 'primario',
-    features: [
-      { ok: true, txt: 'Documentos ilimitados' },
-      { ok: true, txt: 'Sin marca de agua' },
-      { ok: true, txt: 'Guías legales incluidas' },
-      { ok: true, txt: 'Prioridad de generación' },
-      { ok: true, txt: 'Fair use profesional' },
+    id:'pro', nombre:'PRO', cripto:99, tarjeta:112,
+    badge:{txt:'⭐ Más elegido', cls:'badge-oro'}, claseCard:'pro', btn:'primario',
+    features:[
+      {ok:true, txt:'Documentos ilimitados'},
+      {ok:true, txt:'Sin marca de agua'},
+      {ok:true, txt:'Guías legales incluidas'},
+      {ok:true, txt:'Prioridad de generación'},
+      {ok:true, txt:'Fair use profesional'},
     ]
   },
   {
-    id: 'business', nombre: 'Business',
-    cripto: 249, tarjeta: 279,
-    badge: { txt: '🏆 Ideal para estudios', cls: 'badge-azul' },
-    claseCard: 'business',
-    btn: 'secundario',
-    features: [
-      { ok: true, txt: 'Uso intensivo' },
-      { ok: true, txt: 'Prioridad máxima' },
-      { ok: true, txt: 'Sin marca de agua' },
-      { ok: true, txt: 'Guías incluidas' },
-      { ok: true, txt: 'Soporte dedicado' },
+    id:'business', nombre:'Business', cripto:249, tarjeta:279,
+    badge:{txt:'🏆 Ideal para estudios', cls:'badge-azul'}, claseCard:'business', btn:'secundario',
+    features:[
+      {ok:true, txt:'Uso intensivo'},
+      {ok:true, txt:'Prioridad máxima'},
+      {ok:true, txt:'Sin marca de agua'},
+      {ok:true, txt:'Guías incluidas'},
+      {ok:true, txt:'Soporte dedicado'},
     ]
   },
   {
-    id: 'enterprise', nombre: 'Enterprise',
-    cripto: 599, tarjeta: 679,
-    badge: { txt: 'Máxima escala', cls: 'badge-gris' },
-    btn: 'basico',
-    features: [
-      { ok: true, txt: 'Todo lo de Business' },
-      { ok: true, txt: 'Volumen muy alto' },
-      { ok: true, txt: 'Soporte 24/7' },
-      { ok: true, txt: 'Acceso API (próximo)' },
-      { ok: true, txt: 'Prioridad absoluta' },
+    id:'enterprise', nombre:'Enterprise', cripto:599, tarjeta:679,
+    badge:{txt:'Máxima escala', cls:'badge-gris'}, btn:'basico',
+    features:[
+      {ok:true, txt:'Todo lo de Business'},
+      {ok:true, txt:'Volumen muy alto'},
+      {ok:true, txt:'Soporte 24/7'},
+      {ok:true, txt:'Acceso API (próximo)'},
+      {ok:true, txt:'Prioridad absoluta'},
     ]
   },
 ];
 
-// ── Estado ───────────────────────────────────────────────────────
-let modoPago  = 'cripto';
-let cargando  = null; // id del plan en proceso
+let modoPago   = 'cripto';
+let cargando   = null;
+let planPendiente = null;
 
-// ── Afiliado ─────────────────────────────────────────────────────
+// Afiliado
 const params = new URLSearchParams(window.location.search);
 const refParam = params.get('ref');
 if (refParam) sessionStorage.setItem('legalai_ref', refParam);
 const refAfiliado = refParam || sessionStorage.getItem('legalai_ref');
 
-// ── Retorno de pago ───────────────────────────────────────────────
-const statusParam = params.get('status');
-if (statusParam === 'success') {
+// Retorno de pago
+if (params.get('status') === 'success') {
   document.getElementById('bannerExito').classList.add('visible');
-  const emailGuardado = sessionStorage.getItem('legalai_email');
-  if (emailGuardado) {
+  const em = sessionStorage.getItem('legalai_email');
+  if (em) {
     setTimeout(() => {
-      document.getElementById('inputEmail').value = emailGuardado;
-      abrirModal();
+      document.getElementById('inputEmail').value = em;
+      abrirModalActivar();
     }, 800);
   }
 }
 
-// ── Toggle modo pago ──────────────────────────────────────────────
+// Toggle
 function setPago(modo) {
   modoPago = modo;
   document.getElementById('btnCripto').classList.toggle('on', modo === 'cripto');
   document.getElementById('btnTarjeta').classList.toggle('on', modo === 'tarjeta');
-  document.getElementById('notaCripto').style.display  = modo === 'cripto' ? 'block' : 'none';
-  document.getElementById('pillAhorro').style.display  = modo === 'cripto' ? 'inline-block' : 'none';
+  document.getElementById('notaCripto').style.display = modo === 'cripto' ? 'block' : 'none';
+  document.getElementById('pillAhorro').style.display = modo === 'cripto' ? 'inline-block' : 'none';
   renderPlanes();
 }
 
-// ── Render planes ─────────────────────────────────────────────────
+// Render
 function renderPlanes() {
-  const grid = document.getElementById('planesGrid');
-  grid.innerHTML = PLANES.map(p => {
-    const precio     = modoPago === 'cripto' ? p.cripto : p.tarjeta;
-    const tachado    = modoPago === 'cripto' ? `<div class="precio-tachado">USD ${p.tarjeta}</div>` : '<div class="precio-tachado">&nbsp;</div>';
-    const badgeHTML  = p.badge ? `<div class="badge ${p.badge.cls}">${p.badge.txt}</div>` : '';
-    const esCargando = cargando === p.id;
-
+  document.getElementById('planesGrid').innerHTML = PLANES.map(p => {
+    const precio   = modoPago === 'cripto' ? p.cripto : p.tarjeta;
+    const tachado  = modoPago === 'cripto'
+      ? `<div class="precio-tachado">USD ${p.tarjeta}</div>`
+      : '<div class="precio-tachado">&nbsp;</div>';
+    const badge    = p.badge ? `<div class="badge ${p.badge.cls}">${p.badge.txt}</div>` : '';
+    const isCargando = cargando === p.id;
     const features = p.features.map(f =>
-      `<li class="${f.ok ? 'si' : 'no'}"><span class="ico">${f.ok ? '✓' : '✗'}</span>${f.txt}</li>`
+      `<li class="${f.ok?'si':'no'}"><span class="ico">${f.ok?'✓':'✗'}</span>${f.txt}</li>`
     ).join('');
-
-    const btnLabel = esCargando
+    const label = isCargando
       ? `<span class="spinner"></span> Procesando...`
       : (modoPago === 'cripto' ? '🔐 Pagar con cripto' : '💳 Pagar con tarjeta');
-
     return `
-      <div class="plan-card ${p.claseCard || ''}">
-        ${badgeHTML}
+      <div class="plan-card ${p.claseCard||''}">
+        ${badge}
         <div class="plan-nombre">${p.nombre}</div>
         ${tachado}
         <div class="precio-main">USD ${precio}</div>
         <div class="precio-sub">por mes</div>
         <ul class="features">${features}</ul>
-        <button class="btn-plan btn-${p.btn}" onclick="iniciarPago('${p.id}')" ${esCargando ? 'disabled' : ''}>
-          ${btnLabel}
+        <button class="btn-plan btn-${p.btn}" onclick="iniciarPago('${p.id}')" ${isCargando?'disabled':''}>
+          ${label}
         </button>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
-// ── Iniciar pago ──────────────────────────────────────────────────
-async function iniciarPago(plan_id) {
-  const email = prompt('Ingresá tu email para recibir el código de activación:');
-  if (!email || !email.includes('@')) {
-    if (email !== null) alert('Email inválido. Necesitamos tu email para enviarte el código.');
+// ── Modal email ───────────────────────────────────────────────────
+function iniciarPago(plan_id) {
+  planPendiente = plan_id;
+  const p = PLANES.find(x => x.id === plan_id);
+  const precio = modoPago === 'cripto' ? p.cripto : p.tarjeta;
+  document.getElementById('tagPlan').textContent =
+    `${p.nombre} · USD ${precio} · ${modoPago === 'cripto' ? 'USDT' : 'Tarjeta'}`;
+  const em = sessionStorage.getItem('legalai_email');
+  document.getElementById('inputEmailPago').value = em || '';
+  document.getElementById('msgEmailError').style.display = 'none';
+  document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
+  document.getElementById('btnConfirmarEmail').disabled = false;
+  document.getElementById('modalEmail').classList.add('visible');
+  setTimeout(() => document.getElementById('inputEmailPago').focus(), 120);
+}
+
+function cerrarModalEmail() {
+  document.getElementById('modalEmail').classList.remove('visible');
+  planPendiente = null;
+}
+
+document.getElementById('modalEmail').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalEmail')) cerrarModalEmail();
+});
+
+async function confirmarEmail() {
+  const email = (document.getElementById('inputEmailPago').value || '').trim().toLowerCase();
+  const msgEl = document.getElementById('msgEmailError');
+  const btn   = document.getElementById('btnConfirmarEmail');
+
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    mostrarMsg(msgEl, 'Ingresá un email válido.', 'error');
     return;
   }
 
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Creando orden...';
+  msgEl.style.display = 'none';
+
+  const plan_id = planPendiente;
+  cerrarModalEmail();
   cargando = plan_id;
   renderPlanes();
 
@@ -698,32 +383,41 @@ async function iniciarPago(plan_id) {
         ref: refAfiliado || null
       })
     });
-
     const data = await res.json();
 
     if (data.invoice_url) {
-      sessionStorage.setItem('legalai_invoice', data.invoice_id);
+      sessionStorage.setItem('legalai_invoice', data.invoice_id || '');
       sessionStorage.setItem('legalai_email', email);
       window.location.href = data.invoice_url;
     } else {
-      alert('Error al crear la orden: ' + (data.error || 'intentá de nuevo'));
       cargando = null;
       renderPlanes();
+      // Reabrir modal con error
+      planPendiente = plan_id;
+      document.getElementById('inputEmailPago').value = email;
+      mostrarMsg(document.getElementById('msgEmailError'), data.error || 'Error al crear la orden. Intentá de nuevo.', 'error');
+      document.getElementById('btnConfirmarEmail').disabled = false;
+      document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
+      document.getElementById('modalEmail').classList.add('visible');
     }
   } catch (e) {
-    alert('Error de conexión. Verificá tu internet e intentá de nuevo.');
     cargando = null;
     renderPlanes();
+    planPendiente = plan_id;
+    document.getElementById('inputEmailPago').value = email;
+    mostrarMsg(document.getElementById('msgEmailError'), 'Error de conexión. Verificá tu internet.', 'error');
+    document.getElementById('btnConfirmarEmail').disabled = false;
+    document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
+    document.getElementById('modalEmail').classList.add('visible');
   }
 }
 
 // ── Modal activar ─────────────────────────────────────────────────
-function abrirModal()  { document.getElementById('modalActivar').classList.add('visible'); }
-function cerrarModal() { document.getElementById('modalActivar').classList.remove('visible'); }
+function abrirModalActivar()  { document.getElementById('modalActivar').classList.add('visible'); }
+function cerrarModalActivar() { document.getElementById('modalActivar').classList.remove('visible'); }
 
-// Cerrar modal clickando overlay
-document.getElementById('modalActivar').addEventListener('click', function(e) {
-  if (e.target === this) cerrarModal();
+document.getElementById('modalActivar').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalActivar')) cerrarModalActivar();
 });
 
 async function activarCodigo() {
@@ -732,25 +426,23 @@ async function activarCodigo() {
   const btn    = document.getElementById('btnActivar');
   const msg    = document.getElementById('msgActivacion');
 
-  if (!codigo || codigo.length < 6) { mostrarMsg(msg, 'Ingresá un código válido.', 'error'); return; }
-  if (!email  || !email.includes('@')) { mostrarMsg(msg, 'Ingresá un email válido.', 'error'); return; }
+  if (!codigo || codigo.length < 6)   { mostrarMsg(msg, 'Ingresá un código válido.', 'error'); return; }
+  if (!email || !email.includes('@')) { mostrarMsg(msg, 'Ingresá un email válido.', 'error'); return; }
 
   btn.disabled  = true;
   btn.innerHTML = '<span class="spinner"></span> Activando...';
   msg.style.display = 'none';
 
   try {
-    const res = await fetch(`${WORKER}/dev/planes/activar`, {
+    const res  = await fetch(`${WORKER}/dev/planes/activar`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ codigo, email })
     });
-
     const data = await res.json();
-
     if (data.ok) {
       const fecha = new Date(data.expires_at).toLocaleDateString('es-AR', { day:'numeric', month:'long', year:'numeric' });
-      mostrarMsg(msg, `✅ ¡Plan ${data.plan_id.toUpperCase()} activado! Válido hasta el ${fecha}.`, 'ok');
+      mostrarMsg(msg, `✅ Plan ${data.plan_id.toUpperCase()} activado. Válido hasta el ${fecha}.`, 'ok');
       sessionStorage.removeItem('legalai_email');
       sessionStorage.removeItem('legalai_invoice');
     } else {
@@ -770,7 +462,6 @@ function mostrarMsg(el, txt, tipo) {
   el.style.display = 'block';
 }
 
-// ── Init ──────────────────────────────────────────────────────────
 renderPlanes();
 </script>
 </body>
