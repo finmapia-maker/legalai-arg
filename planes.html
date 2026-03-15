@@ -79,7 +79,6 @@ nav { position:sticky; top:0; z-index:50; display:flex; align-items:center; just
 .activar-link { background:none; border:none; color:var(--gris); font-size:.88rem; cursor:pointer; text-decoration:underline; font-family:'DM Sans',sans-serif; transition:color .2s; }
 .activar-link:hover { color:var(--texto); }
 
-/* Modales */
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(4px); z-index:100; align-items:center; justify-content:center; padding:20px; }
 .modal-overlay.visible { display:flex; }
 .modal-box { background:var(--card); border:1px solid var(--borde); border-radius:20px; padding:44px 36px; width:100%; max-width:420px; text-align:center; animation:slideUp .3s ease; }
@@ -177,7 +176,7 @@ nav { position:sticky; top:0; z-index:50; display:flex; align-items:center; just
   </details>
 </section>
 
-<!-- Modal: ingreso de email para pagar -->
+<!-- Modal: email para pagar -->
 <div class="modal-overlay" id="modalEmail">
   <div class="modal-box">
     <h3>Un paso más</h3>
@@ -288,7 +287,6 @@ if (params.get('status') === 'success') {
   }
 }
 
-// Toggle
 function setPago(modo) {
   modoPago = modo;
   document.getElementById('btnCripto').classList.toggle('on', modo === 'cripto');
@@ -298,7 +296,6 @@ function setPago(modo) {
   renderPlanes();
 }
 
-// Render
 function renderPlanes() {
   document.getElementById('planesGrid').innerHTML = PLANES.map(p => {
     const precio   = modoPago === 'cripto' ? p.cripto : p.tarjeta;
@@ -373,7 +370,7 @@ async function confirmarEmail() {
   renderPlanes();
 
   try {
-    const res = await fetch(`${WORKER}/dev/planes/crear-orden`, {
+    const res = await fetch(`${WORKER}/planes/crear-orden`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -392,7 +389,6 @@ async function confirmarEmail() {
     } else {
       cargando = null;
       renderPlanes();
-      // Reabrir modal con error
       planPendiente = plan_id;
       document.getElementById('inputEmailPago').value = email;
       mostrarMsg(document.getElementById('msgEmailError'), data.error || 'Error al crear la orden. Intentá de nuevo.', 'error');
@@ -434,7 +430,7 @@ async function activarCodigo() {
   msg.style.display = 'none';
 
   try {
-    const res  = await fetch(`${WORKER}/dev/planes/activar`, {
+    const res = await fetch(`${WORKER}/planes/activar`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ codigo, email })
