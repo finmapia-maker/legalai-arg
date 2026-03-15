@@ -259,7 +259,6 @@ textarea{resize:vertical;min-height:80px;}
 .modal-check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px;background:var(--cream);border-radius:8px;font-size:.83rem;color:var(--ink);cursor:pointer;}
 .modal-check-row input{width:16px;height:16px;margin-top:2px;flex-shrink:0;}
 
-/* ── FOOTER*/
 /* ── FOOTER ─────────────────────────────────────────────────────────────── */
 footer{background:var(--hdr-bg);padding:36px 40px;text-align:center;border-top:1px solid rgba(200,168,75,.12);}
 footer p{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2;}
@@ -301,12 +300,12 @@ footer a:hover{color:var(--gold);}
 <nav>
   <div class="nav-link active" onclick="showSec('inicio')">Inicio</div>
   <div class="nav-link"        onclick="showSec('generador')">Generador</div>
-  <div class="nav-link"        onclick="showSec('suscripcion')">Plan ilimitado</div>
+  <div class="nav-link"        onclick="window.location.href='planes.html'">Plan ilimitado</div>
   <div class="nav-link"        onclick="showSec('about')">Acerca de</div>
 </nav>
 
 
-<!-- ═══════════════════ INICIO ═══════════════════ -->
+<!-- INICIO -->
 <div class="section visible" id="sec-inicio">
 
   <div class="hero">
@@ -358,14 +357,14 @@ footer a:hover{color:var(--gold);}
       </button>
       <p style="margin-top:16px;font-size:.78rem;color:var(--mist);font-family:'DM Mono',monospace;">
         ¿Generás documentos seguido?
-        <a onclick="showSec('suscripcion')" style="color:var(--gold);cursor:pointer;">Conocé el plan ilimitado →</a>
+        <a href="planes.html" style="color:var(--gold);cursor:pointer;">Conocé el plan ilimitado →</a>
       </p>
     </div>
   </div>
 </div>
 
 
-<!-- ═══════════════════ GENERADOR ═══════════════════ -->
+<!-- GENERADOR -->
 <div class="section" id="sec-generador">
   <div style="max-width:720px;margin:0 auto;padding:40px 24px 0;text-align:center;">
     <div class="hero-tag">// Generador de documentos</div>
@@ -395,9 +394,7 @@ footer a:hover{color:var(--gold);}
         <button class="cat-tab" onclick="setCat(this,'reclamos')">⚠️ Reclamos</button>
         <button class="cat-tab" onclick="setCat(this,'personales')">👤 Personales</button>
       </div>
-      <div class="suggestions" id="suggestBox">
-        <!-- se rellena por JS según categoría -->
-      </div>
+      <div class="suggestions" id="suggestBox"></div>
 
       <div class="suggest-lbl">País y provincia (para adaptar la legislación):</div>
       <div class="row2">
@@ -417,7 +414,6 @@ footer a:hover{color:var(--gold);}
         </div>
       </div>
 
-      <!-- Código de pack opcional -->
       <div id="packCodeSection" style="margin-top:4px;">
         <button type="button" onclick="togglePackCode()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:.05em;padding:0;">
           ▸ ¿Tenés un código de pack? Ingresalo acá
@@ -473,7 +469,7 @@ footer a:hover{color:var(--gold);}
       <div class="alert grn alert-show">✓ Pago seguro con MercadoPago · Descarga inmediata después del pago</div>
       <div class="alert info alert-show" style="margin-top:0;">
         💡 ¿Generás documentos seguido?
-        <a onclick="showSec('suscripcion')" style="color:var(--gold);cursor:pointer;font-weight:500;">Conocé el plan ilimitado →</a>
+        <a href="planes.html" style="color:var(--gold);cursor:pointer;font-weight:500;">Conocé el plan ilimitado →</a>
       </div>
 
       <div class="alert err" id="alert3"></div>
@@ -495,7 +491,6 @@ footer a:hover{color:var(--gold);}
         <p>Fue generado exitosamente. Descargalo o mejorá tu versión.</p>
         <button class="btn gold" onclick="descargarPDF()">⬇ Descargar PDF</button>
 
-        <!-- UPSELL 1: Sin marca -->
         <div class="upsell-block" id="upsellSinMarca">
           <div class="upsell-label">✦ Versión profesional sin marca</div>
           <p class="upsell-desc">El mismo documento sin encabezado LegalAI ni leyendas. Listo para presentar ante escribanos, juzgados o firmar directamente.</p>
@@ -506,7 +501,6 @@ footer a:hover{color:var(--gold);}
           <button class="btn upsell-btn" onclick="abrirModalSinMarca()">Obtener versión sin marca →</button>
         </div>
 
-        <!-- UPSELL 2: Guía de uso -->
         <div class="upsell-block" id="upsellGuia">
           <div class="upsell-label">📖 Guía de uso del documento</div>
           <p class="upsell-desc">Cómo firmarlo, cuándo usarlo, errores frecuentes y si conviene certificar. Generada por IA para este documento específico.</p>
@@ -517,7 +511,6 @@ footer a:hover{color:var(--gold);}
           <button class="btn upsell-btn-guia" onclick="abrirModalGuia()">Obtener guía de uso →</button>
         </div>
 
-        <!-- UPSELL 3: Pack -->
         <div class="upsell-block" id="upsellPack">
           <div class="upsell-label">📦 Pack de 3 documentos — ahorrá 20%</div>
           <p class="upsell-desc">Ya generaste 1. Elegí 2 más y pagá solo la diferencia con descuento. Sin cargar datos nuevos para el primero.</p>
@@ -528,7 +521,7 @@ footer a:hover{color:var(--gold);}
       </div>
     </div>
 
-    <!-- MODAL: Sin marca — descargo + pago -->
+    <!-- MODAL: Sin marca -->
     <div class="modal-overlay" id="modalDescargo">
       <div class="modal-box">
         <div class="modal-tag">Descargo de responsabilidad</div>
@@ -580,50 +573,36 @@ footer a:hover{color:var(--gold);}
       </div>
     </div>
 
-    <!-- MODAL: Pack de documentos — 2 pasos -->
+    <!-- MODAL: Pack -->
     <div class="modal-overlay" id="modalPack">
       <div class="modal-box" style="max-width:580px;">
         <div class="modal-tag">Pack de documentos · 20% de descuento</div>
 
-        <!-- PASO A: elegir documentos -->
         <div id="packPasoA">
           <h3 class="modal-title">¿Qué documentos adicionales necesitás?</h3>
           <div class="modal-body" style="margin-bottom:16px;">
             Ya generaste: <strong id="packDocActual">—</strong><br>
             Describí los 2 documentos adicionales. La IA calculará el precio real de cada uno antes de mostrarte el total.
           </div>
-
           <div style="margin-bottom:12px;">
             <label style="font-size:.82rem;font-weight:500;color:var(--ink);display:block;margin-bottom:6px;">Documento 2 <span style="color:var(--gold)">*</span></label>
-            <input type="text" id="packDoc2"
-              placeholder="Ej: NDA para startup, contrato freelance para diseñador..."
+            <input type="text" id="packDoc2" placeholder="Ej: NDA para startup, contrato freelance para diseñador..."
               style="width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:.88rem;">
           </div>
           <div style="margin-bottom:20px;">
             <label style="font-size:.82rem;font-weight:500;color:var(--ink);display:block;margin-bottom:6px;">Documento 3 <span style="color:var(--gold)">*</span></label>
-            <input type="text" id="packDoc3"
-              placeholder="Ej: Términos y condiciones, contrato de alquiler comercial..."
+            <input type="text" id="packDoc3" placeholder="Ej: Términos y condiciones, contrato de alquiler comercial..."
               style="width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:.88rem;">
           </div>
-
           <div class="alert err" id="alertPackA"></div>
           <button class="btn gold" onclick="cotizarPack()">Calcular precio del pack →</button>
           <button class="btn ghost" style="margin-top:8px;" onclick="cerrarModal('modalPack')">Cancelar</button>
         </div>
 
-        <!-- PASO B: mostrar desglose real y confirmar pago -->
         <div id="packPasoB" style="display:none;">
           <h3 class="modal-title">Resumen del pack</h3>
-          <div class="modal-body" style="margin-bottom:16px;">
-            El precio fue calculado por la IA según la complejidad real de cada documento.
-          </div>
-
-          <!-- Desglose por documento -->
-          <div id="packDesglose" style="margin-bottom:16px;border:1px solid var(--line);border-radius:10px;overflow:hidden;">
-            <!-- se rellena por JS -->
-          </div>
-
-          <!-- Total -->
+          <div class="modal-body" style="margin-bottom:16px;">El precio fue calculado por la IA según la complejidad real de cada documento.</div>
+          <div id="packDesglose" style="margin-bottom:16px;border:1px solid var(--line);border-radius:10px;overflow:hidden;"></div>
           <div style="padding:14px 16px;background:var(--gold-dim);border:1px solid rgba(200,168,75,.25);border-radius:10px;margin-bottom:16px;">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
               <span style="font-size:.84rem;color:var(--mist);">Precio sin descuento</span>
@@ -639,17 +618,14 @@ footer a:hover{color:var(--gold);}
             </div>
             <div style="margin-top:8px;font-size:.78rem;color:var(--mist);" id="packDiferencia">—</div>
           </div>
-
           <div style="font-size:.78rem;color:var(--mist);margin-bottom:16px;padding:10px 14px;background:var(--cream);border-radius:8px;line-height:1.6;">
             ⏱ Este precio es válido por <strong style="color:var(--ink);">10 minutos</strong>. Si pasan más de 10 min, tendrás que cotizar de nuevo.<br>
             Los documentos 2 y 3 se generan después del pago cuando ingreses sus datos.
           </div>
-
           <div class="alert err" id="alertPackB"></div>
           <button class="btn gold" onclick="confirmarPack()">Confirmar y pagar pack →</button>
           <button class="btn ghost" style="margin-top:8px;" onclick="volverPackPasoA()">← Cambiar documentos</button>
         </div>
-
       </div>
     </div>
 
@@ -657,24 +633,20 @@ footer a:hover{color:var(--gold);}
 </div>
 
 
-<!-- ═══════════════════ SUSCRIPCIÓN══════ SUSCRIPCIÓN ═══════════════════ -->
+<!-- SUSCRIPCION -->
 <div class="section" id="sec-suscripcion">
   <div style="max-width:720px;margin:0 auto;padding:60px 40px 0;text-align:center;">
     <div class="sec-label">Plan ilimitado</div>
     <div class="sec-title">Generá todos los documentos<br>que necesitás, sin límite</div>
   </div>
-
   <div class="sub-wrap">
-
     <div class="sub-card feat">
       <div class="sub-icon">⚡</div>
       <div class="sub-title">Acceso ilimitado por suscripción</div>
       <div class="sub-desc">Con el plan ilimitado podés generar todos los documentos que necesitás, sin pagar por cada uno. Ideal para profesionales, emprendedores, inmobiliarias, estudios contables, o cualquier persona que maneje contratos y documentos con frecuencia.</div>
-
       <div class="sub-highlight">
         💡 <strong>Una idea que vale:</strong> Con tu plan podés convertirte en generador de documentos para amigos, familia y conocidos — cobrando lo que consideres justo por cada uno. Tu suscripción se paga sola.
       </div>
-
       <ul class="sub-list">
         <li>Documentos ilimitados sin costo adicional por cada generación</li>
         <li>Todos los tipos de documentos disponibles, para cualquier país y provincia</li>
@@ -682,12 +654,11 @@ footer a:hover{color:var(--gold);}
         <li>Podés usar el servicio para generar documentos para terceros</li>
         <li>Soporte directo por email ante cualquier duda o problema</li>
       </ul>
-
       <div class="how-sub">
         <div class="how-sub-title">¿Cómo funciona? — 3 pasos</div>
         <div class="how-sub-step">
           <div class="how-sub-n">1</div>
-          <div class="how-sub-txt"><strong>Completá tu email.</strong> Hacé click en el botón de abajo y envianos un mail con tu nombre. No necesitás explicar nada más.</div>
+          <div class="how-sub-txt"><strong>Completá tu email.</strong> Hacé click en el botón de abajo y envianos un mail con tu nombre.</div>
         </div>
         <div class="how-sub-step">
           <div class="how-sub-n">2</div>
@@ -695,35 +666,29 @@ footer a:hover{color:var(--gold);}
         </div>
         <div class="how-sub-step">
           <div class="how-sub-n">3</div>
-          <div class="how-sub-txt"><strong>Ingresás tu email en el generador</strong> para crear documentos sin costo adicional por cada uno. Simple, directo, sin complicaciones.</div>
+          <div class="how-sub-txt"><strong>Ingresás tu email en el generador</strong> para crear documentos sin costo adicional por cada uno.</div>
         </div>
       </div>
-
-      <a class="btn-inline gold" id="ctaSub" href="#">
-        Quiero el plan ilimitado — escribinos →
-      </a>
+      <a class="btn-inline gold" id="ctaSub" href="#">Quiero el plan ilimitado — escribinos →</a>
       <div class="contact-note">
         También podés escribirnos directamente a <a id="contactLink" href="#"><!-- email --></a><br>
         Respondemos dentro de las 24 horas hábiles.
       </div>
     </div>
-
     <div class="sub-card">
       <div class="sub-icon">📄</div>
       <div class="sub-title">Pago por documento</div>
       <div class="sub-desc">Si necesitás un documento puntual sin comprometerte a una suscripción, podés generarlo directamente desde el generador pagando solo por ese documento.</div>
       <button class="btn-inline dark" onclick="showSec('generador')">Ir al generador →</button>
     </div>
-
   </div>
 </div>
 
 
-<!-- ═══════════════════════ ACERCA DE ═══════════════════════ -->
+<!-- ACERCA DE -->
 <div class="section" id="sec-about">
   <div class="about-wrap">
 
-    <!-- HERO -->
     <div class="about-hero">
       <div class="hero-tag">✦ LegalAI Arg</div>
       <h1 class="about-title">Documentos legales generados<br>con inteligencia artificial</h1>
@@ -731,7 +696,6 @@ footer a:hover{color:var(--gold);}
       <button class="btn gold" style="max-width:280px;margin:0 auto;" onclick="showSec('generador')">Generar mi documento →</button>
     </div>
 
-    <!-- QUÉ ES -->
     <div class="about-block">
       <div class="about-block-label">El servicio</div>
       <h2 class="about-block-title">¿Qué es LegalAI Arg?</h2>
@@ -740,41 +704,21 @@ footer a:hover{color:var(--gold);}
       <div class="about-nota">Los documentos son orientativos y no constituyen asesoramiento legal profesional. Para situaciones específicas, consultá a un profesional matriculado.</div>
     </div>
 
-    <!-- CÓMO FUNCIONA -->
     <div class="about-block">
       <div class="about-block-label">El flujo</div>
       <h2 class="about-block-title">¿Cómo funciona?</h2>
       <div class="about-steps">
-        <div class="about-step">
-          <div class="about-step-n">①</div>
-          <div class="about-step-title">Describís qué necesitás</div>
-          <div class="about-step-desc">Escribí con tus propias palabras o elegí entre 32 tipos de documentos predefinidos. Indicá el país y la provincia para que el documento se adapte a la legislación correspondiente.</div>
-        </div>
-        <div class="about-step">
-          <div class="about-step-n">②</div>
-          <div class="about-step-title">Completás el formulario</div>
-          <div class="about-step-desc">La IA analiza tu pedido y genera un formulario personalizado para ese documento específico. Cada campo tiene ejemplos orientativos reales. Sin tecnicismos, sin confusión.</div>
-        </div>
-        <div class="about-step">
-          <div class="about-step-n">③</div>
-          <div class="about-step-title">Pagás con MercadoPago</div>
-          <div class="about-step-desc">Pago seguro con tarjeta, transferencia o cualquier medio disponible en MercadoPago. El precio se muestra en pesos al tipo de cambio del momento.</div>
-        </div>
-        <div class="about-step">
-          <div class="about-step-n">④</div>
-          <div class="about-step-title">Descargás el PDF</div>
-          <div class="about-step-desc">El documento se genera al instante y se descarga directo en tu dispositivo. No se almacena en ningún servidor.</div>
-        </div>
+        <div class="about-step"><div class="about-step-n">①</div><div class="about-step-title">Describís qué necesitás</div><div class="about-step-desc">Escribí con tus propias palabras o elegí entre 32 tipos de documentos predefinidos. Indicá el país y la provincia para que el documento se adapte a la legislación correspondiente.</div></div>
+        <div class="about-step"><div class="about-step-n">②</div><div class="about-step-title">Completás el formulario</div><div class="about-step-desc">La IA analiza tu pedido y genera un formulario personalizado para ese documento específico. Cada campo tiene ejemplos orientativos reales. Sin tecnicismos, sin confusión.</div></div>
+        <div class="about-step"><div class="about-step-n">③</div><div class="about-step-title">Pagás con MercadoPago</div><div class="about-step-desc">Pago seguro con tarjeta, transferencia o cualquier medio disponible en MercadoPago. El precio se muestra en pesos al tipo de cambio del momento.</div></div>
+        <div class="about-step"><div class="about-step-n">④</div><div class="about-step-title">Descargás el PDF</div><div class="about-step-desc">El documento se genera al instante y se descarga directo en tu dispositivo. No se almacena en ningún servidor.</div></div>
       </div>
     </div>
 
-    <!-- DOCUMENTOS -->
     <div class="about-block">
       <div class="about-block-label">Catálogo</div>
       <h2 class="about-block-title">Tipos de documentos disponibles</h2>
-
       <div class="about-cat-grid">
-
         <div class="about-cat">
           <div class="about-cat-title">📋 Contratos</div>
           <div class="about-doc-row"><span class="about-doc-emoji">🏠</span><span class="about-doc-name">Alquiler de vivienda</span><span class="about-doc-desc">Contrato residencial con cláusulas completas</span></div>
@@ -787,7 +731,6 @@ footer a:hover{color:var(--gold);}
           <div class="about-doc-row"><span class="about-doc-emoji">📱</span><span class="about-doc-name">Términos y condiciones</span><span class="about-doc-desc">Para sitios web o aplicaciones</span></div>
           <div class="about-doc-row"><span class="about-doc-emoji">🛡️</span><span class="about-doc-name">Política de privacidad</span><span class="about-doc-desc">Conforme a la legislación de datos personales</span></div>
         </div>
-
         <div class="about-cat">
           <div class="about-cat-title">💼 Freelance &amp; Servicios</div>
           <div class="about-doc-row"><span class="about-doc-emoji">🎨</span><span class="about-doc-name">Freelance diseño gráfico</span><span class="about-doc-desc">Para trabajos de branding, ilustración y diseño</span></div>
@@ -799,7 +742,6 @@ footer a:hover{color:var(--gold);}
           <div class="about-doc-row"><span class="about-doc-emoji">📧</span><span class="about-doc-name">Propuesta comercial</span><span class="about-doc-desc">Para presentar presupuestos a clientes</span></div>
           <div class="about-doc-row"><span class="about-doc-emoji">🤝</span><span class="about-doc-name">Acuerdo de colaboración</span><span class="about-doc-desc">Entre profesionales independientes o equipos</span></div>
         </div>
-
         <div class="about-cat">
           <div class="about-cat-title">⚠️ Reclamos &amp; Cartas documento</div>
           <div class="about-doc-row"><span class="about-doc-emoji">🏠</span><span class="about-doc-name">Carta doc. — alquiler</span><span class="about-doc-desc">Por falta de pago o incumplimientos del inquilino</span></div>
@@ -811,7 +753,6 @@ footer a:hover{color:var(--gold);}
           <div class="about-doc-row"><span class="about-doc-emoji">💡</span><span class="about-doc-name">Reclamo a servicios públicos</span><span class="about-doc-desc">Contra empresas de luz, gas, internet, etc.</span></div>
           <div class="about-doc-row"><span class="about-doc-emoji">⚠️</span><span class="about-doc-name">Intimación de pago formal</span><span class="about-doc-desc">Notificación previa a acciones legales</span></div>
         </div>
-
         <div class="about-cat">
           <div class="about-cat-title">👤 Documentos personales</div>
           <div class="about-doc-row"><span class="about-doc-emoji">✈️</span><span class="about-doc-name">Autorización viaje menor</span><span class="about-doc-desc">Para que un menor viaje solo o con un adulto</span></div>
@@ -823,62 +764,31 @@ footer a:hover{color:var(--gold);}
           <div class="about-doc-row"><span class="about-doc-emoji">💳</span><span class="about-doc-name">Convenio de pago en cuotas</span><span class="about-doc-desc">Para regularizar una deuda en pagos</span></div>
           <div class="about-doc-row"><span class="about-doc-emoji">🧾</span><span class="about-doc-name">Constancia de recibo de dinero</span><span class="about-doc-desc">Comprobante de pago entre particulares</span></div>
         </div>
-
       </div>
     </div>
 
-    <!-- PRECIOS -->
     <div class="about-block">
       <div class="about-block-label">Precios</div>
       <h2 class="about-block-title">¿Cuánto cuesta?</h2>
       <p class="about-p">Los precios se muestran en <strong>pesos argentinos</strong> al tipo de cambio del momento (dólar MEP).</p>
       <div class="about-price-grid">
-        <div class="about-price-card">
-          <div class="about-price-tag">Simple</div>
-          <div class="about-price-desc">Cartas documento, autorizaciones, notas, declaraciones juradas</div>
-        </div>
-        <div class="about-price-card">
-          <div class="about-price-tag">Intermedio</div>
-          <div class="about-price-desc">Contratos freelance, NDA, términos y condiciones, propuestas</div>
-        </div>
-        <div class="about-price-card about-price-card--featured">
-          <div class="about-price-tag">Complejo</div>
-          <div class="about-price-desc">Alquileres, sociedades, compraventas, contratos de servicios complejos</div>
-        </div>
+        <div class="about-price-card"><div class="about-price-tag">Simple</div><div class="about-price-desc">Cartas documento, autorizaciones, notas, declaraciones juradas</div></div>
+        <div class="about-price-card"><div class="about-price-tag">Intermedio</div><div class="about-price-desc">Contratos freelance, NDA, términos y condiciones, propuestas</div></div>
+        <div class="about-price-card about-price-card--featured"><div class="about-price-tag">Complejo</div><div class="about-price-desc">Alquileres, sociedades, compraventas, contratos de servicios complejos</div></div>
       </div>
     </div>
 
-    <!-- OPCIONES ADICIONALES -->
     <div class="about-block">
       <div class="about-block-label">Extras</div>
       <h2 class="about-block-title">Opciones adicionales</h2>
       <p class="about-p">Una vez que descargás tu documento podés sumar:</p>
       <div class="about-extras">
-        <div class="about-extra">
-          <div class="about-extra-icon">✦</div>
-          <div>
-            <div class="about-extra-title">Versión sin marca</div>
-            <div class="about-extra-desc">El mismo documento sin el encabezado LegalAI. Listo para presentar ante escribanos, juzgados o firmar directamente entre las partes.</div>
-          </div>
-        </div>
-        <div class="about-extra">
-          <div class="about-extra-icon">📖</div>
-          <div>
-            <div class="about-extra-title">Guía de uso</div>
-            <div class="about-extra-desc">Un PDF adicional generado por IA para tu documento específico. Incluye cuándo usarlo, cómo firmarlo, qué revisar antes de firmar, errores frecuentes y preguntas frecuentes.</div>
-          </div>
-        </div>
-        <div class="about-extra">
-          <div class="about-extra-icon">📦</div>
-          <div>
-            <div class="about-extra-title">Pack de 3 documentos</div>
-            <div class="about-extra-desc">Si sabés que vas a necesitar más de uno, armás un pack con 3 documentos y ahorrás un 20%. Obtenés un código para usar cuando quieras, desde cualquier dispositivo.</div>
-          </div>
-        </div>
+        <div class="about-extra"><div class="about-extra-icon">✦</div><div><div class="about-extra-title">Versión sin marca</div><div class="about-extra-desc">El mismo documento sin el encabezado LegalAI. Listo para presentar ante escribanos, juzgados o firmar directamente entre las partes.</div></div></div>
+        <div class="about-extra"><div class="about-extra-icon">📖</div><div><div class="about-extra-title">Guía de uso</div><div class="about-extra-desc">Un PDF adicional generado por IA para tu documento específico. Incluye cuándo usarlo, cómo firmarlo, qué revisar antes de firmar, errores frecuentes y preguntas frecuentes.</div></div></div>
+        <div class="about-extra"><div class="about-extra-icon">📦</div><div><div class="about-extra-title">Pack de 3 documentos</div><div class="about-extra-desc">Si sabés que vas a necesitar más de uno, armás un pack con 3 documentos y ahorrás un 20%. Obtenés un código para usar cuando quieras, desde cualquier dispositivo.</div></div></div>
       </div>
     </div>
 
-    <!-- PLAN ILIMITADO -->
     <div class="about-block">
       <div class="about-block-label">Suscripción</div>
       <h2 class="about-block-title">Plan ilimitado</h2>
@@ -891,42 +801,22 @@ footer a:hover{color:var(--gold);}
         <div class="about-plan-item">✓ Acceso anticipado a nuevas funciones</div>
       </div>
       <p class="about-p" style="margin-top:20px;">Escribinos a <a id="aboutContactLink" href="#" style="color:var(--gold);"><!-- email --></a> o desde la sección <em>Plan ilimitado</em> en la plataforma. Respondemos dentro de las 24 horas hábiles.</p>
-      <button class="btn gold" style="max-width:280px;margin-top:16px;" onclick="showSec('suscripcion')">Ver plan ilimitado →</button>
+      <button class="btn gold" style="max-width:280px;margin-top:16px;" onclick="window.location.href='planes.html'">Ver plan ilimitado →</button>
     </div>
 
-    <!-- FAQ -->
     <div class="about-block">
       <div class="about-block-label">FAQ</div>
       <h2 class="about-block-title">Preguntas frecuentes</h2>
       <div class="about-faq">
-        <div class="about-faq-item">
-          <div class="about-faq-q">¿Los documentos tienen validez legal?</div>
-          <div class="about-faq-a">Son documentos orientativos redactados conforme a la legislación vigente. Para presentación formal ante organismos o situaciones de alta complejidad, recomendamos validarlos con un profesional matriculado.</div>
-        </div>
-        <div class="about-faq-item">
-          <div class="about-faq-q">¿Mis datos se guardan en algún servidor?</div>
-          <div class="about-faq-a">No. El PDF se genera directamente en tu navegador y no se almacena en ningún servidor. Los datos del formulario solo existen durante tu sesión.</div>
-        </div>
-        <div class="about-faq-item">
-          <div class="about-faq-q">¿Para qué país están los documentos?</div>
-          <div class="about-faq-a">El sistema está optimizado para Argentina pero genera documentos para cualquier país y provincia. La IA adapta la legislación citada según el lugar indicado.</div>
-        </div>
-        <div class="about-faq-item">
-          <div class="about-faq-q">¿Qué pasa si me equivoco en algún dato?</div>
-          <div class="about-faq-a">Podés volver al formulario antes de pagar para corregir cualquier dato. Una vez generado el documento, los datos quedan fijos en ese PDF.</div>
-        </div>
-        <div class="about-faq-item">
-          <div class="about-faq-q">¿Cómo funciona el pack de documentos?</div>
-          <div class="about-faq-a">Cuando comprás el pack recibís un código que podés usar en cualquier momento desde cualquier dispositivo. Tiene vigencia de 30 días y viene con créditos para los documentos adicionales que elegiste.</div>
-        </div>
-        <div class="about-faq-item">
-          <div class="about-faq-q">¿Puedo compartir el código del pack con otra persona?</div>
-          <div class="about-faq-a">Sí. El código funciona desde cualquier dispositivo y puede usarlo quien lo tenga.</div>
-        </div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Los documentos tienen validez legal?</div><div class="about-faq-a">Son documentos orientativos redactados conforme a la legislación vigente. Para presentación formal ante organismos o situaciones de alta complejidad, recomendamos validarlos con un profesional matriculado.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Mis datos se guardan en algún servidor?</div><div class="about-faq-a">No. El PDF se genera directamente en tu navegador y no se almacena en ningún servidor. Los datos del formulario solo existen durante tu sesión.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Para qué país están los documentos?</div><div class="about-faq-a">El sistema está optimizado para Argentina pero genera documentos para cualquier país y provincia. La IA adapta la legislación citada según el lugar indicado.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Qué pasa si me equivoco en algún dato?</div><div class="about-faq-a">Podés volver al formulario antes de pagar para corregir cualquier dato. Una vez generado el documento, los datos quedan fijos en ese PDF.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Cómo funciona el pack de documentos?</div><div class="about-faq-a">Cuando comprás el pack recibís un código que podés usar en cualquier momento desde cualquier dispositivo. Tiene vigencia de 30 días y viene con créditos para los documentos adicionales que elegiste.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Puedo compartir el código del pack con otra persona?</div><div class="about-faq-a">Sí. El código funciona desde cualquier dispositivo y puede usarlo quien lo tenga.</div></div>
       </div>
     </div>
 
-    <!-- CTA FINAL -->
     <div class="about-cta">
       <div class="hero-tag" style="margin-bottom:16px;">✦ LegalAI Arg</div>
       <p style="color:var(--mist);font-size:.9rem;margin-bottom:24px;line-height:1.7;">Documentos orientativos generados con inteligencia artificial.<br>No constituyen asesoramiento legal profesional.</p>
@@ -948,18 +838,12 @@ footer a:hover{color:var(--gold);}
 
 
 <script>
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  ★ CONFIGURACIÓN — modificar acá cuando cambies el email        ║
-// ╚══════════════════════════════════════════════════════════════════╝
 const CONFIG = {
   WORKER_URL:    'https://legalai-worker.finmap-ia.workers.dev',
-  CONTACT_EMAIL: 'finmap.ia@gmail.com',  // ← único lugar para cambiar
-  PRECIO_GUIA_USD: 2.5,                  // ← precio fijo guía de uso
-  // PACK_SECRET debe coincidir con la variable de entorno en Cloudflare Worker
-  // (se configura como secreto en el Worker, no acá)
+  CONTACT_EMAIL: 'finmap.ia@gmail.com',
+  PRECIO_GUIA_USD: 2.5,
 };
 
-// ── CATEGORÍAS DE DOCUMENTOS ─────────────────────────────────────────
 const CATEGORIAS = {
   contratos: {
     label: '📋 Contratos',
@@ -1032,63 +916,37 @@ function renderSugerencias(cat) {
   ).join('');
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  COTIZACIÓN DÓLAR — MEP → Oficial → BNA (fallback en cadena)    ║
-// ╚══════════════════════════════════════════════════════════════════╝
 let cotizacion = { valor: null, fuente: null };
 
 async function obtenerCotizacion() {
-  // Fuente 1 — Dólar MEP
   try {
     const r = await fetch('https://dolarapi.com/v1/dolares/bolsa', { signal: AbortSignal.timeout(4000) });
     const d = await r.json();
-    if (d && d.venta && d.venta > 0) {
-      cotizacion = { valor: d.venta, fuente: 'MEP' };
-      return cotizacion;
-    }
+    if (d && d.venta && d.venta > 0) { cotizacion = { valor: d.venta, fuente: 'MEP' }; return cotizacion; }
   } catch(_) {}
-
-  // Fuente 2 — Dólar Oficial
   try {
     const r = await fetch('https://dolarapi.com/v1/dolares/oficial', { signal: AbortSignal.timeout(4000) });
     const d = await r.json();
-    if (d && d.venta && d.venta > 0) {
-      cotizacion = { valor: d.venta, fuente: 'Oficial' };
-      return cotizacion;
-    }
+    if (d && d.venta && d.venta > 0) { cotizacion = { valor: d.venta, fuente: 'Oficial' }; return cotizacion; }
   } catch(_) {}
-
-  // Fuente 3 — BNA vía bluelytics
   try {
     const r = await fetch('https://api.bluelytics.com.ar/v2/latest', { signal: AbortSignal.timeout(4000) });
     const d = await r.json();
-    if (d && d.official && d.official.value_sell > 0) {
-      cotizacion = { valor: d.official.value_sell, fuente: 'BNA' };
-      return cotizacion;
-    }
+    if (d && d.official && d.official.value_sell > 0) { cotizacion = { valor: d.official.value_sell, fuente: 'BNA' }; return cotizacion; }
   } catch(_) {}
-
-  // Sin cotización — mostrar USD
   cotizacion = { valor: null, fuente: null };
   return cotizacion;
 }
 
 function calcularPrecios() {
-  const precioDoc     = G.precio_usd;
-  const upgradeUSD    = +(precioDoc * G.upgrade_porcentaje / 100).toFixed(2);
-  const guiaUSD       = CONFIG.PRECIO_GUIA_USD;
-  const cot           = cotizacion?.valor;
-  const fuente        = cotizacion?.fuente || 'USD';
-
+  const precioDoc  = G.precio_usd;
+  const upgradeUSD = +(precioDoc * G.upgrade_porcentaje / 100).toFixed(2);
+  const guiaUSD    = CONFIG.PRECIO_GUIA_USD;
+  const cot        = cotizacion?.valor;
+  const fuente     = cotizacion?.fuente || 'USD';
   function toARS(usd) { return cot ? Math.ceil(usd * cot / 100) * 100 : null; }
-  function fmt(usd) {
-    const ars = toARS(usd);
-    return ars ? '$ ' + ars.toLocaleString('es-AR') : 'USD ' + usd;
-  }
-  function detalle(usd) {
-    return cot ? 'USD ' + usd + ' · dólar ' + fuente + ' $' + Math.round(cot) : '';
-  }
-
+  function fmt(usd) { const ars = toARS(usd); return ars ? '$ ' + ars.toLocaleString('es-AR') : 'USD ' + usd; }
+  function detalle(usd) { return cot ? 'USD ' + usd + ' · dólar ' + fuente + ' $' + Math.round(cot) : ''; }
   return { precioDoc, upgradeUSD, guiaUSD, fmt, detalle, toARS };
 }
 
@@ -1098,11 +956,9 @@ function formatearPrecio(cot) {
   if (!elAmt) return;
   const { precioDoc, upgradeUSD, guiaUSD, fmt, detalle } = calcularPrecios();
   const btn = document.getElementById('btnPagar');
-
   elAmt.textContent  = fmt(precioDoc);
   elDesc.textContent = detalle(precioDoc);
   if (btn) btn.textContent = 'Pagar ' + fmt(precioDoc) + ' con MercadoPago →';
-
   const elSM = document.getElementById('precioSinMarcaAmt');
   const elGu = document.getElementById('precioGuiaAmt');
   const elGuM = document.getElementById('precioGuiaModal');
@@ -1111,7 +967,6 @@ function formatearPrecio(cot) {
   if (elGuM) elGuM.textContent = fmt(guiaUSD);
 }
 
-// Inyectar email en todos los lugares
 function injectEmail() {
   const e = CONFIG.CONTACT_EMAIL;
   const sub = encodeURIComponent('Quiero el plan ilimitado - LegalAI Arg');
@@ -1125,9 +980,6 @@ function injectEmail() {
   if (aboutLink) { aboutLink.href = `mailto:${e}?subject=${sub}&body=${body}`; aboutLink.textContent = e; }
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  TEMA                                                            ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function setTheme(t) {
   localStorage.setItem('theme', t);
   applyTheme(t);
@@ -1143,9 +995,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
   if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
 });
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  NAVEGACIÓN                                                      ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function showSec(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -1155,25 +1004,16 @@ function showSec(name) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  ESTADO                                                          ║
-// ╚══════════════════════════════════════════════════════════════════╝
 let G = {
   tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'',
-  paymentId:  null,
-  codigoPack: null,   // código de pack ingresado en card1
-  // metadata dinámica devuelta por Claude vía /campos
-  precio_usd: 8,
-  upgrade_porcentaje: 40,
-  categoria: 'intermedio',
-  requiere_advertencia_legal: false,
+  paymentId: null, codigoPack: null,
+  precio_usd: 8, upgrade_porcentaje: 40, categoria: 'intermedio', requiere_advertencia_legal: false,
 };
 
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
 function empezarDeNuevo() {
   G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
-  // Limpiar campo código pack si existe
   const pci = document.getElementById('packCodeInput');
   const pcs = document.getElementById('packCodeStatus');
   const pcb = document.getElementById('packCodeBox');
@@ -1206,20 +1046,15 @@ function hideErr(id) {
   if (el) el.classList.remove('visible');
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  PASO 1 → FORMULARIO DINÁMICO                                   ║
-// ╚══════════════════════════════════════════════════════════════════╝
 async function generarFormulario() {
   const doc      = document.getElementById('docInput').value.trim();
   const pais     = document.getElementById('paisSelect').value;
   const provincia = document.getElementById('provinciaInput').value.trim() || 'No especificada';
   hideErr('alert1');
   if (!doc) { showErr('alert1', 'Por favor escribí o seleccioná el tipo de documento que necesitás.'); return; }
-
   G.tipo = doc; G.pais = pais; G.provincia = provincia;
   document.getElementById('card1').classList.remove('visible');
   document.getElementById('loadingForm').classList.add('visible');
-
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/campos`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1227,34 +1062,27 @@ async function generarFormulario() {
     });
     const data = await res.json();
     if (!data.campos?.length) throw new Error('No se pudieron generar los campos.');
-
-    G.form                      = data;
-    G.campos                    = data.campos;
-    G.precio_usd                = data.precio_usd || 8;
-    G.upgrade_porcentaje        = data.upgrade_porcentaje || 40;
-    G.categoria                 = data.categoria || 'intermedio';
+    G.form = data; G.campos = data.campos;
+    G.precio_usd = data.precio_usd || 8;
+    G.upgrade_porcentaje = data.upgrade_porcentaje || 40;
+    G.categoria = data.categoria || 'intermedio';
     G.requiere_advertencia_legal = data.requiere_advertencia_legal || false;
-
     document.getElementById('formTitle').textContent = data.titulo || doc;
     document.getElementById('formDesc').textContent  = (data.descripcion || '') + ' Los campos con * son obligatorios.';
-
     if (data.legislacion) {
       const el = document.getElementById('alertLeg');
       el.textContent = '📋 Legislación aplicable: ' + data.legislacion;
       el.style.display = 'block';
     }
-
     const container = document.getElementById('formFields');
     container.innerHTML = '';
     data.campos.forEach(c => {
       const isLong = c.tipo === 'textarea';
       const div = document.createElement('div');
       div.className = 'field-group' + (isLong ? ' field-full' : '');
-
       const lbl = document.createElement('label');
       lbl.className = 'field-label'; lbl.htmlFor = c.id;
       lbl.innerHTML = c.label + (c.requerido ? '<span class="req">*</span>' : '');
-
       let inp;
       if (c.tipo === 'select' && c.opciones) {
         inp = document.createElement('select');
@@ -1267,10 +1095,8 @@ async function generarFormulario() {
       inp.id = c.id; inp.name = c.id;
       if (c.placeholder) inp.placeholder = c.placeholder;
       if (c.requerido)   inp.required    = true;
-
       div.appendChild(lbl); div.appendChild(inp); container.appendChild(div);
     });
-
     showCard(2);
   } catch(err) {
     document.getElementById('loadingForm').classList.remove('visible');
@@ -1279,9 +1105,6 @@ async function generarFormulario() {
   }
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  PASO 2 → PAGO                                                   ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function irAlPago() {
   hideErr('alert2');
   for (const c of G.campos.filter(x => x.requerido)) {
@@ -1293,17 +1116,12 @@ function irAlPago() {
   sessionStorage.setItem('legalai_datos',  JSON.stringify(datos));
   sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
   sessionStorage.setItem('legalai_meta',   JSON.stringify({
-    titulo:      G.form?.titulo || G.tipo,
-    categoria:   G.categoria,
-    precio_usd:  G.precio_usd,
-    upgrade_porcentaje: G.upgrade_porcentaje,
-    requiere_advertencia_legal: G.requiere_advertencia_legal,
+    titulo: G.form?.titulo || G.tipo, categoria: G.categoria, precio_usd: G.precio_usd,
+    upgrade_porcentaje: G.upgrade_porcentaje, requiere_advertencia_legal: G.requiere_advertencia_legal,
   }));
   document.getElementById('priceDocName').textContent = G.form?.titulo || G.tipo;
   document.getElementById('priceDocDesc').textContent = G.pais + (G.provincia !== 'No especificada' ? ' · ' + G.provincia : '');
-
   if (G.codigoPack) {
-    // Tiene código de pack — mostrar como gratis y botón directo
     const elAmt  = document.getElementById('precioARS');
     const elDesc = document.getElementById('precioDetalle');
     const btn    = document.getElementById('btnPagar');
@@ -1316,10 +1134,6 @@ function irAlPago() {
   showCard(3);
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  PASO 3 → PROCESAR PAGO                                         ║
-// ╚══════════════════════════════════════════════════════════════════╝
-// ── Helper central: crea preferencia y redirige a MP ────────────
 async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPago, onError }) {
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
@@ -1328,7 +1142,6 @@ async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPa
     });
     const data = await res.json();
     if (!data.init_point) throw new Error(data.detalle || data.error || 'Error al crear el pago');
-    // Redirigir al checkout de MercadoPago
     window.location.href = data.init_point;
   } catch(err) {
     if (onError) onError(err.message);
@@ -1338,33 +1151,20 @@ async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPa
 
 async function procesarPago() {
   hideErr('alert3');
-
-  // Si tiene código de pack activo → generar directo, sin pago
-  if (G.codigoPack) {
-    await generarDocumento('PACK_' + Date.now());
-    return;
-  }
-
-  const { fmt, toARS } = calcularPrecios();
+  if (G.codigoPack) { await generarDocumento('PACK_' + Date.now()); return; }
+  const { toARS } = calcularPrecios();
   const montoARS = toARS(G.precio_usd) || Math.round(G.precio_usd * 1200);
-
-  // sessionId: identifica esta sesión de compra
   const sessionId = 'sess_' + Date.now();
   sessionStorage.setItem('legalai_sessionId', sessionId);
-
   await iniciarPagoMP({
-    tipo:        'doc',
-    montoARS,
+    tipo: 'doc', montoARS,
     descripcion: `Documento legal: ${G.form?.titulo || G.tipo}`,
     externalRef: `doc_${sessionId}`,
-    datosPago:   { titulo: G.form?.titulo || G.tipo, dolar_rate: cotizacion?.valor || 0 },
+    datosPago: { titulo: G.form?.titulo || G.tipo, dolar_rate: cotizacion?.valor || 0 },
     onError: msg => showErr('alert3', 'Error al conectar con MercadoPago: ' + msg),
   });
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  PASO 4 → GENERAR DOCUMENTO                                     ║
-// ╚══════════════════════════════════════════════════════════════════╝
 async function generarDocumento(paymentId) {
   document.getElementById('card3').classList.remove('visible');
   document.getElementById('loadingDoc').classList.add('visible');
@@ -1378,8 +1178,7 @@ async function generarDocumento(paymentId) {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    G.texto     = data.texto;
-    G.paymentId = data.paymentId || paymentId;
+    G.texto = data.texto; G.paymentId = data.paymentId || paymentId;
     sessionStorage.setItem('legalai_texto',     data.texto);
     sessionStorage.setItem('legalai_paymentId', G.paymentId);
     document.getElementById('loadingDoc').classList.remove('visible');
@@ -1391,9 +1190,6 @@ async function generarDocumento(paymentId) {
   }
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  DESCARGAR PDF — motor robusto                                  ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function descargarPDF() {
   const texto  = G.texto || sessionStorage.getItem('legalai_texto');
   const titulo = sessionStorage.getItem('legalai_titulo') || 'documento-legal';
@@ -1401,36 +1197,20 @@ function descargarPDF() {
   _generarPDF(texto, titulo, true, false);
 }
 
-function abrirModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function cerrarModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
-// Cerrar modal clickeando overlay
+function abrirModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function cerrarModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
 document.addEventListener('click', e => {
-  if (e.target.classList.contains('modal-overlay')) {
-    e.target.classList.remove('open');
-    document.body.style.overflow = '';
-  }
+  if (e.target.classList.contains('modal-overlay')) { e.target.classList.remove('open'); document.body.style.overflow = ''; }
 });
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  UPSELL 1 — VERSIÓN SIN MARCA                                   ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function abrirModalSinMarca() {
   const { upgradeUSD, fmt } = calcularPrecios();
   const monto = fmt(upgradeUSD);
   document.getElementById('btnSinMarcaMonto').textContent = monto;
   document.getElementById('precioSinMarcaAmt').textContent = monto;
-
-  // Mostrar advertencia legal si aplica
   const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
   const adv  = document.getElementById('advertenciaLegalBloque');
   if (adv) adv.style.display = meta.requiere_advertencia_legal ? 'block' : 'none';
-
   document.getElementById('checkDescargo').checked = false;
   hideErr('alertDescargo');
   abrirModal('modalDescargo');
@@ -1438,26 +1218,18 @@ function abrirModalSinMarca() {
 
 async function confirmarSinMarca() {
   hideErr('alertDescargo');
-  if (!document.getElementById('checkDescargo').checked) {
-    showErr('alertDescargo', 'Debés aceptar los términos para continuar.');
-    return;
-  }
+  if (!document.getElementById('checkDescargo').checked) { showErr('alertDescargo', 'Debés aceptar los términos para continuar.'); return; }
   cerrarModal('modalDescargo');
-
   const { upgradeUSD, toARS } = calcularPrecios();
   const montoARS      = toARS(upgradeUSD) || Math.round(upgradeUSD * 1200);
   const paymentIdOrig = G.paymentId || sessionStorage.getItem('legalai_paymentId') || 'unknown';
   const titulo        = sessionStorage.getItem('legalai_titulo') || 'documento';
-
-  // Guardar contexto para recuperar al volver de MP
   sessionStorage.setItem('legalai_upgrade_pendiente', paymentIdOrig);
-
   await iniciarPagoMP({
-    tipo:        'upgrade',
-    montoARS,
+    tipo: 'upgrade', montoARS,
     descripcion: `Versión sin marca: ${titulo}`,
     externalRef: `upgrade_${paymentIdOrig}`,
-    datosPago:   { paymentIdOriginal: paymentIdOrig, dolar_rate: cotizacion?.valor || 0 },
+    datosPago: { paymentIdOriginal: paymentIdOrig, dolar_rate: cotizacion?.valor || 0 },
     onError: msg => showErr('alertDescargo', 'Error al conectar con MercadoPago: ' + msg),
   });
 }
@@ -1469,9 +1241,6 @@ function descargarPDFSinMarca(mantenerAdvertencia = false) {
   _generarPDF(texto, titulo, false, mantenerAdvertencia);
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  UPSELL 2 — GUÍA DE USO                                         ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function abrirModalGuia() {
   const { guiaUSD, fmt } = calcularPrecios();
   const monto = fmt(guiaUSD);
@@ -1484,20 +1253,16 @@ function abrirModalGuia() {
 async function confirmarGuia() {
   hideErr('alertGuia');
   cerrarModal('modalGuia');
-
   const { guiaUSD, toARS } = calcularPrecios();
   const montoARS      = toARS(guiaUSD) || Math.round(guiaUSD * 1200);
   const paymentIdOrig = G.paymentId || sessionStorage.getItem('legalai_paymentId') || 'unknown';
   const titulo        = sessionStorage.getItem('legalai_titulo') || 'documento';
-
   sessionStorage.setItem('legalai_guia_pendiente', paymentIdOrig);
-
   await iniciarPagoMP({
-    tipo:        'guia',
-    montoARS,
+    tipo: 'guia', montoARS,
     descripcion: `Guía de uso: ${titulo}`,
     externalRef: `guia_${paymentIdOrig}`,
-    datosPago:   { paymentIdOriginal: paymentIdOrig, dolar_rate: cotizacion?.valor || 0 },
+    datosPago: { paymentIdOriginal: paymentIdOrig, dolar_rate: cotizacion?.valor || 0 },
     onError: msg => showErr('alertGuia', 'Error al conectar con MercadoPago: ' + msg),
   });
 }
@@ -1505,11 +1270,8 @@ async function confirmarGuia() {
 async function generarYDescargarGuia(paymentIdGuia) {
   const paymentIdOriginal = G.paymentId || sessionStorage.getItem('legalai_paymentId');
   if (!paymentIdOriginal) { alert('No se encontró el documento base.'); return; }
-
-  // Mostrar loading
   const btnGuia = document.querySelector('.upsell-btn-guia');
   if (btnGuia) { btnGuia.disabled = true; btnGuia.textContent = 'Generando guía...'; }
-
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/guia`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1517,10 +1279,7 @@ async function generarYDescargarGuia(paymentIdGuia) {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-
-    // Descargar guía como PDF con marca
-    const titulo = (data.titulo || 'documento') + ' - Guía de uso';
-    _generarPDF(data.guia, titulo, true, false);
+    _generarPDF(data.guia, (data.titulo || 'documento') + ' - Guía de uso', true, false);
   } catch(err) {
     alert('Error al generar la guía: ' + err.message);
   } finally {
@@ -1528,77 +1287,44 @@ async function generarYDescargarGuia(paymentIdGuia) {
   }
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  UPSELL 3 — PACK DE DOCUMENTOS (flujo seguro en 2 pasos)       ║
-// ╚══════════════════════════════════════════════════════════════════╝
-
-// Estado interno del pack — el precio viene del servidor, nunca del cliente
-let packCotizacion = null; // { doc2, doc3, totalSinDescuento, totalConDescuento, token, tokenTs }
+let packCotizacion = null;
 
 function abrirModalPack() {
-  // Resetear al paso A
   document.getElementById('packDoc2').value = '';
   document.getElementById('packDoc3').value = '';
-  document.getElementById('packDocActual').textContent =
-    sessionStorage.getItem('legalai_titulo') || 'Tu documento actual';
-  hideErr('alertPackA');
-  hideErr('alertPackB');
-  mostrarPasoA();
-  packCotizacion = null;
+  document.getElementById('packDocActual').textContent = sessionStorage.getItem('legalai_titulo') || 'Tu documento actual';
+  hideErr('alertPackA'); hideErr('alertPackB');
+  mostrarPasoA(); packCotizacion = null;
   abrirModal('modalPack');
 }
+function mostrarPasoA() { document.getElementById('packPasoA').style.display='block'; document.getElementById('packPasoB').style.display='none'; }
+function volverPackPasoA() { packCotizacion = null; mostrarPasoA(); }
 
-function mostrarPasoA() {
-  document.getElementById('packPasoA').style.display = 'block';
-  document.getElementById('packPasoB').style.display = 'none';
-}
-
-function volverPackPasoA() {
-  packCotizacion = null;
-  mostrarPasoA();
-}
-
-// PASO A → cotiza en el servidor, muestra desglose real
 async function cotizarPack() {
   hideErr('alertPackA');
   const doc2 = document.getElementById('packDoc2').value.trim();
   const doc3 = document.getElementById('packDoc3').value.trim();
-
   if (!doc2) { showErr('alertPackA', 'Describí el Documento 2.'); return; }
   if (!doc3) { showErr('alertPackA', 'Describí el Documento 3.'); return; }
-
   const btn = document.querySelector('#packPasoA .btn.gold');
-  btn.disabled = true;
-  btn.textContent = 'Calculando precio con IA...';
-
+  btn.disabled = true; btn.textContent = 'Calculando precio con IA...';
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/pack/cotizar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        doc1Nombre: sessionStorage.getItem('legalai_titulo') || '',
-        doc2, doc3,
-      })
+      body: JSON.stringify({ doc1Nombre: sessionStorage.getItem('legalai_titulo') || '', doc2, doc3 })
     });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Error al calcular precio');
-
-    // Guardar cotización — el token viene del servidor y no puede ser modificado
     packCotizacion = data;
-
-    // Renderizar desglose
-    const { fmt } = calcularPrecios();
     const cot = cotizacion?.valor;
     function fmtUSD(usd) { return cot ? '$ ' + Math.ceil(usd * cot / 100) * 100 .toLocaleString('es-AR') : 'USD ' + usd; }
-
-    const doc1Meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    const doc1Meta   = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
     const doc1Precio = doc1Meta.precio_usd || 8;
-
     const rows = [
       { label: doc1Meta.titulo || sessionStorage.getItem('legalai_titulo') || 'Documento 1', precio: doc1Precio, cat: doc1Meta.categoria || 'intermedio', badge: 'Ya generado' },
       { label: data.doc2.titulo, precio: data.doc2.precio_usd, cat: data.doc2.categoria },
       { label: data.doc3.titulo, precio: data.doc3.precio_usd, cat: data.doc3.categoria },
     ];
-
     const catColor = { simple: '#6abf8a', intermedio: '#c8a84b', complejo: '#e07a5f' };
     document.getElementById('packDesglose').innerHTML = rows.map((r,i) => `
       <div style="padding:12px 16px;${i>0?'border-top:1px solid var(--line)':''}background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:12px;">
@@ -1611,107 +1337,48 @@ async function cotizarPack() {
         </div>
         <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--ink);white-space:nowrap;">${fmtUSD(r.precio)}</div>
       </div>`).join('');
-
-    const sinDesc   = data.totalSinDescuento;
-    const conDesc   = data.totalConDescuento;
-    const descuento = +(sinDesc - conDesc).toFixed(2);
-    const yaPagado  = doc1Precio;
-    const diferencia = +(conDesc - yaPagado).toFixed(2);
-
+    const sinDesc = data.totalSinDescuento, conDesc = data.totalConDescuento;
+    const descuento = +(sinDesc - conDesc).toFixed(2), diferencia = +(conDesc - doc1Precio).toFixed(2);
     document.getElementById('packTotalSin').textContent     = fmtUSD(sinDesc);
     document.getElementById('packDescuentoAmt').textContent = '− ' + fmtUSD(descuento);
     document.getElementById('packTotalCon').textContent     = fmtUSD(conDesc);
-    document.getElementById('packDiferencia').textContent   =
-      `Ya pagaste ${fmtUSD(yaPagado)} · Pagás solo la diferencia: ${fmtUSD(diferencia)}`;
-
-    // Ir al paso B
+    document.getElementById('packDiferencia').textContent   = `Ya pagaste ${fmtUSD(doc1Precio)} · Pagás solo la diferencia: ${fmtUSD(diferencia)}`;
     document.getElementById('packPasoA').style.display = 'none';
     document.getElementById('packPasoB').style.display = 'block';
-
   } catch(err) {
     showErr('alertPackA', 'Error al calcular precio: ' + err.message);
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Calcular precio del pack →';
+    btn.disabled = false; btn.textContent = 'Calcular precio del pack →';
   }
 }
 
-// PASO B → confirmar pago con el precio ya validado por el servidor
 async function confirmarPack() {
   hideErr('alertPackB');
   if (!packCotizacion) { showErr('alertPackB', 'Calculá el precio antes de confirmar.'); return; }
-
   const doc2 = document.getElementById('packDoc2').value.trim();
   const doc3 = document.getElementById('packDoc3').value.trim();
-
-  // Guardar cotización en sessionStorage para usarla al volver de MP
   sessionStorage.setItem('legalai_pack_cot', JSON.stringify({
     doc2, doc3,
-    precioDoc2:        packCotizacion.doc2.precio_usd,
-    precioDoc3:        packCotizacion.doc3.precio_usd,
-    totalConDescuento: packCotizacion.totalConDescuento,
-    token:             packCotizacion.token,
-    tokenTs:           packCotizacion.tokenTs,
-    paymentIdDoc1:     G.paymentId || sessionStorage.getItem('legalai_paymentId'),
-    pais:              G.pais || 'Argentina',
-    provincia:         G.provincia || '',
+    precioDoc2: packCotizacion.doc2.precio_usd, precioDoc3: packCotizacion.doc3.precio_usd,
+    totalConDescuento: packCotizacion.totalConDescuento, token: packCotizacion.token, tokenTs: packCotizacion.tokenTs,
+    paymentIdDoc1: G.paymentId || sessionStorage.getItem('legalai_paymentId'),
+    pais: G.pais || 'Argentina', provincia: G.provincia || '',
   }));
-
   const { toARS } = calcularPrecios();
   const montoARS = toARS(packCotizacion.totalConDescuento) || Math.round(packCotizacion.totalConDescuento * 1200);
   const packRef  = `pack_${Date.now()}`;
   sessionStorage.setItem('legalai_pack_ref', packRef);
-
   cerrarModal('modalPack');
-
   await iniciarPagoMP({
-    tipo:        'pack',
-    montoARS,
+    tipo: 'pack', montoARS,
     descripcion: `Pack 3 documentos (20% dto) — LegalAI Arg`,
     externalRef: packRef,
-    datosPago:   { dolar_rate: cotizacion?.valor || 0 },
-    onError:     msg => alert('Error al iniciar el pago del pack: ' + msg),
+    datosPago: { dolar_rate: cotizacion?.valor || 0 },
+    onError: msg => alert('Error al iniciar el pago del pack: ' + msg),
   });
-  return; // la función termina acá — el resto se ejecuta al volver de MP
-
-  const btn = document.querySelector('#packPasoB .btn.gold');
-  btn.disabled = true;
-  btn.textContent = 'Creando pack...';
-
-  try {
-    const res = await fetch(`${CONFIG.WORKER_URL}/pack/crear`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        paymentIdPack,
-        paymentIdDoc1:     G.paymentId || sessionStorage.getItem('legalai_paymentId'),
-        doc2,
-        doc3,
-        pais:              G.pais || 'Argentina',
-        provincia:         G.provincia || '',
-        // Precio viene del servidor — el token impide manipulación
-        precioDoc2:        packCotizacion.doc2.precio_usd,
-        precioDoc3:        packCotizacion.doc3.precio_usd,
-        totalConDescuento: packCotizacion.totalConDescuento,
-        token:             packCotizacion.token,
-        tokenTs:           packCotizacion.tokenTs,
-      })
-    });
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Error al crear el pack');
-
-    cerrarModal('modalPack');
-    mostrarCodigoPack(data.codigo, data.creditos, data.expiraDias);
-
-  } catch(err) {
-    showErr('alertPackB', 'Error: ' + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Confirmar y pagar pack →';
-  }
 }
 
 function mostrarCodigoPack(codigo, creditos, expiraDias) {
-  // Crear panel de éxito del pack dentro de card4
   const successBox = document.querySelector('#card4 .success-box');
   let panel = document.getElementById('packCodigoPanel');
   if (!panel) {
@@ -1730,26 +1397,18 @@ function mostrarCodigoPack(codigo, creditos, expiraDias) {
     <div style="font-size:.8rem;color:var(--mist);line-height:1.6;">
       <strong style="color:var(--ink);">${creditos} créditos disponibles</strong> · Válido por ${expiraDias} días<br>
       Ingresá este código en el paso 1 del generador al crear tus próximos documentos.
-    </div>
-  `;
+    </div>`;
   panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function copiarCodigo(codigo) {
   navigator.clipboard.writeText(codigo).then(() => {
     const btn = event.target;
-    btn.textContent = '✓ Copiado';
-    btn.style.background = 'var(--sage)';
-    btn.style.color = '#fff';
+    btn.textContent = '✓ Copiado'; btn.style.background = 'var(--sage)'; btn.style.color = '#fff';
     setTimeout(() => { btn.textContent = 'Copiar'; btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; }, 2000);
   });
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  HELPERS DE RETORNO DESDE MP                                    ║
-// ╚══════════════════════════════════════════════════════════════════╝
-
-// Llamado al volver de MP después de pagar el upgrade sin marca
 async function habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal) {
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/habilitar`, {
@@ -1758,13 +1417,10 @@ async function habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal) {
     });
     const data = await res.json();
     if (!data.habilitado) throw new Error(data.error || 'No se pudo habilitar');
-
-    // Restaurar texto y metadata
-    G.texto     = data.texto     || sessionStorage.getItem('legalai_texto') || '';
+    G.texto = data.texto || sessionStorage.getItem('legalai_texto') || '';
     G.paymentId = paymentIdOriginal;
-    const meta  = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
     showCard(4);
-    // Descarga automática
     descargarPDFSinMarca(data.requiere_advertencia_legal || meta.requiere_advertencia_legal || false);
     sessionStorage.removeItem('legalai_upgrade_pendiente');
   } catch(err) {
@@ -1773,33 +1429,22 @@ async function habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal) {
   }
 }
 
-// Llamado al volver de MP después de pagar el pack
 async function crearPackTrasRetornoMP(paymentIdPack, cot) {
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/pack/crear`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        paymentIdPack,
-        paymentIdDoc1:     cot.paymentIdDoc1,
-        doc2:              cot.doc2,
-        doc3:              cot.doc3,
-        pais:              cot.pais,
-        provincia:         cot.provincia,
-        precioDoc2:        cot.precioDoc2,
-        precioDoc3:        cot.precioDoc3,
-        totalConDescuento: cot.totalConDescuento,
-        token:             cot.token,
-        tokenTs:           cot.tokenTs,
+        paymentIdPack, paymentIdDoc1: cot.paymentIdDoc1, doc2: cot.doc2, doc3: cot.doc3,
+        pais: cot.pais, provincia: cot.provincia,
+        precioDoc2: cot.precioDoc2, precioDoc3: cot.precioDoc3,
+        totalConDescuento: cot.totalConDescuento, token: cot.token, tokenTs: cot.tokenTs,
       }),
     });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Error al crear el pack');
-
-    // Restaurar card4 si hay documento previo
-    G.texto     = sessionStorage.getItem('legalai_texto') || '';
+    G.texto = sessionStorage.getItem('legalai_texto') || '';
     G.paymentId = cot.paymentIdDoc1 || null;
     if (G.texto) showCard(4);
-
     mostrarCodigoPack(data.codigo, data.creditos, data.expiraDias);
     sessionStorage.removeItem('legalai_pack_cot');
     sessionStorage.removeItem('legalai_pack_ref');
@@ -1808,18 +1453,12 @@ async function crearPackTrasRetornoMP(paymentIdPack, cot) {
   }
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  MOTOR PDF UNIFICADO (_generarPDF)                              ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ format: 'a4', unit: 'mm' });
-
   const PW=210, PH=297, ML=25, MR=25, MT= conMarca ? 28 : 20, MB=20;
-  const CW = PW - ML - MR;
-  const YBOTTOM = PH - MB - 14;
+  const CW = PW - ML - MR, YBOTTOM = PH - MB - 14;
   let y = MT;
-
   function agregarEncabezado() {
     if (!conMarca) return;
     doc.setFillColor(248,247,244); doc.rect(0,0,PW,16,'F');
@@ -1828,50 +1467,29 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
     doc.text('LegalAI Arg  ·  Documento Orientativo', ML, 11);
     doc.text(new Date().toLocaleDateString('es-AR'), PW-MR, 11, {align:'right'});
   }
-
   function agregarPie() {
     if (!conMarca && !mantenerAdvertenciaLegal) return;
-    doc.setDrawColor(180,160,100); doc.setLineWidth(0.25);
-    doc.line(ML, PH-MB, PW-MR, PH-MB);
+    doc.setDrawColor(180,160,100); doc.setLineWidth(0.25); doc.line(ML, PH-MB, PW-MR, PH-MB);
     doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
-    const msg = conMarca
-      ? 'Modelo orientativo · No reemplaza asesoramiento legal profesional'
-      : 'Documento orientativo · Consultá a un profesional matriculado para situaciones específicas';
+    const msg = conMarca ? 'Modelo orientativo · No reemplaza asesoramiento legal profesional' : 'Documento orientativo · Consultá a un profesional matriculado para situaciones específicas';
     doc.text(msg, PW/2, PH-MB+5, {align:'center'});
   }
-
-  function nuevaPagina() {
-    agregarPie();
-    doc.addPage(); y = MT;
-    agregarEncabezado();
-  }
-
+  function nuevaPagina() { agregarPie(); doc.addPage(); y = MT; agregarEncabezado(); }
   function checkY(h) { if (y + h > YBOTTOM) nuevaPagina(); }
-
   function limpiar(txt) {
-    return txt
-      .replace(/\*\*(.*?)\*\*/g,'$1')
-      .replace(/\*(.*?)\*/g,'$1')
+    return txt.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1')
       .replace(/\[A completar[^\]]*\]/gi,'______________________________')
-      .replace(/\[[^\]]{0,40}\]/g,'______________________________')
-      .trim();
+      .replace(/\[[^\]]{0,40}\]/g,'______________________________').trim();
   }
-
   agregarEncabezado();
-
   for (const raw of texto.split('\n')) {
-
     const l = limpiar(raw);
-
     if (raw.startsWith('# ')) {
       checkY(20); y+=4;
       doc.setFontSize(13); doc.setFont('times','bold'); doc.setTextColor(15,17,23);
       const wrp = doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(), CW);
       for (const p of wrp) { checkY(8); doc.text(p, PW/2, y, {align:'center'}); y+=7; }
-      y+=3;
-      doc.setDrawColor(200,168,75); doc.setLineWidth(0.5);
-      doc.line(ML+20, y, PW-MR-20, y); y+=6;
-      continue;
+      y+=3; doc.setDrawColor(200,168,75); doc.setLineWidth(0.5); doc.line(ML+20, y, PW-MR-20, y); y+=6; continue;
     }
     if (raw.startsWith('## ') || raw.startsWith('### ')) {
       y+=5; checkY(12);
@@ -1882,11 +1500,7 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
       for (const p of wrp) { doc.text(p, ML, y); y+=6; }
       y+=3; continue;
     }
-    if (raw.trim().startsWith('---')) {
-      y+=3; checkY(6);
-      doc.setDrawColor(210,200,180); doc.setLineWidth(0.2);
-      doc.line(ML,y,PW-MR,y); y+=5; continue;
-    }
+    if (raw.trim().startsWith('---')) { y+=3; checkY(6); doc.setDrawColor(210,200,180); doc.setLineWidth(0.2); doc.line(ML,y,PW-MR,y); y+=5; continue; }
     if (!l) { y+=3; continue; }
     if (raw.trimStart().startsWith('- ') || raw.trimStart().startsWith('* ')) {
       doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
@@ -1895,41 +1509,28 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
       for (const p of wrp) { doc.text(p, ML+4, y); y+=5.5; }
       y+=1; continue;
     }
-    if (l.match(/^_{5,}$/)) {
-      checkY(10); y+=2;
-      doc.setDrawColor(40,40,40); doc.setLineWidth(0.4);
-      doc.line(ML, y, ML+80, y); y+=7; continue;
-    }
+    if (l.match(/^_{5,}$/)) { checkY(10); y+=2; doc.setDrawColor(40,40,40); doc.setLineWidth(0.4); doc.line(ML, y, ML+80, y); y+=7; continue; }
     doc.setFontSize(10); doc.setFont('times','normal'); doc.setTextColor(40,40,40);
     const wrp = doc.splitTextToSize(l, CW);
     checkY(wrp.length*5.5+2);
     for (const p of wrp) { doc.text(p, ML, y); y+=5.5; }
     y+=1;
   }
-
   agregarPie();
-
   const total = doc.internal.getNumberOfPages();
   for (let i=1;i<=total;i++) {
-    doc.setPage(i);
-    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
+    doc.setPage(i); doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
     doc.text('Pág '+i+' / '+total, PW-MR, PH-MB+5, {align:'right'});
   }
-
   doc.save(titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf');
 }
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  PACK — CÓDIGO EN CARD1                                         ║
-// ╚══════════════════════════════════════════════════════════════════╝
 function togglePackCode() {
   const box = document.getElementById('packCodeBox');
   const btn = box.previousElementSibling;
   const visible = box.style.display !== 'none';
   box.style.display = visible ? 'none' : 'block';
-  btn.textContent = visible
-    ? '▸ ¿Tenés un código de pack? Ingresalo acá'
-    : '▾ ¿Tenés un código de pack? Ingresalo acá';
+  btn.textContent = visible ? '▸ ¿Tenés un código de pack? Ingresalo acá' : '▾ ¿Tenés un código de pack? Ingresalo acá';
   if (!visible) document.getElementById('packCodeInput').focus();
 }
 
@@ -1937,11 +1538,7 @@ async function consultarPack() {
   const codigo = document.getElementById('packCodeInput').value.trim().toUpperCase();
   const status = document.getElementById('packCodeStatus');
   if (!codigo) return;
-
-  status.style.display = 'block';
-  status.style.color = 'var(--mist)';
-  status.textContent = 'Verificando código...';
-
+  status.style.display = 'block'; status.style.color = 'var(--mist)'; status.textContent = 'Verificando código...';
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/pack/consultar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1955,103 +1552,70 @@ async function consultarPack() {
     } else {
       status.style.color = 'var(--sage)';
       status.textContent = `✓ Pack válido · ${data.creditos} crédito${data.creditos !== 1 ? 's' : ''} disponible${data.creditos !== 1 ? 's' : ''} · Vence en ${data.expiraEn}`;
-      G.codigoPack = codigo; // guardar para usar en generarDocumento
+      G.codigoPack = codigo;
     }
   } catch(err) {
-    status.style.color = '#c05030';
-    status.textContent = '✗ Error al verificar. Intentá de nuevo.';
+    status.style.color = '#c05030'; status.textContent = '✗ Error al verificar. Intentá de nuevo.';
   }
 }
 
-// Permitir Enter en el campo de código
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('packCodeInput');
   if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') consultarPack(); });
 });
 
 window.addEventListener('load', () => {
-  // Tema
   const t = localStorage.getItem('theme') || 'system';
   applyTheme(t);
   ['Light','System','Dark'].forEach(x =>
     document.getElementById('btn'+x).classList.toggle('active', x.toLowerCase() === t)
   );
-
-  // Email
   injectEmail();
-
-  // Categorías de documentos — renderizar la primera
   renderSugerencias('contratos');
-
-  // Cotización (carga en background al iniciar)
   obtenerCotizacion();
-
-  // Restaurar metadata dinámica si se vuelve de un pago
   const metaStr = sessionStorage.getItem('legalai_meta');
   if (metaStr) {
     try {
       const m = JSON.parse(metaStr);
-      G.precio_usd                 = m.precio_usd || 8;
-      G.upgrade_porcentaje         = m.upgrade_porcentaje || 40;
-      G.categoria                  = m.categoria || 'intermedio';
-      G.requiere_advertencia_legal = m.requiere_advertencia_legal || false;
+      G.precio_usd = m.precio_usd || 8; G.upgrade_porcentaje = m.upgrade_porcentaje || 40;
+      G.categoria = m.categoria || 'intermedio'; G.requiere_advertencia_legal = m.requiere_advertencia_legal || false;
     } catch(_) {}
   }
   G.paymentId = sessionStorage.getItem('legalai_paymentId') || null;
 
-  // ── Retorno desde MercadoPago ────────────────────────────────
   const p    = new URLSearchParams(window.location.search);
   const stat = p.get('status');
-  const tipo = p.get('tipo')  || '';
-  const ref  = p.get('ref')   || '';
+  const tipo = p.get('tipo') || '';
 
   if (stat === 'approved') {
-    // Limpiar params de la URL sin recargar
     window.history.replaceState({}, '', window.location.pathname);
     showSec('generador');
-
     if (tipo === 'doc') {
-      // Pago principal — MP pone el payment_id en la URL con auto_return
       const paymentId = p.get('payment_id') || p.get('collection_id');
       if (paymentId) generarDocumento(paymentId);
-
     } else if (tipo === 'upgrade') {
-      // Upgrade sin marca — recuperar paymentId original y habilitar
       const paymentIdUpgrade  = p.get('payment_id') || p.get('collection_id');
       const paymentIdOriginal = sessionStorage.getItem('legalai_upgrade_pendiente');
-      if (paymentIdUpgrade && paymentIdOriginal) {
-        habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal);
-      }
-
+      if (paymentIdUpgrade && paymentIdOriginal) habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal);
     } else if (tipo === 'guia') {
-      // Guía de uso — generar PDF con el pago aprobado
       const paymentIdGuia     = p.get('payment_id') || p.get('collection_id');
       const paymentIdOriginal = sessionStorage.getItem('legalai_guia_pendiente');
       if (paymentIdGuia && paymentIdOriginal) {
-        // Restaurar texto si está en sessionStorage
-        G.texto     = sessionStorage.getItem('legalai_texto') || '';
+        G.texto = sessionStorage.getItem('legalai_texto') || '';
         G.paymentId = paymentIdOriginal;
         showCard(4);
         generarYDescargarGuia(paymentIdGuia);
       }
-
     } else if (tipo === 'pack') {
-      // Pack — crear el pack con el token de precio guardado
       const paymentIdPack = p.get('payment_id') || p.get('collection_id');
       const cotStr        = sessionStorage.getItem('legalai_pack_cot');
-      if (paymentIdPack && cotStr) {
-        crearPackTrasRetornoMP(paymentIdPack, JSON.parse(cotStr));
-      }
+      if (paymentIdPack && cotStr) crearPackTrasRetornoMP(paymentIdPack, JSON.parse(cotStr));
     }
-
   } else if (stat === 'failure') {
-    showSec('generador');
-    showCard(3);
+    showSec('generador'); showCard(3);
     showErr('alert3', 'El pago fue rechazado. Intentá de nuevo o usá otro medio de pago.');
-
   } else if (stat === 'pending') {
-    showSec('generador');
-    showCard(3);
+    showSec('generador'); showCard(3);
     showErr('alert3', 'El pago está pendiente de acreditación. Te avisaremos cuando esté confirmado.');
   }
 });
