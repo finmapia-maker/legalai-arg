@@ -343,9 +343,9 @@
   }
 
   // ── FORMAT ──
-  function ars(n) {
+  function usd(n) {
     if (n == null) return '—';
-    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n);
   }
   function fecha(ts) {
     return new Date(ts).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit' });
@@ -371,7 +371,7 @@
     errEl.style.display = 'none';
     try {
       const res = await fetch(`${WORKER}/admin/afiliado/lista`, {
-        headers: { 'Authorization': `Bearer ${key}` }
+        headers: { 'x-admin-key': key }
       });
       if (res.status === 401) throw new Error('auth');
       if (!res.ok) throw new Error('err');
@@ -389,19 +389,18 @@
   document.getElementById('btn-login').addEventListener('click', doLogin);
   document.getElementById('admin-key-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-  // ── PROCESAR LISTA ──
   function procesarLista(afiliados) {
     afiliados_cache = afiliados;
 
-    // Summary
-    const activos = afiliados.filter(a => a.active).length;
-    const convs = afiliados.reduce((s, a) => s + (a.earn?.conversiones || 0), 0);
-    const pendiente = afiliados.reduce((s, a) => s + (a.earn?.pendiente || 0), 0);
-    const pagado = afiliados.reduce((s, a) => s + (a.earn?.pagado || 0), 0);
-    document.getElementById('s-activos').textContent = activos;
-    document.getElementById('s-convs').textContent = convs;
-    document.getElementById('s-pendiente').textContent = ars(pendiente);
-    document.getElementById('s-pagado').textContent = ars(pagado);
+    // Summary — worker devuelve earnings.pending, earnings.paid, total_conv
+    const activos   = afiliados.filter(a => a.active).length;
+    const convs     = afiliados.reduce((s, a) => s + (a.total_conv || 0), 0);
+    const pendiente = afiliados.reduce((s, a) => s + (a.earnings?.pending || 0), 0);
+    const pagado    = afiliados.reduce((s, a) => s + (a.earnings?.paid    || 0), 0);
+    document.getElementById('s-activos').textContent   = activos;
+    document.getElementById('s-convs').textContent     = convs;
+    document.getElementById('s-pendiente').textContent = usd(pendiente);
+    document.getElementById('s-pagado').textContent    = usd(pagado);
 
     // Lista
     const el = document.getElementById('lista-contenido');
@@ -419,11 +418,11 @@
         </div>
         <div class="aff-stats">
           <div class="aff-stat">
-            <div class="aff-stat-val gold">${ars(a.earn?.pendiente || 0)}</div>
+            <div class="aff-stat-val gold">${usd(a.earnings?.pending || 0)}</div>
             <div class="aff-stat-lbl">Pendiente</div>
           </div>
           <div class="aff-stat">
-            <div class="aff-stat-val">${a.earn?.conversiones || 0}</div>
+            <div class="aff-stat-val">${a.total_conv || 0}</div>
             <div class="aff-stat-lbl">Conversiones</div>
           </div>
           <span class="${a.active ? 'tag-active' : 'tag-inactive'}">${a.active ? 'Activo' : 'Inactivo'}</span>
@@ -439,29 +438,29 @@
 
   // ── DETALLE ──
   async function abrirDetalle(ref) {
-    const overlay = document.getElementById('detalle-overlay');
+    const overlay   = document.getElementById('detalle-overlay');
     const contenido = document.getElementById('detalle-contenido');
     overlay.classList.add('open');
     contenido.innerHTML = `<div class="loading-center"><div class="spinner"></div></div>`;
 
     try {
       const res = await fetch(`${WORKER}/admin/afiliado/detalle?ref=${encodeURIComponent(ref)}`, {
-        headers: { 'Authorization': `Bearer ${ADMIN_KEY}` }
+        headers: { 'x-admin-key': ADMIN_KEY }
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || 'Error');
 
-      const { afiliado, earn, conversiones } = data;
-      const pendientes = conversiones.filter(c => !c.pagado);
+      const { afiliado, earnings, conversiones } = data;
+      const pendientes = conversiones.filter(c => !c.paid);
 
       const convRows = conversiones.length
         ? conversiones.map(c => `
           <tr>
-            <td>${fecha(c.fecha)}</td>
-            <td><span class="plan-tag">${c.plan || '—'}</span></td>
-            <td style="color:var(--text-dim)">${ars(c.monto)}</td>
-            <td><span class="com-val">${ars(c.comision)}</span></td>
-            <td><span class="status-tag ${c.pagado ? 'pagado' : 'pendiente'}">${c.pagado ? 'Pagado' : 'Pendiente'}</span></td>
+            <td>${fecha(c.created_at)}</td>
+            <td><span class="plan-tag">${c.plan_id || '—'}</span></td>
+            <td style="color:var(--text-dim)">${usd(c.amount)}</td>
+            <td><span class="com-val">${usd(c.commission)}</span></td>
+            <td><span class="status-tag ${c.paid ? 'pagado' : 'pendiente'}">${c.paid ? 'Pagado' : 'Pendiente'}</span></td>
           </tr>`).join('')
         : `<tr><td colspan="5" class="empty">Sin conversiones aún.</td></tr>`;
 
@@ -473,15 +472,15 @@
         <div class="detalle-stats">
           <div class="scard">
             <div class="scard-label">Total generado</div>
-            <div class="scard-value gold">${ars(earn.total)}</div>
+            <div class="scard-value gold">${usd(earnings.total)}</div>
           </div>
           <div class="scard">
             <div class="scard-label">Pendiente</div>
-            <div class="scard-value">${ars(earn.pendiente)}</div>
+            <div class="scard-value">${usd(earnings.pending)}</div>
           </div>
           <div class="scard">
             <div class="scard-label">Ya pagado</div>
-            <div class="scard-value green">${ars(earn.pagado)}</div>
+            <div class="scard-value green">${usd(earnings.paid)}</div>
           </div>
         </div>
         <div class="detalle-conv-header">
@@ -525,12 +524,13 @@
     try {
       const res = await fetch(`${WORKER}/admin/afiliado/pagar`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${ADMIN_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ref, all: true })
+        headers: { 'x-admin-key': ADMIN_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref, all_pending: true })
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || 'Error');
-      toast(`✓ ${data.conversiones_pagadas} conversión${data.conversiones_pagadas !== 1 ? 'es' : ''} marcada${data.conversiones_pagadas !== 1 ? 's' : ''} como pagada${data.conversiones_pagadas !== 1 ? 's' : ''} — ${ars(data.monto_total)}`);
+      const n = data.conversiones_pagadas || data.procesadas || 0;
+      toast(`✓ ${n} conversión${n !== 1 ? 'es' : ''} marcada${n !== 1 ? 's' : ''} como pagada${n !== 1 ? 's' : ''} — ${usd(data.monto_total || data.comision_pagada || 0)}`);
       // Recargar detalle
       setTimeout(() => abrirDetalle(ref), 600);
       // Recargar lista en background
@@ -545,7 +545,7 @@
   async function recargarLista() {
     try {
       const res = await fetch(`${WORKER}/admin/afiliado/lista`, {
-        headers: { 'Authorization': `Bearer ${ADMIN_KEY}` }
+        headers: { 'x-admin-key': ADMIN_KEY }
       });
       const data = await res.json();
       if (data.ok) procesarLista(data.afiliados || []);
@@ -567,7 +567,7 @@
     try {
       const res = await fetch(`${WORKER}/admin/afiliado/crear`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${ADMIN_KEY}`, 'Content-Type': 'application/json' },
+        headers: { 'x-admin-key': ADMIN_KEY, 'Content-Type': 'application/json' },
         body: JSON.stringify({ ref, nombre, email, commission_pct: pct })
       });
       const data = await res.json();
