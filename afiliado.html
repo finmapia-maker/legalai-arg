@@ -245,9 +245,9 @@
     });
   }
 
-  function ars(n) {
+  function usd(n) {
     if (n == null) return '—';
-    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n);
   }
 
   function fecha(ts) {
@@ -272,11 +272,11 @@
     document.getElementById('conv-count').textContent = `${convs.length} registro${convs.length !== 1 ? 's' : ''}`;
     const rows = convs.map(c => `
       <tr>
-        <td>${fecha(c.fecha)}</td>
-        <td><span class="plan-tag">${c.plan || '—'}</span></td>
-        <td style="color:var(--text-dim)">${ars(c.monto)}</td>
-        <td><span class="com-val">${ars(c.comision)}</span></td>
-        <td><span class="tag ${c.pagado ? 'pagado' : 'pendiente'}">${c.pagado ? 'Pagado' : 'Pendiente'}</span></td>
+        <td>${fecha(c.created_at)}</td>
+        <td><span class="plan-tag">${c.plan_id || '—'}</span></td>
+        <td style="color:var(--text-dim)">${usd(c.amount)}</td>
+        <td><span class="com-val">${usd(c.commission)}</span></td>
+        <td><span class="tag ${c.paid ? 'pagado' : 'pendiente'}">${c.paid ? 'Pagado' : 'Pendiente'}</span></td>
       </tr>`).join('');
     el.innerHTML = `
       <table>
@@ -300,9 +300,9 @@
       if (!data.ok) { show('no-auth'); return; }
 
       document.getElementById('nombre').textContent = data.nombre || ref;
-      document.getElementById('stat-total').textContent = ars(data.earn?.total ?? 0);
-      document.getElementById('stat-pendiente').textContent = ars(data.earn?.pendiente ?? 0);
-      document.getElementById('stat-conv').textContent = data.earn?.conversiones ?? 0;
+      document.getElementById('stat-total').textContent = usd(data.earnings?.total ?? 0);
+      document.getElementById('stat-pendiente').textContent = usd(data.earnings?.pending ?? 0);
+      document.getElementById('stat-conv').textContent = data.total_conv ?? 0;
       document.getElementById('pct-text').textContent = `${data.commission_pct ?? 20}% de comisión por cada venta`;
       document.getElementById('link-val').value = data.link_afiliado || '';
       document.getElementById('conv-count').textContent = `${(data.conversiones || []).length} registros`;
