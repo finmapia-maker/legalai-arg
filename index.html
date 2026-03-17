@@ -1284,13 +1284,14 @@ function injectEmail() {
   }
 }
 
-/* ── AFILIADOS: envío de solicitud vía mailto ──────────────────────────── */
-function enviarSolicitudAfiliado() {
+/* ── AFILIADOS: envío de solicitud al worker ───────────────────────────── */
+async function enviarSolicitudAfiliado() {
   const nombre = document.getElementById('affNombre').value.trim();
   const email  = document.getElementById('affEmail').value.trim();
   const canal  = document.getElementById('affCanal').value.trim();
   const nota   = document.getElementById('affNota').value.trim();
   const errEl  = document.getElementById('affAlertErr');
+  const btn    = document.getElementById('affBtnEnviar');
 
   errEl.style.display = 'none';
 
@@ -1299,19 +1300,57 @@ function enviarSolicitudAfiliado() {
     errEl.textContent = 'Ingresá un email válido.'; errEl.style.display = 'block'; return;
   }
 
-  const subj = encodeURIComponent('Solicitud de afiliado — LegalAI Arg');
-  const cuerpo = encodeURIComponent(
-    `Nueva solicitud de afiliado:\n\nNombre: ${nombre}\nEmail: ${email}\nCanal / audiencia: ${canal || '(no especificado)'}\nNota: ${nota || '(sin nota)'}\n\n--- Enviado desde el formulario de afiliados ---`
-  );
+  btn.disabled = true; btn.textContent = 'Enviando solicitud…';
 
-  window.location.href = `mailto:${CONFIG.CONTACT_EMAIL}?subject=${subj}&body=${cuerpo}`;
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/afiliado/solicitud`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, email, canal, nota }),
+    });
+    const data = await res.json();
 
-  // Mostrar confirmación después de un breve delay
-  setTimeout(() => {
+    if (!data.ok) throw new Error(data.error || 'Error al procesar la solicitud');
+
+    // Mostrar confirmación con el link al dashboard
     document.getElementById('affEmailConfirm').textContent = email;
+
+    const okPanel = document.getElementById('affSendOk');
+
+    // Actualizar el texto según si el email se envió o no
+    const confirmMsg = okPanel.querySelector('p');
+    if (confirmMsg) {
+      confirmMsg.innerHTML = data.email_enviado
+        ? `Tu cuenta está activa. Te enviamos los detalles a <strong>${email}</strong>. Revisá también la carpeta de spam.`
+        : `Tu cuenta fue creada correctamente, pero <strong>el email de bienvenida no pudo enviarse</strong>. Guardá el siguiente link — es el único acceso a tu panel:`;
+    }
+
+    // Mostrar siempre el dashboard URL (es crítico si el email falló)
+    const existing = document.getElementById('affDashboardLink');
+    if (!existing && data.dashboard_url) {
+      const linkDiv = document.createElement('div');
+      linkDiv.id = 'affDashboardLink';
+      linkDiv.style.cssText = 'margin-top:16px;padding:14px 16px;background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);border-radius:8px;';
+      linkDiv.innerHTML = `
+        <p style="font-size:.8rem;color:var(--mist);margin:0 0 8px;">
+          ${data.email_enviado ? 'Tu panel de afiliado:' : '⚠️ Guardá este link ahora:'}
+        </p>
+        <a href="${data.dashboard_url}" target="_blank"
+          style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--gold);word-break:break-all;text-decoration:none;">
+          ${data.dashboard_url}
+        </a>`;
+      okPanel.appendChild(linkDiv);
+    }
+
     document.getElementById('affFormBody').style.display = 'none';
-    document.getElementById('affSendOk').style.display   = 'block';
-  }, 800);
+    okPanel.style.display = 'block';
+
+  } catch(e) {
+    errEl.textContent = 'Error al enviar la solicitud: ' + e.message + '. Intentá de nuevo o escribinos directamente.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enviar solicitud →';
+  }
 }
 
 /* ── AFILIADOS: tracking del ref en sessionStorage ──────────────────────── */
