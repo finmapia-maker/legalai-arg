@@ -259,6 +259,59 @@ textarea{resize:vertical;min-height:80px;}
 .modal-check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px;background:var(--cream);border-radius:8px;font-size:.83rem;color:var(--ink);cursor:pointer;}
 .modal-check-row input{width:16px;height:16px;margin-top:2px;flex-shrink:0;}
 
+/* ── AFILIADOS ──────────────────────────────────────────────────────────── */
+.aff-wrap{max-width:800px;margin:0 auto;padding:0 24px 80px;}
+.aff-hero{text-align:center;padding:72px 20px 56px;border-bottom:1px solid var(--line);margin-bottom:56px;}
+.aff-hero-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:16px;}
+.aff-hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;color:var(--ink);margin-bottom:18px;letter-spacing:-.02em;}
+.aff-hero-title em{font-style:italic;color:var(--gold);}
+.aff-hero-sub{font-size:.95rem;color:var(--mist);line-height:1.75;margin-bottom:36px;font-weight:300;max-width:520px;margin-left:auto;margin-right:auto;}
+.aff-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:560px;margin:0 auto 40px;}
+.aff-stat{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:20px 16px;text-align:center;}
+.aff-stat-n{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold);margin-bottom:4px;}
+.aff-stat-lbl{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mist);}
+.aff-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--line);}
+.aff-block:last-of-type{border-bottom:none;}
+.aff-block-label{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:10px;}
+.aff-block-title{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:700;color:var(--ink);margin-bottom:18px;line-height:1.2;}
+.aff-p{font-size:.9rem;color:var(--mist);line-height:1.8;margin-bottom:12px;}
+.aff-flow{display:flex;flex-direction:column;gap:0;margin-top:8px;}
+.aff-flow-step{display:flex;gap:20px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--line);position:relative;}
+.aff-flow-step:last-child{border-bottom:none;}
+.aff-flow-icon{width:44px;height:44px;flex-shrink:0;border-radius:50%;background:var(--gold-dim);border:1.5px solid rgba(200,168,75,.3);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;color:var(--gold);}
+.aff-flow-body{}
+.aff-flow-title{font-weight:600;font-size:.9rem;color:var(--ink);margin-bottom:5px;}
+.aff-flow-desc{font-size:.83rem;color:var(--mist);line-height:1.65;}
+.aff-flow-code{display:inline-block;font-family:'DM Mono',monospace;font-size:.78rem;background:var(--cream);border:1px solid var(--line);border-radius:6px;padding:3px 10px;color:var(--ink);margin-top:6px;}
+.aff-benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:8px;}
+.aff-benefit{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:22px 18px;transition:background .3s;}
+.aff-benefit.featured{border-color:rgba(200,168,75,.3);background:var(--gold-dim);}
+.aff-benefit-icon{font-size:1.3rem;margin-bottom:12px;}
+.aff-benefit-title{font-weight:600;font-size:.9rem;color:var(--ink);margin-bottom:8px;}
+.aff-benefit-desc{font-size:.8rem;color:var(--mist);line-height:1.6;}
+.aff-nota{background:var(--sage-dim);border:1px solid rgba(61,90,70,.15);border-radius:8px;padding:14px 18px;font-size:.83rem;color:var(--sage);line-height:1.65;margin-top:16px;}
+.aff-commission-box{background:var(--surface);border:1px solid rgba(200,168,75,.3);border-radius:12px;padding:28px;margin-top:16px;box-shadow:var(--shadow);}
+.aff-commission-box::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.15));margin:-28px -28px 24px;border-radius:12px 12px 0 0;}
+.aff-commission-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:.88rem;}
+.aff-commission-row:last-child{border-bottom:none;}
+.aff-commission-lbl{color:var(--mist);}
+.aff-commission-val{font-weight:600;color:var(--ink);}
+.aff-commission-val.gold{color:var(--gold);font-family:'Playfair Display',serif;font-size:1.1rem;}
+.aff-form-card{background:var(--surface);border:1px solid rgba(200,168,75,.25);border-radius:12px;padding:36px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.aff-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.2));}
+.aff-form-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.aff-form-sub{font-size:.85rem;color:var(--mist);margin-bottom:28px;line-height:1.65;}
+.aff-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.aff-form-full{grid-column:1/-1;}
+.aff-already{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin-top:16px;text-align:center;}
+.aff-already-lbl{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mist);margin-bottom:8px;}
+.aff-already-desc{font-size:.84rem;color:var(--mist);line-height:1.6;}
+.aff-already-desc a{color:var(--gold);text-decoration:none;}
+.aff-send-ok{display:none;text-align:center;padding:24px;background:var(--sage-dim);border:1px solid rgba(61,90,70,.2);border-radius:10px;margin-top:16px;}
+.aff-send-ok-icon{font-size:2rem;margin-bottom:10px;}
+.aff-send-ok h4{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.aff-send-ok p{font-size:.84rem;color:var(--mist);line-height:1.6;}
+
 /* ── FOOTER ─────────────────────────────────────────────────────────────── */
 footer{background:var(--hdr-bg);padding:36px 40px;text-align:center;border-top:1px solid rgba(200,168,75,.12);}
 footer p{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2;}
@@ -274,10 +327,13 @@ footer a:hover{color:var(--gold);}
   .content-wrap,.sub-wrap{padding:20px 20px 60px;}
   .app-wrap{padding:0 16px 60px;}
   .card,.sub-card{padding:24px 18px;}
-  .fields-grid,.row2{grid-template-columns:1fr;}
+  .fields-grid,.row2,.aff-form-grid{grid-template-columns:1fr;}
   .steps-how{grid-template-columns:1fr 1fr;}
   .step-how::after{display:none;}
   .price-box{flex-direction:column;gap:12px;align-items:flex-start;}
+  .aff-stats{grid-template-columns:1fr 1fr;}
+  .aff-stats .aff-stat:last-child{grid-column:1/-1;}
+  .aff-wrap{padding:0 16px 60px;}
 }
 </style>
 </head>
@@ -301,6 +357,7 @@ footer a:hover{color:var(--gold);}
   <div class="nav-link active" onclick="showSec('inicio')">Inicio</div>
   <div class="nav-link"        onclick="showSec('generador')">Generador</div>
   <div class="nav-link"        onclick="window.location.href='planes.html'">Plan ilimitado</div>
+  <div class="nav-link"        onclick="showSec('afiliados')">Afiliados</div>
   <div class="nav-link"        onclick="showSec('about')">Acerca de</div>
 </nav>
 
@@ -685,6 +742,246 @@ footer a:hover{color:var(--gold);}
 </div>
 
 
+<!-- ── AFILIADOS ──────────────────────────────────────────────────────────── -->
+<div class="section" id="sec-afiliados">
+  <div class="aff-wrap">
+
+    <div class="aff-hero">
+      <div class="aff-hero-tag">✦ Programa de afiliados</div>
+      <h1 class="aff-hero-title">Recomendá LegalAI Arg<br>y <em>cobrás por cada venta</em></h1>
+      <p class="aff-hero-sub">Compartís tu link. Alguien compra. Vos recibís una comisión. Sin inversión, sin stock, sin complicaciones.</p>
+
+      <div class="aff-stats">
+        <div class="aff-stat">
+          <div class="aff-stat-n">20%</div>
+          <div class="aff-stat-lbl">Comisión por venta</div>
+        </div>
+        <div class="aff-stat">
+          <div class="aff-stat-n">∞</div>
+          <div class="aff-stat-lbl">Sin límite de ganancias</div>
+        </div>
+        <div class="aff-stat">
+          <div class="aff-stat-n">0</div>
+          <div class="aff-stat-lbl">Costo de inscripción</div>
+        </div>
+      </div>
+
+      <button class="btn gold" style="max-width:280px;margin:0 auto;" onclick="document.getElementById('aff-form').scrollIntoView({behavior:'smooth'})">
+        Quiero ser afiliado →
+      </button>
+    </div>
+
+    <!-- CÓMO FUNCIONA -->
+    <div class="aff-block">
+      <div class="aff-block-label">El flujo</div>
+      <h2 class="aff-block-title">¿Cómo ganás dinero?</h2>
+      <p class="aff-p">El proceso es completamente automático. Cada vez que alguien compra a través de tu link, la comisión se acumula en tu cuenta.</p>
+
+      <div class="aff-flow">
+        <div class="aff-flow-step">
+          <div class="aff-flow-icon">01</div>
+          <div class="aff-flow-body">
+            <div class="aff-flow-title">Recibís tu link único</div>
+            <div class="aff-flow-desc">Cuando te registrás, te asignamos un código personal. Tu link tiene el formato:</div>
+            <span class="aff-flow-code">legalai-arg.com/planes.html?ref=TUCODIGO</span>
+          </div>
+        </div>
+        <div class="aff-flow-step">
+          <div class="aff-flow-icon">02</div>
+          <div class="aff-flow-body">
+            <div class="aff-flow-title">Compartís donde quieras</div>
+            <div class="aff-flow-desc">WhatsApp, redes sociales, tu web, grupos, donde te parezca. No hay restricciones sobre cómo o dónde compartir tu link.</div>
+          </div>
+        </div>
+        <div class="aff-flow-step">
+          <div class="aff-flow-icon">03</div>
+          <div class="aff-flow-body">
+            <div class="aff-flow-title">Alguien compra usando tu link</div>
+            <div class="aff-flow-desc">El sistema detecta automáticamente que la compra vino de tu recomendación. Aplica a documentos individuales, upgrades, guías y packs.</div>
+          </div>
+        </div>
+        <div class="aff-flow-step">
+          <div class="aff-flow-icon">04</div>
+          <div class="aff-flow-body">
+            <div class="aff-flow-title">La comisión se acumula</div>
+            <div class="aff-flow-desc">Cada conversión suma tu porcentaje al saldo. Podés ver tus ganancias en tiempo real desde tu panel personal.</div>
+          </div>
+        </div>
+        <div class="aff-flow-step">
+          <div class="aff-flow-icon">05</div>
+          <div class="aff-flow-body">
+            <div class="aff-flow-title">Pedís el pago cuando querés</div>
+            <div class="aff-flow-desc">No hay mínimos obligatorios ni fechas fijas. Cuando lo pedís, coordinamos la transferencia. Normalmente dentro de 48 horas hábiles.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BENEFICIOS -->
+    <div class="aff-block">
+      <div class="aff-block-label">Por qué conviene</div>
+      <h2 class="aff-block-title">Beneficios del programa</h2>
+      <div class="aff-benefits">
+        <div class="aff-benefit featured">
+          <div class="aff-benefit-icon">💰</div>
+          <div class="aff-benefit-title">20% de comisión</div>
+          <div class="aff-benefit-desc">Sobre el precio real de cada venta. El porcentaje es configurable — si tenés volumen alto, lo conversamos.</div>
+        </div>
+        <div class="aff-benefit">
+          <div class="aff-benefit-icon">📊</div>
+          <div class="aff-benefit-title">Panel personal</div>
+          <div class="aff-benefit-desc">Ves cada conversión con plan, fecha y monto. Sin datos del comprador, solo los tuyos.</div>
+        </div>
+        <div class="aff-benefit">
+          <div class="aff-benefit-icon">⚡</div>
+          <div class="aff-benefit-title">Tracking automático</div>
+          <div class="aff-benefit-desc">Tu código viaja con cada click. No necesitás hacer nada extra para que la venta quede registrada a tu nombre.</div>
+        </div>
+        <div class="aff-benefit">
+          <div class="aff-benefit-icon">🔗</div>
+          <div class="aff-benefit-title">Un solo link</div>
+          <div class="aff-benefit-desc">Podés apuntar al generador, a planes, a la página de inicio. El ref funciona en toda la plataforma.</div>
+        </div>
+        <div class="aff-benefit">
+          <div class="aff-benefit-icon">🕐</div>
+          <div class="aff-benefit-title">Sin vencimiento</div>
+          <div class="aff-benefit-desc">Tu código no expira. Las ganancias acumuladas tampoco. Pedí el pago cuando quieras.</div>
+        </div>
+        <div class="aff-benefit">
+          <div class="aff-benefit-icon">✉️</div>
+          <div class="aff-benefit-title">Soporte directo</div>
+          <div class="aff-benefit-desc">Cualquier duda sobre tus conversiones o pagos, respondemos por email en menos de 24 horas hábiles.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMISIONES EJEMPLO -->
+    <div class="aff-block">
+      <div class="aff-block-label">Cuánto se gana</div>
+      <h2 class="aff-block-title">Comisiones por tipo de venta</h2>
+      <p class="aff-p">Los precios varían según la complejidad del documento. Estos son los rangos aproximados en pesos, calculados al tipo de cambio del momento.</p>
+
+      <div class="aff-commission-box">
+        <div class="aff-commission-row">
+          <span class="aff-commission-lbl">Documento simple (carta doc, autorización…)</span>
+          <span class="aff-commission-val gold">~20% del precio</span>
+        </div>
+        <div class="aff-commission-row">
+          <span class="aff-commission-lbl">Documento intermedio (freelance, NDA…)</span>
+          <span class="aff-commission-val gold">~20% del precio</span>
+        </div>
+        <div class="aff-commission-row">
+          <span class="aff-commission-lbl">Documento complejo (alquiler, sociedad…)</span>
+          <span class="aff-commission-val gold">~20% del precio</span>
+        </div>
+        <div class="aff-commission-row">
+          <span class="aff-commission-lbl">Upgrade sin marca</span>
+          <span class="aff-commission-val gold">~20% del precio</span>
+        </div>
+        <div class="aff-commission-row">
+          <span class="aff-commission-lbl">Guía de uso PDF</span>
+          <span class="aff-commission-val gold">~20% del precio</span>
+        </div>
+        <div class="aff-commission-row">
+          <span class="aff-commission-lbl">Pack de 3 documentos (20% dto)</span>
+          <span class="aff-commission-val gold">~20% del precio del pack</span>
+        </div>
+      </div>
+
+      <div class="aff-nota" style="margin-top:20px;">
+        Los precios se actualizan al tipo de cambio del momento. Tu comisión se calcula sobre el monto real cobrado en cada transacción, no sobre precios de lista.
+      </div>
+    </div>
+
+    <!-- FORMULARIO DE SOLICITUD -->
+    <div class="aff-block" id="aff-form">
+      <div class="aff-block-label">Unirse</div>
+      <h2 class="aff-block-title">Solicitar acceso como afiliado</h2>
+      <p class="aff-p">Completá el formulario y te contactamos dentro de las 24 horas hábiles con tu código y acceso al panel.</p>
+
+      <div class="aff-form-card">
+        <h3 class="aff-form-title">Registro de afiliado</h3>
+        <p class="aff-form-sub">Sin compromiso ni costo. Revisamos tu solicitud y activamos tu cuenta manualmente para mantener la calidad del programa.</p>
+
+        <div id="affFormBody">
+          <div class="aff-form-grid">
+            <div class="field-group">
+              <label class="field-label" for="affNombre">Nombre completo <span class="req">*</span></label>
+              <input type="text" id="affNombre" placeholder="Tu nombre y apellido">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="affEmail">Email <span class="req">*</span></label>
+              <input type="email" id="affEmail" placeholder="tu@email.com">
+            </div>
+            <div class="field-group aff-form-full">
+              <label class="field-label" for="affCanal">¿Por dónde pensás compartir el link?</label>
+              <input type="text" id="affCanal" placeholder="Ej: Instagram, grupos de WhatsApp, blog, clientes propios…">
+            </div>
+            <div class="field-group aff-form-full">
+              <label class="field-label" for="affNota">Algo más que quieras aclarar (opcional)</label>
+              <textarea id="affNota" placeholder="Contexto sobre tu audiencia, volumen esperado, o cualquier pregunta…" style="min-height:72px;"></textarea>
+            </div>
+          </div>
+
+          <div class="alert err" id="affAlertErr" style="display:none;"></div>
+
+          <button class="btn gold" id="affBtnEnviar" onclick="enviarSolicitudAfiliado()">
+            Enviar solicitud →
+          </button>
+
+          <div class="aff-already">
+            <div class="aff-already-lbl">¿Ya sos afiliado?</div>
+            <div class="aff-already-desc">
+              Accedé a tu panel desde el link que te enviamos por email, o escribinos a
+              <a id="affContactLink" href="#"><!-- email --></a> si lo perdiste.
+            </div>
+          </div>
+        </div>
+
+        <div class="aff-send-ok" id="affSendOk">
+          <div class="aff-send-ok-icon">✓</div>
+          <h4>Solicitud enviada</h4>
+          <p>Recibimos tu solicitud. Te vamos a contactar a <strong id="affEmailConfirm"></strong> dentro de las 24 horas hábiles con tu código y acceso al panel.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ AFILIADOS -->
+    <div class="aff-block">
+      <div class="aff-block-label">Preguntas frecuentes</div>
+      <h2 class="aff-block-title">FAQ del programa</h2>
+      <div class="about-faq">
+        <div class="about-faq-item">
+          <div class="about-faq-q">¿Hay algún requisito para unirse?</div>
+          <div class="about-faq-a">No. Cualquier persona puede solicitar ser afiliado. Revisamos manualmente cada solicitud para mantener la calidad del programa, pero no hay requisitos de audiencia mínima ni experiencia previa.</div>
+        </div>
+        <div class="about-faq-item">
+          <div class="about-faq-q">¿Cómo sé que una venta fue registrada a mi nombre?</div>
+          <div class="about-faq-a">Desde tu panel personal podés ver cada conversión con el detalle del plan vendido, la fecha y el monto de comisión. El tracking es automático: cualquier compra hecha desde tu link queda registrada.</div>
+        </div>
+        <div class="about-faq-item">
+          <div class="about-faq-q">¿Cuándo y cómo cobro?</div>
+          <div class="about-faq-a">No hay fechas fijas. Cuando tenés saldo acumulado, nos avisás y coordinamos la transferencia. Generalmente dentro de 48 horas hábiles. El medio de pago lo acordamos con cada afiliado.</div>
+        </div>
+        <div class="about-faq-item">
+          <div class="about-faq-q">¿Aplica la comisión a todos los productos?</div>
+          <div class="about-faq-a">Sí. Documentos individuales, upgrades sin marca, guías de uso y packs. Si el comprador llegó desde tu link y pagó, la comisión es tuya.</div>
+        </div>
+        <div class="about-faq-item">
+          <div class="about-faq-q">¿El link tiene vencimiento?</div>
+          <div class="about-faq-a">No. Tu código es permanente mientras la cuenta esté activa. Las ganancias acumuladas tampoco vencen.</div>
+        </div>
+        <div class="about-faq-item">
+          <div class="about-faq-q">¿Puedo tener más de un código?</div>
+          <div class="about-faq-a">Por ahora cada afiliado tiene un único código. Si necesitás segmentar campañas, conversalo con nosotros y lo evaluamos.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 <!-- ACERCA DE -->
 <div class="section" id="sec-about">
   <div class="about-wrap">
@@ -978,7 +1275,50 @@ function injectEmail() {
   document.getElementById('footerEmail').textContent = e;
   const aboutLink = document.getElementById('aboutContactLink');
   if (aboutLink) { aboutLink.href = `mailto:${e}?subject=${sub}&body=${body}`; aboutLink.textContent = e; }
+  // Afiliados
+  const affLink = document.getElementById('affContactLink');
+  if (affLink) {
+    const subAff = encodeURIComponent('Afiliado LegalAI Arg - Recuperar acceso');
+    affLink.href = `mailto:${e}?subject=${subAff}`;
+    affLink.textContent = e;
+  }
 }
+
+/* ── AFILIADOS: envío de solicitud vía mailto ──────────────────────────── */
+function enviarSolicitudAfiliado() {
+  const nombre = document.getElementById('affNombre').value.trim();
+  const email  = document.getElementById('affEmail').value.trim();
+  const canal  = document.getElementById('affCanal').value.trim();
+  const nota   = document.getElementById('affNota').value.trim();
+  const errEl  = document.getElementById('affAlertErr');
+
+  errEl.style.display = 'none';
+
+  if (!nombre) { errEl.textContent = 'Por favor ingresá tu nombre.'; errEl.style.display = 'block'; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Ingresá un email válido.'; errEl.style.display = 'block'; return;
+  }
+
+  const subj = encodeURIComponent('Solicitud de afiliado — LegalAI Arg');
+  const cuerpo = encodeURIComponent(
+    `Nueva solicitud de afiliado:\n\nNombre: ${nombre}\nEmail: ${email}\nCanal / audiencia: ${canal || '(no especificado)'}\nNota: ${nota || '(sin nota)'}\n\n--- Enviado desde el formulario de afiliados ---`
+  );
+
+  window.location.href = `mailto:${CONFIG.CONTACT_EMAIL}?subject=${subj}&body=${cuerpo}`;
+
+  // Mostrar confirmación después de un breve delay
+  setTimeout(() => {
+    document.getElementById('affEmailConfirm').textContent = email;
+    document.getElementById('affFormBody').style.display = 'none';
+    document.getElementById('affSendOk').style.display   = 'block';
+  }, 800);
+}
+
+/* ── AFILIADOS: tracking del ref en sessionStorage ──────────────────────── */
+(function captureRef() {
+  const ref = new URLSearchParams(window.location.search).get('ref');
+  if (ref) sessionStorage.setItem('legalai_ref', ref.toUpperCase());
+})();
 
 function setTheme(t) {
   localStorage.setItem('theme', t);
@@ -999,7 +1339,8 @@ function showSec(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   document.getElementById('sec-' + name).classList.add('visible');
-  const idx = ['inicio','generador','suscripcion','about'].indexOf(name);
+  const secs = ['inicio','generador','suscripcion','afiliados','about'];
+  const idx = secs.indexOf(name);
   if (idx >= 0) document.querySelectorAll('.nav-link')[idx].classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1136,9 +1477,10 @@ function irAlPago() {
 
 async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPago, onError }) {
   try {
+    const ref = sessionStorage.getItem('legalai_ref') || null;
     const res  = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, montoARS, descripcion, externalRef, datosPago }),
+      body: JSON.stringify({ tipo, montoARS, descripcion, externalRef, datosPago, ref }),
     });
     const data = await res.json();
     if (!data.init_point) throw new Error(data.detalle || data.error || 'Error al crear el pago');
@@ -1586,6 +1928,10 @@ window.addEventListener('load', () => {
   const p    = new URLSearchParams(window.location.search);
   const stat = p.get('status');
   const tipo = p.get('tipo') || '';
+
+  // Capturar ref de afiliado si viene en la URL (puede venir en cualquier página)
+  const refParam = p.get('ref');
+  if (refParam) sessionStorage.setItem('legalai_ref', refParam.toUpperCase());
 
   if (stat === 'approved') {
     window.history.replaceState({}, '', window.location.pathname);
