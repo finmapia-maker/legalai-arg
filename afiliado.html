@@ -1,465 +1,233 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Afiliado — LegalAI Arg</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --gold:        #C9A96E;
-      --gold-light:  #E8D5A3;
-      --gold-dark:   #9B7A3D;
-      --sage:        #7A9E7E;
-      --sage-light:  #A8C5AB;
-      --mist:        #B8C4CC;
-      --ink:         #1A1C1E;
-      --parchment:   #F5F0E8;
-      --cream:       #FAF7F2;
-      --text-main:   #1A1C1E;
-      --text-soft:   #5A5E65;
-      --text-muted:  #8A8F97;
-      --border:      rgba(201,169,110,0.2);
-      --border-soft: rgba(0,0,0,0.08);
-      --r: 8px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text-main);
-      min-height: 100vh;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Afiliado — LegalAI Arg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:       #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim:   #7a6020;
+    --bg:         #0a0a0f;
+    --surface:    #16161f;
+    --surface2:   #1e1e2a;
+    --border:     #23232f;
+    --border2:    #2e2e3e;
+    --text:       #e8e8f0;
+    --muted:      #8888a0;
+    --faint:      #444460;
+    --green:      #4caf7a;
+    --green-bg:   #0e2018;
+    --red:        #e05c5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* Header */
-    .header {
-      background: var(--ink);
-      border-bottom: 1px solid rgba(201,169,110,0.25);
-      padding: 0 24px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .header-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      color: var(--gold-light);
-      letter-spacing: 0.03em;
-      text-decoration: none;
-    }
-    .header-logo span {
-      color: var(--mist);
-      font-weight: 300;
-      font-size: 13px;
-      margin-left: 10px;
-      font-family: 'DM Sans', sans-serif;
-    }
-    .header-badge {
-      background: rgba(201,169,110,0.15);
-      border: 1px solid rgba(201,169,110,0.35);
-      color: var(--gold-light);
-      font-size: 11px;
-      font-family: 'DM Mono', monospace;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.08em;
-    }
+  .header { border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
+  .header-logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--gold); }
+  .header-badge { font-size: 11px; font-weight: 600; color: var(--muted); background: var(--border); padding: 3px 10px; border-radius: 20px; letter-spacing: .06em; text-transform: uppercase; margin-left: 12px; }
+  .header-name { font-size: 13px; color: var(--muted); }
 
-    /* States */
-    .state-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 60px);
-      gap: 16px;
-      text-align: center;
-      padding: 24px;
-    }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 2px solid var(--border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .state-icon { font-size: 40px; }
-    .state-title { font-family: 'Playfair Display', serif; font-size: 22px; }
-    .state-msg { color: var(--text-soft); max-width: 360px; font-size: 14px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
 
-    /* Main */
-    .main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 32px 20px 60px;
-    }
+  .state-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; text-align: center; }
+  .state-icon { font-size: 40px; }
+  .state-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text); }
+  .state-sub { font-size: 14px; color: var(--muted); max-width: 340px; line-height: 1.6; }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--border2); border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Welcome */
-    .welcome { margin-bottom: 32px; }
-    .welcome-label {
-      font-size: 11px;
-      color: var(--gold);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .welcome-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .welcome-sub { color: var(--text-muted); font-size: 14px; }
-    .welcome-sub strong { color: var(--gold-dark); font-family: 'DM Mono', monospace; }
+  .welcome { background: linear-gradient(135deg, #1c1a10 0%, var(--surface) 100%); border: 1px solid var(--border2); border-radius: 16px; padding: 28px 32px; margin-bottom: 28px; }
+  .welcome-eyebrow { font-size: 11px; font-weight: 600; color: var(--gold-dim); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+  .welcome-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 18px; }
+  .welcome-name span { color: var(--gold); }
 
-    /* Earn grid */
-    .earn-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 32px;
-    }
-    @media (max-width: 600px) { .earn-grid { grid-template-columns: 1fr; } }
-    .earn-card {
-      background: #fff;
-      border: 1px solid var(--border-soft);
-      border-radius: var(--r);
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .earn-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-    .earn-card.c-total::before  { background: var(--gold); }
-    .earn-card.c-pend::before   { background: var(--sage); }
-    .earn-card.c-paid::before   { background: var(--mist); }
-    .earn-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 8px;
-    }
-    .earn-amount {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      font-weight: 600;
-    }
-    .earn-amount .cur { font-size: 14px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-weight: 400; margin-right: 2px; }
-    .earn-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .link-box { background: var(--bg); border: 1px solid var(--border2); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .link-label { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+  .link-url { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gold-light); flex: 1; word-break: break-all; }
+  .btn-copy { background: var(--gold); color: #000; border: none; border-radius: 8px; padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .2s, transform .1s; }
+  .btn-copy:active { transform: scale(.97); }
+  .btn-copy.copied { background: var(--green); }
 
-    /* Panel card */
-    .panel-card {
-      background: #fff;
-      border: 1px solid var(--border-soft);
-      border-radius: var(--r);
-      margin-bottom: 20px;
-    }
-    .panel-card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .panel-card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 15px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
-    .panel-card-body { padding: 20px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; position: relative; overflow: hidden; }
+  .stat-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); opacity: 0; transition: opacity .25s; }
+  .stat-card:hover::after { opacity: 1; }
+  .stat-eyebrow { font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+  .stat-value { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .stat-value.green { color: var(--green); }
+  .stat-sub { font-size: 12px; color: var(--muted); }
 
-    /* Link box */
-    .link-row {
-      display: flex;
-      gap: 10px;
-      align-items: stretch;
-    }
-    .link-input {
-      flex: 1;
-      background: var(--parchment);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 14px;
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-      outline: none;
-      min-width: 0;
-    }
-    .btn {
-      background: var(--gold);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 18px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .btn:hover { background: var(--gold-dark); }
-    .btn.success { background: var(--sage); }
-    .link-hint { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
-    .comm-badge {
-      display: inline-block;
-      background: rgba(122,158,126,0.12);
-      border: 1px solid rgba(122,158,126,0.3);
-      color: var(--sage);
-      font-size: 11px;
-      font-family: 'DM Mono', monospace;
-      padding: 2px 8px;
-      border-radius: 20px;
-    }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: var(--text); }
+  .section-count { font-size: 12px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; }
 
-    /* Table */
-    .conv-table { width: 100%; border-collapse: collapse; }
-    .conv-table th {
-      padding: 10px 16px;
-      text-align: left;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      font-family: 'DM Mono', monospace;
-      font-weight: 400;
-      background: var(--parchment);
-      border-bottom: 1px solid var(--border-soft);
-    }
-    .conv-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-soft);
-      font-size: 14px;
-    }
-    .conv-table tr:last-child td { border-bottom: none; }
-    .conv-table tr:hover td { background: rgba(201,169,110,0.03); }
-    .tag {
-      display: inline-block;
-      background: var(--parchment);
-      border: 1px solid var(--border);
-      color: var(--gold-dark);
-      font-size: 10px;
-      font-family: 'DM Mono', monospace;
-      padding: 2px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-    .mono { font-family: 'DM Mono', monospace; font-size: 13px; }
-    .muted { color: var(--text-muted); }
-    .green { color: var(--sage); font-weight: 500; }
-    .status-dot {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-family: 'DM Mono', monospace;
-    }
-    .status-dot::before { content: '●'; font-size: 8px; }
-    .status-dot.paid   { color: var(--sage); }
-    .status-dot.pend   { color: var(--gold); }
+  .conv-table { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .conv-head { display: grid; grid-template-columns: 1fr 100px 90px 80px 90px; padding: 12px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .th { font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .07em; text-transform: uppercase; }
+  .conv-row { display: grid; grid-template-columns: 1fr 100px 90px 80px 90px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background .15s; }
+  .conv-row:last-child { border-bottom: none; }
+  .conv-row:hover { background: var(--surface2); }
+  .c-plan { font-size: 13px; font-weight: 600; color: var(--text); text-transform: capitalize; }
+  .c-date { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .c-amt { font-size: 13px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .c-com { font-size: 13px; font-weight: 600; color: var(--gold); font-family: 'DM Mono', monospace; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+  .pill.paid { background: var(--green-bg); color: var(--green); border: 1px solid #1a4030; }
+  .pill.pending { background: #1a140a; color: var(--gold); border: 1px solid #3a2e10; }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .empty-state { padding: 48px 24px; text-align: center; color: var(--faint); font-size: 14px; line-height: 1.8; }
 
-    .empty-msg {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    .empty-msg .em-icon { font-size: 32px; margin-bottom: 10px; }
-
-    .footer-note {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin-top: 36px;
-    }
-
-    @media (max-width: 640px) {
-      .conv-table th:nth-child(2), .conv-table td:nth-child(2) { display: none; }
-    }
-  </style>
+  .footer { text-align: center; padding: 40px 0 24px; font-size: 12px; color: var(--faint); }
+</style>
 </head>
 <body>
 
 <header class="header">
-  <a class="header-logo" href="#">LegalAI Arg <span>Panel de Afiliado</span></a>
-  <span class="header-badge" id="ref-badge">—</span>
+  <div style="display:flex;align-items:center;">
+    <span class="header-logo">LegalAI Arg</span>
+    <span class="header-badge">Afiliados</span>
+  </div>
+  <span class="header-name" id="headerName"></span>
 </header>
 
-<!-- Loading -->
-<div class="state-screen" id="st-loading">
-  <div class="spinner"></div>
-  <p class="state-msg">Cargando tu panel…</p>
-</div>
-
-<!-- Error -->
-<div class="state-screen" id="st-error" style="display:none;">
-  <div class="state-icon">🔒</div>
-  <h2 class="state-title">Acceso no válido</h2>
-  <p class="state-msg" id="error-msg">El link que usaste no es válido o expiró. Solicitá uno nuevo al equipo de LegalAI.</p>
-</div>
-
-<!-- Dashboard -->
-<main id="st-main" style="display:none;">
-  <div class="main">
-
-    <div class="welcome">
-      <div class="welcome-label">Tu panel de afiliado</div>
-      <h1 class="welcome-name" id="w-name">—</h1>
-      <p class="welcome-sub">Código: <strong id="w-ref">—</strong></p>
-    </div>
-
-    <div class="earn-grid">
-      <div class="earn-card c-total">
-        <div class="earn-label">Total ganado</div>
-        <div class="earn-amount"><span class="cur">$</span><span id="e-total">0,00</span></div>
-        <div class="earn-sub" id="e-convs">0 conversiones</div>
-      </div>
-      <div class="earn-card c-pend">
-        <div class="earn-label">Pendiente de cobro</div>
-        <div class="earn-amount"><span class="cur">$</span><span id="e-pend">0,00</span></div>
-        <div class="earn-sub">A liquidar próximamente</div>
-      </div>
-      <div class="earn-card c-paid">
-        <div class="earn-label">Ya cobrado</div>
-        <div class="earn-amount"><span class="cur">$</span><span id="e-paid">0,00</span></div>
-        <div class="earn-sub">Pagos recibidos</div>
-      </div>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header">
-        <div class="panel-card-title"><span class="dot"></span>Tu link para compartir</div>
-      </div>
-      <div class="panel-card-body">
-        <div class="link-row">
-          <input class="link-input" id="link-val" type="text" readonly />
-          <button class="btn" id="btn-copy" onclick="copiar()">Copiar link</button>
-        </div>
-        <p class="link-hint">
-          Cada persona que pague usando tu link te genera una comisión del
-          <span class="comm-badge" id="comm-pct">20%</span>.
-        </p>
-      </div>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header">
-        <div class="panel-card-title"><span class="dot"></span>Historial de conversiones</div>
-        <span class="mono muted" id="conv-count" style="font-size:12px;">—</span>
-      </div>
-      <div id="conv-body"></div>
-    </div>
-
-    <p class="footer-note">Montos en ARS · Las comisiones se liquidan manualmente · LegalAI Arg</p>
+<div id="stateLoading" class="container">
+  <div class="state-screen">
+    <div class="spinner"></div>
+    <p class="state-sub">Cargando tu dashboard…</p>
   </div>
-</main>
+</div>
+
+<div id="stateError" class="container" style="display:none;">
+  <div class="state-screen">
+    <div class="state-icon">🔒</div>
+    <h2 class="state-title">Acceso no autorizado</h2>
+    <p class="state-sub" id="errorMsg">El enlace no es válido. Contactá al equipo de LegalAI.</p>
+  </div>
+</div>
+
+<div id="dashboard" class="container" style="display:none;">
+  <div class="welcome">
+    <p class="welcome-eyebrow">Tu panel de afiliado</p>
+    <h1 class="welcome-name">Hola, <span id="dashNombre"></span></h1>
+    <div class="link-box">
+      <span class="link-label">Tu link</span>
+      <span class="link-url" id="linkAfiliado"></span>
+      <button class="btn-copy" id="btnCopy" onclick="copiarLink()">Copiar link</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <p class="stat-eyebrow">Conversiones</p>
+      <p class="stat-value" id="statConv">0</p>
+      <p class="stat-sub">referidos registrados</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-eyebrow">Pendiente de cobro</p>
+      <p class="stat-value" id="statPending">$0</p>
+      <p class="stat-sub">en USDT · te pagamos nosotros</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-eyebrow">Total cobrado</p>
+      <p class="stat-value green" id="statPaid">$0</p>
+      <p class="stat-sub">histórico acumulado</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title">Historial de conversiones</h2>
+    <span class="section-count" id="convCount">0 registradas</span>
+  </div>
+
+  <div class="conv-table">
+    <div class="conv-head">
+      <span class="th">Plan</span>
+      <span class="th">Fecha</span>
+      <span class="th">Monto</span>
+      <span class="th">Comisión</span>
+      <span class="th">Estado</span>
+    </div>
+    <div id="convBody">
+      <div class="empty-state">Aún no hay conversiones.<br>¡Compartí tu link y empezá a ganar!</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">LegalAI Arg · Portal de afiliados</div>
 
 <script>
-  const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
+const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
+let linkGlobal = '';
 
-  const fmt = n => Number(n || 0).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const fmtFecha = ts => new Date(ts).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  const planMap = { doc: 'Documento', upgrade: 'Upgrade', guia: 'Guía', pack: 'Pack' };
+const PLANES = { starter:'Starter', standard:'Standard', pro:'PRO', business:'Business', enterprise:'Enterprise' };
 
-  function show(id) {
-    ['st-loading','st-error','st-main'].forEach(s => {
-      document.getElementById(s).style.display = s === id ? (id === 'st-main' ? 'block' : 'flex') : 'none';
-    });
-  }
+function fmt(ts) {
+  return new Date(ts).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit'});
+}
+function usd(n) { return '$' + (Number(n)||0).toFixed(2); }
 
-  function copiar() {
-    const val = document.getElementById('link-val').value;
-    navigator.clipboard.writeText(val).then(() => {
-      const btn = document.getElementById('btn-copy');
-      btn.textContent = '¡Copiado!';
-      btn.classList.add('success');
-      setTimeout(() => { btn.textContent = 'Copiar link'; btn.classList.remove('success'); }, 2000);
-    });
-  }
+async function init() {
+  const p = new URLSearchParams(location.search);
+  const ref = p.get('ref')||'', key = p.get('key')||'';
+  if (!ref || !key) { showError('URL inválida. Faltan parámetros.'); return; }
 
-  function renderConversiones(lista) {
-    const body = document.getElementById('conv-body');
-    document.getElementById('conv-count').textContent = `${lista.length} registro${lista.length !== 1 ? 's' : ''}`;
+  try {
+    const res  = await fetch(`${WORKER}/afiliado/dashboard?ref=${encodeURIComponent(ref)}&key=${encodeURIComponent(key)}`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) { showError(data.error||'No autorizado'); return; }
 
-    if (!lista.length) {
-      body.innerHTML = `<div class="empty-msg"><div class="em-icon">📋</div><p>Todavía no hay conversiones registradas.<br>Compartí tu link para empezar a ganar.</p></div>`;
-      return;
+    document.getElementById('headerName').textContent = data.nombre;
+    document.getElementById('dashNombre').textContent = data.nombre;
+    document.getElementById('linkAfiliado').textContent = data.link_afiliado;
+    linkGlobal = data.link_afiliado;
+
+    const e = data.earnings||{};
+    document.getElementById('statConv').textContent    = data.total_conv||0;
+    document.getElementById('statPending').textContent = usd(e.pending);
+    document.getElementById('statPaid').textContent    = usd(e.paid);
+    document.getElementById('convCount').textContent   = `${data.total_conv||0} registradas`;
+
+    const convs = data.conversiones||[];
+    if (convs.length) {
+      document.getElementById('convBody').innerHTML = convs.map(c=>`
+        <div class="conv-row">
+          <span class="c-plan">${PLANES[c.plan_id]||c.plan_id}</span>
+          <span class="c-date">${fmt(c.created_at)}</span>
+          <span class="c-amt">${usd(c.amount)}</span>
+          <span class="c-com">${usd(c.commission)}</span>
+          <span class="pill ${c.paid?'paid':'pending'}"><span class="pill-dot"></span>${c.paid?'Cobrado':'Pendiente'}</span>
+        </div>`).join('');
     }
 
-    const rows = lista.map(c => `
-      <tr>
-        <td><span class="tag">${planMap[c.plan] || c.plan}</span></td>
-        <td class="mono muted">$${fmt(c.monto)}</td>
-        <td class="mono green">$${fmt(c.comision)}</td>
-        <td class="mono muted">${fmtFecha(c.fecha)}</td>
-        <td><span class="status-dot ${c.pagado ? 'paid' : 'pend'}">${c.pagado ? 'Pagado' : 'Pendiente'}</span></td>
-      </tr>`).join('');
-
-    body.innerHTML = `
-      <table class="conv-table">
-        <thead><tr>
-          <th>Plan</th><th>Monto</th><th>Tu comisión</th><th>Fecha</th><th>Estado</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>`;
+    document.getElementById('stateLoading').style.display = 'none';
+    document.getElementById('dashboard').style.display    = 'block';
+  } catch(e) {
+    showError('Error de conexión. Intentá de nuevo.');
   }
+}
 
-  async function init() {
-    const params = new URLSearchParams(location.search);
-    const ref = params.get('ref')?.toUpperCase();
-    const key = params.get('key');
+function showError(msg) {
+  document.getElementById('errorMsg').textContent = msg;
+  document.getElementById('stateLoading').style.display = 'none';
+  document.getElementById('stateError').style.display   = 'block';
+}
 
-    if (!ref || !key) {
-      show('st-error');
-      return;
-    }
+function copiarLink() {
+  if (!linkGlobal) return;
+  navigator.clipboard.writeText(linkGlobal).then(()=>{
+    const b = document.getElementById('btnCopy');
+    b.textContent='¡Copiado!'; b.classList.add('copied');
+    setTimeout(()=>{ b.textContent='Copiar link'; b.classList.remove('copied'); }, 2200);
+  });
+}
 
-    try {
-      const res = await fetch(`${WORKER}/afiliado/dashboard?ref=${encodeURIComponent(ref)}&key=${encodeURIComponent(key)}`);
-      const data = await res.json();
-
-      if (!data.ok) {
-        document.getElementById('error-msg').textContent = data.error || 'Acceso denegado.';
-        show('st-error');
-        return;
-      }
-
-      document.getElementById('ref-badge').textContent = data.ref;
-      document.getElementById('w-name').textContent = `Hola, ${data.nombre.split(' ')[0]}`;
-      document.getElementById('w-ref').textContent = data.ref;
-      document.getElementById('e-total').textContent = fmt(data.earn.total);
-      document.getElementById('e-pend').textContent = fmt(data.earn.pendiente);
-      document.getElementById('e-paid').textContent = fmt(data.earn.pagado);
-      document.getElementById('e-convs').textContent = `${data.earn.conversiones || 0} conversión${data.earn.conversiones !== 1 ? 'es' : ''}`;
-      document.getElementById('comm-pct').textContent = `${data.commission_pct}%`;
-      document.getElementById('link-val').value = data.link_afiliado;
-
-      renderConversiones(data.conversiones);
-      show('st-main');
-
-    } catch (e) {
-      document.getElementById('error-msg').textContent = 'Error de conexión. Intentá nuevamente en unos segundos.';
-      show('st-error');
-    }
-  }
-
-  init();
+init();
 </script>
 </body>
 </html>
