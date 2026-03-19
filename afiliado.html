@@ -1,320 +1,203 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Afiliado — LegalAI ARG</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C96A;
-      --gold-dim: rgba(201,168,76,0.15);
-      --sage: #6B7C5E;
-      --mist: #B8C4C0;
-      --bg: #0D0D0D;
-      --bg2: #141414;
-      --bg3: #1A1A1A;
-      --surface: #1E1E1E;
-      --border: rgba(255,255,255,0.07);
-      --border-gold: rgba(201,168,76,0.25);
-      --text: #F0EDE8;
-      --text-dim: rgba(240,237,232,0.55);
-      --text-muted: rgba(240,237,232,0.3);
-      --green: #5E9E6B;
-      --green-dim: rgba(94,158,107,0.12);
-    }
-    [data-theme="light"] {
-      --bg: #F7F5F0; --bg2: #EFECE6; --bg3: #E8E4DC;
-      --surface: #FFFFFF; --border: rgba(0,0,0,0.08);
-      --border-gold: rgba(201,168,76,0.3);
-      --text: #1A1A1A; --text-dim: rgba(26,26,26,0.55); --text-muted: rgba(26,26,26,0.35);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg); color: var(--text);
-      min-height: 100vh; font-size: 15px; line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
-    }
-    header {
-      background: var(--bg2); border-bottom: 1px solid var(--border);
-      padding: 0 32px; height: 56px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 100;
-    }
-    .logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700;
-      color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
-    .logo span { color: var(--gold); }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .badge { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold);
-      background: var(--gold-dim); border: 1px solid var(--border-gold);
-      padding: 3px 10px; border-radius: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
-    .theme-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim);
-      width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; }
-    .theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel de Afiliado — LegalAI ARG</title>
 
-    main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-    /* ESTADOS */
-    .estado { display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 60vh; gap: 14px; text-align: center; }
-    .estado h2 { font-family: 'Playfair Display', serif; font-size: 24px; }
-    .estado p { color: var(--text-dim); max-width: 360px; font-size: 14px; line-height: 1.7; }
-    .spinner { width: 36px; height: 36px; border: 2px solid var(--border);
-      border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+<style>
+:root {
+--gold:#C9A84C;
+--bg:#0D0D0D;
+--card:#161616;
+--text:#E5E5E5;
+--muted:#8C8C8C;
+--border:#262626;
+}
 
-    #dashboard { display: none; }
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:Inter, sans-serif;
+}
 
-    /* SALUDO */
-    .saludo { margin-bottom: 32px; }
-    .label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold);
-      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
-    .saludo h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 34px);
-      font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
-    .saludo p { margin-top: 8px; color: var(--text-dim); font-size: 14px; }
+.container{
+max-width:1100px;
+margin:auto;
+padding:40px 20px;
+}
 
-    /* STATS */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-    @media (max-width: 580px) { .stats { grid-template-columns: 1fr 1fr; }
-      .stats .card:last-child { grid-column: span 2; } }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 20px; transition: border-color 0.2s; }
-    .card:hover { border-color: var(--border-gold); }
-    .card-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-    .card-value { font-family: 'Playfair Display', serif; font-size: 28px;
-      font-weight: 700; line-height: 1; }
-    .card-value.gold { color: var(--gold); }
-    .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+h1{
+font-family:Playfair Display, serif;
+color:var(--gold);
+}
 
-    /* COMISION PILL */
-    .pill { display: inline-flex; align-items: center; gap: 6px;
-      background: var(--green-dim); border: 1px solid rgba(94,158,107,0.3);
-      color: var(--green); font-family: 'DM Mono', monospace; font-size: 12px;
-      padding: 4px 12px; border-radius: 20px; margin-bottom: 24px; }
+.cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+margin-top:30px;
+}
 
-    /* LINK */
-    .link-box { background: var(--surface); border: 1px solid var(--border-gold);
-      border-radius: 12px; padding: 20px 24px; margin-bottom: 28px; }
-    .link-row { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
-    .link-input { flex: 1; background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 8px; padding: 10px 14px; font-family: 'DM Mono', monospace;
-      font-size: 13px; color: var(--text); outline: none; }
-    .btn-copy { background: var(--gold-dim); border: 1px solid var(--border-gold);
-      color: var(--gold); padding: 10px 18px; border-radius: 8px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-      cursor: pointer; white-space: nowrap; transition: background 0.2s; }
-    .btn-copy:hover { background: rgba(201,168,76,0.25); }
-    .btn-copy.ok { color: var(--green); border-color: rgba(94,158,107,0.4); background: var(--green-dim); }
-    .hint { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+.card{
+background:var(--card);
+padding:20px;
+border-radius:12px;
+border:1px solid var(--border);
+}
 
-    /* TABLA */
-    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .section-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
-    .section-count { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); }
-    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; }
-    thead th { font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--text-muted); text-align: left;
-      padding: 0 16px 10px; border-bottom: 1px solid var(--border); }
-    thead th:last-child { text-align: right; }
-    tbody td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    tbody td:last-child { text-align: right; }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: rgba(255,255,255,0.02); }
-    .plan-tag { font-family: 'DM Mono', monospace; font-size: 11px; padding: 2px 8px;
-      border-radius: 4px; background: var(--bg3); border: 1px solid var(--border);
-      color: var(--text-dim); text-transform: uppercase; }
-    .com-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gold); font-weight: 500; }
-    .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-family: 'DM Mono', monospace; }
-    .tag.pendiente { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-gold); }
-    .tag.pagado { background: var(--green-dim); color: var(--green); border: 1px solid rgba(94,158,107,0.3); }
-    .empty { padding: 48px 16px; text-align: center; color: var(--text-muted); font-size: 14px; line-height: 2; }
-    .empty span { display: block; font-size: 28px; }
+.label{
+font-size:12px;
+color:var(--muted);
+}
 
-    footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
-      text-align: center; font-size: 12px; color: var(--text-muted); }
-    footer a { color: var(--gold); text-decoration: none; }
-  </style>
+.value{
+font-size:24px;
+margin-top:5px;
+}
+
+.link-box{
+margin-top:30px;
+background:var(--card);
+padding:20px;
+border-radius:12px;
+border:1px solid var(--border);
+display:flex;
+gap:10px;
+}
+
+input{
+flex:1;
+background:#111;
+border:1px solid var(--border);
+padding:10px;
+color:white;
+border-radius:6px;
+}
+
+button{
+background:var(--gold);
+border:none;
+padding:10px 16px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.table{
+margin-top:30px;
+}
+
+.row{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+padding:10px;
+border-bottom:1px solid var(--border);
+font-size:14px;
+}
+</style>
 </head>
+
 <body>
 
-<header>
-  <a href="index.html" class="logo">LegalAI <span>ARG</span></a>
-  <div class="header-right">
-    <span class="badge">// Afiliado</span>
-    <button class="theme-btn" id="themeBtn">☀</button>
-  </div>
-</header>
+<div class="container">
 
-<main>
+<h1 id="nombre">Verificando acceso...</h1>
 
-  <div id="cargando" class="estado">
-    <div class="spinner"></div>
-    <p style="color:var(--text-muted);font-size:13px">Verificando acceso…</p>
-  </div>
+<div class="cards">
+<div class="card">
+<div class="label">TOTAL GENERADO</div>
+<div class="value" id="total">US$ 0</div>
+</div>
 
-  <div id="no-auth" class="estado" style="display:none">
-    <div style="font-size:36px">🔒</div>
-    <h2>Acceso no autorizado</h2>
-    <p>El enlace no es válido o expiró. Contactá a LegalAI ARG para recibir tu link de acceso.</p>
-  </div>
+<div class="card">
+<div class="label">PENDIENTE</div>
+<div class="value" id="pendiente">US$ 0</div>
+</div>
 
-  <div id="error" class="estado" style="display:none">
-    <div style="font-size:36px">⚠️</div>
-    <h2>Error al cargar</h2>
-    <p id="error-msg">Ocurrió un error inesperado. Intentá de nuevo en unos minutos.</p>
-  </div>
+<div class="card">
+<div class="label">CONVERSIONES</div>
+<div class="value" id="conv">0</div>
+</div>
+</div>
 
-  <div id="dashboard">
+<div class="link-box">
+<input id="link" readonly />
+<button onclick="copiar()">Copiar</button>
+</div>
 
-    <div class="saludo">
-      <div class="label">// Panel de afiliado</div>
-      <h1>Hola, <span id="nombre">—</span> 👋</h1>
-      <p>Tus conversiones y comisiones en tiempo real.</p>
-    </div>
+<div class="table" id="tabla"></div>
 
-    <div class="stats">
-      <div class="card">
-        <div class="card-label">Total generado</div>
-        <div class="card-value gold" id="stat-total">—</div>
-        <div class="card-sub">comisiones acumuladas</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Pendiente de cobro</div>
-        <div class="card-value" id="stat-pendiente">—</div>
-        <div class="card-sub">próximo pago</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Conversiones</div>
-        <div class="card-value" id="stat-conv">—</div>
-        <div class="card-sub">ventas generadas</div>
-      </div>
-    </div>
-
-    <div class="pill"><span>✓</span><span id="pct-text">20% de comisión por cada venta</span></div>
-
-    <div class="link-box">
-      <div class="label">// Tu link de afiliado</div>
-      <div class="link-row">
-        <input class="link-input" type="text" id="link-val" readonly />
-        <button class="btn-copy" id="btn-copy">Copiar link</button>
-      </div>
-      <div class="hint">Compartí este link. Cada compra que llegue por él te genera comisión automáticamente.</div>
-    </div>
-
-    <div class="section-header">
-      <div class="section-title">Conversiones</div>
-      <div class="section-count" id="conv-count"></div>
-    </div>
-
-    <div class="table-wrap" id="tabla-wrap"></div>
-
-    <footer>
-      LegalAI ARG &mdash; <a href="index.html">Volver al inicio</a>
-    </footer>
-
-  </div>
-</main>
+</div>
 
 <script>
-  const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
+const params = new URLSearchParams(window.location.search);
+const ref = params.get("ref");
+const key = params.get("key");
 
-  // Theme
-  const btn = document.getElementById('themeBtn');
-  const t = localStorage.getItem('theme') || 'dark';
-  document.documentElement.dataset.theme = t;
-  btn.textContent = t === 'dark' ? '☀' : '☾';
-  btn.addEventListener('click', () => {
-    const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = n;
-    localStorage.setItem('theme', n);
-    btn.textContent = n === 'dark' ? '☀' : '☾';
-  });
+if(!ref || !key){
+document.getElementById("nombre").innerText="Acceso no autorizado";
+throw new Error("Sin credenciales");
+}
 
-  function show(id) {
-    ['cargando','no-auth','error','dashboard'].forEach(s => {
-      const el = document.getElementById(s);
-      if (s === id) { el.style.display = s === 'dashboard' ? 'block' : 'flex'; }
-      else { el.style.display = 'none'; }
-    });
-  }
+async function cargar(){
+try{
+const controller = new AbortController();
+setTimeout(()=>controller.abort(),8000);
 
-  function usd(n) {
-    if (n == null) return '—';
-    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n);
-  }
+const res = await fetch("https://legalai-worker.finmap-ia.workers.dev/afiliado/dashboard?ref="+ref+"&key="+key,{
+signal:controller.signal
+});
 
-  function fecha(ts) {
-    return new Date(ts).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit' });
-  }
+if(!res.ok){
+document.getElementById("nombre").innerText="Acceso no autorizado";
+return;
+}
 
-  // Copiar link
-  document.getElementById('btn-copy').addEventListener('click', () => {
-    navigator.clipboard.writeText(document.getElementById('link-val').value).then(() => {
-      const b = document.getElementById('btn-copy');
-      b.textContent = '✓ Copiado'; b.classList.add('ok');
-      setTimeout(() => { b.textContent = 'Copiar link'; b.classList.remove('ok'); }, 2000);
-    });
-  });
+const json = await res.json();
+const data = json.data || json;
 
-  function renderTabla(convs) {
-    const el = document.getElementById('tabla-wrap');
-    if (!convs || !convs.length) {
-      el.innerHTML = `<div class="empty"><span>📋</span>Todavía no tenés conversiones.<br>Compartí tu link para empezar a generar comisiones.</div>`;
-      return;
-    }
-    document.getElementById('conv-count').textContent = `${convs.length} registro${convs.length !== 1 ? 's' : ''}`;
-    const rows = convs.map(c => `
-      <tr>
-        <td>${fecha(c.created_at)}</td>
-        <td><span class="plan-tag">${c.plan_id || '—'}</span></td>
-        <td style="color:var(--text-dim)">${usd(c.amount)}</td>
-        <td><span class="com-val">${usd(c.commission)}</span></td>
-        <td><span class="tag ${c.paid ? 'pagado' : 'pendiente'}">${c.paid ? 'Pagado' : 'Pendiente'}</span></td>
-      </tr>`).join('');
-    el.innerHTML = `
-      <table>
-        <thead><tr>
-          <th>Fecha</th><th>Plan</th><th>Venta</th><th>Comisión</th><th style="text-align:right">Estado</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>`;
-  }
+document.getElementById("nombre").innerText="Hola, "+(data.nombre || "Afiliado");
 
-  async function init() {
-    const p = new URLSearchParams(location.search);
-    const ref = p.get('ref'), key = p.get('key');
-    if (!ref || !key) { show('no-auth'); return; }
+document.getElementById("total").innerText="US$ "+(data.earnings?.total || 0);
+document.getElementById("pendiente").innerText="US$ "+(data.earnings?.pending || 0);
+document.getElementById("conv").innerText=(data.total_conv || 0);
 
-    try {
-      const res = await fetch(`${WORKER}/afiliado/dashboard?ref=${encodeURIComponent(ref)}&key=${encodeURIComponent(key)}`);
-      if (res.status === 401 || res.status === 404) { show('no-auth'); return; }
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (!data.ok) { show('no-auth'); return; }
+document.getElementById("link").value=data.link_afiliado || "";
 
-      document.getElementById('nombre').textContent = data.nombre || ref;
-      document.getElementById('stat-total').textContent = usd(data.earnings?.total ?? 0);
-      document.getElementById('stat-pendiente').textContent = usd(data.earnings?.pending ?? 0);
-      document.getElementById('stat-conv').textContent = data.total_conv ?? 0;
-      document.getElementById('pct-text').textContent = `${data.commission_pct ?? 20}% de comisión por cada venta`;
-      document.getElementById('link-val').value = data.link_afiliado || '';
-      document.getElementById('conv-count').textContent = `${(data.conversiones || []).length} registros`;
-      renderTabla(data.conversiones || []);
-      show('dashboard');
-    } catch (e) {
-      document.getElementById('error-msg').textContent = e.message;
-      show('error');
-    }
-  }
+const tabla=document.getElementById("tabla");
+tabla.innerHTML="";
 
-  init();
+(data.conversiones || []).forEach(c=>{
+const row=document.createElement("div");
+row.className="row";
+row.innerHTML=`
+<div>${c.fecha || "-"}</div>
+<div>${c.plan || "-"}</div>
+<div>${c.monto || 0}</div>
+<div>${c.comision || 0}</div>
+<div>${c.estado || "-"}</div>
+`;
+tabla.appendChild(row);
+});
+
+}catch(e){
+document.getElementById("nombre").innerText="Error al cargar";
+}
+}
+
+function copiar(){
+const input=document.getElementById("link");
+input.select();
+document.execCommand("copy");
+}
+
+cargar();
 </script>
+
 </body>
 </html>
