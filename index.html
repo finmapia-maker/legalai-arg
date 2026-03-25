@@ -335,6 +335,8 @@ footer a:hover{color:var(--gold);}
   .aff-stats .aff-stat:last-child{grid-column:1/-1;}
   .aff-wrap{padding:0 16px 60px;}
 }
+    #previewCanvas { user-select:none; -webkit-user-select:none; }
+    #card25 { user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
 </style>
 </head>
 <body>
@@ -432,8 +434,9 @@ footer a:hover{color:var(--gold);}
     <div class="steps-bar">
       <div class="step-bar active" id="step1">1 · Tipo</div>
       <div class="step-bar" id="step2">2 · Datos</div>
-      <div class="step-bar" id="step3">3 · Pago</div>
-      <div class="step-bar" id="step4">4 · Descarga</div>
+      <div class="step-bar" id="step25">3 · Vista previa</div>
+      <div class="step-bar" id="step3">4 · Pago</div>
+      <div class="step-bar" id="step4">5 · Descarga</div>
     </div>
 
     <!-- CARD 1 -->
@@ -504,7 +507,30 @@ footer a:hover{color:var(--gold);}
       <div id="formFields" class="fields-grid"></div>
       <div class="alert err" id="alert2" style="margin-top:16px;"></div>
       <br>
-      <button class="btn" onclick="irAlPago()">Ver precio y continuar →</button>
+      <button class="btn" onclick="irAPreview()">Ver vista previa del documento →</button>
+    </div>
+
+    <!-- LOADING PREVIEW -->
+    <div class="loading" id="loadingPreview">
+      <div class="spinner"></div>
+      <div class="loading-lbl">Generando vista previa...</div>
+    </div>
+
+    <!-- CARD 2.5 — Vista previa protegida -->
+    <div class="card" id="card25" style="max-width:680px;">
+      <div class="card-title">Vista previa del documento</div>
+      <div class="card-sub">Revisá el contenido antes de pagar. El documento final será idéntico a esta vista previa.</div>
+
+      <div id="previewContainer" style="position:relative;margin:16px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--cream);max-height:520px;overflow-y:auto;">
+        <canvas id="previewCanvas" style="display:block;width:100%;cursor:default;"></canvas>
+        <div id="previewWatermarkOverlay" style="position:absolute;inset:0;overflow:hidden;opacity:0.11;pointer-events:none;"></div>
+      </div>
+
+      <div class="alert grn alert-show" style="margin-top:12px;">✓ El documento final es idéntico a esta vista previa</div>
+      <div class="alert err" id="alertPreview"></div>
+
+      <button class="btn gold" id="btnPagarDesdePreview" onclick="irAlPagoDesdePreview()">Pagar y obtener documento →</button>
+      <button class="btn ghost" onclick="volverDatosDesdePreview()">← Volver y editar datos</button>
     </div>
 
     <!-- CARD 3 -->
@@ -1386,14 +1412,14 @@ function showSec(name) {
 
 let G = {
   tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'',
-  paymentId: null, codigoPack: null,
+  paymentId: null, codigoPack: null, previewId: null,
   precio_usd: 8, upgrade_porcentaje: 40, categoria: 'intermedio', requiere_advertencia_legal: false,
 };
 
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
 function empezarDeNuevo() {
-  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
+  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, previewId:null, precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
   const pci = document.getElementById('packCodeInput');
   const pcs = document.getElementById('packCodeStatus');
   const pcb = document.getElementById('packCodeBox');
@@ -1405,16 +1431,27 @@ function empezarDeNuevo() {
   showCard(1);
 }
 function showCard(n) {
-  [1,2,3,4].forEach(i => {
-    document.getElementById('card'+i).classList.remove('visible');
-    const s = document.getElementById('step'+i);
-    s.classList.remove('active','done');
-    if (i < n) s.classList.add('done');
-    if (i === n) s.classList.add('active');
+  // Hide all cards including card25
+  [1,2,'25',3,4].forEach(i => {
+    const card = document.getElementById('card'+i);
+    if (card) card.classList.remove('visible');
   });
-  document.getElementById('card'+n).classList.add('visible');
+  // Update step bar — steps are 1,2,25,3,4 mapped to visual order 1..5
+  const stepOrder = [1, 2, '25', 3, 4];
+  const nIdx = stepOrder.indexOf(n);
+  stepOrder.forEach((sid, idx) => {
+    const s = document.getElementById('step'+sid);
+    if (!s) return;
+    s.classList.remove('active','done');
+    if (idx < nIdx) s.classList.add('done');
+    if (sid === n)  s.classList.add('active');
+  });
+  const card = document.getElementById('card'+n);
+  if (card) card.classList.add('visible');
   document.getElementById('loadingForm').classList.remove('visible');
   document.getElementById('loadingDoc').classList.remove('visible');
+  const lp = document.getElementById('loadingPreview');
+  if (lp) lp.classList.remove('visible');
 }
 function showErr(id, msg) {
   const el = document.getElementById(id);
@@ -1486,19 +1523,7 @@ async function generarFormulario() {
 }
 
 function irAlPago() {
-  hideErr('alert2');
-  for (const c of G.campos.filter(x => x.requerido)) {
-    const el = document.getElementById(c.id);
-    if (el && !el.value.trim()) { showErr('alert2', `El campo "${c.label}" es obligatorio.`); el.focus(); return; }
-  }
-  const datos = { tipo: G.tipo, pais: G.pais, provincia: G.provincia };
-  G.campos.forEach(c => { const el = document.getElementById(c.id); if (el) datos[c.id] = el.value; });
-  sessionStorage.setItem('legalai_datos',  JSON.stringify(datos));
-  sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
-  sessionStorage.setItem('legalai_meta',   JSON.stringify({
-    titulo: G.form?.titulo || G.tipo, categoria: G.categoria, precio_usd: G.precio_usd,
-    upgrade_porcentaje: G.upgrade_porcentaje, requiere_advertencia_legal: G.requiere_advertencia_legal,
-  }));
+  // Prepara card3 con precios y navega a ella
   document.getElementById('priceDocName').textContent = G.form?.titulo || G.tipo;
   document.getElementById('priceDocDesc').textContent = G.pais + (G.provincia !== 'No especificada' ? ' · ' + G.provincia : '');
   if (G.codigoPack) {
@@ -1512,6 +1537,167 @@ function irAlPago() {
     formatearPrecio(cotizacion);
   }
   showCard(3);
+}
+
+async function irAPreview() {
+  hideErr('alert2');
+  // Validar campos requeridos
+  for (const c of G.campos.filter(x => x.requerido)) {
+    const el = document.getElementById(c.id);
+    if (el && !el.value.trim()) { showErr('alert2', `El campo "${c.label}" es obligatorio.`); el.focus(); return; }
+  }
+  // Recopilar datos
+  const datos = { tipo: G.tipo, pais: G.pais, provincia: G.provincia };
+  G.campos.forEach(c => { const el = document.getElementById(c.id); if (el) datos[c.id] = el.value; });
+  const meta = {
+    titulo: G.form?.titulo || G.tipo, categoria: G.categoria, precio_usd: G.precio_usd,
+    upgrade_porcentaje: G.upgrade_porcentaje, requiere_advertencia_legal: G.requiere_advertencia_legal,
+  };
+  sessionStorage.setItem('legalai_datos',  JSON.stringify(datos));
+  sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
+  sessionStorage.setItem('legalai_meta',   JSON.stringify(meta));
+
+  // Si tiene pack, saltar preview e ir directo al pago
+  if (G.codigoPack) { irAlPago(); return; }
+
+  // Mostrar loading preview
+  document.getElementById('card2').classList.remove('visible');
+  document.getElementById('loadingPreview').classList.add('visible');
+  hideErr('alertPreview');
+
+  try {
+    const res  = await fetch(`${CONFIG.WORKER_URL}/preview`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ datosDoc: datos, metadata: meta }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    // Guardar previewId para usarlo en /generar
+    G.previewId = data.previewId;
+    sessionStorage.setItem('legalai_previewId', data.previewId);
+
+    // Renderizar preview en canvas con marca de agua
+    renderizarPreviewCanvas(data.texto, G.form?.titulo || G.tipo);
+
+    document.getElementById('loadingPreview').classList.remove('visible');
+    showCard('25');
+    document.getElementById('previewContainer').scrollTop = 0;
+  } catch(err) {
+    document.getElementById('loadingPreview').classList.remove('visible');
+    document.getElementById('card2').classList.add('visible');
+    showErr('alert2', 'Error al generar la vista previa: ' + err.message);
+  }
+}
+
+function renderizarPreviewCanvas(texto, titulo) {
+  const canvas  = document.getElementById('previewCanvas');
+  const overlay = document.getElementById('previewWatermarkOverlay');
+  const W = 680, LINE_H = 18, FONT = 11, ML = 36, MR = 36, MT = 36;
+  const CW = W - ML - MR;
+  const ctx = canvas.getContext('2d');
+
+  // Medir altura total primero
+  canvas.width  = W;
+  canvas.height = 100; // temporal
+  ctx.font = `${FONT}px Times New Roman, serif`;
+
+  const lineas = [];
+  for (const raw of texto.split('\n')) {
+    if (raw.startsWith('# ')) {
+      lineas.push({ tipo: 'h1', txt: raw.replace(/^# /, '').toUpperCase() });
+    } else if (raw.startsWith('## ') || raw.startsWith('### ')) {
+      lineas.push({ tipo: 'h2', txt: raw.replace(/^#{2,3} /, '') });
+    } else if (!raw.trim()) {
+      lineas.push({ tipo: 'br' });
+    } else {
+      const txt = raw.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').trim();
+      // Wrap largo
+      ctx.font = `${FONT}px Times New Roman, serif`;
+      const words = txt.split(' ');
+      let line = '';
+      for (const w of words) {
+        const test = line ? line + ' ' + w : w;
+        if (ctx.measureText(test).width > CW && line) {
+          lineas.push({ tipo: 'p', txt: line });
+          line = w;
+        } else { line = test; }
+      }
+      if (line) lineas.push({ tipo: 'p', txt: line });
+    }
+  }
+
+  // Calcular altura
+  let totalH = MT;
+  for (const l of lineas) {
+    if (l.tipo === 'h1')  totalH += 32;
+    else if (l.tipo === 'h2') totalH += 26;
+    else if (l.tipo === 'br') totalH += 8;
+    else totalH += LINE_H;
+  }
+  totalH += 40;
+
+  canvas.height = totalH;
+  canvas.style.height = '';
+
+  // Fondo
+  ctx.fillStyle = '#faf9f6';
+  ctx.fillRect(0, 0, W, totalH);
+
+  // Renderizar líneas
+  let y = MT;
+  for (const l of lineas) {
+    if (l.tipo === 'h1') {
+      ctx.font = `bold 15px Times New Roman, serif`;
+      ctx.fillStyle = '#0f1117';
+      ctx.textAlign = 'center';
+      ctx.fillText(l.txt, W/2, y + 12);
+      y += 22;
+      ctx.strokeStyle = '#c9a84c'; ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.moveTo(ML+30, y); ctx.lineTo(W-MR-30, y); ctx.stroke();
+      y += 10;
+    } else if (l.tipo === 'h2') {
+      ctx.font = `bold ${FONT+1}px Times New Roman, serif`;
+      ctx.fillStyle = '#1a1a2e'; ctx.textAlign = 'left';
+      ctx.fillStyle = '#f0ede6';
+      ctx.fillRect(ML-4, y-1, CW+8, 18);
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillText(l.txt, ML, y + 12);
+      y += 26;
+    } else if (l.tipo === 'br') {
+      y += 8;
+    } else {
+      ctx.font = `${FONT}px Times New Roman, serif`;
+      ctx.fillStyle = '#282828'; ctx.textAlign = 'left';
+      ctx.fillText(l.txt, ML, y + 12);
+      y += LINE_H;
+    }
+  }
+
+  // Marca de agua diagonal en overlay
+  overlay.innerHTML = '';
+  const wText = 'VISTA PREVIA · LEGALAI ARG · ';
+  const repeat = Math.ceil((W * 3) / (wText.length * 11)) + 2;
+  const rows   = Math.ceil(totalH / 38) + 4;
+  let html = '';
+  for (let r = 0; r < rows; r++) {
+    html += '<div style="white-space:nowrap;height:38px;line-height:38px;">' + wText.repeat(repeat) + '</div>';
+  }
+  overlay.style.cssText = `position:absolute;inset:0;overflow:hidden;opacity:0.11;pointer-events:none;
+    font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:#c9a84c;
+    transform:rotate(-25deg) translateY(-10%);transform-origin:center center;
+    word-break:break-all;letter-spacing:3px;`;
+  overlay.innerHTML = html;
+}
+
+function volverDatosDesdePreview() {
+  G.previewId = null;
+  sessionStorage.removeItem('legalai_previewId');
+  showCard(2);
+}
+
+function irAlPagoDesdePreview() {
+  irAlPago();
 }
 
 async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPago, onError }) {
@@ -1553,13 +1739,15 @@ async function generarDocumento(paymentId) {
     const datos     = JSON.parse(sessionStorage.getItem('legalai_datos'));
     const meta      = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
     const codigoPack = G.codigoPack || null;
+    const previewId = G.previewId || sessionStorage.getItem('legalai_previewId') || null;
     const res   = await fetch(`${CONFIG.WORKER_URL}/generar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paymentId, datosDoc: datos, metadata: meta, codigoPack })
+      body: JSON.stringify({ paymentId, datosDoc: datos, metadata: meta, codigoPack, previewId })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     G.texto = data.texto; G.paymentId = data.paymentId || paymentId;
+    G.previewId = null; sessionStorage.removeItem('legalai_previewId');
     sessionStorage.setItem('legalai_texto',     data.texto);
     sessionStorage.setItem('legalai_paymentId', G.paymentId);
     document.getElementById('loadingDoc').classList.remove('visible');
