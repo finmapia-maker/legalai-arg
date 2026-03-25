@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LegalAI ARG · Panel Owner</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Lato:wght@300;400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0a0a0a;
+  --bg2:      #111111;
+  --bg3:      #161616;
+  --bg4:      #1c1c1c;
+  --border:   #222222;
+  --border2:  #2e2e2e;
+  --gold:     #c9a84c;
+  --gold2:    #a8872e;
+  --gold-lt:  #e8c97a;
+  --gold-dim: rgba(201,168,76,.1);
+  --gold-glow:rgba(201,168,76,.05);
+  --text:     #f0ece4;
+  --text2:    #9a9082;
+  --text3:    #524b40;
+  --green:    #5a9a6e;
+  --red2:     #b06060;
+  --orange:   #b07840;
+  --serif:    'Playfair Display', Georgia, serif;
+  --sans:     'Lato', sans-serif;
+  --mono:     'DM Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{display:flex;min-height:100vh;overflow:hidden}
+
+/* LOGIN */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  height:100vh;width:100%;
+  background:var(--bg);
+  background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(201,168,76,.08),transparent 60%);
+}
+.login-box{
+  width:360px;background:var(--bg2);border:1px solid var(--border2);
+  padding:44px 40px;position:relative;
+}
+.login-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.login-logo{font-family:var(--serif);font-size:22px;font-weight:900;color:var(--text);margin-bottom:5px}
+.login-logo em{color:var(--gold);font-style:italic}
+.login-sub{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:30px}
+.fg{margin-bottom:18px}
+.fg label{display:block;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
+.fg input{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--mono);font-size:13px;
+  padding:10px 13px;outline:none;transition:.2s;
+}
+.fg input:focus{border-color:var(--gold);background:var(--bg4)}
+.btn-gold{
+  width:100%;padding:12px;background:var(--gold);color:#0a0a0a;
+  font-family:var(--sans);font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  border:none;cursor:pointer;transition:.2s;
+}
+.btn-gold:hover{background:var(--gold-lt)}
+.login-err{font-size:11px;color:var(--red2);margin-top:10px;display:none;font-family:var(--mono)}
+
+/* APP */
+#app{display:none;width:100%}
+
+/* SIDEBAR */
+#sidebar{
+  width:228px;flex-shrink:0;background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  height:100vh;position:sticky;top:0;
+}
+.sl{
+  padding:22px 20px 18px;
+  border-bottom:1px solid var(--border);
+}
+.sl .brand{font-family:var(--serif);font-size:18px;font-weight:900;color:var(--text);line-height:1}
+.sl .brand em{color:var(--gold);font-style:italic}
+.sl .brand-sub{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-top:5px}
+.snav{flex:1;padding:14px 0;overflow-y:auto}
+.nsec{padding:10px 20px 4px;font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text3)}
+.ni{
+  display:flex;align-items:center;gap:11px;
+  padding:9px 20px;cursor:pointer;
+  font-size:12.5px;color:var(--text2);
+  border-left:2px solid transparent;transition:.15s;
+}
+.ni:hover{color:var(--text);background:var(--bg3)}
+.ni.active{color:var(--gold);background:var(--gold-glow);border-left-color:var(--gold);font-weight:700}
+.ni .ic{width:15px;font-size:13px;opacity:.55;flex-shrink:0}
+.ni.active .ic{opacity:1}
+.sb{padding:14px 20px;border-top:1px solid var(--border)}
+.sb-user{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.btn-logout{
+  width:100%;padding:7px;background:transparent;border:1px solid var(--border2);
+  color:var(--text3);font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;cursor:pointer;transition:.15s;
+}
+.btn-logout:hover{border-color:var(--red2);color:var(--red2)}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#topbar{
+  height:50px;background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;flex-shrink:0;
+}
+.tb-title{font-family:var(--serif);font-size:17px;font-weight:800;color:var(--text)}
+.tb-r{display:flex;align-items:center;gap:14px}
+.live{
+  display:flex;align-items:center;gap:6px;
+  font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);
+}
+.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.tb-date{font-size:10px;color:var(--text3);font-family:var(--mono)}
+
+/* CONTENT */
+#content{flex:1;overflow-y:auto;background:var(--bg)}
+.page{display:none;padding:24px}
+.page.active{display:block}
+
+/* PAGE HEADER */
+.ph{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border);
+}
+.ph-title{font-family:var(--serif);font-size:22px;font-weight:900;color:var(--text)}
+.ph-title em{color:var(--gold);font-style:italic}
+.ph-sub{font-size:11px;color:var(--text2);margin-top:4px}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px}
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:18px 16px;position:relative;overflow:hidden;transition:.2s;
+}
+.card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:.2s;
+}
+.card:hover{border-color:var(--border2)}
+.card:hover::after{opacity:.35}
+.cl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:9px}
+.cv{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--text);line-height:1}
+.cv.gold{color:var(--gold)}
+.cv.green{color:var(--green)}
+.cv.red{color:var(--red2)}
+.cv.dim{color:var(--text2)}
+.cs{font-size:10px;color:var(--text3);margin-top:5px}
+
+/* FILTER */
+.fb{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:13px 15px;margin-bottom:12px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;
+}
+.fg2{display:flex;flex-direction:column;gap:5px}
+.fg2 label{font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.fg2 input,.fg2 select{
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--mono);font-size:11px;
+  padding:5px 9px;outline:none;min-width:112px;transition:.15s;
+}
+.fg2 input:focus,.fg2 select:focus{border-color:var(--gold)}
+.fg2 select option{background:var(--bg3)}
+.btn-f{
+  padding:6px 14px;background:var(--gold);color:#0a0a0a;
+  border:none;cursor:pointer;font-size:10px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;transition:.15s;height:29px;
+}
+.btn-f:hover{background:var(--gold-lt)}
+.btn-cl{
+  padding:6px 12px;background:transparent;color:var(--text3);
+  border:1px solid var(--border2);cursor:pointer;
+  font-size:10px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;transition:.15s;height:29px;
+}
+.btn-cl:hover{color:var(--text);border-color:var(--border)}
+
+/* SEARCH */
+.sb2{display:flex;gap:10px;margin-bottom:12px}
+.sb2 input{
+  flex:1;background:var(--bg2);border:1px solid var(--border2);
+  color:var(--text);font-size:12px;padding:9px 14px;outline:none;transition:.15s;
+}
+.sb2 input:focus{border-color:var(--gold)}
+.sb2 input::placeholder{color:var(--text3)}
+
+/* TABLE */
+.tw{background:var(--bg2);border:1px solid var(--border);overflow:auto;max-height:530px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{position:sticky;top:0;z-index:2}
+th{
+  background:var(--bg3);padding:9px 13px;text-align:left;
+  font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--text3);border-bottom:1px solid var(--border2);white-space:nowrap;cursor:pointer;
+}
+th:hover{color:var(--text2)}
+td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap;vertical-align:middle}
+tr:hover td{background:var(--bg3);color:var(--text)}
+tr:last-child td{border-bottom:none}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.b-confirmada{background:rgba(90,154,110,.12);color:#6aba88;border:1px solid rgba(90,154,110,.25)}
+.b-pendiente{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
+.b-error{background:rgba(176,96,96,.15);color:var(--red2);border:1px solid rgba(176,96,96,.3)}
+.b-anulada{background:rgba(82,75,64,.2);color:var(--text3);border:1px solid var(--border)}
+.b-activo{background:rgba(90,154,110,.12);color:#6aba88;border:1px solid rgba(90,154,110,.25)}
+.b-inactivo{background:rgba(82,75,64,.2);color:var(--text3);border:1px solid var(--border)}
+.b-solicitud{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
+.b-pagada{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
+.b-revisar{background:rgba(176,120,64,.15);color:#c89050;border:1px solid rgba(176,120,64,.3)}
+
+/* ACTIONS */
+.ba{
+  padding:3px 9px;background:transparent;border:1px solid var(--border2);
+  color:var(--text3);cursor:pointer;font-size:9px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;transition:.15s;margin-right:3px;
+}
+.ba:hover{border-color:var(--gold);color:var(--gold)}
+.ba.ok:hover{border-color:var(--green);color:var(--green)}
+.ba.no:hover{border-color:var(--red2);color:var(--red2)}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sh-t{font-family:var(--serif);font-size:14px;font-weight:800;color:var(--text)}
+.sh-c{font-size:10px;color:var(--text3);margin-left:6px;font-family:var(--mono)}
+.btn-exp{
+  padding:5px 12px;background:transparent;border:1px solid var(--border2);
+  color:var(--text3);font-size:10px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;transition:.15s;
+}
+.btn-exp:hover{border-color:var(--gold);color:var(--gold)}
+
+/* DATE ROW */
+.dr{display:flex;align-items:center;gap:8px}
+.dr span{font-size:10px;color:var(--text3)}
+
+/* CHARTS */
+.cr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.cb{background:var(--bg2);border:1px solid var(--border);padding:18px}
+.ct{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.bc{display:flex;flex-direction:column;gap:9px}
+.bi{display:flex;align-items:center;gap:10px}
+.bl{font-size:10px;color:var(--text2);width:110px;text-align:right;flex-shrink:0}
+.bt{flex:1;height:5px;background:var(--bg4);overflow:hidden}
+.bf{height:100%;background:var(--gold);transition:.4s}
+.bf.g{background:var(--green)}
+.bf.o{background:var(--orange)}
+.bv{font-family:var(--mono);font-size:10px;color:var(--text2);width:80px}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:14px}
+.tab{
+  padding:8px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text3);cursor:pointer;
+  border-bottom:2px solid transparent;transition:.15s;
+}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tc{display:none}
+.tc.active{display:block}
+
+/* MODAL */
+.mo{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.82);z-index:100;
+  align-items:center;justify-content:center;
+}
+.mo.open{display:flex}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);
+  width:620px;max-width:95vw;max-height:88vh;overflow-y:auto;position:relative;
+}
+.modal::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.mh{
+  padding:18px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.mt{font-family:var(--serif);font-size:15px;font-weight:800;color:var(--text)}
+.mc{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;transition:.15s}
+.mc:hover{color:var(--text)}
+.mb{padding:22px}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.di{border:1px solid var(--border);padding:10px 13px;background:var(--bg3)}
+.dl{font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.dv{font-size:12px;color:var(--text);font-family:var(--mono)}
+textarea.oi{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-size:12px;padding:9px;resize:vertical;
+  min-height:80px;outline:none;margin-top:12px;transition:.15s;
+}
+textarea.oi:focus{border-color:var(--gold)}
+
+/* INFO ROW */
+.ir{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.ic2{background:var(--bg2);border:1px solid var(--border2);padding:4px 12px;font-size:10px;color:var(--text2)}
+.ic2 b{color:var(--gold);font-family:var(--mono)}
+
+/* AUDIT */
+.ai{border-left:2px solid var(--border2);padding:11px 15px;margin-bottom:8px;background:var(--bg2);transition:.15s}
+.ai:hover{border-left-color:var(--gold)}
+.am{font-size:9px;color:var(--text3);margin-bottom:4px;font-family:var(--mono)}
+.ad{font-size:12.5px;color:var(--text2)}
+.adf{font-family:var(--mono);font-size:10px;margin-top:5px}
+.adf .old{color:var(--red2)}
+.adf .nw{color:var(--green)}
+
+/* DIVIDER */
+.gd{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.2;margin:18px 0}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:22px;right:22px;
+  background:var(--bg3);border:1px solid var(--border2);
+  padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.05em;
+  color:var(--text);z-index:999;transform:translateX(130%);transition:.3s;
+}
+.toast.show{transform:translateX(0)}
+.toast.success{border-color:var(--gold);color:var(--gold)}
+.toast.error{border-color:var(--red2);color:var(--red2)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo"><em>Legal</em>AI ARG</div>
+    <div class="login-sub">Panel Owner · Acceso restringido</div>
+    <div class="fg">
+      <label>Clave de acceso</label>
+      <input type="password" id="lk" placeholder="••••••••••" autocomplete="off">
+    </div>
+    <button class="btn-gold" onclick="doLogin()">Ingresar</button>
+    <div class="login-err" id="lerr">Clave incorrecta</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:flex">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sl">
+      <div class="brand"><em>Legal</em>AI ARG</div>
+      <div class="brand-sub">Owner Panel</div>
+    </div>
+    <nav class="snav">
+      <div class="nsec">Principal</div>
+      <div class="ni active" onclick="goto('dashboard',this)"><span class="ic">◈</span><span>Dashboard</span></div>
+      <div class="ni" onclick="goto('operaciones',this)"><span class="ic">≡</span><span>Operaciones</span></div>
+      <div class="nsec">Gestión</div>
+      <div class="ni" onclick="goto('afiliados',this)"><span class="ic">◎</span><span>Afiliados</span></div>
+      <div class="ni" onclick="goto('comisiones',this)"><span class="ic">$</span><span>Comisiones</span></div>
+      <div class="nsec">Sistema</div>
+      <div class="ni" onclick="goto('logs',this)"><span class="ic">▷</span><span>Logs / Errores</span></div>
+      <div class="ni" onclick="goto('auditoria',this)"><span class="ic">◫</span><span>Auditoría</span></div>
+    </nav>
+    <div class="sb">
+      <div class="sb-user">Owner</div>
+      <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+    <div id="topbar">
+      <div class="tb-title" id="tbt">Dashboard</div>
+      <div class="tb-r">
+        <div class="live">Live</div>
+        <div class="tb-date" id="tbd"></div>
+      </div>
+    </div>
+
+    <div id="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Resumen <em>operacional</em></div>
+            <div class="ph-sub">Métricas en tiempo real por período</div>
+          </div>
+          <div class="dr">
+            <div class="fg2"><label>Desde</label><input type="date" id="dd" value="2025-01-01"></div>
+            <span>—</span>
+            <div class="fg2"><label>Hasta</label><input type="date" id="dh" value="2025-12-31"></div>
+            <button class="btn-f" onclick="renderDash()">Aplicar</button>
+          </div>
+        </div>
+        <div class="cards" id="dk"></div>
+        <div class="cr" id="dc"></div>
+        <div class="sh"><div><span class="sh-t">Últimas operaciones</span></div></div>
+        <div class="tw" id="dr2"></div>
+      </div>
+
+      <!-- OPERACIONES -->
+      <div class="page" id="page-operaciones">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Inventario de <em>operaciones</em></div>
+            <div class="ph-sub">Todos los eventos del sistema</div>
+          </div>
+          <button class="btn-exp" onclick="exportCSV('ops')">↓ Exportar CSV</button>
+        </div>
+        <div class="sb2"><input type="text" id="os" placeholder="Buscar por email, ID, código, afiliado, producto..." oninput="filterOps()"></div>
+        <div class="fb">
+          <div class="fg2"><label>Desde</label><input type="date" id="od" value="2025-01-01"></div>
+          <div class="fg2"><label>Hasta</label><input type="date" id="oh" value="2025-12-31"></div>
+          <div class="fg2"><label>Tipo</label>
+            <select id="ot"><option value="">Todos</option><option>venta</option><option>activacion</option><option>generacion</option><option>upgrade</option><option>afiliado</option><option>error</option></select>
+          </div>
+          <div class="fg2"><label>Estado</label>
+            <select id="oe"><option value="">Todos</option><option>Confirmada</option><option>Pendiente</option><option>Error</option><option>Anulada</option><option>Revisada</option></select>
+          </div>
+          <div class="fg2"><label>Método</label>
+            <select id="om"><option value="">Todos</option><option>MercadoPago</option><option>NOWPayments</option></select>
+          </div>
+          <div class="fg2"><label>Producto</label>
+            <select id="op2"><option value="">Todos</option><option>Plan Básico</option><option>Plan Pro</option><option>Plan Enterprise</option><option>Pack Documentos</option><option>Documento único</option></select>
+          </div>
+          <div class="fg2"><label>Afiliado</label>
+            <select id="oa"><option value="">Todos</option><option value="si">Con afiliado</option><option value="no">Sin afiliado</option></select>
+          </div>
+          <div class="fg2"><label>Error</label>
+            <select id="oer"><option value="">Todos</option><option value="si">Con error</option><option value="no">Sin error</option></select>
+          </div>
+          <button class="btn-f" onclick="filterOps()">Filtrar</button>
+          <button class="btn-cl" onclick="clearOps()">Limpiar</button>
+        </div>
+        <div class="sh"><div><span class="sh-t">Eventos</span><span class="sh-c" id="oc"></span></div></div>
+        <div class="tw" id="ot2"></div>
+      </div>
+
+      <!-- AFILIADOS -->
+      <div class="page" id="page-afiliados">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Programa de <em>afiliados</em></div>
+            <div class="ph-sub">Gestión de referidos y solicitudes</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-exp" onclick="exportCSV('afiliados')">↓ CSV</button>
+            <button class="btn-f" onclick="openM('m-naf')">+ Nuevo</button>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="swTab('ta-lista','at',this)">Lista</div>
+          <div class="tab" onclick="swTab('ta-sol','at',this)">Solicitudes</div>
+          <div class="tab" onclick="swTab('ta-stats','at',this)">Estadísticas</div>
+        </div>
+        <div id="at">
+          <div class="tc active" id="ta-lista">
+            <div class="sb2"><input type="text" id="as" placeholder="Buscar afiliado..." oninput="filterAfil()"></div>
+            <div class="fb">
+              <div class="fg2"><label>Estado</label>
+                <select id="ae"><option value="">Todos</option><option>Activo</option><option>Inactivo</option></select>
+              </div>
+              <button class="btn-f" onclick="filterAfil()">Filtrar</button>
+            </div>
+            <div class="tw" id="at2"></div>
+          </div>
+          <div class="tc" id="ta-sol"><div class="tw" id="asol"></div></div>
+          <div class="tc" id="ta-stats"><div class="cards" id="astats"></div></div>
+        </div>
+      </div>
+
+      <!-- COMISIONES -->
+      <div class="page" id="page-comisiones">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Control de <em>comisiones</em></div>
+            <div class="ph-sub">Liquidaciones y pagos a afiliados</div>
+          </div>
+          <button class="btn-exp" onclick="exportCSV('comisiones')">↓ Exportar CSV</button>
+        </div>
+        <div class="fb">
+          <div class="fg2"><label>Desde</label><input type="date" id="cd" value="2025-01-01"></div>
+          <div class="fg2"><label>Hasta</label><input type="date" id="ch" value="2025-12-31"></div>
+          <div class="fg2"><label>Estado</label>
+            <select id="ce"><option value="">Todos</option><option>Pendiente</option><option>Pagada</option><option>Parcial</option><option>Anulada</option></select>
+          </div>
+          <div class="fg2"><label>Afiliado</label><input type="text" id="ca" placeholder="email o código"></div>
+          <button class="btn-f" onclick="filterCom()">Filtrar</button>
+          <button class="btn-cl" onclick="clearCom()">Limpiar</button>
+        </div>
+        <div class="ir" id="csum"></div>
+        <div class="sh"><div><span class="sh-t">Comisiones</span><span class="sh-c" id="cc"></span></div></div>
+        <div class="tw" id="ct2"></div>
+      </div>
+
+      <!-- LOGS -->
+      <div class="page" id="page-logs">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Logs del <em>sistema</em></div>
+            <div class="ph-sub">Errores y eventos de email</div>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="swTab('tl-err','lt',this)">Errores</div>
+          <div class="tab" onclick="swTab('tl-email','lt',this)">Emails</div>
+        </div>
+        <div id="lt">
+          <div class="tc active" id="tl-err"><div class="tw" id="lt-err"></div></div>
+          <div class="tc" id="tl-email"><div class="tw" id="lt-email"></div></div>
+        </div>
+      </div>
+
+      <!-- AUDITORÍA -->
+      <div class="page" id="page-auditoria">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Registro de <em>auditoría</em></div>
+            <div class="ph-sub">Historial completo de cambios manuales</div>
+          </div>
+        </div>
+        <div id="alist"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="mo" id="m-det">
+  <div class="modal">
+    <div class="mh">
+      <div class="mt" id="m-det-t">Detalle</div>
+      <button class="mc" onclick="closeM('m-det')">✕</button>
+    </div>
+    <div class="mb" id="m-det-b"></div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO AFILIADO -->
+<div class="mo" id="m-naf">
+  <div class="modal" style="width:420px">
+    <div class="mh">
+      <div class="mt">Nuevo afiliado</div>
+      <button class="mc" onclick="closeM('m-naf')">✕</button>
+    </div>
+    <div class="mb">
+      <div class="fg"><label>Nombre completo</label><input type="text" id="nn" placeholder="Ej: Juan Martínez"></div>
+      <div class="fg"><label>Email</label><input type="email" id="ne" placeholder="email@dominio.com"></div>
+      <div class="fg"><label>Código referido</label><input type="text" id="nc" placeholder="Ej: MARTINEZ15"></div>
+      <div class="fg"><label>% Comisión</label><input type="number" id="np" value="20" min="1" max="50"></div>
+      <button class="btn-gold" onclick="crearAfil()" style="margin-top:8px">Crear afiliado</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='owner2024';
+
+const OPS=[
+  {id:'EVT-001',fecha:'2025-03-15 14:22',tipo:'venta',subtipo:'plan',estado:'Confirmada',email:'garcia@empresa.com',nombre:'Carlos García',producto:'Plan Pro',plan:'pro',monto:29900,moneda:'ARS',metodo_pago:'MercadoPago',afiliado_ref:'MARTINEZ15',afiliado_email:'martinez@agencia.com',comision_monto:4485,comision_moneda:'ARS',comision_estado:'Pendiente',payment_id:'MP-123456',order_id:'ORD-001',invoice_id:'',codigo:'',documento_generado:false,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'',updated_at:'2025-03-15 14:25'},
+  {id:'EVT-002',fecha:'2025-03-14 10:05',tipo:'venta',subtipo:'documento',estado:'Confirmada',email:'lopez@mail.com',nombre:'Ana López',producto:'Documento único',plan:'',monto:5900,moneda:'ARS',metodo_pago:'MercadoPago',afiliado_ref:'',afiliado_email:'',comision_monto:0,comision_moneda:'',comision_estado:'',payment_id:'MP-789012',order_id:'ORD-002',invoice_id:'',codigo:'',documento_generado:true,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'',updated_at:'2025-03-14 10:08'},
+  {id:'EVT-003',fecha:'2025-03-13 18:40',tipo:'venta',subtipo:'plan',estado:'Confirmada',email:'tech@startup.io',nombre:'Startup Tech SRL',producto:'Plan Enterprise',plan:'enterprise',monto:0.15,moneda:'USDT',metodo_pago:'NOWPayments',afiliado_ref:'RIVERA20',afiliado_email:'rivera@consulting.com',comision_monto:0.03,comision_moneda:'USDT',comision_estado:'Pendiente',payment_id:'',order_id:'',invoice_id:'NP-555111',codigo:'',documento_generado:false,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'',updated_at:'2025-03-13 18:45'},
+  {id:'EVT-004',fecha:'2025-03-12 09:15',tipo:'activacion',subtipo:'codigo',estado:'Confirmada',email:'estudio@derecho.ar',nombre:'Estudio Jurídico Pérez',producto:'Plan Básico',plan:'basico',monto:0,moneda:'ARS',metodo_pago:'',afiliado_ref:'',afiliado_email:'',comision_monto:0,comision_moneda:'',comision_estado:'',payment_id:'',order_id:'',invoice_id:'',codigo:'PROMO-2025-001',documento_generado:false,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'Código evento legal',updated_at:'2025-03-12 09:15'},
+  {id:'EVT-005',fecha:'2025-03-11 16:30',tipo:'venta',subtipo:'pack',estado:'Confirmada',email:'escribania@notario.com',nombre:'Escribanía Notario',producto:'Pack Documentos',plan:'',monto:12500,moneda:'ARS',metodo_pago:'MercadoPago',afiliado_ref:'MARTINEZ15',afiliado_email:'martinez@agencia.com',comision_monto:1875,comision_moneda:'ARS',comision_estado:'Pagada',payment_id:'MP-334455',order_id:'ORD-005',invoice_id:'',codigo:'',documento_generado:false,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'',updated_at:'2025-03-11 16:33'},
+  {id:'EVT-006',fecha:'2025-03-10 11:20',tipo:'error',subtipo:'webhook',estado:'Error',email:'',nombre:'',producto:'',plan:'',monto:0,moneda:'',metodo_pago:'MercadoPago',afiliado_ref:'',afiliado_email:'',comision_monto:0,comision_moneda:'',comision_estado:'',payment_id:'MP-999888',order_id:'',invoice_id:'',codigo:'',documento_generado:false,upgrade:false,error_flag:true,error_tipo:'webhook_signature',error_detalle:'Firma inválida en webhook MP.',observaciones:'',updated_at:'2025-03-10 11:20'},
+  {id:'EVT-007',fecha:'2025-03-09 14:00',tipo:'afiliado',subtipo:'alta',estado:'Confirmada',email:'nueva@afiliada.com',nombre:'Lucía Fernández',producto:'',plan:'',monto:0,moneda:'',metodo_pago:'',afiliado_ref:'FERNANDEZ22',afiliado_email:'nueva@afiliada.com',comision_monto:0,comision_moneda:'',comision_estado:'',payment_id:'',order_id:'',invoice_id:'',codigo:'',documento_generado:false,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'Alta via formulario',updated_at:'2025-03-09 14:02'},
+  {id:'EVT-008',fecha:'2025-03-08 09:45',tipo:'venta',subtipo:'plan',estado:'Pendiente',email:'abogado@pending.com',nombre:'Dr. Rodríguez',producto:'Plan Pro',plan:'pro',monto:29900,moneda:'ARS',metodo_pago:'MercadoPago',afiliado_ref:'',afiliado_email:'',comision_monto:0,comision_moneda:'',comision_estado:'',payment_id:'MP-777666',order_id:'ORD-008',invoice_id:'',codigo:'',documento_generado:false,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'',updated_at:'2025-03-08 09:48'},
+  {id:'EVT-009',fecha:'2025-03-07 17:10',tipo:'upgrade',subtipo:'plan',estado:'Confirmada',email:'garcia@empresa.com',nombre:'Carlos García',producto:'Plan Enterprise',plan:'enterprise',monto:19900,moneda:'ARS',metodo_pago:'MercadoPago',afiliado_ref:'MARTINEZ15',afiliado_email:'martinez@agencia.com',comision_monto:2985,comision_moneda:'ARS',comision_estado:'Pendiente',payment_id:'MP-112233',order_id:'ORD-009',invoice_id:'',codigo:'',documento_generado:false,upgrade:true,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'Upgrade Pro → Enterprise',updated_at:'2025-03-07 17:12'},
+  {id:'EVT-010',fecha:'2025-03-06 13:25',tipo:'generacion',subtipo:'documento',estado:'Confirmada',email:'estudio@derecho.ar',nombre:'Estudio Jurídico Pérez',producto:'Contrato de locación',plan:'basico',monto:0,moneda:'ARS',metodo_pago:'',afiliado_ref:'',afiliado_email:'',comision_monto:0,comision_moneda:'',comision_estado:'',payment_id:'',order_id:'',invoice_id:'',codigo:'PROMO-2025-001',documento_generado:true,upgrade:false,error_flag:false,error_tipo:'',error_detalle:'',observaciones:'',updated_at:'2025-03-06 13:26'},
+];
+
+const AFIL=[
+  {codigo:'MARTINEZ15',nombre:'Juan Martínez',email:'martinez@agencia.com',estado:'Activo',porcentaje:15,clientes_referidos:8,total_ars:24350,total_usdt:0,pendiente_ars:7470,fecha_alta:'2025-01-15'},
+  {codigo:'RIVERA20',nombre:'Sofía Rivera',email:'rivera@consulting.com',estado:'Activo',porcentaje:20,clientes_referidos:3,total_ars:0,total_usdt:0.09,pendiente_ars:0,fecha_alta:'2025-02-01'},
+  {codigo:'FERNANDEZ22',nombre:'Lucía Fernández',email:'nueva@afiliada.com',estado:'Activo',porcentaje:22,clientes_referidos:0,total_ars:0,total_usdt:0,pendiente_ars:0,fecha_alta:'2025-03-09'},
+  {codigo:'GOMEZ10',nombre:'Pedro Gómez',email:'gomez@red.com',estado:'Inactivo',porcentaje:10,clientes_referidos:1,total_ars:1200,total_usdt:0,pendiente_ars:0,fecha_alta:'2024-11-20'},
+];
+
+const SOLS=[
+  {fecha:'2025-03-18',nombre:'Laura Díaz',email:'laura@marketing.com',descripcion:'Consultora marketing legal',estado:'Solicitud'},
+  {fecha:'2025-03-17',nombre:'Roberto Vega',email:'roberto@vega.com',descripcion:'Estudio contable',estado:'Solicitud'},
+];
+
+const COMS=[
+  {id:'COM-001',fecha:'2025-03-15',afil_n:'Juan Martínez',afil_e:'martinez@agencia.com',afil_c:'MARTINEZ15',venta:'EVT-001',cli:'garcia@empresa.com',producto:'Plan Pro',monto_v:29900,mon_v:'ARS',pct:15,monto_c:4485,mon_c:'ARS',estado:'Pendiente',renovacion:false},
+  {id:'COM-002',fecha:'2025-03-11',afil_n:'Juan Martínez',afil_e:'martinez@agencia.com',afil_c:'MARTINEZ15',venta:'EVT-005',cli:'escribania@notario.com',producto:'Pack Documentos',monto_v:12500,mon_v:'ARS',pct:15,monto_c:1875,mon_c:'ARS',estado:'Pagada',renovacion:false},
+  {id:'COM-003',fecha:'2025-03-13',afil_n:'Sofía Rivera',afil_e:'rivera@consulting.com',afil_c:'RIVERA20',venta:'EVT-003',cli:'tech@startup.io',producto:'Plan Enterprise',monto_v:0.15,mon_v:'USDT',pct:20,monto_c:0.03,mon_c:'USDT',estado:'Pendiente',renovacion:false},
+  {id:'COM-004',fecha:'2025-03-07',afil_n:'Juan Martínez',afil_e:'martinez@agencia.com',afil_c:'MARTINEZ15',venta:'EVT-009',cli:'garcia@empresa.com',producto:'Plan Enterprise (upgrade)',monto_v:19900,mon_v:'ARS',pct:15,monto_c:2985,mon_c:'ARS',estado:'Pendiente',renovacion:false},
+];
+
+const LERR=[
+  {id:'ERR-001',fecha:'2025-03-10 11:20',tipo:'webhook_signature',detalle:'Firma inválida en webhook MP.',resuelto:false},
+  {id:'ERR-002',fecha:'2025-03-08 22:15',tipo:'kv_write_fail',detalle:'Error al escribir en KV storage: timeout.',resuelto:true},
+  {id:'ERR-003',fecha:'2025-03-05 09:00',tipo:'claude_api',detalle:'Claude API 529: Overloaded.',resuelto:true},
+];
+const LEMAIL=[
+  {id:'EM-001',fecha:'2025-03-15 14:25',para:'garcia@empresa.com',asunto:'Confirmación de pago - Plan Pro',estado:'OK',resend:'re_abc123'},
+  {id:'EM-002',fecha:'2025-03-09 14:02',para:'nueva@afiliada.com',asunto:'Bienvenida al programa de afiliados',estado:'OK',resend:'re_def456'},
+  {id:'EM-003',fecha:'2025-03-08 09:48',para:'abogado@pending.com',asunto:'Pago recibido - verificación pendiente',estado:'Error',resend:''},
+];
+
+let ALOG=[
+  {id:'AUD-001',fecha:'2025-03-15 16:00',u:'owner',accion:'Comisión marcada pagada',campo:'estado',ant:'Pendiente',nvo:'Pagada',ref:'COM-002',det:'Transferencia confirmada'},
+  {id:'AUD-002',fecha:'2025-03-12 10:00',u:'owner',accion:'Observación agregada',campo:'observaciones',ant:'',nvo:'Código evento legal',ref:'EVT-004',det:''},
+];
+
+// ─ LOGIN ─
+document.getElementById('login-screen').style.display='flex';
+document.getElementById('app').style.display='none';
+function doLogin(){
+  if(document.getElementById('lk').value===KEY){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    init();
+  } else document.getElementById('lerr').style.display='block';
+}
+document.getElementById('lk').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+function doLogout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('lk').value='';
+}
+
+// ─ INIT ─
+function init(){
+  document.getElementById('tbd').textContent=new Date().toLocaleString('es-AR',{dateStyle:'medium',timeStyle:'short'});
+  renderDash();renderOps();renderAfil();renderCom();renderLogs();renderAudit();
+}
+
+// ─ NAV ─
+function goto(p,el){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tbt').textContent={dashboard:'Dashboard',operaciones:'Operaciones',afiliados:'Afiliados',comisiones:'Comisiones',logs:'Logs / Errores',auditoria:'Auditoría'}[p]||p;
+}
+function swTab(tid,gid,el){
+  document.getElementById(gid).querySelectorAll('.tc').forEach(x=>x.classList.remove('active'));
+  document.getElementById(tid).classList.add('active');
+  el.closest('.page').querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─ DASHBOARD ─
+function renderDash(){
+  const desde=document.getElementById('dd').value,hasta=document.getElementById('dh').value;
+  const ops=OPS.filter(o=>o.fecha>=desde&&o.fecha<=hasta+'z');
+  const v=ops.filter(o=>o.tipo==='venta'&&o.estado==='Confirmada');
+  const tARS=v.filter(o=>o.moneda==='ARS').reduce((s,o)=>s+o.monto,0);
+  const tUSDT=v.filter(o=>o.moneda==='USDT').reduce((s,o)=>s+o.monto,0);
+  const pARS=COMS.filter(c=>c.estado==='Pendiente'&&c.mon_c==='ARS').reduce((s,c)=>s+c.monto_c,0);
+  const pUSDT=COMS.filter(c=>c.estado==='Pendiente'&&c.mon_c==='USDT').reduce((s,c)=>s+c.monto_c,0);
+  const err=ops.filter(o=>o.error_flag).length;
+
+  document.getElementById('dk').innerHTML=[
+    {l:'Facturación ARS',v:'$'+f(tARS),s:'período seleccionado',c:'gold'},
+    {l:'Facturación USDT',v:tUSDT.toFixed(4)+' USDT',s:'período',c:'gold'},
+    {l:'Ventas confirmadas',v:v.length,s:'transacciones'},
+    {l:'Ticket promedio ARS',v:v.filter(o=>o.moneda==='ARS').length?'$'+f(Math.round(tARS/v.filter(o=>o.moneda==='ARS').length)):'-',s:'promedio ARS'},
+    {l:'Com. pendientes ARS',v:'$'+f(pARS),s:'por liquidar',c:'dim'},
+    {l:'Com. pendientes USDT',v:pUSDT.toFixed(4)+' USDT',s:'por liquidar',c:'dim'},
+    {l:'Errores sistema',v:err,s:'en período',c:err>0?'red':''},
+    {l:'Afiliados activos',v:AFIL.filter(a=>a.estado==='Activo').length,s:'en el programa',c:'green'},
+  ].map(k=>`<div class="card"><div class="cl">${k.l}</div><div class="cv ${k.c||''}">${k.v}</div><div class="cs">${k.s}</div></div>`).join('');
+
+  const byP={};v.forEach(o=>{byP[o.producto]=(byP[o.producto]||0)+(o.moneda==='ARS'?o.monto:0)});
+  const mxP=Math.max(...Object.values(byP),1);
+  const byM={};v.forEach(o=>{byM[o.metodo_pago||'—']=(byM[o.metodo_pago||'—']||0)+(o.moneda==='ARS'?o.monto:0)});
+  const mxM=Math.max(...Object.values(byM),1);
+  const byA={};v.filter(o=>o.afiliado_ref).forEach(o=>{byA[o.afiliado_ref]=(byA[o.afiliado_ref]||0)+(o.moneda==='ARS'?o.monto:0)});
+  const mxA=Math.max(...Object.values(byA),1);
+  const cPag=COMS.filter(c=>c.estado==='Pagada'&&c.mon_c==='ARS').reduce((s,c)=>s+c.monto_c,0);
+  const mxC=Math.max(pARS,cPag,1);
+
+  document.getElementById('dc').innerHTML=`
+    <div class="cb"><div class="ct">Ventas por producto — ARS</div><div class="bc">${Object.entries(byP).map(([p,v])=>`<div class="bi"><div class="bl">${p.replace('Plan ','')}</div><div class="bt"><div class="bf" style="width:${v/mxP*100}%"></div></div><div class="bv">$${f(v)}</div></div>`).join('')||nd()}</div></div>
+    <div class="cb"><div class="ct">Ventas por método de pago</div><div class="bc">${Object.entries(byM).map(([m,v])=>`<div class="bi"><div class="bl">${m}</div><div class="bt"><div class="bf g" style="width:${v/mxM*100}%"></div></div><div class="bv">$${f(v)}</div></div>`).join('')||nd()}</div></div>
+    <div class="cb"><div class="ct">Ventas por afiliado — ARS</div><div class="bc">${Object.entries(byA).length?Object.entries(byA).map(([a,v])=>`<div class="bi"><div class="bl">${a}</div><div class="bt"><div class="bf o" style="width:${v/mxA*100}%"></div></div><div class="bv">$${f(v)}</div></div>`).join(''):nd()}</div></div>
+    <div class="cb"><div class="ct">Estado comisiones — ARS</div><div class="bc">
+      <div class="bi"><div class="bl">Pendiente</div><div class="bt"><div class="bf" style="width:${pARS/mxC*100}%"></div></div><div class="bv">$${f(pARS)}</div></div>
+      <div class="bi"><div class="bl">Pagada</div><div class="bt"><div class="bf g" style="width:${cPag/mxC*100}%"></div></div><div class="bv">$${f(cPag)}</div></div>
+    </div></div>`;
+
+  document.getElementById('dr2').innerHTML=buildOpsT([...OPS].sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,5),true);
+}
+function nd(){return '<div style="font-size:11px;color:var(--text3);padding:6px 0">Sin datos en el período</div>'}
+
+// ─ OPERACIONES ─
+function renderOps(){filterOps()}
+function filterOps(){
+  const s=(document.getElementById('os')?.value||'').toLowerCase();
+  const od=document.getElementById('od')?.value||'';
+  const oh=document.getElementById('oh')?.value||'';
+  const ot=document.getElementById('ot')?.value||'';
+  const oe=document.getElementById('oe')?.value||'';
+  const om=document.getElementById('om')?.value||'';
+  const op2=document.getElementById('op2')?.value||'';
+  const oa=document.getElementById('oa')?.value||'';
+  const oer=document.getElementById('oer')?.value||'';
+  const data=OPS.filter(o=>{
+    if(od&&o.fecha<od)return false;
+    if(oh&&o.fecha>oh+'z')return false;
+    if(ot&&o.tipo!==ot)return false;
+    if(oe&&o.estado!==oe)return false;
+    if(om&&o.metodo_pago!==om)return false;
+    if(op2&&o.producto!==op2)return false;
+    if(oa==='si'&&!o.afiliado_ref)return false;
+    if(oa==='no'&&o.afiliado_ref)return false;
+    if(oer==='si'&&!o.error_flag)return false;
+    if(oer==='no'&&o.error_flag)return false;
+    if(s&&![o.id,o.email,o.nombre,o.producto,o.afiliado_ref,o.payment_id,o.order_id,o.codigo].join(' ').toLowerCase().includes(s))return false;
+    return true;
+  });
+  document.getElementById('oc').textContent=` — ${data.length} registros`;
+  document.getElementById('ot2').innerHTML=buildOpsT(data,false);
+}
+function clearOps(){['os','ot','oe','om','op2','oa','oer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});filterOps()}
+function buildOpsT(data,compact){
+  if(!data.length)return em();
+  return `<table><thead><tr><th>ID</th><th>Fecha</th><th>Tipo</th><th>Estado</th><th>Email</th><th>Producto</th><th>Monto</th><th>Método</th>${!compact?'<th>Afiliado</th><th>Comisión</th>':''}<th>Acciones</th></tr></thead><tbody>
+    ${data.map(o=>`<tr>
+      <td><span style="font-family:var(--mono);font-size:10px;color:var(--gold)">${o.id}</span></td>
+      <td style="font-family:var(--mono);font-size:10px">${o.fecha}</td>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--text3)">${o.tipo}${o.upgrade?'<span style="color:var(--gold)"> ↑</span>':''}</td>
+      <td>${bdg(o.estado)}</td>
+      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${o.email||ds()}</td>
+      <td>${o.producto||ds()}</td>
+      <td style="font-family:var(--mono)">${o.monto?ms(o.monto,o.moneda):ds()}</td>
+      <td style="font-size:10px;color:var(--text3)">${o.metodo_pago||'—'}</td>
+      ${!compact?`<td style="font-size:10px;color:var(--text3)">${o.afiliado_ref||'—'}</td><td style="font-family:var(--mono);font-size:11px">${o.comision_monto?ms(o.comision_monto,o.comision_moneda):ds()}</td>`:''}
+      <td>
+        <button class="ba" onclick="verDet('${o.id}')">Ver</button>
+        ${o.error_flag?'<span style="color:var(--red2);font-size:11px"> ⚠</span>':''}
+        ${o.documento_generado?'<span style="color:var(--green);font-size:11px"> 📄</span>':''}
+      </td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+function ds(){return '<span style="color:var(--text3)">—</span>'}
+function em(){return '<div style="padding:28px;text-align:center;color:var(--text3);font-size:12px">Sin registros</div>'}
+
+// ─ DETALLE ─
+function verDet(id){
+  const o=OPS.find(x=>x.id===id);if(!o)return;
+  document.getElementById('m-det-t').textContent='Evento — '+o.id;
+  const flds=[
+    ['ID',o.id],['Fecha',o.fecha],['Tipo',o.tipo+' / '+o.subtipo],['Estado',bdg(o.estado)],
+    ['Email',o.email||'—'],['Nombre',o.nombre||'—'],['Producto',o.producto||'—'],['Plan',o.plan||'—'],
+    ['Monto',o.monto?ms(o.monto,o.moneda):'—'],['Método',o.metodo_pago||'—'],
+    ['Payment ID',o.payment_id||'—'],['Order ID',o.order_id||'—'],['Invoice ID',o.invoice_id||'—'],['Código',o.codigo||'—'],
+    ['Afiliado ref',o.afiliado_ref||'—'],['Afiliado email',o.afiliado_email||'—'],
+    ['Comisión',o.comision_monto?ms(o.comision_monto,o.comision_moneda):'—'],['Est. comisión',o.comision_estado||'—'],
+    ['Doc generado',o.documento_generado?'✓ Sí':'No'],['Error',o.error_flag?'⚠ '+o.error_tipo:'No'],
+    ['Det. error',o.error_detalle||'—'],['Actualizado',o.updated_at],
+  ];
+  document.getElementById('m-det-b').innerHTML=`
+    <div class="dg">${flds.map(([l,v])=>`<div class="di"><div class="dl">${l}</div><div class="dv">${v}</div></div>`).join('')}</div>
+    ${o.observaciones?`<div style="margin-top:12px;padding:10px 13px;background:var(--bg3);border:1px solid var(--border2);font-size:11px;color:var(--text2)"><span style="color:var(--text3)">Observaciones:</span><br>${o.observaciones}</div>`:''}
+    <div class="gd"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-f" style="font-size:10px;padding:7px 14px" onclick="mRevisada('${o.id}')">Marcar revisada</button>
+      <button class="btn-exp" onclick="toast('Email reenviado (simulado)','success')">Reenviar email</button>
+      <button class="btn-exp" onclick="cp('${o.id}')">Copiar ID</button>
+    </div>
+    <textarea class="oi" id="tobs-${o.id}" placeholder="Agregar observación..."></textarea>
+    <button class="ba" style="margin-top:8px" onclick="gObs('${o.id}')">Guardar observación</button>
+  `;
+  openM('m-det');
+}
+function mRevisada(id){
+  const o=OPS.find(x=>x.id===id);if(!o)return;
+  o.estado='Revisada';logA('Marcar revisada','estado','Confirmada','Revisada',id,'');
+  toast('Evento marcado como revisado','success');renderOps();closeM('m-det');
+}
+function gObs(id){
+  const t=document.getElementById('tobs-'+id)?.value;if(!t?.trim()){toast('Escribí una observación','error');return}
+  const o=OPS.find(x=>x.id===id);if(o){o.observaciones=t;logA('Observación','observaciones','',t,id,'');toast('Observación guardada','success')}
+}
+
+// ─ AFILIADOS ─
+function renderAfil(){filterAfil();renderSols();renderAStats()}
+function filterAfil(){
+  const s=(document.getElementById('as')?.value||'').toLowerCase();
+  const e=document.getElementById('ae')?.value||'';
+  const data=AFIL.filter(a=>{
+    if(e&&a.estado!==e)return false;
+    if(s&&![a.codigo,a.nombre,a.email].join(' ').toLowerCase().includes(s))return false;
+    return true;
+  });
+  document.getElementById('at2').innerHTML=`<table>
+    <thead><tr><th>Código</th><th>Nombre</th><th>Email</th><th>Estado</th><th>%</th><th>Clientes</th><th>Total ARS</th><th>Total USDT</th><th>Pendiente ARS</th><th>Alta</th><th>Acciones</th></tr></thead>
+    <tbody>${data.map(a=>`<tr>
+      <td style="font-family:var(--mono);color:var(--gold);font-size:11px">${a.codigo}</td>
+      <td>${a.nombre}</td><td style="font-size:11px">${a.email}</td>
+      <td>${bdg(a.estado)}</td>
+      <td style="font-family:var(--mono);text-align:center">${a.porcentaje}%</td>
+      <td style="text-align:center">${a.clientes_referidos}</td>
+      <td style="font-family:var(--mono)">$${f(a.total_ars)}</td>
+      <td style="font-family:var(--mono)">${a.total_usdt} USDT</td>
+      <td style="font-family:var(--mono);color:var(--gold)">$${f(a.pendiente_ars)}</td>
+      <td style="font-size:10px;color:var(--text3)">${a.fecha_alta}</td>
+      <td>
+        <button class="ba" onclick="verAD('${a.codigo}')">Ver</button>
+        <button class="ba ${a.estado==='Activo'?'no':'ok'}" onclick="togAfil('${a.codigo}')">${a.estado==='Activo'?'Desactivar':'Activar'}</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+function renderSols(){
+  document.getElementById('asol').innerHTML=`<table>
+    <thead><tr><th>Fecha</th><th>Nombre</th><th>Email</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>${SOLS.map(s=>`<tr>
+      <td style="font-size:11px;color:var(--text3)">${s.fecha}</td>
+      <td>${s.nombre}</td><td style="font-size:11px">${s.email}</td>
+      <td style="font-size:11px">${s.descripcion}</td>
+      <td>${bdg(s.estado)}</td>
+      <td>
+        <button class="ba ok" onclick="aprob('${s.email}')">Aprobar</button>
+        <button class="ba no" onclick="toast('Solicitud rechazada','success')">Rechazar</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+function renderAStats(){
+  const ac=AFIL.filter(a=>a.estado==='Activo').length;
+  const tot=AFIL.reduce((s,a)=>s+a.total_ars,0);
+  const pen=AFIL.reduce((s,a)=>s+a.pendiente_ars,0);
+  document.getElementById('astats').innerHTML=[
+    {l:'Afiliados activos',v:ac,c:'green'},
+    {l:'Total comisiones ARS',v:'$'+f(tot),c:'gold'},
+    {l:'Com. pendientes ARS',v:'$'+f(pen),c:'dim'},
+    {l:'Total clientes referidos',v:AFIL.reduce((s,a)=>s+a.clientes_referidos,0)},
+  ].map(k=>`<div class="card"><div class="cl">${k.l}</div><div class="cv ${k.c||''}">${k.v}</div></div>`).join('');
+}
+function togAfil(cod){
+  const a=AFIL.find(x=>x.codigo===cod);if(!a)return;
+  const p=a.estado;a.estado=a.estado==='Activo'?'Inactivo':'Activo';
+  logA('Cambio estado afiliado','estado',p,a.estado,'AFIL-'+cod,'');
+  toast(a.nombre+' → '+a.estado,'success');renderAfil();
+}
+function verAD(cod){
+  const a=AFIL.find(x=>x.codigo===cod);if(!a)return;
+  document.getElementById('m-det-t').textContent='Afiliado — '+a.codigo;
+  const coms=COMS.filter(c=>c.afil_c===cod);
+  document.getElementById('m-det-b').innerHTML=`
+    <div class="dg">
+      ${[['Nombre',a.nombre],['Email',a.email],['Código',a.codigo],['Estado',bdg(a.estado)],['% Comisión',a.porcentaje+'%'],['Clientes',a.clientes_referidos],['Total ARS','$'+f(a.total_ars)],['Pendiente ARS','$'+f(a.pendiente_ars)]].map(([l,v])=>`<div class="di"><div class="dl">${l}</div><div class="dv">${v}</div></div>`).join('')}
+    </div>
+    <div class="gd"></div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Comisiones (${coms.length})</div>
+    ${coms.map(c=>`<div style="background:var(--bg3);border:1px solid var(--border);padding:9px 13px;margin-bottom:7px;font-size:11px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <span style="font-family:var(--mono);color:var(--text3)">${c.fecha}</span>
+      <span>${c.producto}</span>
+      <span style="font-family:var(--mono);color:var(--gold)">${ms(c.monto_c,c.mon_c)}</span>
+      ${bdg(c.estado)}
+      <button class="ba ok" onclick="marcarPagada('${c.id}')">Pagar</button>
+    </div>`).join('')}
+  `;
+  openM('m-det');
+}
+function aprob(email){
+  const s=SOLS.find(x=>x.email===email);if(!s)return;
+  AFIL.push({codigo:s.nombre.split(' ')[0].toUpperCase()+'22',nombre:s.nombre,email:s.email,estado:'Activo',porcentaje:20,clientes_referidos:0,total_ars:0,total_usdt:0,pendiente_ars:0,fecha_alta:new Date().toISOString().split('T')[0]});
+  SOLS.splice(SOLS.indexOf(s),1);
+  logA('Solicitud aprobada','estado','Solicitud','Activo','AFIL-'+email,'');
+  toast('Solicitud aprobada','success');renderAfil();
+}
+function crearAfil(){
+  const n=document.getElementById('nn').value,e=document.getElementById('ne').value,c=document.getElementById('nc').value,p=parseInt(document.getElementById('np').value);
+  if(!n||!e||!c){toast('Completá todos los campos','error');return}
+  AFIL.push({codigo:c,nombre:n,email:e,estado:'Activo',porcentaje:p,clientes_referidos:0,total_ars:0,total_usdt:0,pendiente_ars:0,fecha_alta:new Date().toISOString().split('T')[0]});
+  logA('Creación afiliado','estado','','Activo','AFIL-'+c,'');
+  toast('Afiliado creado','success');closeM('m-naf');renderAfil();
+}
+
+// ─ COMISIONES ─
+function renderCom(){filterCom()}
+function filterCom(){
+  const cd=document.getElementById('cd')?.value||'';
+  const ch=document.getElementById('ch')?.value||'';
+  const ce=document.getElementById('ce')?.value||'';
+  const ca=(document.getElementById('ca')?.value||'').toLowerCase();
+  const data=COMS.filter(c=>{
+    if(cd&&c.fecha<cd)return false;
+    if(ch&&c.fecha>ch)return false;
+    if(ce&&c.estado!==ce)return false;
+    if(ca&&!(c.afil_e.includes(ca)||c.afil_c.toLowerCase().includes(ca)))return false;
+    return true;
+  });
+  const pARS=data.filter(c=>c.estado==='Pendiente'&&c.mon_c==='ARS').reduce((s,c)=>s+c.monto_c,0);
+  const pgARS=data.filter(c=>c.estado==='Pagada'&&c.mon_c==='ARS').reduce((s,c)=>s+c.monto_c,0);
+  const pUSDT=data.filter(c=>c.estado==='Pendiente'&&c.mon_c==='USDT').reduce((s,c)=>s+c.monto_c,0);
+  document.getElementById('csum').innerHTML=`
+    <div class="ic2">Pendiente ARS <b>$${f(pARS)}</b></div>
+    <div class="ic2">Pagada ARS <b>$${f(pgARS)}</b></div>
+    <div class="ic2">Pendiente USDT <b>${pUSDT} USDT</b></div>
+    <div class="ic2">Registros <b>${data.length}</b></div>`;
+  document.getElementById('cc').textContent=` — ${data.length} registros`;
+  document.getElementById('ct2').innerHTML=`<table>
+    <thead><tr><th>ID</th><th>Fecha</th><th>Afiliado</th><th>Cliente</th><th>Producto</th><th>Venta</th><th>%</th><th>Comisión</th><th>Estado</th><th>Renovación</th><th>Acciones</th></tr></thead>
+    <tbody>${data.map(c=>`<tr>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--text3)">${c.id}</td>
+      <td style="font-family:var(--mono);font-size:10px">${c.fecha}</td>
+      <td><div style="font-size:12px">${c.afil_n}</div><div style="font-size:10px;color:var(--gold);font-family:var(--mono)">${c.afil_c}</div></td>
+      <td style="font-size:11px">${c.cli}</td>
+      <td style="font-size:11px">${c.producto}</td>
+      <td style="font-family:var(--mono)">${ms(c.monto_v,c.mon_v)}</td>
+      <td style="font-family:var(--mono);text-align:center">${c.pct}%</td>
+      <td style="font-family:var(--mono);font-weight:700">${ms(c.monto_c,c.mon_c)}</td>
+      <td>${bdg(c.estado)}</td>
+      <td style="text-align:center;font-size:10px">${c.renovacion?'<span style="color:var(--gold)">Sí</span>':'—'}</td>
+      <td>${c.estado==='Pendiente'?`<button class="ba ok" onclick="marcarPagada('${c.id}')">Pagar</button>`:''}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+function clearCom(){['ce','ca'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});filterCom()}
+function marcarPagada(id){
+  const c=COMS.find(x=>x.id===id);if(!c||c.estado==='Pagada'){toast('Ya está pagada','error');return}
+  const p=c.estado;c.estado='Pagada';
+  const a=AFIL.find(x=>x.codigo===c.afil_c);
+  if(a&&c.mon_c==='ARS')a.pendiente_ars=Math.max(0,a.pendiente_ars-c.monto_c);
+  logA('Comisión marcada pagada','estado',p,'Pagada',c.id,'');
+  toast(c.id+' → Pagada','success');renderCom();renderAfil();renderDash();closeM('m-det');
+}
+
+// ─ LOGS ─
+function renderLogs(){
+  document.getElementById('lt-err').innerHTML=`<table>
+    <thead><tr><th>ID</th><th>Fecha</th><th>Tipo</th><th>Detalle</th><th>Resuelto</th></tr></thead>
+    <tbody>${LERR.map(e=>`<tr>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--red2)">${e.id}</td>
+      <td style="font-family:var(--mono);font-size:10px">${e.fecha}</td>
+      <td>${bdg('Error')}</td>
+      <td style="font-size:11px;max-width:280px">${e.detalle}</td>
+      <td>${e.resuelto?'<span style="color:var(--green);font-size:10px;font-family:var(--mono)">✓ Sí</span>':'<span style="color:var(--gold);font-size:10px;font-family:var(--mono)">No</span>'}</td>
+    </tr>`).join('')}</tbody></table>`;
+  document.getElementById('lt-email').innerHTML=`<table>
+    <thead><tr><th>ID</th><th>Fecha</th><th>Para</th><th>Asunto</th><th>Estado</th><th>Resend ID</th></tr></thead>
+    <tbody>${LEMAIL.map(e=>`<tr>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--text3)">${e.id}</td>
+      <td style="font-family:var(--mono);font-size:10px">${e.fecha}</td>
+      <td style="font-size:11px">${e.para}</td>
+      <td style="font-size:11px">${e.asunto}</td>
+      <td>${e.estado==='OK'?'<span style="color:var(--green);font-size:10px;font-family:var(--mono)">✓ OK</span>':bdg('Error')}</td>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--text3)">${e.resend||'—'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+// ─ AUDITORÍA ─
+function renderAudit(){
+  document.getElementById('alist').innerHTML=ALOG.length
+    ?ALOG.map(a=>`<div class="ai">
+        <div class="am">${a.fecha} · ${a.u} · Ref: <span style="color:var(--gold)">${a.ref}</span></div>
+        <div class="ad"><strong>${a.accion}</strong>${a.det?' — '+a.det:''}</div>
+        <div class="adf">
+          ${a.ant?`<span class="old">— ${a.campo}: "${a.ant}"</span> `:''}
+          ${a.nvo?`<span class="nw">+ ${a.campo}: "${a.nvo}"</span>`:''}
+        </div>
+      </div>`).join('')
+    :'<div style="color:var(--text3);font-size:12px;padding:20px">Sin registros</div>';
+}
+function logA(accion,campo,ant,nvo,ref,det){
+  ALOG.unshift({id:'AUD-'+String(ALOG.length+1).padStart(3,'0'),fecha:new Date().toLocaleString('es-AR'),u:'owner',accion,campo,ant,nvo,ref,det});
+  renderAudit();
+}
+
+// ─ EXPORT ─
+function exportCSV(tipo){
+  let data,hdrs,rows;
+  if(tipo==='ops'){data=OPS;hdrs=['id','fecha','tipo','subtipo','estado','email','nombre','producto','plan','monto','moneda','metodo_pago','afiliado_ref','comision_monto','comision_moneda','comision_estado','payment_id','error_flag','observaciones'];}
+  else if(tipo==='afiliados'){data=AFIL;hdrs=['codigo','nombre','email','estado','porcentaje','clientes_referidos','total_ars','total_usdt','pendiente_ars','fecha_alta'];}
+  else{data=COMS;hdrs=['id','fecha','afil_c','afil_n','cli','producto','monto_v','mon_v','pct','monto_c','mon_c','estado','renovacion'];}
+  rows=data.map(d=>hdrs.map(h=>JSON.stringify(d[h]??'')).join(','));
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([[hdrs.join(','),...rows].join('\n')],{type:'text/csv'}));
+  a.download=`legalai-${tipo}-${new Date().toISOString().split('T')[0]}.csv`;a.click();
+  toast('CSV exportado','success');
+}
+
+// ─ UTILS ─
+function ms(m,c){
+  if(c==='ARS')return '$'+f(m)+' <span style="font-size:9px;color:var(--text3)">ARS</span>';
+  if(c==='USDT')return m+' <span style="font-size:9px;color:var(--gold)">USDT</span>';
+  return m+(c?' '+c:'');
+}
+function f(n){return Number(n).toLocaleString('es-AR')}
+function bdg(e){
+  const m={Confirmada:'b-confirmada',Pendiente:'b-pendiente',Error:'b-error',Anulada:'b-anulada',Activo:'b-activo',Inactivo:'b-inactivo',Solicitud:'b-solicitud',Pagada:'b-pagada',Revisar:'b-revisar',Revisada:'b-inactivo'};
+  return `<span class="badge ${m[e]||'b-pendiente'}">${e}</span>`;
+}
+function openM(id){document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(type?' '+type:'');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);
+}
+function cp(txt){navigator.clipboard?.writeText(txt).then(()=>toast('Copiado','success'))}
+</script>
+</body>
+</html>
