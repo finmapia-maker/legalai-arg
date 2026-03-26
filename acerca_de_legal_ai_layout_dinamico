@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acerca de - LegalAI ARG</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Lato:wght@300;400;700&family=DM+Mono&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  background: #0a0a0a;
+  color: #e5e5e5;
+  font-family: 'Lato', sans-serif;
+}
+
+.header-line {
+  height: 3px;
+  background: #c9a84c;
+  width: 100%;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h1 em {
+  color: #c9a84c;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #111;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(201,168,76,0.15);
+}
+
+.card.large {
+  grid-column: span 2;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.highlight {
+  color: #c9a84c;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  margin-right: 5px;
+}
+
+.green { background: #1e3a2f; color: #4ade80; }
+.red { background: #3a1e1e; color: #f87171; }
+
+.center {
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  background: #c9a84c;
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .card.large { grid-column: span 1; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header-line"></div>
+
+<div class="container">
+
+<h1><em>Acerca de</em> LegalAI</h1>
+
+<div class="grid">
+
+<div class="card large center">
+  <div class="title">🔥 ESTO NO ES PARA TODOS <span class="highlight">(pero funciona)</span></div>
+  <p>Estamos abriendo cupos para generar ingresos sin invertir ni crear nada.</p>
+  <div class="badge red">No MLM</div>
+  <div class="badge red">No empleo</div>
+  <div class="badge red">No curso</div>
+  <p class="highlight">👉 Es algo mucho más simple</p>
+</div>
+
+<div class="card">
+  <div class="title">💡 ¿De qué se trata?</div>
+  <p>Generación de documentos con IA en minutos.</p>
+  <p>👉 Ya se usa<br>👉 Ya se paga</p>
+</div>
+
+<div class="card">
+  <div class="title">💰 Cómo ganás</div>
+  <p><strong>Link personal:</strong><br>comisión por uso o pago</p>
+  <p class="highlight">👉 Automático</p>
+</div>
+
+<div class="card">
+  <div class="title">🧠 Diferencial</div>
+  <p>Generás documentos, ayudás a otros o entregás modelos.</p>
+  <p class="highlight">👉 Tiempo mínimo</p>
+</div>
+
+<div class="card">
+  <div class="title">📊 Por qué funciona</div>
+  <p>👉 Necesidad real<br>👉 Falta de conocimiento<br>👉 Solución rápida</p>
+</div>
+
+<div class="card">
+  <div class="title">💵 Ganancias</div>
+  <p><span class="highlight">20% por venta</span></p>
+  <p>USDT o ARS</p>
+  <div class="badge green">Sin límite</div>
+  <div class="badge green">Flexible</div>
+</div>
+
+<div class="card large">
+  <div class="title">⚙️ Cómo empezás</div>
+  <p>Te registrás → obtenés tu link → lo usás o compartís → generás ingresos.</p>
+</div>
+
+<div class="card">
+  <div class="title">⚠️ Importante</div>
+  <p>Modelos orientativos → revisar antes de usar</p>
+</div>
+
+<div class="card">
+  <div class="title">🚫 No tenés que</div>
+  <p>No invertir<br>No comprar<br>No buscar clientes obligatoriamente<br>No dar datos de terceros</p>
+</div>
+
+<div class="card">
+  <div class="title">🎯 Para quién es</div>
+  <p>👉 Si no hacés nada → nada pasa<br>👉 Si lo usás bien → escala</p>
+</div>
+
+<div class="card center">
+  <div class="title">🌐 Web</div>
+  <p><a href="https://legalai-arg.com/" class="highlight">legalai-arg.com</a></p>
+</div>
+
+<div class="card large center">
+  <div class="title">🟢 Si te interesa</div>
+  <p>Escribime y te paso acceso</p>
+  <p style="font-size:12px; opacity:0.7">(No es masivo)</p>
+  <a href="#" class="btn">Quiero ser afiliado →</a>
+</div>
+
+<div class="card large center">
+  <div class="title">📌 Realidad</div>
+  <p>No es magia ni automático sin hacer nada.</p>
+  <p class="highlight">👉 Es simple y ya funciona</p>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
