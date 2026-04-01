@@ -2191,9 +2191,28 @@ window.addEventListener('load', () => {
   const refParam = p.get('ref');
   if (refParam) sessionStorage.setItem('legalai_ref', refParam.toUpperCase());
 
-  // Manejar hash #aff-form: abrir sección afiliados y hacer scroll + foco al form
-  if (window.location.hash === '#aff-form' && !stat) {
-    showSec('afiliados', 'aff-form');
+  // Manejar hash #aff-form o #afiliados: abrir sección afiliados (+ scroll al form si aplica)
+  const _hash = window.location.hash;
+  if ((_hash === '#aff-form' || _hash === '#afiliados') && !stat) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('sec-afiliados').classList.add('visible');
+    const _nl = document.querySelectorAll('.nav-link');
+    const _ai = ['inicio','generador','suscripcion','afiliados','about'].indexOf('afiliados');
+    if (_nl[_ai]) _nl[_ai].classList.add('active');
+    if (_hash === '#aff-form') {
+      // doble rAF garantiza que display:block ya fue aplicado antes de calcular posición
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const el = document.getElementById('aff-form');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const firstInput = el.querySelector('input, textarea, select');
+          if (firstInput) setTimeout(() => firstInput.focus(), 400);
+        }
+      }));
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
     return;
   }
 
