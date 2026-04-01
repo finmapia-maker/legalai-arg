@@ -26,6 +26,9 @@ h1 em{color:#c9a84c}
 .highlight-box{background:linear-gradient(135deg,#1a1510,#111);border:1px solid rgba(201,168,76,.35)}
 .highlight-box:hover{box-shadow:0 0 30px rgba(201,168,76,.25)}
 @media(max-width:700px){.card.large{grid-column:span 1}}
+.row.center-row{grid-column:1/-1;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:6px}
+.row.center-row .card{max-width:320px;width:100%}
+
 </style>
 </head>
 <body>
@@ -78,27 +81,33 @@ h1 em{color:#c9a84c}
   <div class="badge green">USDT o ARS</div>
 </div>
 
-<!-- EXTRA -->
-<div class="card">
-  <span class="icon">➕</span>
-  <div class="title">Extra</div>
-  <p>Podés generar documentos para otros y cobrar.</p>
+  </div>
+
+<!-- FILA FINAL CENTRADA (SIN DUPLICADOS) -->
+<div class="row center-row">
+
+  <div class="card">
+    <span class="icon">➕</span>
+    <div class="title">Extra</div>
+    <p>Podés generar documentos para otros y cobrar.</p>
+  </div>
+
+  <div class="card">
+    <span class="icon">🚫</span>
+    <div class="title">No es</div>
+    <div class="badge red">Multinivel</div>
+    <div class="badge red">Inversión</div>
+  </div>
+
+  <div class="card center">
+    <span class="icon">🟢</span>
+    <div class="title">Empezar</div>
+    <p>Registrate, obtené tu link y empezá.</p>
+    <a href="#" class="btn">Quiero ser afiliado →</a>
+  </div>
+
 </div>
 
-<!-- FILTRO -->
-<div class="card">
-  <span class="icon">🚫</span>
-  <div class="title">No es</div>
-  <div class="badge red">Multinivel</div>
-  <div class="badge red">Inversión</div>
-</div>
-
-<!-- CTA -->
-<div class="card large center">
-  <span class="icon">🟢</span>
-  <div class="title">Empezar</div>
-  <p>Registrate, obtené tu link y empezá.</p>
-  <a href="#" class="btn">Quiero ser afiliado →</a>
 </div>
 
 </div>
