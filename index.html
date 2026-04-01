@@ -22,6 +22,9 @@
   --hdr-bg:    #0f1117;
   --hdr-txt:   rgba(255,255,255,0.28);
   --shadow:    0 2px 16px rgba(15,17,23,0.07);
+  --btn-bg:    #0f1117;
+  --btn-txt:   #c8a84b;
+  --btn-hover-bg: #1e2230;
 }
 [data-theme="dark"] {
   --ink:       #eceef2;
@@ -37,6 +40,9 @@
   --hdr-bg:    #080a0e;
   --hdr-txt:   rgba(255,255,255,0.22);
   --shadow:    0 2px 20px rgba(0,0,0,0.4);
+  --btn-bg:    #d4a847;
+  --btn-txt:   #0c0e12;
+  --btn-hover-bg: #e0b84e;
 }
 
 /* ── RESET ──────────────────────────────────────────────────────────────── */
@@ -135,7 +141,7 @@ nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;d
 .steps-bar{display:flex;margin-bottom:32px;background:var(--cream);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:background .3s;}
 .step-bar{flex:1;padding:11px 8px;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mist);border-right:1px solid var(--line);transition:all .3s;}
 .step-bar:last-child{border-right:none;}
-.step-bar.active{background:var(--ink);color:var(--gold);}
+.step-bar.active{background:var(--btn-bg);color:var(--btn-txt);}
 .step-bar.done{background:var(--sage-dim);color:var(--sage);}
 
 /* ── CARDS ──────────────────────────────────────────────────────────────── */
@@ -162,16 +168,18 @@ textarea{resize:vertical;min-height:80px;}
 .suggest-lbl{font-family:'DM Mono',monospace;font-size:.63rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mist);margin-bottom:10px;}
 .suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
 .suggestion{font-size:.78rem;padding:7px 14px;background:var(--cream);border:1px solid var(--line);border-radius:20px;cursor:pointer;color:var(--ink);transition:all .15s;font-family:'DM Sans',sans-serif;}
-.suggestion:hover{background:var(--ink);color:var(--gold);border-color:var(--ink);}
+.suggestion:hover{background:var(--btn-bg);color:var(--btn-txt);border-color:var(--btn-bg);}
 
 /* ── BUTTONS ────────────────────────────────────────────────────────────── */
-.btn{width:100%;padding:15px;background:var(--ink);color:var(--gold);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:.02em;}
-.btn:hover:not(:disabled){opacity:.88;}
+.btn{width:100%;padding:15px;background:var(--btn-bg);color:var(--btn-txt);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:.02em;}
+.btn:hover:not(:disabled){background:var(--btn-hover-bg);opacity:1;}
 .btn:disabled{opacity:.45;cursor:not-allowed;}
 .btn.gold{background:var(--gold);color:#0f1117;}
-.btn.ghost{background:transparent;color:var(--mist);border:1px solid var(--line);margin-top:10px;}
+.btn.gold:hover:not(:disabled){opacity:.88;background:var(--gold);}
+.btn.ghost{background:transparent;color:var(--mist);border:1.5px solid var(--line);margin-top:10px;}
+.btn.ghost:hover:not(:disabled){color:var(--ink);border-color:var(--gold);background:transparent;}
 .btn-inline{display:inline-block;padding:13px 28px;width:auto;text-decoration:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:opacity .2s;border:none;}
-.btn-inline.dark{background:var(--ink);color:var(--gold);}
+.btn-inline.dark{background:var(--btn-bg);color:var(--btn-txt);}
 .btn-inline.gold{background:var(--gold);color:#0f1117;}
 .btn-inline:hover{opacity:.85;}
 
@@ -416,7 +424,7 @@ footer a:hover{color:var(--gold);}
     </div>
 
     <div style="text-align:center;margin-top:48px;">
-      <button class="btn" style="max-width:280px;margin:0 auto;" onclick="showSec('generador')">
+      <button class="btn gold" style="max-width:280px;margin:0 auto;" onclick="showSec('generador')">
         Empezar ahora →
       </button>
       <p style="margin-top:16px;font-size:.78rem;color:var(--mist);font-family:'DM Mono',monospace;">
@@ -1148,7 +1156,10 @@ footer a:hover{color:var(--gold);}
     <div class="about-cta">
       <div class="hero-tag" style="margin-bottom:16px;">✦ LegalAI Arg</div>
       <p style="color:var(--mist);font-size:.9rem;margin-bottom:24px;line-height:1.7;">Documentos orientativos generados con inteligencia artificial.<br>No constituyen asesoramiento legal profesional.</p>
-      <button class="btn gold" style="max-width:280px;margin:0 auto;" onclick="showSec('generador')">Generar mi documento →</button>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn gold" style="max-width:260px;" onclick="showSec('generador')">Generar mi documento →</button>
+        <button class="btn" style="max-width:260px;background:transparent;color:var(--gold);border:1.5px solid var(--gold);" onclick="showSec('afiliados','aff-form')">✦ Ser afiliado · 20%</button>
+      </div>
     </div>
 
   </div>
