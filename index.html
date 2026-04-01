@@ -1316,73 +1316,93 @@ async function enviarSolicitudAfiliado() {
   const email  = document.getElementById('affEmail').value.trim();
   const canal  = document.getElementById('affCanal').value.trim();
   const nota   = document.getElementById('affNota').value.trim();
+  const ref_origen = (sessionStorage.getItem('legalai_ref') || localStorage.getItem('legalai_ref') || '').trim().toUpperCase() || null;
+
   const errEl  = document.getElementById('affAlertErr');
   const btn    = document.getElementById('affBtnEnviar');
 
   errEl.style.display = 'none';
 
-  if (!nombre) { errEl.textContent = 'Por favor ingresá tu nombre.'; errEl.style.display = 'block'; return; }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errEl.textContent = 'Ingresá un email válido.'; errEl.style.display = 'block'; return;
+  if (!nombre) {
+    errEl.textContent = 'Por favor ingresá tu nombre.';
+    errEl.style.display = 'block';
+    return;
   }
 
-  btn.disabled = true; btn.textContent = 'Enviando solicitud…';
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Ingresá un email válido.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando solicitud…';
 
   try {
-    const res  = await fetch(`${CONFIG.WORKER_URL}/afiliado/solicitud`, {
+    const res = await fetch(`${CONFIG.WORKER_URL}/afiliado/solicitud`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, email, canal, nota }),
+      body: JSON.stringify({ nombre, email, canal, nota, ref_origen }),
     });
-    const data = await res.json();
 
+    const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Error al procesar la solicitud');
 
-    // Mostrar confirmación con el link al dashboard
     document.getElementById('affEmailConfirm').textContent = email;
 
     const okPanel = document.getElementById('affSendOk');
-
-    // Actualizar el texto según si el email se envió o no
     const confirmMsg = okPanel.querySelector('p');
+
     if (confirmMsg) {
-      confirmMsg.innerHTML = data.email_enviado
-        ? `Tu cuenta está activa. Te enviamos los detalles a <strong>${email}</strong>. Revisá también la carpeta de spam.`
-        : `Tu cuenta fue creada correctamente, pero <strong>el email de bienvenida no pudo enviarse</strong>. Guardá el siguiente link — es el único acceso a tu panel:`;
+      confirmMsg.innerHTML = data.ya_existia
+        ? `Ese email <strong>${email}</strong> ya estaba registrado. Te mostramos nuevamente tu acceso.`
+        : `Tu cuenta está activa. Te enviamos los detalles a <strong>${email}</strong>. Revisá también la carpeta de spam.`;
     }
 
-    // Mostrar siempre el dashboard URL (es crítico si el email falló)
     const existing = document.getElementById('affDashboardLink');
-    if (!existing && data.dashboard_url) {
+    if (existing) existing.remove();
+
+    if (data.dashboard_url) {
       const linkDiv = document.createElement('div');
       linkDiv.id = 'affDashboardLink';
       linkDiv.style.cssText = 'margin-top:16px;padding:14px 16px;background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);border-radius:8px;';
       linkDiv.innerHTML = `
         <p style="font-size:.8rem;color:var(--mist);margin:0 0 8px;">
-          ${data.email_enviado ? 'Tu panel de afiliado:' : '⚠️ Guardá este link ahora:'}
+          ${data.ya_existia ? 'Tu acceso actual:' : 'Tu panel de afiliado:'}
         </p>
         <a href="${data.dashboard_url}" target="_blank"
           style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--gold);word-break:break-all;text-decoration:none;">
           ${data.dashboard_url}
-        </a>`;
+        </a>
+        <div style="margin-top:10px;">
+          <a href="${data.link_afiliado || '#'}" target="_blank"
+             style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--ink);text-decoration:none;background:var(--surface);padding:8px 10px;border-radius:6px;display:inline-block;border:1px solid var(--line);">
+             Ver mi link para compartir
+          </a>
+        </div>`;
       okPanel.appendChild(linkDiv);
     }
 
     document.getElementById('affFormBody').style.display = 'none';
     okPanel.style.display = 'block';
 
-  } catch(e) {
+  } catch (e) {
     errEl.textContent = 'Error al enviar la solicitud: ' + e.message + '. Intentá de nuevo o escribinos directamente.';
     errEl.style.display = 'block';
   } finally {
-    btn.disabled = false; btn.textContent = 'Enviar solicitud →';
+    btn.disabled = false;
+    btn.textContent = 'Enviar solicitud →';
   }
 }
 
 /* ── AFILIADOS: tracking del ref en sessionStorage ──────────────────────── */
 (function captureRef() {
   const ref = new URLSearchParams(window.location.search).get('ref');
-  if (ref) sessionStorage.setItem('legalai_ref', ref.toUpperCase());
+  if (ref) {
+    const refNorm = ref.trim().toUpperCase();
+    sessionStorage.setItem('legalai_ref', refNorm);
+    localStorage.setItem('legalai_ref', refNorm);
+  }
 })();
 
 function setTheme(t) {
@@ -1400,14 +1420,25 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
   if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
 });
 
-function showSec(name) {
+function showSec(name, _anchor) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   document.getElementById('sec-' + name).classList.add('visible');
   const secs = ['inicio','generador','suscripcion','afiliados','about'];
   const idx = secs.indexOf(name);
   if (idx >= 0) document.querySelectorAll('.nav-link')[idx].classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (_anchor === 'aff-form') {
+    requestAnimationFrame(() => {
+      const el = document.getElementById('aff-form');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const firstInput = el.querySelector('input, textarea, select');
+        if (firstInput) setTimeout(() => firstInput.focus(), 350);
+      }
+    });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 let G = {
@@ -2159,6 +2190,12 @@ window.addEventListener('load', () => {
   // Capturar ref de afiliado si viene en la URL (puede venir en cualquier página)
   const refParam = p.get('ref');
   if (refParam) sessionStorage.setItem('legalai_ref', refParam.toUpperCase());
+
+  // Manejar hash #aff-form: abrir sección afiliados y hacer scroll + foco al form
+  if (window.location.hash === '#aff-form' && !stat) {
+    showSec('afiliados', 'aff-form');
+    return;
+  }
 
   if (stat === 'approved') {
     window.history.replaceState({}, '', window.location.pathname);
