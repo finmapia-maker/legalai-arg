@@ -378,9 +378,14 @@ footer a:hover{color:var(--gold);}
       <span class="badge">Descarga inmediata</span>
       <span class="badge">Sin registro</span>
     </div>
-    <button class="btn" style="max-width:300px;margin:0 auto;" onclick="showSec('generador')">
-      Generar mi documento →
-    </button>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:620px;margin:0 auto;">
+      <button class="btn" style="flex:1;min-width:220px;max-width:280px;background:var(--gold);color:#0f1117;" onclick="showSec('generador')">
+        Generar mi documento →
+      </button>
+      <button class="btn" style="flex:1;min-width:220px;max-width:280px;background:transparent;color:var(--gold);border:1.5px solid var(--gold);" onclick="showSec('afiliados','aff-form')">
+        ✦ Ser afiliado ✦
+      </button>
+    </div>
   </div>
 
   <div class="content-wrap">
