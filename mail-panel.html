@@ -8,495 +8,125 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Lato:wght@300;400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg:        #0a0a0a;
-    --surface:   #111111;
-    --border:    #1e1e1e;
-    --border2:   #2a2a2a;
-    --gold:      #c9a84c;
-    --gold-dim:  #7a6128;
-    --text:      #d4d4d8;
-    --muted:     #6b6b80;
-    --danger:    #e05555;
-    --success:   #4caf7d;
-    --mono:      'DM Mono', monospace;
+    --bg:      #0a0a0a;
+    --surface: #111111;
+    --border:  #1e1e1e;
+    --border2: #2a2a2a;
+    --gold:    #c9a84c;
+    --text:    #d4d4d8;
+    --muted:   #6b6b80;
+    --danger:  #e05555;
+    --success: #4caf7d;
+    --mono:    'DM Mono', monospace;
   }
+  body { background:var(--bg); color:var(--text); font-family:'Lato',sans-serif; font-size:14px; min-height:100vh; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Lato', sans-serif;
-    font-size: 14px;
-    min-height: 100vh;
-  }
+  /* LOGIN */
+  #login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .login-card { background:var(--surface); border:1px solid var(--border2); border-radius:16px; padding:48px 40px; width:100%; max-width:380px; text-align:center; }
+  .login-logo { font-family:'Playfair Display',serif; font-size:26px; color:var(--gold); margin-bottom:4px; }
+  .login-sub { font-size:12px; color:var(--muted); margin-bottom:36px; font-family:var(--mono); letter-spacing:.06em; text-transform:uppercase; }
+  .login-input { width:100%; background:#0d0d0d; border:1px solid var(--border2); border-radius:8px; color:var(--text); font-family:var(--mono); font-size:14px; padding:13px 16px; text-align:center; letter-spacing:3px; outline:none; transition:border-color .2s; margin-bottom:14px; }
+  .login-input:focus { border-color:var(--gold); }
+  .login-btn { width:100%; background:var(--gold); color:#000; border:none; border-radius:8px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; padding:13px; cursor:pointer; }
+  .login-btn:hover { opacity:.85; }
+  .login-error { font-size:12px; color:var(--danger); margin-top:12px; display:none; }
 
-  /* ── LOGIN ── */
-  #login-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-  .login-card {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 16px;
-    padding: 48px 40px;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
-  }
-  .login-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-  .login-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 36px;
-    font-family: var(--mono);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-  }
-  .login-input {
-    width: 100%;
-    background: #0d0d0d;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 13px 16px;
-    text-align: center;
-    letter-spacing: 3px;
-    outline: none;
-    transition: border-color .2s;
-    margin-bottom: 14px;
-  }
-  .login-input:focus { border-color: var(--gold); }
-  .login-btn {
-    width: 100%;
-    background: var(--gold);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 13px;
-    cursor: pointer;
-    transition: opacity .2s;
-  }
-  .login-btn:hover { opacity: .85; }
-  .login-error {
-    font-size: 12px;
-    color: var(--danger);
-    margin-top: 12px;
-    display: none;
-  }
+  /* APP */
+  #app { display:none; }
+  .topbar { height:56px; background:var(--surface); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; gap:20px; position:sticky; top:0; z-index:100; }
+  .topbar-logo { font-family:'Playfair Display',serif; font-style:italic; color:var(--gold); font-size:18px; }
+  .topbar-divider { width:1px; height:24px; background:var(--border2); }
+  .topbar-label { font-size:11px; color:var(--muted); font-family:var(--mono); letter-spacing:.06em; text-transform:uppercase; }
+  .topbar-spacer { flex:1; }
+  .topbar-logout { font-size:12px; color:var(--muted); cursor:pointer; padding:6px 12px; border-radius:6px; font-family:var(--mono); }
+  .topbar-logout:hover { color:var(--danger); background:rgba(224,85,85,.08); }
 
-  /* ── APP SHELL ── */
-  #app { display: none; }
+  .tabs { display:flex; gap:2px; padding:0 24px; background:var(--surface); border-bottom:1px solid var(--border); }
+  .tab { padding:14px 20px; font-size:13px; font-weight:700; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; transition:color .2s,border-color .2s; user-select:none; }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .tab-badge { display:inline-block; background:var(--border2); color:var(--muted); font-size:10px; font-family:var(--mono); padding:2px 6px; border-radius:20px; margin-left:6px; vertical-align:middle; }
 
-  .topbar {
-    height: 56px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    gap: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .topbar-logo {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--gold);
-    font-size: 18px;
-    white-space: nowrap;
-  }
-  .topbar-divider { width: 1px; height: 24px; background: var(--border2); }
-  .topbar-label {
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-  }
-  .topbar-spacer { flex: 1; }
-  .topbar-logout {
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 6px;
-    transition: color .2s, background .2s;
-    font-family: var(--mono);
-  }
-  .topbar-logout:hover { color: var(--danger); background: rgba(224,85,85,.08); }
+  .main { padding:28px 24px; max-width:1100px; margin:0 auto; }
+  .panel { display:none; }
+  .panel.active { display:block; }
 
-  /* ── TABS ── */
-  .tabs {
-    display: flex;
-    gap: 2px;
-    padding: 0 24px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-  }
-  .tab {
-    padding: 14px 20px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: color .2s, border-color .2s;
-    letter-spacing: .02em;
-    user-select: none;
-  }
-  .tab:hover { color: var(--text); }
-  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .tab-badge {
-    display: inline-block;
-    background: var(--border2);
-    color: var(--muted);
-    font-size: 10px;
-    font-family: var(--mono);
-    padding: 2px 6px;
-    border-radius: 20px;
-    margin-left: 6px;
-    vertical-align: middle;
-  }
+  .panel-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .panel-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--text); }
+  .panel-title em { color:var(--gold); font-style:italic; }
+  .panel-count { font-size:11px; color:var(--muted); font-family:var(--mono); background:var(--border); padding:3px 10px; border-radius:20px; }
 
-  /* ── MAIN ── */
-  .main { padding: 28px 24px; max-width: 1100px; margin: 0 auto; }
+  .search-bar { display:flex; gap:10px; margin-bottom:18px; }
+  .search-input { flex:1; background:var(--surface); border:1px solid var(--border2); border-radius:8px; color:var(--text); font-size:13px; padding:10px 14px; outline:none; font-family:'Lato',sans-serif; }
+  .search-input:focus { border-color:var(--gold); }
+  .search-input::placeholder { color:var(--muted); }
 
-  .panel { display: none; }
-  .panel.active { display: block; }
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; border:none; transition:opacity .2s; font-family:'Lato',sans-serif; }
+  .btn:hover { opacity:.85; }
+  .btn-gold { background:var(--gold); color:#000; }
+  .btn-ghost { background:var(--border); color:var(--text); }
+  .btn-sm { padding:7px 12px; font-size:12px; }
 
-  /* ── CONTACTS PANEL ── */
-  .panel-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-  .panel-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    color: var(--text);
-  }
-  .panel-title em { color: var(--gold); font-style: italic; }
-  .panel-count {
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-    background: var(--border);
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
+  .select-bar { background:rgba(201,168,76,.08); border:1px solid rgba(201,168,76,.2); border-radius:8px; padding:10px 16px; display:none; align-items:center; gap:14px; margin-bottom:14px; }
+  .select-bar.visible { display:flex; }
+  .select-count { font-size:13px; color:var(--gold); font-weight:700; }
 
-  .search-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-  .search-input {
-    flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 13px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color .2s;
-    font-family: 'Lato', sans-serif;
-  }
-  .search-input:focus { border-color: var(--gold); }
-  .search-input::placeholder { color: var(--muted); }
+  .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
+  thead { background:#0d0d0d; }
+  th { padding:12px 16px; text-align:left; font-size:11px; color:var(--muted); font-family:var(--mono); letter-spacing:.08em; text-transform:uppercase; font-weight:500; border-bottom:1px solid var(--border); }
+  td { padding:13px 16px; font-size:13px; color:var(--text); border-bottom:1px solid var(--border); vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(201,168,76,.03); }
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: opacity .2s, transform .1s;
-    font-family: 'Lato', sans-serif;
-  }
-  .btn:hover { opacity: .85; }
-  .btn:active { transform: scale(.98); }
-  .btn-gold { background: var(--gold); color: #000; }
-  .btn-ghost { background: var(--border); color: var(--text); }
-  .btn-sm { padding: 7px 12px; font-size: 12px; }
-  .btn-danger { background: rgba(224,85,85,.15); color: var(--danger); border: 1px solid rgba(224,85,85,.25); }
+  .contact-email { font-family:var(--mono); font-size:12px; color:var(--gold); }
+  .contact-nombre { font-weight:700; }
+  .tag { display:inline-block; background:var(--border); color:var(--muted); font-size:11px; font-family:var(--mono); padding:2px 8px; border-radius:20px; }
+  .date-cell { font-size:11px; color:var(--muted); font-family:var(--mono); }
+  .checkbox-cell { width:40px; }
+  input[type="checkbox"] { width:16px; height:16px; accent-color:var(--gold); cursor:pointer; }
 
-  /* ── TABLE ── */
-  .table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  table { width: 100%; border-collapse: collapse; }
-  thead { background: #0d0d0d; }
-  th {
-    padding: 12px 16px;
-    text-align: left;
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    font-weight: 500;
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 13px 16px;
-    font-size: 13px;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(201,168,76,.03); }
+  .compose-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:768px){ .compose-grid { grid-template-columns:1fr; } }
+  .compose-section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; }
+  .compose-title { font-size:13px; font-weight:700; color:var(--muted); font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--border); }
 
-  .contact-email {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--gold);
-  }
-  .contact-nombre { font-weight: 700; }
-  .tag {
-    display: inline-block;
-    background: var(--border);
-    color: var(--muted);
-    font-size: 11px;
-    font-family: var(--mono);
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-  .date-cell {
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-  }
+  .field { margin-bottom:16px; }
+  .field-label { display:block; font-size:11px; color:var(--muted); font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em; margin-bottom:7px; }
+  .field-input, .field-textarea { width:100%; background:#0d0d0d; border:1px solid var(--border2); border-radius:8px; color:var(--text); font-size:13px; padding:10px 14px; outline:none; transition:border-color .2s; font-family:'Lato',sans-serif; }
+  .field-input:focus, .field-textarea:focus { border-color:var(--gold); }
+  .field-input::placeholder, .field-textarea::placeholder { color:var(--muted); }
+  .field-textarea { resize:vertical; min-height:200px; line-height:1.7; }
+  .field-hint { font-size:11px; color:var(--muted); margin-top:6px; font-family:var(--mono); }
+  .field-hint code { background:var(--border2); padding:2px 6px; border-radius:4px; color:var(--gold); font-size:11px; }
 
-  .checkbox-cell { width: 40px; }
-  input[type="checkbox"] {
-    width: 16px; height: 16px;
-    accent-color: var(--gold);
-    cursor: pointer;
-  }
+  .recipients-list { background:#0d0d0d; border:1px solid var(--border2); border-radius:8px; padding:12px; min-height:80px; max-height:200px; overflow-y:auto; }
+  .recipient-chip { display:inline-flex; align-items:center; gap:6px; background:rgba(201,168,76,.12); border:1px solid rgba(201,168,76,.25); border-radius:20px; padding:4px 10px; font-size:11px; font-family:var(--mono); color:var(--gold); margin:3px; }
+  .recipient-chip button { background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px; line-height:1; padding:0; }
+  .recipient-chip button:hover { color:var(--danger); }
+  .empty-recipients { font-size:12px; color:var(--muted); font-family:var(--mono); text-align:center; padding:16px 0; }
 
-  .select-bar {
-    background: rgba(201,168,76,.08);
-    border: 1px solid rgba(201,168,76,.2);
-    border-radius: 8px;
-    padding: 10px 16px;
-    display: none;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-  .select-bar.visible { display: flex; }
-  .select-count { font-size: 13px; color: var(--gold); font-weight: 700; }
+  .send-result { margin-top:16px; padding:12px 16px; border-radius:8px; font-size:13px; display:none; }
+  .send-result.ok  { background:rgba(76,175,125,.12); border:1px solid rgba(76,175,125,.25); color:var(--success); }
+  .send-result.err { background:rgba(224,85,85,.10);  border:1px solid rgba(224,85,85,.25);  color:var(--danger); }
 
-  /* ── COMPOSE ── */
-  .compose-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  @media (max-width: 768px) { .compose-grid { grid-template-columns: 1fr; } }
+  .status-ok { display:inline-block; font-size:10px; font-family:var(--mono); color:var(--success); background:rgba(76,175,125,.1); padding:2px 8px; border-radius:20px; }
+  .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+  .empty-icon { font-size:36px; margin-bottom:12px; opacity:.5; }
 
-  .compose-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-  }
-  .compose-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--muted);
-    font-family: var(--mono);
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    margin-bottom: 18px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(201,168,76,.3); border-top-color:var(--gold); border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:6px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  .field { margin-bottom: 16px; }
-  .field-label {
-    display: block;
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    margin-bottom: 7px;
-  }
-  .field-input,
-  .field-textarea,
-  .field-select {
-    width: 100%;
-    background: #0d0d0d;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 13px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color .2s;
-    font-family: 'Lato', sans-serif;
-  }
-  .field-input:focus,
-  .field-textarea:focus,
-  .field-select:focus { border-color: var(--gold); }
-  .field-input::placeholder,
-  .field-textarea::placeholder { color: var(--muted); }
-  .field-textarea {
-    resize: vertical;
-    min-height: 160px;
-    line-height: 1.6;
-  }
-  .field-hint {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 6px;
-    font-family: var(--mono);
-  }
-  .field-hint code {
-    background: var(--border);
-    padding: 1px 5px;
-    border-radius: 4px;
-    color: var(--gold);
-  }
-
-  .recipients-list {
-    background: #0d0d0d;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 12px;
-    min-height: 80px;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  .recipient-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(201,168,76,.12);
-    border: 1px solid rgba(201,168,76,.25);
-    border-radius: 20px;
-    padding: 4px 10px 4px 10px;
-    font-size: 11px;
-    font-family: var(--mono);
-    color: var(--gold);
-    margin: 3px;
-  }
-  .recipient-chip button {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-    padding: 0;
-  }
-  .recipient-chip button:hover { color: var(--danger); }
-  .empty-recipients {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--mono);
-    text-align: center;
-    padding: 16px 0;
-  }
-
-  .send-result {
-    margin-top: 16px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    display: none;
-  }
-  .send-result.ok { background: rgba(76,175,125,.12); border: 1px solid rgba(76,175,125,.25); color: var(--success); }
-  .send-result.err { background: rgba(224,85,85,.10); border: 1px solid rgba(224,85,85,.25); color: var(--danger); }
-
-  /* ── HISTORY ── */
-  .history-row td:first-child { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-  .status-ok {
-    display: inline-block;
-    font-size: 10px;
-    font-family: var(--mono);
-    color: var(--success);
-    background: rgba(76,175,125,.1);
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-  }
-  .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: .5; }
-  .empty-text { font-size: 14px; }
-
-  /* ── LOADING ── */
-  .spinner {
-    display: inline-block;
-    width: 14px; height: 14px;
-    border: 2px solid rgba(201,168,76,.3);
-    border-top-color: var(--gold);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── TOAST ── */
-  #toast {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    background: #1e1e24;
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    padding: 13px 18px;
-    font-size: 13px;
-    color: var(--text);
-    box-shadow: 0 8px 32px rgba(0,0,0,.5);
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all .3s;
-    z-index: 9999;
-    pointer-events: none;
-    max-width: 340px;
-  }
-  #toast.show { transform: translateY(0); opacity: 1; }
-  #toast.ok { border-left: 3px solid var(--success); }
-  #toast.err { border-left: 3px solid var(--danger); }
+  #toast { position:fixed; bottom:28px; right:28px; background:#1e1e24; border:1px solid var(--border2); border-radius:10px; padding:13px 18px; font-size:13px; color:var(--text); box-shadow:0 8px 32px rgba(0,0,0,.5); transform:translateY(20px); opacity:0; transition:all .3s; z-index:9999; pointer-events:none; max-width:340px; }
+  #toast.show { transform:translateY(0); opacity:1; }
+  #toast.ok  { border-left:3px solid var(--success); }
+  #toast.err { border-left:3px solid var(--danger); }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">LegalAI Arg</div>
@@ -507,7 +137,6 @@
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="topbar">
     <div class="topbar-logo">LegalAI <em style="font-style:italic">Arg</em></div>
@@ -516,47 +145,35 @@
     <div class="topbar-spacer"></div>
     <div class="topbar-logout" onclick="doLogout()">Salir</div>
   </div>
-
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('contacts')">
-      Contactos <span class="tab-badge" id="badge-contacts">—</span>
-    </div>
+    <div class="tab active" onclick="switchTab('contacts')">Contactos <span class="tab-badge" id="badge-contacts">—</span></div>
     <div class="tab" onclick="switchTab('compose')">Redactar</div>
-    <div class="tab" onclick="switchTab('history')">
-      Historial <span class="tab-badge" id="badge-history">—</span>
-    </div>
+    <div class="tab" onclick="switchTab('history')">Historial <span class="tab-badge" id="badge-history">—</span></div>
   </div>
 
   <div class="main">
 
-    <!-- ── CONTACTOS ── -->
+    <!-- CONTACTOS -->
     <div class="panel active" id="panel-contacts">
       <div class="panel-header">
         <div class="panel-title">Inventario de <em>contactos</em></div>
         <div class="panel-count" id="contacts-count">cargando…</div>
       </div>
-
       <div class="search-bar">
         <input class="search-input" id="search-input" type="text" placeholder="Buscar por email o nombre…" oninput="filterContacts()">
         <button class="btn btn-ghost btn-sm" onclick="loadContacts()">↻ Actualizar</button>
       </div>
-
       <div class="select-bar" id="select-bar">
         <span class="select-count" id="select-count">0 seleccionados</span>
         <button class="btn btn-gold btn-sm" onclick="sendToSelected()">✉ Redactar para seleccionados</button>
         <button class="btn btn-ghost btn-sm" onclick="clearSelection()">Limpiar</button>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th class="checkbox-cell"><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
-              <th>Email</th>
-              <th>Nombre</th>
-              <th>Etiqueta</th>
-              <th>Fecha</th>
-              <th>Acción</th>
+              <th>Email</th><th>Nombre</th><th>Etiqueta</th><th>Fecha</th><th>Acción</th>
             </tr>
           </thead>
           <tbody id="contacts-body">
@@ -568,17 +185,14 @@
       </div>
     </div>
 
-    <!-- ── REDACTAR ── -->
+    <!-- REDACTAR -->
     <div class="panel" id="panel-compose">
       <div class="panel-header">
         <div class="panel-title">Redactar <em>mensaje</em></div>
       </div>
-
       <div class="compose-grid">
-        <!-- Destinatarios -->
         <div class="compose-section">
           <div class="compose-title">Destinatarios</div>
-
           <div class="field">
             <label class="field-label">Agregar email manual</label>
             <div style="display:flex;gap:8px;">
@@ -586,60 +200,46 @@
               <button class="btn btn-ghost btn-sm" onclick="addManualRecipient()">+ Agregar</button>
             </div>
           </div>
-
           <div class="field">
-            <label class="field-label">Destinatarios seleccionados</label>
+            <label class="field-label">Destinatarios</label>
             <div class="recipients-list" id="recipients-list">
-              <div class="empty-recipients" id="empty-recipients">Ningún destinatario aún</div>
+              <div class="empty-recipients">Ningún destinatario aún</div>
             </div>
           </div>
-
           <div class="field">
-            <label class="field-label">O elegir de contactos</label>
             <button class="btn btn-ghost" style="width:100%" onclick="switchTab('contacts')">← Ver lista de contactos</button>
           </div>
         </div>
-
-        <!-- Mensaje -->
         <div class="compose-section">
           <div class="compose-title">Mensaje</div>
-
           <div class="field">
             <label class="field-label">Asunto</label>
             <input class="field-input" id="compose-asunto" type="text" placeholder="Asunto del email">
           </div>
-
           <div class="field">
             <label class="field-label">Cuerpo del mensaje</label>
-            <textarea class="field-textarea" id="compose-mensaje" placeholder="Escribí tu mensaje acá…&#10;&#10;Podés usar variables:&#10;{{nombre}} → nombre del contacto&#10;{{email}} → email del contacto"></textarea>
-            <div class="field-hint">Variables: <code>{{nombre}}</code> <code>{{email}}</code></div>
+            <textarea class="field-textarea" id="compose-mensaje" placeholder="Escribí tu mensaje acá…"></textarea>
+            <div class="field-hint">
+              Variables: <code>{{nombre}}</code> <code>{{email}}</code> &nbsp;·&nbsp;
+              Formato: <code>**negrita**</code> &nbsp;<code>* ítem de lista</code> &nbsp;línea vacía = párrafo
+            </div>
           </div>
-
-          <button class="btn btn-gold" id="btn-send" onclick="sendEmails()" style="width:100%">
-            ✉ Enviar emails
-          </button>
-
+          <button class="btn btn-gold" id="btn-send" onclick="sendEmails()" style="width:100%">✉ Enviar emails</button>
           <div class="send-result" id="send-result"></div>
         </div>
       </div>
     </div>
 
-    <!-- ── HISTORIAL ── -->
+    <!-- HISTORIAL -->
     <div class="panel" id="panel-history">
       <div class="panel-header">
         <div class="panel-title">Historial de <em>envíos</em></div>
         <div class="panel-count" id="history-count">cargando…</div>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Email</th>
-              <th>Asunto</th>
-              <th>Estado</th>
-            </tr>
+            <tr><th>Fecha</th><th>Email</th><th>Asunto</th><th>Estado</th></tr>
           </thead>
           <tbody id="history-body">
             <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:40px;font-family:var(--mono);">
@@ -650,17 +250,81 @@
       </div>
     </div>
 
-  </div><!-- /main -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <div id="toast"></div>
 
 <script>
 const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
-
-let adminKey = '';
+let adminKey    = '';
 let allContacts = [];
-let recipients = []; // { email, nombre }
+let recipients  = [];
+
+// ── Markdown básico → HTML ────────────────────────────────────────
+function mdToHtml(text) {
+  const lines  = text.split('\n');
+  const out    = [];
+  let inList   = false;
+
+  for (let line of lines) {
+    // Bold
+    line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    // Bullet list
+    if (/^[\*\-]\s+/.test(line)) {
+      if (!inList) { out.push('<ul style="margin:10px 0;padding-left:22px;">'); inList = true; }
+      out.push('<li style="margin-bottom:5px;">' + line.replace(/^[\*\-]\s+/, '') + '</li>');
+      continue;
+    }
+    if (inList) { out.push('</ul>'); inList = false; }
+
+    // Línea vacía
+    if (!line.trim()) { out.push('<br>'); continue; }
+
+    // Separador ---
+    if (/^-{3,}$/.test(line.trim())) {
+      out.push('<hr style="border:none;border-top:1px solid #2a2a2a;margin:14px 0;">');
+      continue;
+    }
+
+    out.push('<p style="margin:0 0 6px;line-height:1.75;">' + line + '</p>');
+  }
+  if (inList) out.push('</ul>');
+  return out.join('\n');
+}
+
+// ── Wrapper HTML del email ────────────────────────────────────────
+function wrapEmail(body) {
+  return `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0a0a0f;font-family:'Segoe UI',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0f;padding:40px 20px;">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#16161f;border-radius:16px;border:1px solid #23232f;overflow:hidden;max-width:560px;width:100%;">
+<tr>
+  <td style="background:linear-gradient(135deg,#1c1a10,#16161f);padding:28px 40px;border-bottom:1px solid #23232f;">
+    <p style="margin:0;font-size:20px;font-weight:700;color:#c9a84c;">LegalAI Arg</p>
+    <p style="margin:4px 0 0;font-size:12px;color:#6b6b80;">Documentos legales con inteligencia artificial</p>
+  </td>
+</tr>
+<tr>
+  <td style="padding:36px 40px;font-size:15px;color:#c8c8d8;line-height:1.75;">
+    ${body}
+  </td>
+</tr>
+<tr>
+  <td style="padding:20px 40px;border-top:1px solid #23232f;">
+    <p style="margin:0;font-size:11px;color:#444460;text-align:center;">LegalAI Arg — legalai-arg.com</p>
+  </td>
+</tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
 
 // ── AUTH ──────────────────────────────────────────────────────────
 function doLogin() {
@@ -672,9 +336,7 @@ function doLogin() {
   loadContacts();
   loadHistory();
 }
-document.getElementById('login-key').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
+document.getElementById('login-key').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 function doLogout() {
   adminKey = '';
   document.getElementById('app').style.display = 'none';
@@ -684,9 +346,7 @@ function doLogout() {
 
 // ── TABS ──────────────────────────────────────────────────────────
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['contacts','compose','history'][i] === name);
-  });
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['contacts','compose','history'][i] === name));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
 }
@@ -704,29 +364,14 @@ function toast(msg, type = 'ok') {
 // ── CONTACTS ──────────────────────────────────────────────────────
 async function loadContacts() {
   document.getElementById('contacts-body').innerHTML =
-    `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px;font-family:var(--mono);">
-      <span class="spinner"></span> Cargando…
-    </td></tr>`;
-
+    `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px;font-family:var(--mono);"><span class="spinner"></span> Cargando…</td></tr>`;
   try {
-    const res  = await fetch(`${WORKER}/mail/contacts`, {
-      headers: { 'x-admin-key': adminKey }
-    });
+    const res  = await fetch(`${WORKER}/mail/contacts`, { headers: { 'x-admin-key': adminKey } });
     const data = await res.json();
-
-    if (!data.ok) {
-      if (res.status === 401) {
-        document.getElementById('login-error').style.display = 'block';
-        doLogout();
-        return;
-      }
-      throw new Error(data.error || 'Error desconocido');
-    }
-
+    if (!data.ok) { if (res.status === 401) { doLogout(); return; } throw new Error(data.error); }
     allContacts = data.contactos || [];
     renderContacts(allContacts);
     document.getElementById('badge-contacts').textContent = allContacts.length;
-
   } catch (e) {
     document.getElementById('contacts-body').innerHTML =
       `<tr><td colspan="6" style="text-align:center;color:var(--danger);padding:40px;">${e.message}</td></tr>`;
@@ -734,113 +379,58 @@ async function loadContacts() {
 }
 
 function renderContacts(list) {
-  const tbody = document.getElementById('contacts-body');
   document.getElementById('contacts-count').textContent = list.length + ' contactos';
-
+  const tbody = document.getElementById('contacts-body');
   if (!list.length) {
-    tbody.innerHTML = `<tr><td colspan="6">
-      <div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Sin contactos aún</div></div>
-    </td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><div>Sin contactos aún</div></div></td></tr>`;
     return;
   }
-
   tbody.innerHTML = list.map(c => {
     if (!c) return '';
-    const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'2-digit' }) : '—';
-    const isSelected = recipients.some(r => r.email === c.email);
+    const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString('es-AR',{day:'2-digit',month:'short',year:'2-digit'}) : '—';
+    const sel  = recipients.some(r => r.email === c.email);
     return `<tr>
-      <td class="checkbox-cell">
-        <input type="checkbox" class="contact-check" value="${c.email}" data-nombre="${c.nombre || ''}"
-          ${isSelected ? 'checked' : ''} onchange="onCheckChange(this)">
-      </td>
+      <td class="checkbox-cell"><input type="checkbox" class="contact-check" value="${c.email}" data-nombre="${(c.nombre||'').replace(/"/g,'&quot;')}" ${sel?'checked':''} onchange="onCheckChange(this)"></td>
       <td><span class="contact-email">${c.email}</span></td>
-      <td><span class="contact-nombre">${c.nombre || '—'}</span></td>
-      <td>${c.etiqueta ? `<span class="tag">${c.etiqueta}</span>` : '—'}</td>
+      <td><span class="contact-nombre">${c.nombre||'—'}</span></td>
+      <td>${c.etiqueta?`<span class="tag">${c.etiqueta}</span>`:'—'}</td>
       <td><span class="date-cell">${date}</span></td>
-      <td>
-        <button class="btn btn-gold btn-sm" onclick="sendQuick('${c.email}','${(c.nombre||'').replace(/'/g,"\\'")}')">
-          ✉ Escribir
-        </button>
-      </td>
+      <td><button class="btn btn-gold btn-sm" onclick="sendQuick('${c.email}','${(c.nombre||'').replace(/'/g,"\\'")}')">✉ Escribir</button></td>
     </tr>`;
   }).join('');
 }
 
 function filterContacts() {
-  const q = document.getElementById('search-input').value.toLowerCase().trim();
-  if (!q) { renderContacts(allContacts); return; }
-  renderContacts(allContacts.filter(c =>
-    c && (c.email?.toLowerCase().includes(q) || c.nombre?.toLowerCase().includes(q) || c.etiqueta?.toLowerCase().includes(q))
-  ));
+  const q = document.getElementById('search-input').value.toLowerCase();
+  renderContacts(allContacts.filter(c => c && (c.email?.toLowerCase().includes(q) || c.nombre?.toLowerCase().includes(q) || c.etiqueta?.toLowerCase().includes(q))));
 }
-
 function toggleAll(cb) {
   document.querySelectorAll('.contact-check').forEach(el => {
     el.checked = cb.checked;
-    const email  = el.value;
-    const nombre = el.dataset.nombre;
-    if (cb.checked) addRecipient(email, nombre);
-    else removeRecipient(email);
+    if (cb.checked) addRecipient(el.value, el.dataset.nombre); else removeRecipient(el.value);
   });
   updateSelectBar();
 }
-
-function onCheckChange(el) {
-  if (el.checked) addRecipient(el.value, el.dataset.nombre);
-  else removeRecipient(el.value);
-  updateSelectBar();
-}
-
+function onCheckChange(el) { if (el.checked) addRecipient(el.value, el.dataset.nombre); else removeRecipient(el.value); updateSelectBar(); }
 function updateSelectBar() {
-  const bar = document.getElementById('select-bar');
-  const n   = recipients.length;
-  bar.classList.toggle('visible', n > 0);
-  document.getElementById('select-count').textContent = n + ' seleccionado' + (n !== 1 ? 's' : '');
+  document.getElementById('select-bar').classList.toggle('visible', recipients.length > 0);
+  document.getElementById('select-count').textContent = recipients.length + ' seleccionado' + (recipients.length !== 1 ? 's' : '');
 }
-
-function clearSelection() {
-  recipients = [];
-  document.querySelectorAll('.contact-check').forEach(el => el.checked = false);
-  document.getElementById('check-all').checked = false;
-  updateSelectBar();
-  renderRecipients();
-}
-
-function sendToSelected() {
-  switchTab('compose');
-  renderRecipients();
-}
-
-function sendQuick(email, nombre) {
-  recipients = [{ email, nombre }];
-  renderRecipients();
-  switchTab('compose');
-}
+function clearSelection() { recipients = []; document.querySelectorAll('.contact-check').forEach(el => el.checked = false); document.getElementById('check-all').checked = false; updateSelectBar(); renderRecipients(); }
+function sendToSelected() { switchTab('compose'); renderRecipients(); }
+function sendQuick(email, nombre) { recipients = [{email, nombre}]; renderRecipients(); switchTab('compose'); }
 
 // ── RECIPIENTS ────────────────────────────────────────────────────
-function addRecipient(email, nombre = '') {
-  if (!email || recipients.some(r => r.email === email)) return;
-  recipients.push({ email, nombre });
-  renderRecipients();
-}
-function removeRecipient(email) {
-  recipients = recipients.filter(r => r.email !== email);
-  renderRecipients();
-  updateSelectBar();
-}
+function addRecipient(email, nombre = '') { if (!email || recipients.some(r => r.email === email)) return; recipients.push({email, nombre}); renderRecipients(); }
+function removeRecipient(email) { recipients = recipients.filter(r => r.email !== email); renderRecipients(); updateSelectBar(); }
 function renderRecipients() {
   const list = document.getElementById('recipients-list');
-  const empty = document.getElementById('empty-recipients');
-  if (!recipients.length) {
-    list.innerHTML = '<div class="empty-recipients" id="empty-recipients">Ningún destinatario aún</div>';
-    return;
-  }
+  if (!recipients.length) { list.innerHTML = '<div class="empty-recipients">Ningún destinatario aún</div>'; return; }
   list.innerHTML = recipients.map(r => `
     <span class="recipient-chip">
-      ${r.nombre ? `<strong>${r.nombre}</strong> &lt;${r.email}&gt;` : r.email}
+      ${r.nombre ? `<strong>${r.nombre}</strong>&nbsp;&lt;${r.email}&gt;` : r.email}
       <button onclick="removeRecipient('${r.email}')">×</button>
-    </span>
-  `).join('');
+    </span>`).join('');
 }
 function addManualRecipient() {
   const input = document.getElementById('manual-email');
@@ -868,19 +458,23 @@ async function sendEmails() {
   let ok = 0, err = 0, errores = [];
 
   for (const r of recipients) {
+    // 1. Reemplazar variables
+    const texto = mensaje
+      .replace(/\{\{nombre\}\}/gi, r.nombre || '')
+      .replace(/\{\{email\}\}/gi,  r.email);
+
+    // 2. Markdown → HTML → wrapper email
+    const html = wrapEmail(mdToHtml(texto));
+
     try {
       const res  = await fetch(`${WORKER}/mail/send`, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
-        body:    JSON.stringify({ email: r.email, nombre: r.nombre, asunto, mensaje }),
+        body: JSON.stringify({ email: r.email, nombre: r.nombre, asunto, html }),
       });
       const data = await res.json();
-      if (data.ok) ok++;
-      else { err++; errores.push(r.email + ': ' + (data.error || '?')); }
-    } catch (e) {
-      err++;
-      errores.push(r.email + ': ' + e.message);
-    }
+      if (data.ok) ok++; else { err++; errores.push(r.email + ': ' + (data.error || '?')); }
+    } catch (e) { err++; errores.push(r.email + ': ' + e.message); }
   }
 
   btn.disabled = false;
@@ -889,52 +483,38 @@ async function sendEmails() {
   if (ok > 0 && err === 0) {
     result.className = 'send-result ok';
     result.style.display = 'block';
-    result.textContent = `✓ ${ok} email${ok > 1 ? 's' : ''} enviado${ok > 1 ? 's' : ''} correctamente`;
-    toast(`${ok} email${ok > 1 ? 's' : ''} enviado${ok > 1 ? 's' : ''}`, 'ok');
+    result.textContent = `✓ ${ok} email${ok>1?'s':''} enviado${ok>1?'s':''} correctamente`;
+    toast(`${ok} email${ok>1?'s':''} enviado${ok>1?'s':''}`, 'ok');
     loadHistory();
-  } else if (err > 0) {
+  } else {
     result.className = 'send-result err';
     result.style.display = 'block';
-    result.innerHTML = `✗ ${err} error${err > 1 ? 'es' : ''}: <br><small>${errores.join('<br>')}</small>`;
-    if (ok > 0) toast(`${ok} enviados, ${err} fallidos`, 'err');
-    else toast('Error al enviar', 'err');
+    result.innerHTML = `✗ ${err} error${err>1?'es':''}: <br><small>${errores.join('<br>')}</small>`;
+    toast('Error al enviar', 'err');
   }
 }
 
 // ── HISTORY ───────────────────────────────────────────────────────
 async function loadHistory() {
   try {
-    const res  = await fetch(`${WORKER}/mail/history`, {
-      headers: { 'x-admin-key': adminKey }
-    });
+    const res  = await fetch(`${WORKER}/mail/history`, { headers: { 'x-admin-key': adminKey } });
     const data = await res.json();
     if (!data.ok) return;
-
     const logs  = data.logs || [];
-    const tbody = document.getElementById('history-body');
     document.getElementById('history-count').textContent = logs.length + ' registros';
     document.getElementById('badge-history').textContent = logs.length;
-
-    if (!logs.length) {
-      tbody.innerHTML = `<tr><td colspan="4">
-        <div class="empty-state"><div class="empty-icon">📨</div><div class="empty-text">Sin historial aún</div></div>
-      </td></tr>`;
-      return;
-    }
-
+    const tbody = document.getElementById('history-body');
+    if (!logs.length) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📨</div><div>Sin historial aún</div></div></td></tr>`; return; }
     tbody.innerHTML = logs.map(l => {
       if (!l) return '';
-      const date = l.createdAt
-        ? new Date(l.createdAt).toLocaleString('es-AR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
-        : '—';
-      return `<tr class="history-row">
-        <td>${date}</td>
-        <td><span class="contact-email">${l.email || '—'}</span></td>
-        <td>${l.asunto || '—'}</td>
+      const date = l.createdAt ? new Date(l.createdAt).toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+      return `<tr>
+        <td><span class="date-cell">${date}</span></td>
+        <td><span class="contact-email">${l.email||'—'}</span></td>
+        <td>${l.asunto||'—'}</td>
         <td><span class="status-ok">enviado</span></td>
       </tr>`;
     }).join('');
-
   } catch (_) {}
 }
 </script>
