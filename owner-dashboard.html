@@ -678,7 +678,7 @@
       </section>
 
       <div id="authWarning" style="display:none;margin:0 0 18px;padding:14px 20px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);border-radius:8px;font-size:13px;color:#c9a84c;font-family:'DM Mono',monospace;">
-        ⚠️ Sin <code>admin_key</code> — mostrando datos de ejemplo. Accedé con <code>?admin_key=TU_KEY</code>
+        ⚠️ No se pudo conectar con el worker — mostrando datos de ejemplo. Verificá que Cloudflare Access esté activo.
       </div>
       <div class="footnote">
         Panel OWNER · LegalAI Arg
@@ -942,51 +942,45 @@
       document.getElementById("endDate").value = toDateInputValue(end);
     }
 
-    // ── Leer cookie (para Cloudflare Access JWT si se activa) ──────────
-    function getCookie(name) {
+    const WORKER_URL = 'https://legalai-worker.finmap-ia.workers.dev';
+
+    // Cloudflare Access pone el JWT en la cookie CF_Authorization automáticamente.
+    // Lo reenviamos al worker en el header Cf-Access-Jwt-Assertion.
+    function getCFJwt() {
       const v = `; ${document.cookie}`;
-      const p = v.split(`; ${name}=`);
+      const p = v.split('; CF_Authorization=');
       if (p.length === 2) return p.pop().split(';').shift();
+      return null;
     }
 
-    // ── Config endpoint ──────────────────────────────────────────────
-    const WORKER_URL = 'https://legalai-worker.finmap-ia.workers.dev';
-    const ADMIN_KEY  = (() => {
-      // Lee ?admin_key=XXX de la URL y lo guarda en sessionStorage
-      // Así solo hay que ingresarlo una vez por sesión
-      const p = new URLSearchParams(window.location.search);
-      const k = p.get('admin_key');
-      if (k) { sessionStorage.setItem('owner_admin_key', k); window.history.replaceState({}, '', window.location.pathname); }
-      return sessionStorage.getItem('owner_admin_key') || '';
-    })();
-
     async function loadDashboardData(){
-      if (!ADMIN_KEY) {
-        document.getElementById('authWarning').style.display = 'block';
-        return mockData; // muestra mock si no hay key
-      }
-      document.getElementById('authWarning').style.display = 'none';
+      const jwt = getCFJwt();
+      const headers = { 'Content-Type': 'application/json' };
+      if (jwt) headers['Cf-Access-Jwt-Assertion'] = jwt;
+
       try {
         const from = document.getElementById('startDate')?.value || '';
         const to   = document.getElementById('endDate')?.value   || '';
-        const params = new URLSearchParams({ admin_key: ADMIN_KEY });
+        const params = new URLSearchParams();
         if (from) params.set('desde', from);
         if (to)   params.set('hasta', to);
 
         const res = await fetch(`${WORKER_URL}/owner/dashboard?${params}`, {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
+          headers,
+          credentials: 'include',   // envía cookies incluyendo CF_Authorization
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (!Array.isArray(data)) throw new Error('Formato inválido');
 
+        document.getElementById('authWarning').style.display = 'none';
         console.log(`✅ ${data.length} registros reales cargados`);
         return data;
 
       } catch (err) {
+        document.getElementById('authWarning').style.display = 'block';
         console.warn('⚠️ Usando mock data:', err.message);
         return mockData;
       }
