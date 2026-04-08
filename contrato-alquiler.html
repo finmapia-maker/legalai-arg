@@ -106,7 +106,7 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
     <span class="precio-det" style="display:block;margin-top:6px;color:var(--gold);opacity:.8">Pago único · sin suscripción</span>
   </div>
 
-  <a class="btn-hero" href="https://legalai-arg.com/#formulario" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){var u=new URLSearchParams(location.search);fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'hero_landing',utm_src:u.get('utm_source')||'',utm_cmp:u.get('utm_campaign')||''})}).catch(function(){});})();">Generar mi contrato ahora →</a>
+  <a class="btn-hero" href="https://legalai-arg.com/#formulario" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){var u=new URLSearchParams(location.search);fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'hero_landing',utm_src:sessionStorage.getItem('legalai_utm_source')||u.get('utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||u.get('utm_campaign')||''})}).catch(function(){});})();">Generar mi contrato ahora →</a>
   <p class="hero-trust">🔒 Pago seguro · Descarga inmediata</p>
 </section>
 
@@ -163,7 +163,7 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
     <p class="sec-body" style="font-size:.86rem;margin:0 auto 26px;text-align:center">Pagás una vez y descargás tu contrato.</p>
     <span class="precio-grande" id="precioGrande"><span class="ld"></span></span>
     <span class="precio-grande-det" id="precioGrandeDet">cargando…</span>
-    <a class="btn-block" href="https://legalai-arg.com/#formulario" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){var u=new URLSearchParams(location.search);fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'precio_landing',utm_src:u.get('utm_source')||'',utm_cmp:u.get('utm_campaign')||''})}).catch(function(){});})();">Generar mi contrato ahora →</a>
+    <a class="btn-block" href="https://legalai-arg.com/#formulario" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){var u=new URLSearchParams(location.search);fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'precio_landing',utm_src:sessionStorage.getItem('legalai_utm_source')||u.get('utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||u.get('utm_campaign')||''})}).catch(function(){});})();">Generar mi contrato ahora →</a>
     <p class="precio-nota">🔒 Pago seguro con MercadoPago · Descarga inmediata</p>
   </div>
 </section>
@@ -223,7 +223,7 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
       <span style="font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold);display:block;line-height:1;min-height:2.1rem" id="ctaMonto"><span class="ld"></span></span>
       <span style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--ink-dim)" id="ctaDet"></span>
     </div><br>
-    <a class="btn-block" href="https://legalai-arg.com/#formulario" style="max-width:360px;margin:0 auto;display:block" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){var u=new URLSearchParams(location.search);fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'cta_final_landing',utm_src:u.get('utm_source')||'',utm_cmp:u.get('utm_campaign')||''})}).catch(function(){});})();">Generar mi contrato ahora →</a>
+    <a class="btn-block" href="https://legalai-arg.com/#formulario" style="max-width:360px;margin:0 auto;display:block" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){var u=new URLSearchParams(location.search);fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'cta_final_landing',utm_src:sessionStorage.getItem('legalai_utm_source')||u.get('utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||u.get('utm_campaign')||''})}).catch(function(){});})();">Generar mi contrato ahora →</a>
   </div>
 </section>
 
