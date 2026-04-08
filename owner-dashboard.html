@@ -1,0 +1,1365 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LegalIA Owner Dashboard</title>
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --panel:#14141b;
+      --panel-2:#1b1b24;
+      --line:#2a2a36;
+      --text:#f3f3f7;
+      --muted:#a7a7b6;
+      --gold:#c9a84c;
+      --green:#2dc071;
+      --red:#ff5f6d;
+      --blue:#4e89ff;
+      --orange:#f59e0b;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    button,input,select{font:inherit}
+
+    .app{
+      display:grid;
+      grid-template-columns:260px 1fr;
+      min-height:100vh;
+    }
+
+    .sidebar{
+      background:linear-gradient(180deg,#0f0f14 0%, #12121a 100%);
+      border-right:1px solid var(--line);
+      padding:24px 18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:26px;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:22px;
+      line-height:1.1;
+      color:var(--gold);
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .nav{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .nav button{
+      width:100%;
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      text-align:left;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .nav button:hover,
+    .nav button.active{
+      background:var(--panel);
+      border-color:var(--gold);
+    }
+
+    .main{
+      padding:24px;
+    }
+
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:20px;
+    }
+
+    .topbar-left h2{
+      margin:0 0 6px 0;
+      font-size:26px;
+    }
+
+    .topbar-left p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .filters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:end;
+      background:var(--panel);
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:150px;
+    }
+
+    .field label{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .field input,
+    .field select{
+      background:var(--panel-2);
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+
+    .btn{
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .btn.primary{
+      background:var(--gold);
+      color:#111;
+    }
+
+    .btn.secondary{
+      background:var(--panel-2);
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .cards{
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      margin-bottom:18px;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .metric-title{
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:10px;
+    }
+
+    .metric-value{
+      font-size:26px;
+      font-weight:800;
+      line-height:1.1;
+      margin-bottom:8px;
+    }
+
+    .metric-sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .ok{color:var(--green)}
+    .bad{color:var(--red)}
+    .warn{color:var(--orange)}
+    .info{color:var(--blue)}
+
+    .content-grid{
+      grid-template-columns:2fr 1fr;
+      align-items:start;
+    }
+
+    .panel-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .panel-title h3{
+      margin:0;
+      font-size:17px;
+    }
+
+    .panel-title p{
+      margin:0;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .chart-wrap{
+      width:100%;
+      overflow:auto;
+    }
+
+    canvas{
+      width:100%;
+      display:block;
+      background:transparent;
+      border-radius:12px;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border-radius:14px;
+      border:1px solid var(--line);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:780px;
+      background:var(--panel-2);
+    }
+
+    th,td{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      font-size:13px;
+      vertical-align:top;
+    }
+
+    th{
+      color:var(--muted);
+      font-weight:600;
+      position:sticky;
+      top:0;
+      background:#191923;
+      z-index:1;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      border:1px solid var(--line);
+      background:#111118;
+      white-space:nowrap;
+    }
+
+    .chip.ok{color:var(--green);border-color:rgba(45,192,113,.35)}
+    .chip.bad{color:var(--red);border-color:rgba(255,95,109,.35)}
+    .chip.warn{color:var(--orange);border-color:rgba(245,158,11,.35)}
+    .chip.info{color:var(--blue);border-color:rgba(78,137,255,.35)}
+
+    .kpis-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .kpi-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+      font-size:14px;
+    }
+
+    .kpi-row:last-child{border-bottom:none}
+
+    .section{
+      display:none;
+    }
+
+    .section.active{
+      display:block;
+    }
+
+    .empty{
+      padding:16px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .footnote{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media (max-width:1200px){
+      .cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .content-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width:900px){
+      .app{grid-template-columns:1fr}
+      .sidebar{
+        position:relative;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
+      .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width:640px){
+      .main{padding:16px}
+      .cards{grid-template-columns:1fr}
+      .filters{padding:12px}
+      .field{min-width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>LegalIA OWNER</h1>
+        <p>Panel integral de control y métricas</p>
+      </div>
+
+      <nav class="nav">
+        <button class="active" data-section="dashboard">Resumen general</button>
+        <button data-section="ventas">Ventas</button>
+        <button data-section="afiliados">Afiliados y comisiones</button>
+        <button data-section="planes">Planes y activaciones</button>
+        <button data-section="metodos">Métodos de pago</button>
+        <button data-section="productos">Productos</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h2>Dashboard OWNER</h2>
+          <p>Facturación, conversión, afiliados, planes, comisiones y rendimiento comercial.</p>
+        </div>
+
+        <div class="filters">
+          <div class="field">
+            <label for="periodPreset">Período</label>
+            <select id="periodPreset">
+              <option value="7d">Últimos 7 días</option>
+              <option value="30d" selected>Últimos 30 días</option>
+              <option value="90d">Últimos 90 días</option>
+              <option value="thisMonth">Este mes</option>
+              <option value="lastMonth">Mes anterior</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="startDate">Desde</label>
+            <input type="date" id="startDate">
+          </div>
+
+          <div class="field">
+            <label for="endDate">Hasta</label>
+            <input type="date" id="endDate">
+          </div>
+
+          <div class="field">
+            <label for="currencyFilter">Moneda</label>
+            <select id="currencyFilter">
+              <option value="ALL" selected>Todas</option>
+              <option value="ARS">ARS</option>
+              <option value="USD">USD</option>
+              <option value="USDT">USDT</option>
+            </select>
+          </div>
+
+          <button class="btn primary" id="applyFilters">Aplicar</button>
+          <button class="btn secondary" id="exportCsv">Exportar CSV</button>
+        </div>
+      </div>
+
+      <section id="dashboard" class="section active">
+        <div class="grid cards">
+          <div class="card">
+            <div class="metric-title">Facturación total</div>
+            <div class="metric-value" id="mBilling">$0</div>
+            <div class="metric-sub" id="mBillingSub">0 operaciones</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-title">Ventas confirmadas</div>
+            <div class="metric-value" id="mSales">0</div>
+            <div class="metric-sub" id="mSalesSub">Aprobadas / activadas</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-title">Ticket promedio</div>
+            <div class="metric-value" id="mAvg">$0</div>
+            <div class="metric-sub" id="mAvgSub">Sobre ventas confirmadas</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-title">Comisiones pendientes</div>
+            <div class="metric-value" id="mPendingCommissions">$0</div>
+            <div class="metric-sub" id="mPendingCommissionsSub">A confirmar / pagar</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-title">Planes activos</div>
+            <div class="metric-value" id="mActivePlans">0</div>
+            <div class="metric-sub" id="mActivePlansSub">Suscripciones vivas</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-title">Afiliados activos</div>
+            <div class="metric-value" id="mActiveAffiliates">0</div>
+            <div class="metric-sub" id="mActiveAffiliatesSub">Con al menos 1 evento</div>
+          </div>
+        </div>
+
+        <div class="grid content-grid">
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Evolución diaria</h3>
+                <p>Facturación por día en el período filtrado</p>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="billingChart" height="120"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>KPIs rápidos</h3>
+                <p>Vista ejecutiva</p>
+              </div>
+            </div>
+            <div class="kpis-list" id="quickKpis"></div>
+          </div>
+        </div>
+
+        <div style="height:16px"></div>
+
+        <div class="grid content-grid">
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Ventas recientes</h3>
+                <p>Últimas operaciones filtradas</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table id="recentSalesTable">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Producto</th>
+                    <th>Método</th>
+                    <th>Cliente</th>
+                    <th>Afiliado</th>
+                    <th>Estado</th>
+                    <th>Monto</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Distribución</h3>
+                <p>Comercial</p>
+              </div>
+            </div>
+            <div class="kpis-list" id="distributionBox"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ventas" class="section">
+        <div class="card">
+          <div class="panel-title">
+            <div>
+              <h3>Detalle de ventas</h3>
+              <p>Documentos, upgrades, packs y planes</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="salesTable">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>ID</th>
+                  <th>Tipo</th>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Moneda</th>
+                  <th>Método</th>
+                  <th>Estado</th>
+                  <th>Afiliado</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="afiliados" class="section">
+        <div class="grid content-grid">
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Eventos de afiliados</h3>
+                <p>Ventas atribuídas y estado de comisión</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table id="affiliateTable">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Afiliado</th>
+                    <th>Venta</th>
+                    <th>Cliente</th>
+                    <th>Moneda</th>
+                    <th>Comisión</th>
+                    <th>Estado</th>
+                    <th>Fuente</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Resumen de comisiones</h3>
+                <p>Por estado</p>
+              </div>
+            </div>
+            <div class="kpis-list" id="commissionSummary"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="planes" class="section">
+        <div class="grid content-grid">
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Planes y suscripciones</h3>
+                <p>Altas, renovaciones y estado</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table id="plansTable">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Plan</th>
+                    <th>Monto</th>
+                    <th>Moneda</th>
+                    <th>Método</th>
+                    <th>Estado</th>
+                    <th>Renueva</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">
+              <div>
+                <h3>Panel rápido</h3>
+                <p>Suscripciones</p>
+              </div>
+            </div>
+            <div class="kpis-list" id="planSummary"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="metodos" class="section">
+        <div class="card">
+          <div class="panel-title">
+            <div>
+              <h3>Métodos de pago</h3>
+              <p>Rendimiento y volumen</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="methodsTable">
+              <thead>
+                <tr>
+                  <th>Método</th>
+                  <th>Operaciones</th>
+                  <th>Facturación</th>
+                  <th>Aprobadas</th>
+                  <th>Pendientes</th>
+                  <th>Fallidas / revertidas</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="productos" class="section">
+        <div class="card">
+          <div class="panel-title">
+            <div>
+              <h3>Productos / servicios</h3>
+              <p>Qué vende más y con mejor ticket</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="productsTable">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Tipo</th>
+                  <th>Ventas</th>
+                  <th>Facturación</th>
+                  <th>Ticket promedio</th>
+                  <th>Afiliadas</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <div class="footnote">
+        Panel OWNER listo para validación visual. Para producción, reemplazá la función <strong>loadDashboardData()</strong> por tu endpoint real del Worker.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const appState = {
+      raw: [],
+      filtered: []
+    };
+
+    const mockData = [
+      {
+        id:"V001",
+        date:"2026-04-08T10:12:00-03:00",
+        type:"documento",
+        product:"Contrato de alquiler",
+        category:"simple",
+        amount:6,
+        currency:"USD",
+        amount_ars:8400,
+        payment_method:"MercadoPago",
+        status:"approved",
+        customer:"cliente1@mail.com",
+        affiliate:"afiliado_a",
+        affiliate_source:"ref",
+        commission_amount:1.2,
+        commission_currency:"USD",
+        commission_status:"confirmed",
+        plan_name:null,
+        active_code:false
+      },
+      {
+        id:"V002",
+        date:"2026-04-07T18:40:00-03:00",
+        type:"upgrade",
+        product:"Upgrade sin marca",
+        category:"upgrade",
+        amount:3,
+        currency:"USD",
+        amount_ars:4200,
+        payment_method:"MercadoPago",
+        status:"approved",
+        customer:"cliente2@mail.com",
+        affiliate:null,
+        affiliate_source:null,
+        commission_amount:0,
+        commission_currency:null,
+        commission_status:null,
+        plan_name:null,
+        active_code:false
+      },
+      {
+        id:"V003",
+        date:"2026-04-06T09:15:00-03:00",
+        type:"plan",
+        product:"Plan PRO",
+        category:"plan",
+        amount:99,
+        currency:"USD",
+        amount_ars:138600,
+        payment_method:"NOWPayments",
+        status:"active",
+        customer:"empresa1@mail.com",
+        affiliate:"afiliado_b",
+        affiliate_source:"ref",
+        commission_amount:19.8,
+        commission_currency:"USDT",
+        commission_status:"pending_payment",
+        plan_name:"PRO",
+        active_code:true
+      },
+      {
+        id:"V004",
+        date:"2026-04-05T11:55:00-03:00",
+        type:"pack",
+        product:"Pack 10 documentos",
+        category:"pack",
+        amount:49,
+        currency:"USD",
+        amount_ars:68600,
+        payment_method:"NOWPayments",
+        status:"approved",
+        customer:"estudio@mail.com",
+        affiliate:"afiliado_a",
+        affiliate_source:"ref",
+        commission_amount:9.8,
+        commission_currency:"USDT",
+        commission_status:"paid",
+        plan_name:null,
+        active_code:true
+      },
+      {
+        id:"V005",
+        date:"2026-04-04T14:22:00-03:00",
+        type:"documento",
+        product:"Poder simple",
+        category:"simple",
+        amount:6,
+        currency:"USD",
+        amount_ars:8400,
+        payment_method:"MercadoPago",
+        status:"pending",
+        customer:"cliente3@mail.com",
+        affiliate:null,
+        affiliate_source:null,
+        commission_amount:0,
+        commission_currency:null,
+        commission_status:null,
+        plan_name:null,
+        active_code:false
+      },
+      {
+        id:"V006",
+        date:"2026-04-03T16:05:00-03:00",
+        type:"plan",
+        product:"Plan Starter",
+        category:"plan",
+        amount:19,
+        currency:"USD",
+        amount_ars:26600,
+        payment_method:"Tarjeta",
+        status:"active",
+        customer:"cliente4@mail.com",
+        affiliate:null,
+        affiliate_source:null,
+        commission_amount:0,
+        commission_currency:null,
+        commission_status:null,
+        plan_name:"Starter",
+        active_code:false
+      },
+      {
+        id:"V007",
+        date:"2026-04-02T12:10:00-03:00",
+        type:"documento",
+        product:"Intimación de pago",
+        category:"intermedio",
+        amount:8,
+        currency:"USD",
+        amount_ars:11200,
+        payment_method:"MercadoPago",
+        status:"approved",
+        customer:"cliente5@mail.com",
+        affiliate:"afiliado_c",
+        affiliate_source:"ref",
+        commission_amount:1.6,
+        commission_currency:"USD",
+        commission_status:"confirmed",
+        plan_name:null,
+        active_code:false
+      },
+      {
+        id:"V008",
+        date:"2026-04-01T20:00:00-03:00",
+        type:"documento",
+        product:"Cesión de derechos",
+        category:"complejo",
+        amount:11,
+        currency:"USD",
+        amount_ars:15400,
+        payment_method:"MercadoPago",
+        status:"refunded",
+        customer:"cliente6@mail.com",
+        affiliate:"afiliado_a",
+        affiliate_source:"ref",
+        commission_amount:2.2,
+        commission_currency:"USD",
+        commission_status:"reverted",
+        plan_name:null,
+        active_code:false
+      }
+    ];
+
+    function formatMoneyARS(value){
+      return new Intl.NumberFormat("es-AR", {
+        style:"currency",
+        currency:"ARS",
+        maximumFractionDigits:0
+      }).format(value || 0);
+    }
+
+    function formatMoney(value, currency="USD"){
+      try{
+        return new Intl.NumberFormat("es-AR", {
+          style:"currency",
+          currency: currency === "USDT" ? "USD" : currency,
+          maximumFractionDigits:2
+        }).format(value || 0);
+      }catch{
+        return `${value || 0} ${currency}`;
+      }
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function statusChip(status){
+      const map = {
+        approved:["ok","Aprobada"],
+        active:["ok","Activo"],
+        pending:["warn","Pendiente"],
+        confirmed:["info","Confirmado"],
+        pending_payment:["warn","Pendiente pago"],
+        paid:["ok","Pagado"],
+        refunded:["bad","Reintegrado"],
+        reverted:["bad","Revertido"],
+        failed:["bad","Fallida"],
+        cancelled:["bad","Cancelado"]
+      };
+      const [cls,label] = map[status] || ["info",status || "-"];
+      return `<span class="chip ${cls}">${escapeHtml(label)}</span>`;
+    }
+
+    function setDefaultDates(){
+      const end = new Date();
+      const start = new Date();
+      start.setDate(end.getDate() - 30);
+
+      document.getElementById("startDate").value = toDateInputValue(start);
+      document.getElementById("endDate").value = toDateInputValue(end);
+    }
+
+    function toDateInputValue(date){
+      const y = date.getFullYear();
+      const m = String(date.getMonth()+1).padStart(2,"0");
+      const d = String(date.getDate()).padStart(2,"0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function applyPresetDates(){
+      const preset = document.getElementById("periodPreset").value;
+      const now = new Date();
+      let start = new Date(now);
+      let end = new Date(now);
+
+      if(preset === "7d"){
+        start.setDate(now.getDate()-7);
+      }else if(preset === "30d"){
+        start.setDate(now.getDate()-30);
+      }else if(preset === "90d"){
+        start.setDate(now.getDate()-90);
+      }else if(preset === "thisMonth"){
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+      }else if(preset === "lastMonth"){
+        start = new Date(now.getFullYear(), now.getMonth()-1, 1);
+        end = new Date(now.getFullYear(), now.getMonth(), 0);
+      }else{
+        return;
+      }
+
+      document.getElementById("startDate").value = toDateInputValue(start);
+      document.getElementById("endDate").value = toDateInputValue(end);
+    }
+
+    async function loadDashboardData(){
+      // PRODUCCIÓN:
+      // const res = await fetch("/owner/dashboard?from=...&to=...");
+      // return await res.json();
+
+      return mockData;
+    }
+
+    function filterData(data){
+      const start = document.getElementById("startDate").value;
+      const end = document.getElementById("endDate").value;
+      const currency = document.getElementById("currencyFilter").value;
+
+      const startDate = start ? new Date(`${start}T00:00:00`) : null;
+      const endDate = end ? new Date(`${end}T23:59:59`) : null;
+
+      return data.filter(item=>{
+        const d = new Date(item.date);
+        const inDate = (!startDate || d >= startDate) && (!endDate || d <= endDate);
+        const inCurrency = currency === "ALL" || item.currency === currency;
+        return inDate && inCurrency;
+      }).sort((a,b)=>new Date(b.date)-new Date(a.date));
+    }
+
+    function calcMetrics(rows){
+      const confirmedStatuses = new Set(["approved","active"]);
+      const confirmedRows = rows.filter(r=>confirmedStatuses.has(r.status));
+      const billingARS = confirmedRows.reduce((acc,r)=>acc + (r.amount_ars || 0), 0);
+      const salesCount = confirmedRows.length;
+      const avgARS = salesCount ? billingARS / salesCount : 0;
+      const pendingCommissionsARS = rows
+        .filter(r=>["confirmed","pending_payment"].includes(r.commission_status))
+        .reduce((acc,r)=>acc + convertCommissionToARS(r), 0);
+      const activePlans = rows.filter(r=>r.type==="plan" && r.status==="active").length;
+      const activeAffiliates = new Set(rows.filter(r=>r.affiliate).map(r=>r.affiliate)).size;
+
+      return {billingARS,salesCount,avgARS,pendingCommissionsARS,activePlans,activeAffiliates,confirmedRows};
+    }
+
+    function convertCommissionToARS(row){
+      if(!row.commission_amount) return 0;
+      if(row.commission_currency === "USD" || row.commission_currency === "USDT"){
+        return row.commission_amount * 1400;
+      }
+      return row.commission_amount;
+    }
+
+    function renderMetrics(rows){
+      const m = calcMetrics(rows);
+
+      document.getElementById("mBilling").textContent = formatMoneyARS(m.billingARS);
+      document.getElementById("mBillingSub").textContent = `${m.salesCount} operaciones confirmadas`;
+
+      document.getElementById("mSales").textContent = String(m.salesCount);
+      document.getElementById("mSalesSub").textContent = "Aprobadas / activadas";
+
+      document.getElementById("mAvg").textContent = formatMoneyARS(m.avgARS);
+      document.getElementById("mAvgSub").textContent = "Promedio por venta confirmada";
+
+      document.getElementById("mPendingCommissions").textContent = formatMoneyARS(m.pendingCommissionsARS);
+      document.getElementById("mPendingCommissionsSub").textContent = "Pendientes / confirmadas";
+
+      document.getElementById("mActivePlans").textContent = String(m.activePlans);
+      document.getElementById("mActivePlansSub").textContent = "Planes con estado activo";
+
+      document.getElementById("mActiveAffiliates").textContent = String(m.activeAffiliates);
+      document.getElementById("mActiveAffiliatesSub").textContent = "Afiliados con movimiento";
+
+      const quick = [
+        ["Conversión confirmada", rows.length ? `${Math.round((m.salesCount / rows.length) * 100)}%` : "0%"],
+        ["Ventas con afiliado", `${rows.filter(r=>r.affiliate).length}`],
+        ["Códigos activados", `${rows.filter(r=>r.active_code).length}`],
+        ["Planes vendidos", `${rows.filter(r=>r.type==="plan").length}`],
+        ["Upgrades vendidos", `${rows.filter(r=>r.type==="upgrade").length}`],
+        ["Packs vendidos", `${rows.filter(r=>r.type==="pack").length}`]
+      ];
+
+      document.getElementById("quickKpis").innerHTML = quick.map(([k,v])=>`
+        <div class="kpi-row">
+          <span>${escapeHtml(k)}</span>
+          <strong>${escapeHtml(v)}</strong>
+        </div>
+      `).join("");
+
+      const distribution = buildDistribution(rows);
+      document.getElementById("distributionBox").innerHTML = distribution.map(([k,v])=>`
+        <div class="kpi-row">
+          <span>${escapeHtml(k)}</span>
+          <strong>${escapeHtml(v)}</strong>
+        </div>
+      `).join("");
+    }
+
+    function buildDistribution(rows){
+      const confirmed = rows.filter(r=>["approved","active"].includes(r.status));
+      const byType = groupSum(confirmed, r=>r.type, r=>r.amount_ars || 0);
+      const sortedTypes = Object.entries(byType).sort((a,b)=>b[1]-a[1]);
+      return sortedTypes.map(([k,v])=>[k, formatMoneyARS(v)]);
+    }
+
+    function groupSum(rows, keyFn, valFn){
+      return rows.reduce((acc,row)=>{
+        const k = keyFn(row) || "-";
+        acc[k] = (acc[k] || 0) + (valFn(row) || 0);
+        return acc;
+      },{});
+    }
+
+    function renderSalesTables(rows){
+      const recentBody = document.querySelector("#recentSalesTable tbody");
+      const salesBody = document.querySelector("#salesTable tbody");
+
+      recentBody.innerHTML = rows.slice(0,10).map(r=>`
+        <tr>
+          <td>${formatDate(r.date)}</td>
+          <td>${escapeHtml(r.type)}</td>
+          <td>${escapeHtml(r.product)}</td>
+          <td>${escapeHtml(r.payment_method)}</td>
+          <td>${escapeHtml(r.customer)}</td>
+          <td>${escapeHtml(r.affiliate || "-")}</td>
+          <td>${statusChip(r.status)}</td>
+          <td>${formatMoneyARS(r.amount_ars || 0)}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="8" class="empty">Sin datos en el período.</td></tr>`;
+
+      salesBody.innerHTML = rows.map(r=>`
+        <tr>
+          <td>${formatDate(r.date)}</td>
+          <td>${escapeHtml(r.id)}</td>
+          <td>${escapeHtml(r.type)}</td>
+          <td>${escapeHtml(r.product)}</td>
+          <td>${escapeHtml(r.category || "-")}</td>
+          <td>${formatMoney(r.amount, r.currency)}</td>
+          <td>${escapeHtml(r.currency)}</td>
+          <td>${escapeHtml(r.payment_method)}</td>
+          <td>${statusChip(r.status)}</td>
+          <td>${escapeHtml(r.affiliate || "-")}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="10" class="empty">Sin ventas en el período.</td></tr>`;
+    }
+
+    function renderAffiliateSection(rows){
+      const body = document.querySelector("#affiliateTable tbody");
+      const affiliateRows = rows.filter(r=>r.affiliate);
+
+      body.innerHTML = affiliateRows.map(r=>`
+        <tr>
+          <td>${formatDate(r.date)}</td>
+          <td>${escapeHtml(r.affiliate)}</td>
+          <td>${escapeHtml(r.product)}</td>
+          <td>${escapeHtml(r.customer)}</td>
+          <td>${escapeHtml(r.commission_currency || "-")}</td>
+          <td>${r.commission_amount ? formatMoney(r.commission_amount, r.commission_currency || "USD") : "-"}</td>
+          <td>${statusChip(r.commission_status)}</td>
+          <td>${escapeHtml(r.affiliate_source || "-")}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="8" class="empty">No hay eventos de afiliados.</td></tr>`;
+
+      const summary = {
+        "Pendientes de pago": affiliateRows.filter(r=>r.commission_status==="pending_payment").reduce((a,r)=>a+convertCommissionToARS(r),0),
+        "Confirmadas": affiliateRows.filter(r=>r.commission_status==="confirmed").reduce((a,r)=>a+convertCommissionToARS(r),0),
+        "Pagadas": affiliateRows.filter(r=>r.commission_status==="paid").reduce((a,r)=>a+convertCommissionToARS(r),0),
+        "Revertidas": affiliateRows.filter(r=>r.commission_status==="reverted").reduce((a,r)=>a+convertCommissionToARS(r),0)
+      };
+
+      document.getElementById("commissionSummary").innerHTML = Object.entries(summary).map(([k,v])=>`
+        <div class="kpi-row">
+          <span>${escapeHtml(k)}</span>
+          <strong>${formatMoneyARS(v)}</strong>
+        </div>
+      `).join("");
+    }
+
+    function renderPlansSection(rows){
+      const body = document.querySelector("#plansTable tbody");
+      const planRows = rows.filter(r=>r.type==="plan");
+
+      body.innerHTML = planRows.map(r=>`
+        <tr>
+          <td>${formatDate(r.date)}</td>
+          <td>${escapeHtml(r.customer)}</td>
+          <td>${escapeHtml(r.plan_name || r.product)}</td>
+          <td>${formatMoney(r.amount, r.currency)}</td>
+          <td>${escapeHtml(r.currency)}</td>
+          <td>${escapeHtml(r.payment_method)}</td>
+          <td>${statusChip(r.status)}</td>
+          <td>${r.status === "active" ? "Sí" : "No"}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="8" class="empty">No hay planes en el período.</td></tr>`;
+
+      const summary = {
+        "Activos": planRows.filter(r=>r.status==="active").length,
+        "Starter": planRows.filter(r=>(r.plan_name || "").toLowerCase()==="starter").length,
+        "Standard": planRows.filter(r=>(r.plan_name || "").toLowerCase()==="standard").length,
+        "PRO": planRows.filter(r=>(r.plan_name || "").toLowerCase()==="pro").length,
+        "Business": planRows.filter(r=>(r.plan_name || "").toLowerCase()==="business").length,
+        "Enterprise": planRows.filter(r=>(r.plan_name || "").toLowerCase()==="enterprise").length
+      };
+
+      document.getElementById("planSummary").innerHTML = Object.entries(summary).map(([k,v])=>`
+        <div class="kpi-row">
+          <span>${escapeHtml(k)}</span>
+          <strong>${escapeHtml(String(v))}</strong>
+        </div>
+      `).join("");
+    }
+
+    function renderMethodsSection(rows){
+      const body = document.querySelector("#methodsTable tbody");
+      const groups = {};
+
+      rows.forEach(r=>{
+        const key = r.payment_method || "-";
+        if(!groups[key]){
+          groups[key] = {ops:0,billing:0,approved:0,pending:0,bad:0};
+        }
+        groups[key].ops += 1;
+        if(["approved","active"].includes(r.status)){
+          groups[key].billing += (r.amount_ars || 0);
+          groups[key].approved += 1;
+        }else if(["pending","confirmed","pending_payment"].includes(r.status)){
+          groups[key].pending += 1;
+        }else{
+          groups[key].bad += 1;
+        }
+      });
+
+      const rowsHtml = Object.entries(groups).map(([method,v])=>`
+        <tr>
+          <td>${escapeHtml(method)}</td>
+          <td>${v.ops}</td>
+          <td>${formatMoneyARS(v.billing)}</td>
+          <td>${v.approved}</td>
+          <td>${v.pending}</td>
+          <td>${v.bad}</td>
+        </tr>
+      `).join("");
+
+      body.innerHTML = rowsHtml || `<tr><td colspan="6" class="empty">No hay datos de métodos de pago.</td></tr>`;
+    }
+
+    function renderProductsSection(rows){
+      const body = document.querySelector("#productsTable tbody");
+      const groups = {};
+
+      rows.forEach(r=>{
+        const key = r.product || "-";
+        if(!groups[key]){
+          groups[key] = {
+            type:r.type || "-",
+            sales:0,
+            billing:0,
+            affiliateSales:0
+          };
+        }
+        groups[key].sales += 1;
+        if(["approved","active"].includes(r.status)){
+          groups[key].billing += (r.amount_ars || 0);
+        }
+        if(r.affiliate) groups[key].affiliateSales += 1;
+      });
+
+      const sorted = Object.entries(groups).sort((a,b)=>b[1].billing-a[1].billing);
+
+      body.innerHTML = sorted.map(([product,v])=>`
+        <tr>
+          <td>${escapeHtml(product)}</td>
+          <td>${escapeHtml(v.type)}</td>
+          <td>${v.sales}</td>
+          <td>${formatMoneyARS(v.billing)}</td>
+          <td>${formatMoneyARS(v.sales ? v.billing / v.sales : 0)}</td>
+          <td>${v.affiliateSales}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="6" class="empty">No hay productos en el período.</td></tr>`;
+    }
+
+    function formatDate(dateStr){
+      const d = new Date(dateStr);
+      return new Intl.DateTimeFormat("es-AR", {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      }).format(d);
+    }
+
+    function drawBillingChart(rows){
+      const canvas = document.getElementById("billingChart");
+      const ctx = canvas.getContext("2d");
+      const ratio = window.devicePixelRatio || 1;
+      const cssWidth = canvas.clientWidth || 900;
+      const cssHeight = 120;
+      canvas.width = cssWidth * ratio;
+      canvas.height = cssHeight * ratio;
+      ctx.scale(ratio, ratio);
+
+      ctx.clearRect(0,0,cssWidth,cssHeight);
+
+      const daily = {};
+      rows.filter(r=>["approved","active"].includes(r.status)).forEach(r=>{
+        const key = r.date.slice(0,10);
+        daily[key] = (daily[key] || 0) + (r.amount_ars || 0);
+      });
+
+      const keys = Object.keys(daily).sort();
+      if(keys.length === 0){
+        ctx.fillStyle = "#a7a7b6";
+        ctx.font = "14px Inter, sans-serif";
+        ctx.fillText("Sin datos de facturación en el período.", 12, 28);
+        return;
+      }
+
+      const values = keys.map(k=>daily[k]);
+      const max = Math.max(...values, 1);
+
+      const padding = {top:12,right:12,bottom:24,left:12};
+      const chartW = cssWidth - padding.left - padding.right;
+      const chartH = cssHeight - padding.top - padding.bottom;
+
+      ctx.strokeStyle = "rgba(255,255,255,.08)";
+      ctx.lineWidth = 1;
+
+      for(let i=0;i<4;i++){
+        const y = padding.top + (chartH/3)*i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left,y);
+        ctx.lineTo(cssWidth-padding.right,y);
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      values.forEach((v,i)=>{
+        const x = padding.left + (chartW * (keys.length === 1 ? 0.5 : i/(keys.length-1)));
+        const y = padding.top + chartH - ((v/max) * chartH);
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      });
+      ctx.strokeStyle = "#c9a84c";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      values.forEach((v,i)=>{
+        const x = padding.left + (chartW * (keys.length === 1 ? 0.5 : i/(keys.length-1)));
+        const y = padding.top + chartH - ((v/max) * chartH);
+        ctx.beginPath();
+        ctx.arc(x,y,3,0,Math.PI*2);
+        ctx.fillStyle = "#c9a84c";
+        ctx.fill();
+      });
+
+      ctx.fillStyle = "#a7a7b6";
+      ctx.font = "11px Inter, sans-serif";
+      const step = Math.max(1, Math.ceil(keys.length / 6));
+      keys.forEach((k,i)=>{
+        if(i % step !== 0 && i !== keys.length-1) return;
+        const x = padding.left + (chartW * (keys.length === 1 ? 0.5 : i/(keys.length-1)));
+        ctx.fillText(k.slice(5), x - 14, cssHeight - 6);
+      });
+    }
+
+    function exportFilteredCsv(){
+      const rows = appState.filtered;
+      const headers = ["date","id","type","product","category","amount","currency","amount_ars","payment_method","status","customer","affiliate","commission_amount","commission_currency","commission_status","plan_name","active_code"];
+      const csv = [
+        headers.join(","),
+        ...rows.map(r => headers.map(h => {
+          const val = r[h] ?? "";
+          return `"${String(val).replaceAll('"','""')}"`
+        }).join(","))
+      ].join("\n");
+
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `owner_dashboard_${Date.now()}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function setupSectionNav(){
+      document.querySelectorAll(".nav button").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+          btn.classList.add("active");
+
+          document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active"));
+          document.getElementById(btn.dataset.section).classList.add("active");
+        });
+      });
+    }
+
+    async function refreshDashboard(){
+      const raw = await loadDashboardData();
+      appState.raw = raw;
+      appState.filtered = filterData(raw);
+
+      renderMetrics(appState.filtered);
+      renderSalesTables(appState.filtered);
+      renderAffiliateSection(appState.filtered);
+      renderPlansSection(appState.filtered);
+      renderMethodsSection(appState.filtered);
+      renderProductsSection(appState.filtered);
+      drawBillingChart(appState.filtered);
+    }
+
+    document.getElementById("periodPreset").addEventListener("change", ()=>{
+      applyPresetDates();
+    });
+
+    document.getElementById("applyFilters").addEventListener("click", refreshDashboard);
+    document.getElementById("exportCsv").addEventListener("click", exportFilteredCsv);
+
+    window.addEventListener("resize", ()=>{
+      drawBillingChart(appState.filtered || []);
+    });
+
+    setDefaultDates();
+    setupSectionNav();
+    refreshDashboard();
+  </script>
+</body>
+</html>
