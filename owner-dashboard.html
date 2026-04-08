@@ -678,7 +678,7 @@
       </section>
 
       <div id="authWarning" style="display:none;margin:0 0 18px;padding:14px 20px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);border-radius:8px;font-size:13px;color:#c9a84c;font-family:'DM Mono',monospace;">
-        ⚠️ No se pudo conectar con el worker — mostrando datos de ejemplo. Verificá que Cloudflare Access esté activo.
+        ⚠️ Sin admin_key — mostrando datos de ejemplo. Accedé con <code style='background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px'>?admin_key=TU_KEY</code> una sola vez — queda guardado en la sesión.
       </div>
       <div class="footnote">
         Panel OWNER · LegalAI Arg
@@ -944,31 +944,32 @@
 
     const WORKER_URL = 'https://legalai-worker.finmap-ia.workers.dev';
 
-    // Cloudflare Access pone el JWT en la cookie CF_Authorization automáticamente.
-    // Lo reenviamos al worker en el header Cf-Access-Jwt-Assertion.
-    function getCFJwt() {
-      const v = `; ${document.cookie}`;
-      const p = v.split('; CF_Authorization=');
-      if (p.length === 2) return p.pop().split(';').shift();
-      return null;
-    }
+    // ADMIN_KEY: ingresala una vez con ?admin_key=TU_KEY — queda en sessionStorage.
+    const ADMIN_KEY = (() => {
+      const p = new URLSearchParams(window.location.search);
+      const k = p.get('admin_key');
+      if (k) {
+        sessionStorage.setItem('owner_admin_key', k);
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+      return sessionStorage.getItem('owner_admin_key') || '';
+    })();
 
     async function loadDashboardData(){
-      const jwt = getCFJwt();
-      const headers = { 'Content-Type': 'application/json' };
-      if (jwt) headers['Cf-Access-Jwt-Assertion'] = jwt;
-
+      if (!ADMIN_KEY) {
+        document.getElementById('authWarning').style.display = 'block';
+        return mockData;
+      }
       try {
         const from = document.getElementById('startDate')?.value || '';
         const to   = document.getElementById('endDate')?.value   || '';
-        const params = new URLSearchParams();
+        const params = new URLSearchParams({ admin_key: ADMIN_KEY });
         if (from) params.set('desde', from);
         if (to)   params.set('hasta', to);
 
         const res = await fetch(`${WORKER_URL}/owner/dashboard?${params}`, {
           method: 'GET',
-          headers,
-          credentials: 'include',   // envía cookies incluyendo CF_Authorization
+          headers: { 'Content-Type': 'application/json' },
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
