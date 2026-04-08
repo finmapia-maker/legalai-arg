@@ -550,7 +550,7 @@ footer a:hover{color:var(--gold);}
       <div class="alert grn alert-show" style="margin-top:12px;">✓ El documento final es idéntico a esta vista previa</div>
       <div class="alert err" id="alertPreview"></div>
 
-      <button class="btn gold" id="btnPagarDesdePreview" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_preview',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(function(){});})();irAlPagoDesdePreview()">Pagar y obtener documento →</button>
+      <button class="btn gold" id="btnPagarDesdePreview" onclick="(function(){var v=typeof G!=='undefined'&&G.precio_usd?G.precio_usd:5;gtag('event','conversion',{'send_to':'AW-18073890544','value':v,'currency':'USD'});})();(function(){fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_preview',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||''})}).catch(function(){});})();irAlPagoDesdePreview()">Pagar y obtener documento →</button>
       <button class="btn ghost" onclick="volverDatosDesdePreview()">← Volver y editar datos</button>
     </div>
 
@@ -577,7 +577,7 @@ footer a:hover{color:var(--gold);}
       </div>
 
       <div class="alert err" id="alert3"></div>
-      <button class="btn gold" id="btnPagar" onclick="gtag('event', 'conversion', {'send_to': 'AW-18073890544'});(function(){fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_mp',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(function(){});})();procesarPago()">Pagar con MercadoPago →</button>
+      <button class="btn gold" id="btnPagar" onclick="(function(){var v=typeof G!=='undefined'&&G.precio_usd?G.precio_usd:5;gtag('event','conversion',{'send_to':'AW-18073890544','value':v,'currency':'USD'});})();(function(){fetch('https://legalai-worker.finmap-ia.workers.dev/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_mp',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||''})}).catch(function(){});})();procesarPago()">Pagar con MercadoPago →</button>
       <button class="btn ghost" onclick="volver()">← Volver y editar datos</button>
     </div>
 
@@ -1769,7 +1769,7 @@ async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPa
     const ref = sessionStorage.getItem('legalai_ref') || null;
     const res  = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, montoARS, descripcion, externalRef, datosPago: Object.assign({}, datosPago, {utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',utm_cnt:sessionStorage.getItem('legalai_utm_content')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}), ref }),
+      body: JSON.stringify({ tipo, montoARS, descripcion, externalRef, ref, datosPago: Object.assign({}, datosPago, {utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',utm_cnt:sessionStorage.getItem('legalai_utm_content')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}) }),
     });
     const data = await res.json();
     if (!data.init_point) throw new Error(data.detalle || data.error || 'Error al crear el pago');
@@ -2198,9 +2198,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('load', () => {
-  // Capturar UTMs y gclid para tracking de conversion
+  // Capturar UTMs, gclid y device al cargar — para tracking de conversión
   (function(){var p=new URLSearchParams(window.location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'].forEach(function(k){var v=p.get(k);if(v)sessionStorage.setItem('legalai_'+k,v);});sessionStorage.setItem('legalai_device',/mobile|android|iphone|ipad/i.test(navigator.userAgent)?'Mobile':'Desktop');})();
-
   const t = localStorage.getItem('theme') || 'system';
   applyTheme(t);
   ['Light','System','Dark'].forEach(x =>
