@@ -1420,6 +1420,15 @@ async function enviarSolicitudAfiliado() {
 }
 
 /* ── AFILIADOS: tracking del ref en sessionStorage ──────────────────────── */
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get("ref");
+
+  if (ref) {
+    sessionStorage.setItem("ref", ref);
+  }
+})();
+  
 (function captureRef() {
   const ref = new URLSearchParams(window.location.search).get('ref');
   if (ref) {
