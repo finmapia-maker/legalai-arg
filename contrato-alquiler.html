@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18073890544');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contrato de Alquiler Online | LegalAI Argentina</title>
@@ -98,7 +106,7 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
     <span class="precio-det" style="display:block;margin-top:6px;color:var(--gold);opacity:.8">Pago único · sin suscripción</span>
   </div>
 
-  <a class="btn-hero" href="https://legalai-arg.com/#formulario">Generar mi contrato ahora →</a>
+  <a class="btn-hero" href="https://legalai-arg.com/#formulario" onclick="try{gtag("event","conversion",{"send_to":"AW-18073890544"});}catch(_){}">Generar mi contrato ahora →</a>
   <p class="hero-trust">🔒 Pago seguro · Descarga inmediata</p>
 </section>
 
@@ -155,7 +163,7 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
     <p class="sec-body" style="font-size:.86rem;margin:0 auto 26px;text-align:center">Pagás una vez y descargás tu contrato.</p>
     <span class="precio-grande" id="precioGrande"><span class="ld"></span></span>
     <span class="precio-grande-det" id="precioGrandeDet">cargando…</span>
-    <a class="btn-block" href="https://legalai-arg.com/#formulario">Generar mi contrato ahora →</a>
+    <a class="btn-block" href="https://legalai-arg.com/#formulario" onclick="try{gtag("event","conversion",{"send_to":"AW-18073890544"});}catch(_){}">Generar mi contrato ahora →</a>
     <p class="precio-nota">🔒 Pago seguro con MercadoPago · Descarga inmediata</p>
   </div>
 </section>
@@ -215,7 +223,7 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
       <span style="font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold);display:block;line-height:1;min-height:2.1rem" id="ctaMonto"><span class="ld"></span></span>
       <span style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--ink-dim)" id="ctaDet"></span>
     </div><br>
-    <a class="btn-block" href="https://legalai-arg.com/#formulario" style="max-width:360px;margin:0 auto;display:block">Generar mi contrato ahora →</a>
+    <a class="btn-block" href="https://legalai-arg.com/#formulario" style="max-width:360px;margin:0 auto;display:block" onclick="try{gtag("event","conversion",{"send_to":"AW-18073890544"});}catch(_){}">Generar mi contrato ahora →</a>
   </div>
 </section>
 
@@ -228,40 +236,50 @@ footer{padding:36px 40px;display:flex;align-items:center;justify-content:space-b
 // Mismo PRECIO_USD que CONFIG.PRECIO_USD en index.html
 const PRECIO_USD = 5;
 
+// Fallback ARS hardcodeado — se usa solo si TODAS las APIs fallan
+// Actualizar manualmente cada 30-60 dias si hace falta
+const FALLBACK_ARS = 1200; // valor conservador orientativo
+const FALLBACK_FUENTE = 'ref.';
+
 let cotizacion = { valor: null, fuente: null };
 
 async function obtenerCotizacion() {
   // Fuente 1 — MEP
   try {
-    const r = await fetch('https://dolarapi.com/v1/dolares/bolsa', { signal: AbortSignal.timeout(4000) });
+    const r = await fetch('https://dolarapi.com/v1/dolares/bolsa', { signal: AbortSignal.timeout(5000) });
     const d = await r.json();
     if (d?.venta && d.venta > 0) { cotizacion = { valor: d.venta, fuente: 'MEP' }; return cotizacion; }
   } catch(_) {}
   // Fuente 2 — Oficial
   try {
-    const r = await fetch('https://dolarapi.com/v1/dolares/oficial', { signal: AbortSignal.timeout(4000) });
+    const r = await fetch('https://dolarapi.com/v1/dolares/oficial', { signal: AbortSignal.timeout(5000) });
     const d = await r.json();
     if (d?.venta && d.venta > 0) { cotizacion = { valor: d.venta, fuente: 'Oficial' }; return cotizacion; }
   } catch(_) {}
-  // Fuente 3 — BNA
+  // Fuente 3 — BNA via bluelytics
   try {
-    const r = await fetch('https://api.bluelytics.com.ar/v2/latest', { signal: AbortSignal.timeout(4000) });
+    const r = await fetch('https://api.bluelytics.com.ar/v2/latest', { signal: AbortSignal.timeout(5000) });
     const d = await r.json();
     if (d?.official?.value_sell > 0) { cotizacion = { valor: d.official.value_sell, fuente: 'BNA' }; return cotizacion; }
   } catch(_) {}
-  cotizacion = { valor: null, fuente: null };
+  // Fallback — siempre ARS, nunca USD al usuario argentino
+  cotizacion = { valor: FALLBACK_ARS, fuente: FALLBACK_FUENTE };
   return cotizacion;
 }
 
 function renderPrecios(cot) {
   let monto, detalle;
+  // Siempre ARS si hay valor (incluyendo fallback)
   if (cot?.valor) {
     const totalARS = Math.ceil(PRECIO_USD * cot.valor / 100) * 100;
     monto   = '$ ' + totalARS.toLocaleString('es-AR');
-    detalle = 'USD ' + PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
+    detalle = cot.fuente === FALLBACK_FUENTE
+      ? 'Precio en pesos argentinos'
+      : 'USD ' + PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
   } else {
-    monto   = 'USD ' + PRECIO_USD;
-    detalle = 'por documento';
+    // Nunca deberia llegar aca, pero por si acaso
+    monto   = '$ ' + (PRECIO_USD * FALLBACK_ARS).toLocaleString('es-AR');
+    detalle = 'Precio en pesos argentinos';
   }
   ['heroMonto','precioGrande','ctaMonto'].forEach(id => {
     const el = document.getElementById(id);
