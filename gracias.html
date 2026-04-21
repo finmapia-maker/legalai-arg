@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Gracias por tu compra! | LegalAI Arg</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18073890544');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ── TEMAS — idénticos al index ─────────────────────────────────── */
+:root {
+  --ink:       #0f1117;
+  --paper:     #f7f3ec;
+  --cream:     #ede8dc;
+  --surface:   #ffffff;
+  --gold:      #c8a84b;
+  --gold-dim:  rgba(200,168,75,0.12);
+  --sage:      #3d5a46;
+  --sage-dim:  rgba(61,90,70,0.09);
+  --mist:      #6b7580;
+  --line:      rgba(15,17,23,0.1);
+  --btn-bg:    #0f1117;
+  --btn-txt:   #c8a84b;
+}
+[data-theme="dark"] {
+  --ink:       #eceef2;
+  --paper:     #0c0e12;
+  --cream:     #141720;
+  --surface:   #1c2030;
+  --gold:      #d4a847;
+  --gold-dim:  rgba(212,168,71,0.13);
+  --sage:      #6abf8a;
+  --sage-dim:  rgba(106,191,138,0.1);
+  --mist:      #7a8494;
+  --line:      rgba(255,255,255,0.07);
+  --btn-bg:    #d4a847;
+  --btn-txt:   #0c0e12;
+}
+/* Fondo claro forzado si viene de landing (clase en <html>) */
+[data-from="landing"] {
+  --ink:       #0f1117;
+  --paper:     #f5f4f0;
+  --cream:     #ede8dc;
+  --surface:   #ffffff;
+  --gold:      #c9a84c;
+  --gold-dim:  rgba(201,168,76,0.1);
+  --mist:      #6b7580;
+  --line:      rgba(15,17,23,0.1);
+  --btn-bg:    #c9a84c;
+  --btn-txt:   #0a0a0a;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;transition:background .25s,color .25s}
+
+/* ── NAV ── */
+nav{padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:var(--ink);text-decoration:none}
+.logo span{color:var(--gold)}
+.nav-link{font-size:.82rem;color:var(--mist);text-decoration:none;transition:color .15s}
+.nav-link:hover{color:var(--ink)}
+
+/* ── HERO GRACIAS ── */
+.gracias-hero{padding:64px 24px 48px;text-align:center;max-width:640px;margin:0 auto}
+.check-circle{width:72px;height:72px;border-radius:50%;background:var(--sage-dim);border:2px solid var(--sage);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;font-size:2rem}
+[data-theme="dark"] .check-circle,[data-from="landing"] .check-circle{background:rgba(201,168,76,.12);border-color:var(--gold)}
+.gracias-kicker{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.gracias-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,2.8rem);font-weight:900;line-height:1.12;margin-bottom:14px;letter-spacing:-.02em}
+.gracias-hero p{font-size:1rem;color:var(--mist);max-width:420px;margin:0 auto 32px;line-height:1.65}
+
+/* botón volver */
+.btn-primary{display:inline-block;background:var(--btn-bg);color:var(--btn-txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.92rem;padding:13px 32px;border-radius:8px;text-decoration:none;transition:opacity .15s,transform .12s}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+
+/* ── SEPARADOR ── */
+.divider{height:1px;background:var(--line);margin:0 24px}
+
+/* ── RECONVERSIÓN ── */
+.reconv-section{padding:52px 24px;max-width:900px;margin:0 auto}
+.reconv-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:8px}
+.reconv-sub{font-size:.88rem;color:var(--mist);text-align:center;margin-bottom:36px}
+
+/* Cards de documentos sugeridos */
+.docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px}
+.doc-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;cursor:pointer;text-decoration:none;color:var(--ink);transition:border-color .2s,transform .15s,box-shadow .15s;display:block}
+.doc-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+[data-theme="dark"] .doc-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.doc-icon{font-size:1.6rem;margin-bottom:10px}
+.doc-name{font-weight:600;font-size:.9rem;margin-bottom:4px;line-height:1.3}
+.doc-desc{font-size:.78rem;color:var(--mist);line-height:1.45}
+.doc-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);padding:2px 8px;border-radius:10px;margin-top:8px}
+
+/* ── AFILIADOS CTA ── */
+.aff-banner{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:32px 36px;display:flex;align-items:center;gap:28px;margin-bottom:48px}
+.aff-icon{font-size:2.4rem;flex-shrink:0}
+.aff-txt h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.aff-txt p{font-size:.85rem;color:var(--mist);line-height:1.55;margin-bottom:14px}
+.btn-aff{display:inline-block;background:var(--gold);color:#0a0a0a;font-weight:700;font-size:.83rem;padding:10px 22px;border-radius:7px;text-decoration:none;transition:opacity .15s}
+.btn-aff:hover{opacity:.85}
+
+/* ── PACK BANNER ── */
+.pack-banner{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:48px}
+.pack-left h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;margin-bottom:5px}
+.pack-left p{font-size:.83rem;color:var(--mist);line-height:1.5}
+.pack-badge{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--sage);background:var(--sage-dim);padding:3px 10px;border-radius:10px;margin-bottom:10px;display:inline-block}
+[data-theme="dark"] .pack-badge{color:#6abf8a}
+.btn-pack{display:inline-block;background:var(--btn-bg);color:var(--btn-txt);font-weight:700;font-size:.83rem;padding:10px 22px;border-radius:7px;text-decoration:none;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+.btn-pack:hover{opacity:.85}
+
+/* ── FOOTER ── */
+footer{padding:28px 32px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+footer span{font-size:.75rem;color:var(--mist)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .docs-grid{grid-template-columns:1fr 1fr}
+  .aff-banner{flex-direction:column;text-align:center;padding:24px 20px}
+  .pack-banner{flex-direction:column;gap:16px}
+  nav{padding:14px 20px}
+  .reconv-section{padding:36px 20px}
+  .gracias-hero{padding:48px 20px 36px}
+}
+@media(max-width:420px){
+  .docs-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="https://legalai-arg.com">Legal<span>AI</span> Arg</a>
+  <a class="nav-link" href="https://legalai-arg.com">Volver al inicio</a>
+</nav>
+
+<!-- HERO -->
+<div class="gracias-hero">
+  <div class="check-circle">✓</div>
+  <div class="gracias-kicker">Pago confirmado</div>
+  <h1>¡Tu documento está listo!</h1>
+  <p>Revisá tu correo — el PDF llegó a tu casilla. También podés volver al sitio para descargarlo nuevamente.</p>
+  <a class="btn-primary" href="https://legalai-arg.com">Volver al inicio →</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- RECONVERSIÓN -->
+<div class="reconv-section">
+
+  <!-- Pack 3 documentos -->
+  <div class="pack-banner">
+    <div class="pack-left">
+      <span class="pack-badge">💰 Ahorrás 20%</span>
+      <h3>¿Necesitás más documentos?</h3>
+      <p>Con el pack de 3 documentos pagás menos por cada uno. Ideal si tenés que hacer más contratos o necesitás otro tipo de documento.</p>
+    </div>
+    <a class="btn-pack" href="https://legalai-arg.com/#formulario">Armar mi pack →</a>
+  </div>
+
+  <!-- Documentos sugeridos -->
+  <div class="reconv-title">Otros documentos que suelen necesitar</div>
+  <p class="reconv-sub">Generados con los mismos datos, listos en minutos</p>
+
+  <div class="docs-grid">
+    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Carta documento')">
+      <div class="doc-icon">📨</div>
+      <div class="doc-name">Carta documento</div>
+      <div class="doc-desc">Para notificar formalmente al inquilino o propietario ante incumplimientos.</div>
+      <div class="doc-badge">Muy solicitado</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Acuerdo de rescisión de contrato de alquiler')">
+      <div class="doc-icon">🤝</div>
+      <div class="doc-name">Rescisión de alquiler</div>
+      <div class="doc-desc">Para finalizar el contrato de mutuo acuerdo antes del vencimiento.</div>
+      <div class="doc-badge">Relacionado</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Addenda o modificación de contrato de alquiler')">
+      <div class="doc-icon">📝</div>
+      <div class="doc-name">Addenda al contrato</div>
+      <div class="doc-desc">Para agregar cláusulas o modificar condiciones del contrato original.</div>
+      <div class="doc-badge">Relacionado</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Recibo de pago de alquiler')">
+      <div class="doc-icon">🧾</div>
+      <div class="doc-name">Recibo de alquiler</div>
+      <div class="doc-desc">Comprobante de pago mensual del canon locativo.</div>
+      <div class="doc-badge">Popular</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Contrato de comodato')">
+      <div class="doc-icon">🏠</div>
+      <div class="doc-name">Comodato</div>
+      <div class="doc-desc">Para préstamo de un inmueble sin cobrar alquiler, con todas las garantías.</div>
+      <div class="doc-badge">Alternativa</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Poder simple de representación')">
+      <div class="doc-icon">📋</div>
+      <div class="doc-name">Poder simple</div>
+      <div class="doc-desc">Para autorizar a otra persona a actuar en tu nombre en trámites.</div>
+      <div class="doc-badge">Complementario</div>
+    </a>
+  </div>
+
+  <!-- Banner afiliados -->
+  <div class="aff-banner">
+    <div class="aff-icon">💼</div>
+    <div class="aff-txt">
+      <h3>¿Conocés a alguien que alquila o arrienda?</h3>
+      <p>Compartí tu link de afiliado y ganás el 20% de cada venta confirmada. Sin inversión, sin límite de ganancias. Te pagamos en 48hs hábiles.</p>
+      <a class="btn-aff" href="https://legalai-arg.com/#aff-form">Quiero ser afiliado →</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>© LegalAI Arg</span>
+  <span>Orientativo. No reemplaza asesoramiento legal profesional.</span>
+</footer>
+
+<script>
+// ── Heredar tema ──────────────────────────────────────────────────
+(function() {
+  var p = new URLSearchParams(window.location.search);
+  var origen = p.get('origen') || sessionStorage.getItem('legalai_origen') || '';
+
+  if (origen === 'landing') {
+    // Viene de contrato-alquiler.html (fondo claro forzado)
+    document.documentElement.setAttribute('data-from', 'landing');
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    // Hereda el tema del index (localStorage)
+    var t = localStorage.getItem('theme') || 'system';
+    var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+      if ((localStorage.getItem('theme') || 'system') === 'system') {
+        var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+      }
+    });
+  }
+})();
+
+// ── Tracking conversión real ──────────────────────────────────────
+(function() {
+  var p = new URLSearchParams(window.location.search);
+  var paymentId = p.get('payment_id') || p.get('collection_id') || '';
+  var tipo = p.get('tipo') || 'doc';
+
+  // Solo disparar si hay payment_id real (no en visitas directas)
+  if (!paymentId) return;
+
+  try {
+    var precioUSD = parseFloat(sessionStorage.getItem('legalai_precio_usd') || '5') || 5;
+    gtag('event', 'conversion', {
+      'send_to':        'AW-18073890544',
+      'value':          precioUSD,
+      'currency':       'USD',
+      'transaction_id': paymentId,
+    });
+  } catch(_) {}
+})();
+
+// ── Sugerir doc: pre-cargar en sessionStorage para el index ───────
+function sugerirDoc(nombre) {
+  try { sessionStorage.setItem('legalai_sugerencia', nombre); } catch(_) {}
+}
+
+// ── Limpiar params de MP de la URL ────────────────────────────────
+(function() {
+  var p = new URLSearchParams(window.location.search);
+  if (p.get('payment_id') || p.get('collection_id') || p.get('status')) {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+})();
+</script>
+</body>
+</html>
