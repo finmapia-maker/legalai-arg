@@ -1787,11 +1787,13 @@ async function procesarPago() {
   const montoARS = toARS(G.precio_usd) || Math.round(G.precio_usd * 1200);
   const sessionId = 'sess_' + Date.now();
   sessionStorage.setItem('legalai_sessionId', sessionId);
+  sessionStorage.setItem('legalai_precio_usd', String(G.precio_usd || 5));
+  sessionStorage.setItem('legalai_origen', 'index');
   await iniciarPagoMP({
     tipo: 'doc', montoARS,
     descripcion: `Documento legal: ${G.form?.titulo || G.tipo}`,
     externalRef: `doc_${sessionId}`,
-    datosPago: { titulo: G.form?.titulo || G.tipo, dolar_rate: cotizacion?.valor || 0 },
+    datosPago: { titulo: G.form?.titulo || G.tipo, dolar_rate: cotizacion?.valor || 0, origen: 'index' },
     onError: msg => showErr('alert3', 'Error al conectar con MercadoPago: ' + msg),
   });
 }
@@ -2198,7 +2200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('load', () => {
-  // Capturar UTMs, gclid y device al cargar — para tracking de conversión
+  // Capturar UTMs, gclid y device al cargar
   (function(){var p=new URLSearchParams(window.location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'].forEach(function(k){var v=p.get(k);if(v)sessionStorage.setItem('legalai_'+k,v);});sessionStorage.setItem('legalai_device',/mobile|android|iphone|ipad/i.test(navigator.userAgent)?'Mobile':'Desktop');})();
   const t = localStorage.getItem('theme') || 'system';
   applyTheme(t);
@@ -2254,6 +2256,18 @@ window.addEventListener('load', () => {
   if (stat === 'approved') {
     window.history.replaceState({}, '', window.location.pathname);
     showSec('generador');
+
+    // ✅ Conversión REAL — solo cuando MercadoPago confirma el pago
+    try {
+      const precioUSD = parseFloat(sessionStorage.getItem('legalai_precio_usd') || '5') || 5;
+      gtag('event', 'conversion', {
+        'send_to':        'AW-18073890544',
+        'value':          precioUSD,
+        'currency':       'USD',
+        'transaction_id': p.get('payment_id') || p.get('collection_id') || '',
+      });
+    } catch(_) {}
+
     if (tipo === 'doc') {
       const paymentId = p.get('payment_id') || p.get('collection_id');
       if (paymentId) generarDocumento(paymentId);
