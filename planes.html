@@ -1,212 +1,302 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="system">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Planes — LegalAI Arg</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── THEMES — idénticos al index ─────────────────────────────── */
 :root {
-  --negro:#0a0a0f; --oscuro:#111118; --card:#16161f; --borde:#23232f;
-  --texto:#e8e8f0; --gris:#6b6b80; --blanco:#ffffff;
-  --oro:#c9a84c; --oro-luz:#f0c96e; --verde:#2dd4a0; --rojo:#e05252; --azul:#4f8ef7;
+  --ink:       #0f1117;
+  --paper:     #f7f3ec;
+  --cream:     #ede8dc;
+  --surface:   #ffffff;
+  --gold:      #c8a84b;
+  --gold-dim:  rgba(200,168,75,0.12);
+  --sage:      #3d5a46;
+  --sage-dim:  rgba(61,90,70,0.09);
+  --mist:      #6b7580;
+  --line:      rgba(15,17,23,0.1);
+  --hdr-bg:    #0f1117;
+  --hdr-txt:   rgba(255,255,255,0.28);
+  --shadow:    0 2px 16px rgba(15,17,23,0.07);
+  --btn-bg:    #0f1117;
+  --btn-txt:   #c8a84b;
+  --btn-hover: #1e2230;
+  --red:       #c0392b;
 }
-html { scroll-behavior: smooth; }
-body { background:var(--negro); color:var(--texto); font-family:'DM Sans',sans-serif; font-weight:400; line-height:1.6; min-height:100vh; overflow-x:hidden; }
-body::before { content:''; position:fixed; top:-200px; left:50%; transform:translateX(-50%); width:800px; height:800px; background:radial-gradient(ellipse,rgba(201,168,76,.06) 0%,transparent 70%); pointer-events:none; z-index:0; }
+[data-theme="dark"] {
+  --ink:       #eceef2;
+  --paper:     #0c0e12;
+  --cream:     #141720;
+  --surface:   #1c2030;
+  --gold:      #d4a847;
+  --gold-dim:  rgba(212,168,71,0.13);
+  --sage:      #6abf8a;
+  --sage-dim:  rgba(106,191,138,0.1);
+  --mist:      #7a8494;
+  --line:      rgba(255,255,255,0.07);
+  --hdr-bg:    #080a0e;
+  --hdr-txt:   rgba(255,255,255,0.22);
+  --shadow:    0 2px 20px rgba(0,0,0,0.4);
+  --btn-bg:    #d4a847;
+  --btn-txt:   #0c0e12;
+  --btn-hover: #e0b84e;
+}
 
-nav { position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(10,10,15,.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--borde); }
-.nav-logo { font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--oro); text-decoration:none; letter-spacing:.02em; }
-.nav-back { font-size:.85rem; color:var(--gris); text-decoration:none; transition:color .2s; }
-.nav-back:hover { color:var(--texto); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;transition:background .3s,color .3s}
 
-.hero { text-align:center; padding:80px 20px 50px; position:relative; z-index:1; }
-.hero-eyebrow { display:inline-block; font-size:.78rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--oro); border:1px solid rgba(201,168,76,.3); padding:5px 14px; border-radius:20px; margin-bottom:24px; }
-.hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.4rem,5vw,3.8rem); line-height:1.15; color:var(--blanco); margin-bottom:18px; }
-.hero h1 em { font-style:italic; color:var(--oro); }
-.hero p { font-size:1.05rem; color:var(--gris); max-width:480px; margin:0 auto 36px; }
+/* ── HEADER ── */
+header{background:var(--hdr-bg);padding:0 40px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(200,168,75,.15)}
+.logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);letter-spacing:.05em;text-decoration:none}
+.logo span{color:rgba(200,168,75,.4)}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.hdr-back{font-size:.8rem;color:var(--hdr-txt);text-decoration:none;transition:color .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.hdr-back:hover{color:var(--gold)}
+.theme-toggle{display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px}
+.theme-btn{padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);transition:all .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.theme-btn.active{background:rgba(200,168,75,.2);color:var(--gold)}
 
-.toggle-wrap { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:48px; position:relative; z-index:1; }
-.toggle-track { display:flex; background:var(--card); border:1px solid var(--borde); border-radius:40px; padding:4px; gap:4px; }
-.toggle-opt { padding:9px 22px; border-radius:32px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500; transition:all .25s; color:var(--gris); background:transparent; }
-.toggle-opt.on { background:var(--oro); color:#000; }
-.ahorro-pill { background:rgba(45,212,160,.12); border:1px solid rgba(45,212,160,.25); color:var(--verde); font-size:.78rem; font-weight:600; padding:5px 12px; border-radius:20px; letter-spacing:.04em; }
+/* ── HERO ── */
+.hero{text-align:center;padding:72px 40px 56px;max-width:720px;margin:0 auto}
+.hero-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:18px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;line-height:1.1;color:var(--ink);margin-bottom:16px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{font-size:.97rem;color:var(--mist);line-height:1.75;max-width:520px;margin:0 auto}
 
-.planes-wrap { max-width:1180px; margin:0 auto; padding:0 20px 80px; position:relative; z-index:1; }
-.planes-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:end; }
-@media(max-width:1100px){ .planes-grid{ grid-template-columns:repeat(3,1fr); } }
-@media(max-width:700px) { .planes-grid{ grid-template-columns:1fr; } }
+/* ── TOGGLE MODO PAGO ── */
+.toggle-wrap{display:flex;align-items:center;justify-content:center;gap:14px;margin:36px 0 8px;flex-wrap:wrap}
+.toggle-track{display:flex;background:var(--cream);border:1px solid var(--line);border-radius:40px;padding:4px;gap:4px;transition:background .3s}
+.toggle-opt{padding:9px 22px;border-radius:32px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;transition:all .25s;color:var(--mist);background:transparent}
+.toggle-opt.on{background:var(--btn-bg);color:var(--btn-txt)}
+.ahorro-pill{background:var(--sage-dim);border:1px solid rgba(61,90,70,.2);color:var(--sage);font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.nota-cripto{text-align:center;background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);border-radius:10px;padding:12px 20px;font-size:.82rem;color:var(--gold);max-width:540px;margin:0 auto 16px;line-height:1.5;font-family:'DM Mono',monospace}
 
-.plan-card { background:var(--card); border:1px solid var(--borde); border-radius:16px; padding:28px 22px 24px; position:relative; transition:transform .25s,box-shadow .25s; display:flex; flex-direction:column; }
-.plan-card:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.4); }
-.plan-card.pro { border-color:var(--oro); background:linear-gradient(160deg,#1c1a10 0%,#16161f 60%); box-shadow:0 0 0 1px rgba(201,168,76,.2),0 20px 60px rgba(201,168,76,.08); transform:translateY(-8px) scale(1.02); z-index:2; }
-.plan-card.pro:hover { transform:translateY(-12px) scale(1.02); }
-.plan-card.business { border-color:rgba(79,142,247,.5); background:linear-gradient(160deg,#0f1420 0%,#16161f 60%); }
+/* ── BANNER ÉXITO ── */
+.banner-exito{display:none;max-width:560px;margin:0 auto 8px;padding:14px 20px;background:var(--sage-dim);border:1px solid rgba(61,90,70,.2);border-radius:10px;font-size:.88rem;color:var(--sage);text-align:center;line-height:1.55}
+.banner-exito.visible{display:block}
 
-.badge { position:absolute; top:-13px; left:50%; transform:translateX(-50%); padding:3px 14px; border-radius:20px; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; white-space:nowrap; }
-.badge-oro  { background:var(--oro); color:#000; }
-.badge-azul { background:var(--azul); color:#fff; }
-.badge-gris { background:#2a2a38; color:var(--gris); border:1px solid var(--borde); }
+/* ── GRID PLANES ── */
+.planes-wrap{max-width:1060px;margin:0 auto;padding:0 24px 80px}
+.planes-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:start}
 
-.plan-nombre { font-size:.78rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--gris); margin-bottom:16px; }
-.plan-card.pro .plan-nombre { color:var(--oro); }
-.precio-tachado { font-size:.85rem; color:var(--gris); text-decoration:line-through; height:20px; }
-.precio-main { font-family:'DM Serif Display',serif; font-size:2.6rem; line-height:1; color:var(--blanco); margin:4px 0 2px; }
-.plan-card.pro .precio-main { color:var(--oro-luz); }
-.precio-sub { font-size:.78rem; color:var(--gris); margin-bottom:22px; }
-.features { list-style:none; flex:1; margin-bottom:22px; }
-.features li { font-size:.84rem; color:var(--gris); padding:5px 0; border-bottom:1px solid rgba(255,255,255,.04); display:flex; align-items:center; gap:8px; }
-.features li:last-child { border-bottom:none; }
-.features li .ico { font-size:.75rem; flex-shrink:0; }
-.features li.si { color:#c8c8d8; }
-.features li.no { color:#3a3a4a; text-decoration:line-through; }
-.features li.si .ico { color:var(--verde); }
-.features li.no .ico { color:#333; }
-.plan-card.pro .features li.si { color:#e8e0c0; }
-.plan-card.pro .features li.si .ico { color:var(--oro); }
-.btn-plan { width:100%; padding:12px; border-radius:10px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; transition:all .2s; letter-spacing:.02em; }
-.btn-primario  { background:var(--oro); color:#000; }
-.btn-primario:hover { background:var(--oro-luz); }
-.btn-secundario { background:rgba(79,142,247,.15); color:var(--azul); border:1px solid rgba(79,142,247,.3); }
-.btn-secundario:hover { background:rgba(79,142,247,.25); }
-.btn-basico { background:rgba(255,255,255,.04); color:var(--gris); border:1px solid var(--borde); }
-.btn-basico:hover { background:rgba(255,255,255,.08); color:var(--texto); }
+/* ── CARD PLAN ── */
+.plan-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px 18px 20px;position:relative;display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s,background .3s}
+.plan-card:hover{box-shadow:var(--shadow)}
+.plan-card.pro{border-color:rgba(200,168,75,.5);background:var(--gold-dim);transform:translateY(-6px);box-shadow:0 8px 32px rgba(200,168,75,.12)}
+.plan-card.business{border-color:rgba(61,90,70,.3);background:var(--sage-dim)}
 
-.nota-cripto { text-align:center; background:rgba(45,212,160,.05); border:1px solid rgba(45,212,160,.15); border-radius:12px; padding:14px 20px; font-size:.84rem; color:var(--verde); max-width:560px; margin:0 auto 40px; line-height:1.5; }
-.activar-seccion { text-align:center; padding:20px; position:relative; z-index:1; }
-.activar-link { background:none; border:none; color:var(--gris); font-size:.88rem; cursor:pointer; text-decoration:underline; font-family:'DM Sans',sans-serif; transition:color .2s; }
-.activar-link:hover { color:var(--texto); }
+.plan-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:10px;margin-bottom:10px;font-weight:500}
+.badge-oro{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.3)}
+.badge-sage{background:var(--sage-dim);color:var(--sage);border:1px solid rgba(61,90,70,.2)}
+.badge-mist{background:var(--cream);color:var(--mist);border:1px solid var(--line)}
 
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(4px); z-index:100; align-items:center; justify-content:center; padding:20px; }
-.modal-overlay.visible { display:flex; }
-.modal-box { background:var(--card); border:1px solid var(--borde); border-radius:20px; padding:44px 36px; width:100%; max-width:420px; text-align:center; animation:slideUp .3s ease; }
-@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-.modal-box h3 { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--blanco); margin-bottom:8px; }
-.modal-sub { font-size:.88rem; color:var(--gris); margin-bottom:20px; }
-.modal-plan-tag { display:inline-block; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25); color:var(--oro); font-size:.78rem; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:20px; }
-.input-field { width:100%; background:var(--oscuro); border:1.5px solid var(--borde); border-radius:10px; padding:13px 16px; font-family:'DM Sans',sans-serif; font-size:.92rem; color:var(--texto); transition:border-color .2s; margin-bottom:12px; }
-.input-field:focus { outline:none; border-color:var(--oro); }
-.input-code { width:100%; background:var(--oscuro); border:1.5px solid var(--borde); border-radius:10px; padding:14px 16px; font-family:monospace; font-size:1rem; font-weight:600; text-align:center; letter-spacing:2px; color:var(--texto); text-transform:uppercase; transition:border-color .2s; margin-bottom:10px; }
-.input-code:focus { outline:none; border-color:var(--oro); }
-.btn-modal { width:100%; padding:14px; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.95rem; font-weight:700; cursor:pointer; transition:opacity .2s; margin-bottom:12px; }
-.btn-modal:hover { opacity:.85; }
-.btn-modal.oro   { background:var(--oro);   color:#000; }
-.btn-modal.verde { background:var(--verde); color:#000; }
-.btn-cerrar { background:none; border:none; color:var(--gris); font-size:.83rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:color .2s; }
-.btn-cerrar:hover { color:var(--texto); }
-.msg-resultado { display:none; border-radius:8px; padding:12px 16px; font-size:.86rem; margin-bottom:12px; line-height:1.5; }
-.msg-ok    { background:rgba(45,212,160,.1); color:var(--verde); border:1px solid rgba(45,212,160,.2); }
-.msg-error { background:rgba(224,82,82,.1);  color:var(--rojo);  border:1px solid rgba(224,82,82,.2); }
+.plan-nombre{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:14px}
+.precio-tachado{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--mist);text-decoration:line-through;min-height:1.1rem;margin-bottom:2px}
+.precio-main{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--ink);line-height:1;margin-bottom:3px}
+.precio-sub{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mist);letter-spacing:.05em;margin-bottom:20px}
 
-.banner-exito { display:none; background:rgba(45,212,160,.08); border-bottom:1px solid rgba(45,212,160,.2); padding:14px 20px; text-align:center; font-size:.9rem; color:var(--verde); position:sticky; top:57px; z-index:40; }
-.banner-exito.visible { display:block; }
+.features{list-style:none;margin-bottom:20px;flex:1}
+.features li{font-size:.82rem;padding:7px 0;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:8px;line-height:1.4;color:var(--ink)}
+.features li:last-child{border-bottom:none}
+.features li.no{color:var(--mist);text-decoration:line-through}
+.features li .ico{font-size:.7rem;flex-shrink:0;margin-top:2px;color:var(--gold)}
+.features li.no .ico{color:var(--mist)}
+.plan-card.pro .features li .ico{color:var(--gold)}
+.plan-card.business .features li .ico{color:var(--sage)}
 
-.faq { max-width:620px; margin:0 auto 80px; padding:0 20px; position:relative; z-index:1; }
-.faq-titulo { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--blanco); text-align:center; margin-bottom:28px; }
-.faq-item { border-bottom:1px solid var(--borde); padding:16px 0; }
-.faq-item summary { font-size:.9rem; font-weight:500; color:var(--texto); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-.faq-item summary::after { content:'+'; color:var(--oro); font-size:1.2rem; }
-.faq-item[open] summary::after { content:'−'; }
-.faq-item p { font-size:.86rem; color:var(--gris); padding-top:10px; line-height:1.7; }
+/* ── BOTONES PLAN ── */
+.btn-plan{width:100%;padding:11px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;transition:all .2s;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-plan:disabled{opacity:.55;cursor:not-allowed}
+.btn-primario{background:var(--btn-bg);color:var(--btn-txt)}
+.btn-primario:hover:not(:disabled){background:var(--btn-hover)}
+.btn-sage{background:var(--sage);color:#fff}
+.btn-sage:hover:not(:disabled){opacity:.88}
+.btn-basico{background:transparent;color:var(--mist);border:1.5px solid var(--line)}
+.btn-basico:hover:not(:disabled){color:var(--ink);border-color:var(--gold);background:var(--gold-dim)}
 
-.spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(0,0,0,.3); border-top-color:#000; border-radius:50%; animation:spin .6s linear infinite; margin-right:8px; vertical-align:middle; }
-@keyframes spin { to { transform:rotate(360deg); } }
+/* ── ACTIVAR CÓDIGO ── */
+.activar-wrap{max-width:480px;margin:0 auto 56px;text-align:center}
+.activar-btn{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;padding:0;transition:opacity .2s}
+.activar-btn:hover{opacity:.75}
+
+/* ── SPINNER ── */
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── MODALES ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.visible{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;max-width:420px;width:100%;padding:36px;box-shadow:0 8px 40px rgba(0,0,0,.25);transition:background .3s}
+.modal-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:10px}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.modal-sub{font-size:.84rem;color:var(--mist);margin-bottom:22px;line-height:1.6}
+.modal-plan-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.72rem;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.25);padding:4px 12px;border-radius:8px;margin-bottom:18px}
+
+input.modal-input{width:100%;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:.9rem;background:var(--paper);border:1.5px solid var(--line);border-radius:8px;color:var(--ink);outline:none;transition:border-color .2s,background .3s;margin-bottom:12px}
+input.modal-input:focus{border-color:var(--gold)}
+
+.msg-resultado{display:none;padding:11px 14px;border-radius:8px;font-size:.83rem;margin-bottom:14px;line-height:1.5}
+.msg-ok{background:var(--sage-dim);border:1px solid rgba(61,90,70,.2);color:var(--sage)}
+.msg-error{background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.18);color:var(--red)}
+
+.btn-modal{width:100%;padding:13px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
+.btn-confirm{background:var(--btn-bg);color:var(--btn-txt)}
+.btn-confirm:hover:not(:disabled){background:var(--btn-hover)}
+.btn-confirm:disabled{opacity:.5;cursor:not-allowed}
+.btn-cerrar{width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--line);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--mist);transition:color .2s,border-color .2s}
+.btn-cerrar:hover{color:var(--ink);border-color:var(--gold)}
+
+/* ── FOOTER ── */
+footer{background:var(--hdr-bg);padding:36px 40px;text-align:center;border-top:1px solid rgba(200,168,75,.12)}
+footer p{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2}
+footer a{color:rgba(200,168,75,.5);text-decoration:none}
+footer a:hover{color:var(--gold)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){.planes-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){
+  header{padding:0 16px}
+  .hero{padding:52px 20px 40px}
+  .planes-grid{grid-template-columns:1fr 1fr}
+  .plan-card.pro{transform:none}
+  .planes-wrap{padding:0 16px 60px}
+}
+@media(max-width:400px){.planes-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="index.html">LegalAI Arg</a>
-  <a class="nav-back" href="index.html">← Volver al generador</a>
-</nav>
+<!-- HEADER -->
+<header>
+  <a class="logo" href="/">LegalAI <span>ARG</span></a>
+  <div class="hdr-right">
+    <a class="hdr-back" href="/">← Volver al generador</a>
+    <div class="theme-toggle">
+      <button class="theme-btn" id="btnLight"  onclick="setTheme('light')">☀ Claro</button>
+      <button class="theme-btn" id="btnSystem" onclick="setTheme('system')">⊙ Auto</button>
+      <button class="theme-btn" id="btnDark"   onclick="setTheme('dark')">◗ Oscuro</button>
+    </div>
+  </div>
+</header>
 
-<div class="banner-exito" id="bannerExito">
-  ✅ Pago recibido. Tu código de activación llegará a tu email en unos minutos. También podés activarlo acá abajo.
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">// Plan ilimitado</div>
+  <h1>Generá todos los documentos<br>que necesitás, <em>sin límite</em></h1>
+  <p>Pagás una vez por mes y generás todos los documentos que quieras. Ideal para profesionales, inmobiliarias y estudios que trabajan con contratos seguido.</p>
 </div>
 
-<section class="hero">
-  <div class="hero-eyebrow">Planes y suscripciones</div>
-  <h1>Documentos legales<br><em>sin límites</em></h1>
-  <p>Elegí tu plan, pagá con tarjeta o cripto y activá tu acceso al instante.</p>
-  <div class="toggle-wrap">
-    <div class="toggle-track">
-      <button class="toggle-opt" id="btnTarjeta" onclick="setPago('tarjeta')">💳 Tarjeta</button>
-      <button class="toggle-opt on" id="btnCripto" onclick="setPago('cripto')">🔐 USDT / USDC</button>
-    </div>
-    <span class="ahorro-pill" id="pillAhorro">⚡ Precio más bajo pagando en cripto</span>
+<!-- TOGGLE + NOTA -->
+<div class="toggle-wrap">
+  <div class="toggle-track">
+    <button class="toggle-opt on" id="btnCripto" onclick="setPago('cripto')">🔐 Cripto (USDT)</button>
+    <button class="toggle-opt"    id="btnTarjeta" onclick="setPago('tarjeta')">💳 Tarjeta</button>
   </div>
-  <div class="nota-cripto" id="notaCripto">
-    Pagás con USDT o USDC — stablecoins equivalentes al dólar. Sin volatilidad, sin cuenta extra, sin registro.
-  </div>
-</section>
+  <span class="ahorro-pill" id="pillAhorro">Ahorrás ~12%</span>
+</div>
 
+<div style="max-width:1060px;margin:0 auto;padding:0 24px">
+  <div class="nota-cripto" id="notaCripto">
+    Pago en USDT TRC-20 via NOWPayments · Sin cuenta requerida · Recibís el código al instante por email
+  </div>
+  <div class="banner-exito" id="bannerExito">
+    ✅ ¡Pago recibido! Revisá tu email para obtener tu código de activación.<br>
+    <button onclick="abrirModalActivar()" style="margin-top:8px;background:var(--sage);color:#fff;border:none;padding:8px 18px;border-radius:7px;cursor:pointer;font-size:.83rem;font-weight:500">
+      Activar mi plan →
+    </button>
+  </div>
+</div>
+
+<!-- GRID PLANES -->
 <div class="planes-wrap">
   <div class="planes-grid" id="planesGrid"></div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="activar-btn" onclick="abrirModalActivar()">
+      ▸ Ya tengo un código de activación
+    </button>
+  </div>
 </div>
 
-<div class="activar-seccion">
-  <button class="activar-link" onclick="abrirModalActivar()">
-    ¿Ya tenés un código de activación? Activalo acá →
-  </button>
-</div>
-
-<section class="faq">
-  <div class="faq-titulo">Preguntas frecuentes</div>
-  <details class="faq-item">
-    <summary>¿Cómo funciona el pago con cripto?</summary>
-    <p>Al elegir cripto, NOWPayments genera un checkout donde podés pagar con USDT. El precio está fijado en USD, sin sorpresas. No necesitás crear cuenta en ninguna plataforma.</p>
-  </details>
-  <details class="faq-item">
-    <summary>¿Qué recibo después de pagar?</summary>
-    <p>Un código de activación tipo <strong>PRO-XXXX-XXXX-XXXX</strong> que llega a tu email. Con ese código activás el plan ingresando tu email acá en la página, sin crear cuenta.</p>
-  </details>
-  <details class="faq-item">
-    <summary>¿El plan se renueva automáticamente?</summary>
-    <p>No. Cada plan es por el período contratado. Cuando vence, podés renovar con un nuevo pago. No hay cargos automáticos.</p>
-  </details>
-  <details class="faq-item">
-    <summary>¿Cuánto tiempo tengo para activar el código?</summary>
-    <p>90 días desde que se generó. Una vez activado, el plan corre desde ese momento por el período contratado.</p>
-  </details>
-  <details class="faq-item">
-    <summary>¿Qué es "fair use" en el plan PRO?</summary>
-    <p>Documentos ilimitados para uso profesional normal. No está pensado para generación masiva automatizada, sino para profesionales y estudios con volumen real de trabajo.</p>
-  </details>
-</section>
-
-<!-- Modal: email para pagar -->
+<!-- MODAL: Email para pago -->
 <div class="modal-overlay" id="modalEmail">
   <div class="modal-box">
-    <h3>Un paso más</h3>
+    <div class="modal-tag">Confirmar pago</div>
+    <h3 class="modal-title">¿A qué email enviamos el código?</h3>
+    <p class="modal-sub">Una vez confirmado el pago recibirás el código para activar tu plan.</p>
     <div class="modal-plan-tag" id="tagPlan"></div>
-    <p class="modal-sub">Ingresá tu email. Te enviamos el código de activación después del pago.</p>
-    <input class="input-field" id="inputEmailPago" type="email" placeholder="tu@email.com"
-           onkeydown="if(event.key==='Enter') confirmarEmail()">
+    <input class="modal-input" id="inputEmailPago" type="email" placeholder="tu@email.com"
+      onkeydown="if(event.key==='Enter')confirmarEmail()">
     <div class="msg-resultado" id="msgEmailError"></div>
-    <button class="btn-modal oro" id="btnConfirmarEmail" onclick="confirmarEmail()">
-      Continuar al pago →
-    </button>
+    <button class="btn-modal btn-confirm" id="btnConfirmarEmail" onclick="confirmarEmail()">Continuar al pago →</button>
     <button class="btn-cerrar" onclick="cerrarModalEmail()">Cancelar</button>
   </div>
 </div>
 
-<!-- Modal: activar código -->
+<!-- MODAL: Activar código -->
 <div class="modal-overlay" id="modalActivar">
   <div class="modal-box">
-    <h3>Activar plan</h3>
-    <p class="modal-sub">Ingresá el código que recibiste y tu email para activar.</p>
-    <input class="input-code" id="inputCodigo" placeholder="PRO-XXXX-XXXX-XXXX" maxlength="24"
-           oninput="this.value=this.value.toUpperCase()">
-    <input class="input-field" id="inputEmail" type="email" placeholder="tu@email.com">
+    <div class="modal-tag">Activar plan</div>
+    <h3 class="modal-title">Ingresá tu código</h3>
+    <p class="modal-sub">Si ya realizaste el pago, ingresá el código que recibiste por email y tu dirección de correo.</p>
+    <input class="modal-input" id="inputCodigo" placeholder="PRO-XXXX-XXXX-XXXX" maxlength="24"
+      oninput="this.value=this.value.toUpperCase()"
+      onkeydown="if(event.key==='Enter')activarCodigo()">
+    <input class="modal-input" id="inputEmail" type="email" placeholder="tu@email.com"
+      onkeydown="if(event.key==='Enter')activarCodigo()">
     <div class="msg-resultado" id="msgActivacion"></div>
-    <button class="btn-modal verde" id="btnActivar" onclick="activarCodigo()">Activar plan</button>
+    <button class="btn-modal btn-confirm" id="btnActivar" onclick="activarCodigo()">Activar plan</button>
     <button class="btn-cerrar" onclick="cerrarModalActivar()">Cerrar</button>
   </div>
 </div>
 
+
+<!-- FAQ -->
+<div style="max-width:640px;margin:0 auto;padding:0 24px 80px">
+  <div style="font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);text-align:center;margin-bottom:14px">Preguntas frecuentes</div>
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ink);text-align:center;margin-bottom:32px;line-height:1.2">Lo que más nos preguntan</h2>
+  <div id="faqWrap"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    LegalAI Arg · Planes de suscripción<br>
+    Los precios están en USD · El pago cripto es en USDT TRC-20 via NOWPayments<br>
+    Contacto: <a href="mailto:finmap.ia@gmail.com">finmap.ia@gmail.com</a>
+  </p>
+</footer>
+
 <script>
+// ── Tema ──────────────────────────────────────────────────────────
+function setTheme(t) {
+  localStorage.setItem('theme', t);
+  applyTheme(t);
+  ['Light','System','Dark'].forEach(x =>
+    document.getElementById('btn'+x).classList.toggle('active', x.toLowerCase() === t)
+  );
+}
+function applyTheme(t) {
+  const dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
+});
+(function() {
+  const t = localStorage.getItem('theme') || 'system';
+  applyTheme(t);
+  ['Light','System','Dark'].forEach(x =>
+    document.getElementById('btn'+x).classList.toggle('active', x.toLowerCase() === t)
+  );
+})();
+
+// ── Config ────────────────────────────────────────────────────────
 const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
 
 const PLANES = [
@@ -243,7 +333,7 @@ const PLANES = [
   },
   {
     id:'business', nombre:'Business', cripto:249, tarjeta:279,
-    badge:{txt:'🏆 Ideal para estudios', cls:'badge-azul'}, claseCard:'business', btn:'secundario',
+    badge:{txt:'🏆 Ideal para estudios', cls:'badge-sage'}, claseCard:'business', btn:'sage',
     features:[
       {ok:true, txt:'Uso intensivo'},
       {ok:true, txt:'Prioridad máxima'},
@@ -254,7 +344,7 @@ const PLANES = [
   },
   {
     id:'enterprise', nombre:'Enterprise', cripto:599, tarjeta:679,
-    badge:{txt:'Máxima escala', cls:'badge-gris'}, btn:'basico',
+    badge:{txt:'Máxima escala', cls:'badge-mist'}, btn:'basico',
     features:[
       {ok:true, txt:'Todo lo de Business'},
       {ok:true, txt:'Volumen muy alto'},
@@ -265,60 +355,62 @@ const PLANES = [
   },
 ];
 
-let modoPago   = 'cripto';
-let cargando   = null;
+let modoPago      = 'cripto';
+let cargando      = null;
 let planPendiente = null;
 
-// Afiliado
-const params = new URLSearchParams(window.location.search);
-const refParam = params.get('ref');
+// ── Afiliado ──────────────────────────────────────────────────────
+const params    = new URLSearchParams(window.location.search);
+const refParam  = params.get('ref');
 if (refParam) sessionStorage.setItem('legalai_ref', refParam);
 const refAfiliado = refParam || sessionStorage.getItem('legalai_ref');
 
-// Retorno de pago
+// ── Retorno de pago ───────────────────────────────────────────────
 if (params.get('status') === 'success') {
   document.getElementById('bannerExito').classList.add('visible');
   const em = sessionStorage.getItem('legalai_email');
-  if (em) {
-    setTimeout(() => {
-      document.getElementById('inputEmail').value = em;
-      abrirModalActivar();
-    }, 800);
-  }
+  if (em) setTimeout(() => {
+    document.getElementById('inputEmail').value = em;
+    abrirModalActivar();
+  }, 800);
 }
 
+// ── Toggle modo pago ──────────────────────────────────────────────
 function setPago(modo) {
   modoPago = modo;
   document.getElementById('btnCripto').classList.toggle('on', modo === 'cripto');
   document.getElementById('btnTarjeta').classList.toggle('on', modo === 'tarjeta');
-  document.getElementById('notaCripto').style.display = modo === 'cripto' ? 'block' : 'none';
-  document.getElementById('pillAhorro').style.display = modo === 'cripto' ? 'inline-block' : 'none';
+  document.getElementById('notaCripto').style.display   = modo === 'cripto' ? 'block' : 'none';
+  document.getElementById('pillAhorro').style.display   = modo === 'cripto' ? 'inline-block' : 'none';
   renderPlanes();
 }
 
+// ── Render planes ─────────────────────────────────────────────────
 function renderPlanes() {
   document.getElementById('planesGrid').innerHTML = PLANES.map(p => {
-    const precio   = modoPago === 'cripto' ? p.cripto : p.tarjeta;
-    const tachado  = modoPago === 'cripto'
+    const precio      = modoPago === 'cripto' ? p.cripto : p.tarjeta;
+    const tachado     = modoPago === 'cripto'
       ? `<div class="precio-tachado">USD ${p.tarjeta}</div>`
       : '<div class="precio-tachado">&nbsp;</div>';
-    const badge    = p.badge ? `<div class="badge ${p.badge.cls}">${p.badge.txt}</div>` : '';
-    const isCargando = cargando === p.id;
-    const features = p.features.map(f =>
-      `<li class="${f.ok?'si':'no'}"><span class="ico">${f.ok?'✓':'✗'}</span>${f.txt}</li>`
+    const badge       = p.badge
+      ? `<div class="plan-badge ${p.badge.cls}">${p.badge.txt}</div>`
+      : '<div style="height:24px"></div>';
+    const isCargando  = cargando === p.id;
+    const features    = p.features.map(f =>
+      `<li class="${f.ok ? 'si' : 'no'}"><span class="ico">${f.ok ? '✓' : '✗'}</span>${f.txt}</li>`
     ).join('');
     const label = isCargando
       ? `<span class="spinner"></span> Procesando...`
-      : (modoPago === 'cripto' ? '🔐 Pagar con cripto' : '💳 Pagar con tarjeta');
+      : (modoPago === 'cripto' ? 'Pagar con USDT' : 'Pagar con tarjeta');
     return `
-      <div class="plan-card ${p.claseCard||''}">
+      <div class="plan-card ${p.claseCard || ''}">
         ${badge}
         <div class="plan-nombre">${p.nombre}</div>
         ${tachado}
         <div class="precio-main">USD ${precio}</div>
         <div class="precio-sub">por mes</div>
         <ul class="features">${features}</ul>
-        <button class="btn-plan btn-${p.btn}" onclick="iniciarPago('${p.id}')" ${isCargando?'disabled':''}>
+        <button class="btn-plan btn-${p.btn}" onclick="iniciarPago('${p.id}')" ${isCargando ? 'disabled' : ''}>
           ${label}
         </button>
       </div>`;
@@ -328,15 +420,16 @@ function renderPlanes() {
 // ── Modal email ───────────────────────────────────────────────────
 function iniciarPago(plan_id) {
   planPendiente = plan_id;
-  const p = PLANES.find(x => x.id === plan_id);
-  const precio = modoPago === 'cripto' ? p.cripto : p.tarjeta;
+  const p       = PLANES.find(x => x.id === plan_id);
+  const precio  = modoPago === 'cripto' ? p.cripto : p.tarjeta;
   document.getElementById('tagPlan').textContent =
     `${p.nombre} · USD ${precio} · ${modoPago === 'cripto' ? 'USDT' : 'Tarjeta'}`;
   const em = sessionStorage.getItem('legalai_email');
   document.getElementById('inputEmailPago').value = em || '';
+  mostrarMsg(document.getElementById('msgEmailError'), '', '');
   document.getElementById('msgEmailError').style.display = 'none';
-  document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
-  document.getElementById('btnConfirmarEmail').disabled = false;
+  document.getElementById('btnConfirmarEmail').innerHTML  = 'Continuar al pago →';
+  document.getElementById('btnConfirmarEmail').disabled   = false;
   document.getElementById('modalEmail').classList.add('visible');
   setTimeout(() => document.getElementById('inputEmailPago').focus(), 120);
 }
@@ -345,7 +438,6 @@ function cerrarModalEmail() {
   document.getElementById('modalEmail').classList.remove('visible');
   planPendiente = null;
 }
-
 document.getElementById('modalEmail').addEventListener('click', e => {
   if (e.target === document.getElementById('modalEmail')) cerrarModalEmail();
 });
@@ -360,7 +452,7 @@ async function confirmarEmail() {
     return;
   }
 
-  btn.disabled = true;
+  btn.disabled  = true;
   btn.innerHTML = '<span class="spinner"></span> Creando orden...';
   msgEl.style.display = 'none';
 
@@ -370,15 +462,10 @@ async function confirmarEmail() {
   renderPlanes();
 
   try {
-    const res = await fetch(`${WORKER}/planes/crear-orden`, {
+    const res  = await fetch(`${WORKER}/planes/crear-orden`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        plan_id,
-        metodo_pago: modoPago === 'cripto' ? 'cripto' : 'tarjeta',
-        email,
-        ref: refAfiliado || null
-      })
+      body: JSON.stringify({ plan_id, metodo_pago: modoPago === 'cripto' ? 'cripto' : 'tarjeta', email, ref: refAfiliado || null }),
     });
     const data = await res.json();
 
@@ -387,31 +474,30 @@ async function confirmarEmail() {
       sessionStorage.setItem('legalai_email', email);
       window.location.href = data.invoice_url;
     } else {
-      cargando = null;
+      cargando      = null;
       renderPlanes();
       planPendiente = plan_id;
       document.getElementById('inputEmailPago').value = email;
       mostrarMsg(document.getElementById('msgEmailError'), data.error || 'Error al crear la orden. Intentá de nuevo.', 'error');
-      document.getElementById('btnConfirmarEmail').disabled = false;
+      document.getElementById('btnConfirmarEmail').disabled  = false;
       document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
       document.getElementById('modalEmail').classList.add('visible');
     }
   } catch (e) {
-    cargando = null;
+    cargando      = null;
     renderPlanes();
     planPendiente = plan_id;
     document.getElementById('inputEmailPago').value = email;
     mostrarMsg(document.getElementById('msgEmailError'), 'Error de conexión. Verificá tu internet.', 'error');
-    document.getElementById('btnConfirmarEmail').disabled = false;
+    document.getElementById('btnConfirmarEmail').disabled  = false;
     document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
     document.getElementById('modalEmail').classList.add('visible');
   }
 }
 
-// ── Modal activar ─────────────────────────────────────────────────
+// ── Modal activar código ──────────────────────────────────────────
 function abrirModalActivar()  { document.getElementById('modalActivar').classList.add('visible'); }
 function cerrarModalActivar() { document.getElementById('modalActivar').classList.remove('visible'); }
-
 document.getElementById('modalActivar').addEventListener('click', e => {
   if (e.target === document.getElementById('modalActivar')) cerrarModalActivar();
 });
@@ -422,7 +508,7 @@ async function activarCodigo() {
   const btn    = document.getElementById('btnActivar');
   const msg    = document.getElementById('msgActivacion');
 
-  if (!codigo || codigo.length < 6)   { mostrarMsg(msg, 'Ingresá un código válido.', 'error'); return; }
+  if (!codigo || codigo.length < 6) { mostrarMsg(msg, 'Ingresá un código válido.', 'error'); return; }
   if (!email || !email.includes('@')) { mostrarMsg(msg, 'Ingresá un email válido.', 'error'); return; }
 
   btn.disabled  = true;
@@ -430,10 +516,10 @@ async function activarCodigo() {
   msg.style.display = 'none';
 
   try {
-    const res = await fetch(`${WORKER}/planes/activar`, {
+    const res  = await fetch(`${WORKER}/planes/activar`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ codigo, email })
+      body: JSON.stringify({ codigo, email }),
     });
     const data = await res.json();
     if (data.ok) {
@@ -453,9 +539,65 @@ async function activarCodigo() {
 }
 
 function mostrarMsg(el, txt, tipo) {
-  el.className     = `msg-resultado msg-${tipo}`;
+  el.className     = `msg-resultado${tipo ? ' msg-' + tipo : ''}`;
   el.textContent   = txt;
-  el.style.display = 'block';
+  el.style.display = txt ? 'block' : 'none';
+}
+
+
+// ── FAQ ───────────────────────────────────────────────────────────
+const FAQS = [
+  {
+    q: '¿Cómo funciona el pago con cripto?',
+    a: 'Al elegir cripto, NOWPayments genera un checkout donde podés pagar con USDT. El precio está fijado en USD, sin sorpresas. No necesitás crear cuenta en ninguna plataforma.'
+  },
+  {
+    q: '¿Qué recibo después de pagar?',
+    a: 'Un código de activación tipo PRO-XXXX-XXXX-XXXX que llega a tu email. Con ese código activás el plan ingresando tu email acá en la página, sin crear cuenta.'
+  },
+  {
+    q: '¿El plan se renueva automáticamente?',
+    a: 'No. Cada plan es por el período contratado. Cuando vence, podés renovar con un nuevo pago. No hay cargos automáticos.'
+  },
+  {
+    q: '¿Cuánto tiempo tengo para activar el código?',
+    a: '90 días desde que se generó. Una vez activado, el plan corre desde ese momento por el período contratado.'
+  },
+  {
+    q: '¿Qué es "fair use" en el plan PRO?',
+    a: 'Documentos ilimitados para uso profesional normal. No está pensado para generación masiva automatizada, sino para profesionales y estudios con volumen real de trabajo.'
+  },
+];
+
+(function renderFAQ() {
+  const wrap = document.getElementById('faqWrap');
+  if (!wrap) return;
+  wrap.innerHTML = FAQS.map((f, i) => `
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:background .3s">
+      <button onclick="toggleFAQ(${i})" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;background:none;border:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;color:var(--ink)">
+        ${f.q}
+        <span id="faq-arrow-${i}" style="color:var(--gold);font-size:1rem;flex-shrink:0;transition:transform .22s">+</span>
+      </button>
+      <div id="faq-body-${i}" style="max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s">
+        <div style="padding:0 20px 16px;font-size:.86rem;color:var(--mist);line-height:1.65">${f.a}</div>
+      </div>
+    </div>`).join('');
+})();
+
+function toggleFAQ(i) {
+  const body  = document.getElementById('faq-body-' + i);
+  const arrow = document.getElementById('faq-arrow-' + i);
+  const open  = body.style.maxHeight && body.style.maxHeight !== '0px';
+  // Cerrar todos
+  FAQS.forEach((_, j) => {
+    document.getElementById('faq-body-'  + j).style.maxHeight = '0px';
+    document.getElementById('faq-body-'  + j).style.padding   = '0';
+    document.getElementById('faq-arrow-' + j).style.transform  = 'rotate(0deg)';
+  });
+  if (!open) {
+    body.style.maxHeight  = '200px';
+    arrow.style.transform = 'rotate(45deg)';
+  }
 }
 
 renderPlanes();
