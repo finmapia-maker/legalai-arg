@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comprar Mejor</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121933;
+      --card: rgba(255,255,255,0.08);
+      --card-strong: rgba(255,255,255,0.12);
+      --text: #f5f7ff;
+      --muted: #c7cbe0;
+      --accent: #00d4ff;
+      --accent-2: #7c5cff;
+      --success: #18c37e;
+      --warning: #ffb547;
+      --danger: #ff6b6b;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124,92,255,0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(0,212,255,0.16), transparent 26%),
+        linear-gradient(180deg, #08101e 0%, #0d1428 50%, #0a0f1d 100%);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(9, 14, 30, 0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: var(--shadow);
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 22px;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 18px 40px rgba(70, 117, 255, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero {
+      padding: 42px 0 28px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-copy h1 {
+      margin: 16px 0 14px;
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 11ch;
+    }
+
+    .hero-copy p {
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 60ch;
+      margin: 0 0 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 30px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -20% auto auto -20%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(0,212,255,0.34), transparent 65%);
+      pointer-events: none;
+    }
+
+    .product-visual {
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 460px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(0,212,255,0.25), transparent 25%),
+        radial-gradient(circle at 80% 20%, rgba(124,92,255,0.25), transparent 30%),
+        linear-gradient(135deg, #111a35 0%, #18203f 100%);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .mock-card {
+      width: min(92%, 430px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 26px;
+      padding: 16px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(16px);
+      transform: rotate(-5deg);
+    }
+
+    .mock-image {
+      height: 280px;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.06)),
+        url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80') center/cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discount-tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(255,107,107,0.3);
+    }
+
+    .mock-body {
+      padding: 14px 4px 2px;
+    }
+
+    .stars { color: #ffd75c; letter-spacing: 1px; font-size: 14px; }
+    .muted { color: var(--muted); }
+    .title-sm { font-size: 1.18rem; font-weight: 800; margin: 8px 0; }
+    .price-row {
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      margin: 10px 0 14px;
+      flex-wrap: wrap;
+    }
+
+    .price {
+      font-size: 1.9rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .old-price {
+      color: #98a0c2;
+      text-decoration: line-through;
+      font-size: 1rem;
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.6;
+    }
+
+    .cards-3, .cards-4 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .cards-3 { grid-template-columns: repeat(3, 1fr); }
+    .cards-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .card strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, rgba(0,212,255,0.18), rgba(124,92,255,0.18));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 14px;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .product-thumb {
+      height: 220px;
+      border-radius: 18px;
+      margin-bottom: 14px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .chat-box {
+      display: grid;
+      grid-template-columns: 1fr 0.95fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .chat-window {
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .chat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .chat-top strong { font-size: 1.05rem; }
+
+    .bubble {
+      max-width: 88%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      margin: 10px 0;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .bubble.user {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      margin-left: auto;
+      border-bottom-right-radius: 6px;
+    }
+
+    .bubble.ai {
+      background: linear-gradient(135deg, rgba(0,212,255,0.18), rgba(124,92,255,0.18));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-bottom-left-radius: 6px;
+    }
+
+    .input-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-row input {
+      flex: 1;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .metric .n {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .reviews {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .review {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 22px;
+    }
+
+    .review p {
+      margin: 12px 0 0;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .review .person {
+      margin-top: 14px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .cta {
+      padding-bottom: 100px;
+    }
+
+    .cta-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      padding: 32px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.18), rgba(124,92,255,0.18));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .cta-panel h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .cta-panel p {
+      margin: 0 0 22px;
+      color: #eaf0ff;
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 18px 0 34px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .sticky-buy {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 60;
+      display: none;
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(9, 14, 30, 0.85);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+    }
+
+    .sticky-buy .inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sticky-buy .info { flex: 1; }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .chat-box,
+      .catalog,
+      .cards-4,
+      .reviews,
+      .cards-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero-grid,
+      .chat-box,
+      .catalog,
+      .cards-4,
+      .reviews,
+      .cards-3,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy h1 { max-width: none; }
+      .hero { padding-top: 24px; }
+      .product-visual { min-height: 360px; }
+      .mock-card { transform: none; }
+      .sticky-buy { display: block; }
+      .cta { padding-bottom: 130px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">CM</div>
+        <span>Comprar Mejor</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#destacados">Destacados</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#opiniones">Opiniones</a>
+        <a href="#ayuda">Ayuda IA</a>
+        <a href="#comprar" class="btn btn-primary" style="padding:12px 18px;">Comprar ahora</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="pill">🔥 Ofertas reales · 🚚 Envíos rápidos · 🤖 Asistencia inteligente</span>
+          <h1>Elegí mejor. Comprá con menos dudas.</h1>
+          <p>
+            Una tienda pensada para convertir más: productos destacados, diseño actual, beneficios claros y ayuda automática para que el cliente sienta seguridad y necesidad de comprar ahora.
+          </p>
+          <div class="hero-actions">
+            <a href="#comprar" class="btn btn-primary">Comprar ahora</a>
+            <a href="#ayuda" class="btn btn-secondary">Ver ayuda IA</a>
+          </div>
+          <div class="hero-meta">
+            <span class="pill">⭐ 4.9 promedio</span>
+            <span class="pill">📦 +1.200 pedidos</span>
+            <span class="pill">🔒 Pago seguro</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="product-visual">
+            <div class="mock-card">
+              <div class="mock-image">
+                <div class="discount-tag">25% OFF hoy</div>
+              </div>
+              <div class="mock-body">
+                <div class="stars">★★★★★ <span class="muted">4.9 · 347 reseñas</span></div>
+                <div class="title-sm">Auriculares Pro Wireless</div>
+                <div class="muted">Sonido premium, diseño liviano y batería extendida.</div>
+                <div class="price-row">
+                  <div class="price">$39.999</div>
+                  <div class="old-price">$53.999</div>
+                </div>
+                <a href="#comprar" class="btn btn-primary" style="width:100%;">Lo quiero ahora</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="beneficios">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Por qué esta web convierte mejor</h2>
+          </div>
+          <p>
+            El foco no está en mostrar un catálogo infinito, sino en empujar la compra con confianza, urgencia, claridad y una experiencia moderna tanto en celular como en desktop.
+          </p>
+        </div>
+        <div class="cards-4">
+          <div class="card">
+            <div class="icon">⚡</div>
+            <strong>Decisión rápida</strong>
+            <p>El visitante entiende en segundos qué gana, cuánto sale y por qué conviene comprar en ese momento.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🛡️</div>
+            <strong>Más confianza</strong>
+            <p>Mensajes claros de seguridad, envío, garantía y soporte reducen el freno mental antes de pagar.</p>
+          </div>
+          <div class="card">
+            <div class="icon">📱</div>
+            <strong>Optimizada para móvil</strong>
+            <p>Botón fijo de compra, textos escaneables y bloques visuales que mantienen la atención en celular.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🤖</div>
+            <strong>Asistencia inteligente</strong>
+            <p>El chat responde objeciones al instante y evita que el usuario abandone por una duda simple.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="destacados">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Productos destacados</h2>
+          </div>
+          <p>
+            El formato ideal es destacar pocos productos, muy bien presentados, con estética premium y precio visible. Eso suele vender más que un listado saturado.
+          </p>
+        </div>
+
+        <div class="catalog">
+          <article class="product-card">
+            <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="stars">★★★★★ <span class="muted">4.9</span></div>
+            <div class="title-sm">Auriculares Pro Wireless</div>
+            <div class="muted">Audio inmersivo y gran batería.</div>
+            <div class="price-row"><div class="price" style="font-size:1.5rem;">$39.999</div></div>
+            <a href="#comprar" class="btn btn-secondary" style="width:100%;">Ver producto</a>
+          </article>
+
+          <article class="product-card">
+            <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="stars">★★★★★ <span class="muted">4.8</span></div>
+            <div class="title-sm">Zapatillas Urban Move</div>
+            <div class="muted">Comodidad y diseño para todos los días.</div>
+            <div class="price-row"><div class="price" style="font-size:1.5rem;">$54.900</div></div>
+            <a href="#comprar" class="btn btn-secondary" style="width:100%;">Ver producto</a>
+          </article>
+
+          <article class="product-card">
+            <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="stars">★★★★★ <span class="muted">4.7</span></div>
+            <div class="title-sm">Smartwatch Fit Max</div>
+            <div class="muted">Salud, actividad y notificaciones en tu muñeca.</div>
+            <div class="price-row"><div class="price" style="font-size:1.5rem;">$69.500</div></div>
+            <a href="#comprar" class="btn btn-secondary" style="width:100%;">Ver producto</a>
+          </article>
+
+          <article class="product-card">
+            <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="stars">★★★★★ <span class="muted">4.9</span></div>
+            <div class="title-sm">Reloj Minimal Steel</div>
+            <div class="muted">Elegancia simple para destacar sin esfuerzo.</div>
+            <div class="price-row"><div class="price" style="font-size:1.5rem;">$44.300</div></div>
+            <a href="#comprar" class="btn btn-secondary" style="width:100%;">Ver producto</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Beneficios que generan necesidad</h2>
+          </div>
+          <p>
+            Acá no se habla como ficha técnica. Se comunica lo que el cliente gana. Ese cambio de enfoque suele mejorar la intención de compra.
+          </p>
+        </div>
+        <div class="cards-3">
+          <div class="card">
+            <div class="icon">🎯</div>
+            <strong>Mensajes orientados al deseo</strong>
+            <p>“Se ve mejor”, “ahorra tiempo”, “da más comodidad”, “te hace la vida más fácil”. El beneficio manda.</p>
+          </div>
+          <div class="card">
+            <div class="icon">⏳</div>
+            <strong>Urgencia bien usada</strong>
+            <p>Ofertas, stock visible y CTA repetidos empujan la acción sin parecer una página vieja o agresiva.</p>
+          </div>
+          <div class="card">
+            <div class="icon">💎</div>
+            <strong>Estética premium</strong>
+            <p>La apariencia moderna aumenta el valor percibido. El mismo producto puede vender más si se presenta mejor.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="opiniones">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Opiniones que refuerzan la compra</h2>
+          </div>
+          <p>
+            Las reseñas visibles, directas y creíbles ayudan a bajar objeciones. Son una de las piezas que más influyen en la conversión.
+          </p>
+        </div>
+        <div class="reviews">
+          <div class="review">
+            <div class="stars">★★★★★</div>
+            <p>“La página transmite confianza. Entré por curiosidad y terminé comprando porque todo estaba claro, simple y rápido.”</p>
+            <div class="person">Mariana · Buenos Aires</div>
+          </div>
+          <div class="review">
+            <div class="stars">★★★★★</div>
+            <p>“Me gustó que no tuve que buscar mucho. Vi el producto, entendí el beneficio y compré desde el celular en segundos.”</p>
+            <div class="person">Lucas · Córdoba</div>
+          </div>
+          <div class="review">
+            <div class="stars">★★★★★</div>
+            <p>“El chat resolvió mi duda al instante. Eso fue lo que hizo que no abandonara la compra.”</p>
+            <div class="person">Sofía · Santa Fe</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ayuda">
+      <div class="container chat-box">
+        <div class="chat-window">
+          <div class="chat-top">
+            <strong>Asistente de compra IA</strong>
+            <span class="pill">En línea ahora</span>
+          </div>
+          <div class="bubble user">¿Sirve para iPhone y Android?</div>
+          <div class="bubble ai">Sí. Este modelo funciona con ambos sistemas mediante Bluetooth. También incluye carga rápida y muy buena autonomía diaria.</div>
+          <div class="bubble user">¿Cuánto tarda el envío?</div>
+          <div class="bubble ai">Depende de la zona, pero normalmente entre 24 y 72 horas hábiles. Una vez comprado, recibís seguimiento del pedido.</div>
+          <div class="input-row">
+            <input type="text" placeholder="Escribí tu consulta..." />
+            <button class="btn btn-primary">Enviar</button>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="n">+27%</div>
+            <div><strong>Más intención de compra</strong></div>
+            <div class="small">Cuando la ficha se presenta como landing de venta.</div>
+          </div>
+          <div class="metric">
+            <div class="n">4.9/5</div>
+            <div><strong>Confianza percibida</strong></div>
+            <div class="small">Diseño premium + mensajes claros + soporte.</div>
+          </div>
+          <div class="metric">
+            <div class="n">1 clic</div>
+            <div><strong>Camino corto a comprar</strong></div>
+            <div class="small">Menos pasos, menos distracción, más conversión.</div>
+          </div>
+          <div class="metric">
+            <div class="n">24/7</div>
+            <div><strong>Respuesta automática</strong></div>
+            <div class="small">La IA vende incluso cuando vos no estás conectado.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="comprar">
+      <div class="container">
+        <div class="cta-panel">
+          <span class="pill" style="margin-bottom:12px; color:white;">Comprar Mejor · diseño ideal para vender</span>
+          <h2>Una web pensada para que el usuario quiera comprar hoy</h2>
+          <p>
+            Este formato combina estética actual, foco en beneficios, prueba social, urgencia y asistencia inteligente. Para tu caso, es más conveniente que una web estilo marketplace puro porque guía mejor la decisión y vende más rápido.
+          </p>
+          <div class="hero-actions">
+            <a href="#destacados" class="btn btn-primary">Ver productos</a>
+            <a href="#ayuda" class="btn btn-secondary">Probar ayuda IA</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div>© 2026 Comprar Mejor</div>
+      <div>Diseño moderno · Conversión alta · Mobile first</div>
+    </div>
+  </footer>
+
+  <div class="sticky-buy">
+    <div class="inner">
+      <div class="info">
+        <div class="small">Oferta destacada</div>
+        <div style="font-weight:800;">Auriculares Pro Wireless · $39.999</div>
+      </div>
+      <a href="#comprar" class="btn btn-primary" style="padding: 14px 18px; white-space: nowrap;">Comprar</a>
+    </div>
+  </div>
+</body>
+</html>
