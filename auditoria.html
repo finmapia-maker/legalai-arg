@@ -1,162 +1,116 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
 <meta charset="UTF-8" />
 <title>Auditoría LegalAI</title>
 
-<!-- TIPOGRAFÍAS -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legalai-theme.css">
 
 <style>
-
-/* ===== VARIABLES ===== */
-:root {
-  --paper:#0c0e12;
-  --surface:#1c2030;
-  --ink:#fff;
-  --mist:rgba(255,255,255,.6);
-  --line:rgba(255,255,255,.08);
-  --gold:#d4a847;
-  --btn-bg:#d4a847;
-  --btn-txt:#000;
-  --shadow:0 10px 30px rgba(0,0,0,.4);
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
-/* ===== BASE ===== */
-body {
-  font-family:'DM Sans', sans-serif;
-  background:var(--paper);
-  color:var(--ink);
-  padding:20px;
-}
-
-/* ===== HEADER ===== */
 .header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.logo {
-  font-family:'Playfair Display', serif;
-  color:var(--gold);
-  font-size:1.2rem;
+.title {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  color: var(--gold);
 }
 
-/* ===== GRID ===== */
 .grid {
-  display:grid;
-  grid-template-columns: 320px 1fr;
-  gap:20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
 }
 
-/* ===== CARDS ===== */
 .card {
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:16px;
-  box-shadow:var(--shadow);
+  background: var(--surface);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
 
-/* ===== TEXT ===== */
-.label {
-  font-size:.65rem;
-  font-family:'DM Mono', monospace;
-  color:var(--gold);
-  margin-bottom:4px;
+.kicker {
+  font-size: 11px;
+  color: var(--mist);
+  margin-bottom: 5px;
+  text-transform: uppercase;
 }
 
 .value {
-  margin-bottom:12px;
-  font-size:.9rem;
+  font-size: 16px;
 }
 
-h1 {
-  font-family:'Playfair Display', serif;
-  font-size:1.8rem;
-  margin-bottom:15px;
+.big {
+  font-size: 22px;
+  font-weight: bold;
 }
 
-/* ===== DECISION ===== */
 .decision {
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:6px;
-  font-weight:500;
-  font-size:.8rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: inline-block;
 }
 
-.NO_CAMBIAR { background:#444; }
-.OBSERVAR { background:#2b5cff; }
-.PROPONER_CAMBIO { background:#2ecc71; color:#000; }
+.NO_CAMBIAR { background: #444; }
+.OBSERVAR { background: #2b5cff; }
+.PROPONER_CAMBIO { background: #2ecc71; }
 
-/* ===== LOG LIST ===== */
-.log-item {
-  border-bottom:1px solid var(--line);
-  padding:10px 0;
-  cursor:pointer;
+.logs {
+  margin-top: 25px;
 }
 
-.log-item:hover {
-  opacity:.7;
+.log-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
 }
 
 .log-header {
-  display:flex;
-  justify-content:space-between;
-  font-size:.75rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.log-body {
-  font-size:.85rem;
-  margin-top:5px;
-  color:var(--mist);
-}
-
-/* ===== DETALLE ===== */
 pre {
-  background:#000;
-  padding:10px;
-  font-size:.7rem;
-  border-radius:6px;
-  overflow:auto;
+  background: #000;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  overflow-x: auto;
 }
-
-/* ===== EMPTY ===== */
-.empty {
-  color:var(--mist);
-  font-size:.85rem;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="logo">LegalAI <span style="opacity:.4">Auditor</span></div>
-</div>
+<div class="container">
 
-<h1>Auditoría diaria</h1>
+  <div class="header">
+    <div class="title">Auditoría LegalAI</div>
+  </div>
 
-<div class="grid">
+  <div class="grid" id="estado"></div>
 
-  <!-- ESTADO -->
-  <div id="estado" class="card"></div>
-
-  <!-- LOGS + DETALLE -->
-  <div class="card">
+  <div class="logs">
+    <div class="title" style="font-size:20px;">Historial</div>
     <div id="logs"></div>
-    <hr style="margin:15px 0; border-color:var(--line);">
-    <div id="detalle" class="empty">Seleccioná un log para ver detalle</div>
   </div>
 
 </div>
 
 <script>
-
 async function cargarJSON(path) {
   try {
     const res = await fetch(path);
@@ -169,63 +123,66 @@ async function cargarJSON(path) {
 function renderEstado(data) {
   if (!data) return;
 
-  document.getElementById("estado").innerHTML = `
-    <div class="label">Estado</div>
-    <div class="value">${data.estado || "-"}</div>
-
-    <div class="label">Última decisión</div>
-    <div class="value">
-      <span class="decision ${data.ultima_decision}">
-        ${data.ultima_decision || "-"}
-      </span>
+  const html = `
+    <div class="card">
+      <div class="kicker">Estado</div>
+      <div class="big">${data.estado || "-"}</div>
     </div>
 
-    <div class="label">Última fecha</div>
-    <div class="value">${data.fecha || "-"}</div>
+    <div class="card">
+      <div class="kicker">Última decisión</div>
+      <div class="decision ${data.ultima_decision}">
+        ${data.ultima_decision || "-"}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="kicker">Fecha</div>
+      <div class="value">${data.fecha || "-"}</div>
+    </div>
   `;
+
+  document.getElementById("estado").innerHTML = html;
 }
 
 function renderLogs(logs) {
-  if (!logs || logs.length === 0) {
-    document.getElementById("logs").innerHTML = `<div class="empty">Sin logs</div>`;
-    return;
-  }
+  if (!logs || logs.length === 0) return;
 
   let html = "";
 
-  logs.reverse().forEach((log, index) => {
+  logs.reverse().forEach(log => {
     html += `
-      <div class="log-item" onclick="verDetalle(${index})">
+      <div class="log-card">
         <div class="log-header">
-          <span>${log.fecha}</span>
-          <span class="decision ${log.decision?.decision}">
+          <div>${log.fecha}</div>
+          <div class="decision ${log.decision?.decision}">
             ${log.decision?.decision || "-"}
-          </span>
+          </div>
         </div>
-        <div class="log-body">
-          ${log.decision?.resumen || "-"}
+
+        <div class="grid">
+
+          <div>
+            <div class="kicker">Resumen</div>
+            <div>${log.decision?.resumen || "-"}</div>
+          </div>
+
+          <div>
+            <div class="kicker">Motivo</div>
+            <div>${log.decision?.motivo || "-"}</div>
+          </div>
+
+        </div>
+
+        <div style="margin-top:10px;">
+          <div class="kicker">Cambio sugerido</div>
+          <pre>${JSON.stringify(log.decision?.cambio_sugerido, null, 2)}</pre>
         </div>
       </div>
     `;
   });
 
   document.getElementById("logs").innerHTML = html;
-  window._logs = logs.reverse();
-}
-
-function verDetalle(i) {
-  const log = window._logs[i];
-
-  document.getElementById("detalle").innerHTML = `
-    <div class="label">Resumen</div>
-    <div class="value">${log.decision?.resumen || "-"}</div>
-
-    <div class="label">Motivo</div>
-    <div class="value">${log.decision?.motivo || "-"}</div>
-
-    <div class="label">Cambio sugerido</div>
-    <pre>${JSON.stringify(log.decision?.cambio_sugerido, null, 2)}</pre>
-  `;
 }
 
 async function init() {
@@ -240,7 +197,6 @@ async function init() {
 }
 
 init();
-
 </script>
 
 </body>
