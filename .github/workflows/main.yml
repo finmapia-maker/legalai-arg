@@ -1,0 +1,25 @@
+name: Auditoria LegalAI
+
+on:
+  schedule:
+    - cron: '0 11 * * *' # 08:00 Argentina
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repo
+        uses: actions/checkout@v3
+
+      - name: Instalar Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Instalar dependencias
+        run: npm install axios nodemailer
+
+      - name: Ejecutar auditoría
+        run: node scripts/auditoria.js
