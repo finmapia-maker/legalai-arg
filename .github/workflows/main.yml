@@ -2,7 +2,7 @@ name: Auditoria LegalAI
 
 on:
   schedule:
-    - cron: '0 11 * * *' # 08:00 Argentina
+    - cron: '0 11 * * *'
   workflow_dispatch:
 
 jobs:
@@ -18,19 +18,16 @@ jobs:
       - name: Clonar repo
         uses: actions/checkout@v4
 
-      - name: Instalar Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Verificar archivos
+      - name: Verificar estructura
         run: |
+          echo "Carpeta actual:"
           pwd
+          echo "Archivos raíz:"
           ls -la
+          echo "Carpeta scripts:"
           ls -la scripts || true
-
-      - name: Instalar dependencias
-        run: npm install axios
+          echo "Node:"
+          node -v
 
       - name: Ejecutar auditoría
         run: node scripts/auditoria.js
