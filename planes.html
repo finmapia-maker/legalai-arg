@@ -376,6 +376,12 @@ const refAfiliado = refParam || sessionStorage.getItem('legalai_ref');
 // ── Retorno de pago ───────────────────────────────────────────────
 if (params.get('status') === 'success') {
   document.getElementById('bannerExito').classList.add('visible');
+  // Google Ads: conversión confirmada plan
+  try {
+    const _v  = parseFloat(sessionStorage.getItem('legalai_plan_precio_usd') || '0') || 0;
+    const _id = sessionStorage.getItem('legalai_plan_id') || '';
+    if (_v > 0) gtag('event', 'conversion', { 'send_to': 'AW-18073890544', 'value': _v, 'currency': 'USD', 'transaction_id': _id + '_' + Date.now() });
+  } catch(_) {}
   const em = sessionStorage.getItem('legalai_email');
   if (em) setTimeout(() => {
     document.getElementById('inputEmail').value = em;
@@ -430,6 +436,8 @@ function iniciarPago(plan_id) {
   planPendiente = plan_id;
   const p       = PLANES.find(x => x.id === plan_id);
   const precio  = modoPago === 'cripto' ? p.cripto : p.tarjeta;
+  // Google Ads: inicio de checkout
+  try { gtag('event', 'begin_checkout', { value: precio, currency: 'USD', items: [{ item_id: plan_id, item_name: p.nombre }] }); } catch(_) {}
   document.getElementById('tagPlan').textContent =
     `${p.nombre} · USD ${precio} · ${modoPago === 'cripto' ? 'USDT' : 'Tarjeta'}`;
   const em = sessionStorage.getItem('legalai_email');
@@ -480,6 +488,12 @@ async function confirmarEmail() {
     if (data.invoice_url) {
       sessionStorage.setItem('legalai_invoice', data.invoice_id || '');
       sessionStorage.setItem('legalai_email', email);
+      // Google Ads: conversión de plan iniciada
+      const _p = PLANES.find(x => x.id === plan_id);
+      const _v = _p ? (modoPago === 'cripto' ? _p.cripto : _p.tarjeta) : 0;
+      sessionStorage.setItem('legalai_plan_precio_usd', _v);
+      sessionStorage.setItem('legalai_plan_id', plan_id);
+      try { gtag('event', 'conversion', { 'send_to': 'AW-18073890544', 'value': _v, 'currency': 'USD' }); } catch(_) {}
       window.location.href = data.invoice_url;
     } else {
       cargando      = null;
