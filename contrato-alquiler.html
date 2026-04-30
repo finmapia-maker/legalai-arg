@@ -143,7 +143,7 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 <!-- NAV -->
 <nav>
   <a class="logo" href="https://legalai-arg.com">Legal<span>AI</span> Arg</a>
-  <a href="https://legalai-arg.com/#formulario" style="background:var(--acento);color:#0a0a0a;font-weight:700;font-size:.82rem;padding:9px 20px;border-radius:8px;text-decoration:none;">Crear contrato</a>
+  <a href="https://legalai-arg.com/#formulario" style="background:var(--acento);color:#0a0a0a;font-weight:700;font-size:.82rem;padding:9px 20px;border-radius:8px;text-decoration:none;">Crear y ver resultado →</a>
 </nav>
 
 <!-- HERO -->
@@ -156,32 +156,39 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 
   <!-- Checks directos ANTES del título -->
   <div class="hero-checks">
-    <div class="hero-check">Contrato legal válido en Argentina</div>
-    <div class="hero-check">Listo en 5 minutos</div>
-    <div class="hero-check">Descarga inmediata en PDF</div>
-    <div class="hero-check">Sin abogado ni turnos</div>
+    <div class="hero-check">Vista previa antes de pagar</div>
+    <div class="hero-check">Pagás solo si te sirve el documento</div>
+    <div class="hero-check">Listo en 5 minutos · descarga inmediata</div>
+    <div class="hero-check">Sin abogado · válido en Argentina</div>
   </div>
 
-  <h1>Contrato de alquiler listo<br><mark>en 5 minutos</mark></h1>
-  <p class="hero-sub">Completás los datos en 2 minutos, pagás y el PDF se descarga al instante. Revisás antes de pagar. Sin compromiso.</p>
+  <h1>Creá tu contrato de alquiler<br><mark>en 5 minutos</mark> — vista previa antes de pagar</h1>
+  <p class="hero-sub">Completás los datos, ves el resultado completo y <strong style="color:var(--txt)">pagás solo si te sirve</strong>. PDF descargable al instante.</p>
 
   <div class="precio-pill">
     <span class="precio-monto" id="heroMonto">$ 6.000</span>
     <span class="precio-det" id="heroDet">Precio final en pesos · pago único</span>
-    <span class="precio-nota-pill">Sin suscripción · sin costos ocultos</span>
+    <span class="precio-nota-pill">Precio final · sin costos ocultos · pago único</span>
   </div>
 
-  <p style="font-size:.82rem;color:var(--txt-muted);margin-bottom:10px;font-weight:500">
-    Sin pagar hasta ver el resultado
+  <p style="font-size:.82rem;color:var(--txt-dim);margin-bottom:10px;font-weight:600">
+    Pagás solo si te sirve el documento · vista previa gratis
   </p>
   <a class="btn-cta" href="https://legalai-arg.com/#formulario"
     onclick="fireConversion('hero_landing')">
-    CREAR MI CONTRATO AHORA
+    CREAR Y VER MI CONTRATO →
   </a>
   <div class="trust-line">
     <span>🔒 Pago seguro MercadoPago</span>
-    <span>⚡ Descarga inmediata</span>
-    <span>📄 Revisás antes de pagar</span>
+    <span>📍 Usado en toda Argentina</span>
+    <span>📄 Modelo orientativo · no reemplaza abogado</span>
+  </div>
+  <div style="margin-top:14px;font-size:.77rem;color:var(--txt-muted);display:flex;gap:18px;justify-content:center;flex-wrap:wrap">
+    <span>+500 contratos generados</span>
+    <span>·</span>
+    <span>Propietarios e inquilinos</span>
+    <span>·</span>
+    <span>Todo el país</span>
   </div>
 </section>
 
@@ -244,13 +251,13 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
   <div class="precio-card">
     <div class="monto" id="precioGrande"><span class="ld"></span></div>
     <div class="det" id="precioGrandeDet">cargando…</div>
-    <p style="font-size:.8rem;color:var(--txt-muted);margin-bottom:10px;font-weight:500">
-      Sin pagar hasta ver el resultado
+    <p style="font-size:.8rem;color:var(--txt-dim);margin-bottom:10px;font-weight:600">
+      Pagás solo si te sirve · vista previa completa gratis
     </p>
     <a class="btn-cta" href="https://legalai-arg.com/#formulario"
       onclick="fireConversion('precio_landing')"
       style="display:block;width:100%">
-      CREAR MI CONTRATO AHORA
+      CREAR Y VER MI CONTRATO →
     </a>
     <div class="nota">🔒 Pago seguro · Descarga inmediata · PDF listo para firmar</div>
   </div>
@@ -285,13 +292,13 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 
 <!-- CTA FINAL -->
 <section class="cta-final">
-  <h2>Tu contrato, listo en 5 minutos</h2>
-  <p>Sin abogado · Sin esperas · Revisás antes de pagar</p>
+  <h2>Creá y revisá tu contrato<br>antes de pagar</h2>
+  <p>Vista previa completa · pagás solo si te sirve · PDF inmediato</p>
   <div class="precio-inline" id="ctaInlinePrecio">$ 6.000 · pago único</div>
   <a class="btn-cta" href="https://legalai-arg.com/#formulario"
     onclick="fireConversion('cta_final_landing')"
     style="font-size:1rem;padding:16px 40px">
-    CREAR MI CONTRATO AHORA
+    CREAR Y VER MI CONTRATO →
   </a>
   <p style="margin-top:14px;font-size:.75rem;color:rgba(255,255,255,.35)">
     Precio final · sin sorpresas · sin suscripción
@@ -414,7 +421,7 @@ window.addEventListener('load', async function() {
     </div>
     <a class="sticky-btn" href="https://legalai-arg.com/#formulario"
       onclick="fireConversion('sticky_landing')">
-      Crear contrato →
+      Ver mi contrato →
     </a>
   </div>
 </div>
