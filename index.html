@@ -1409,6 +1409,8 @@ async function enviarSolicitudAfiliado() {
 
     document.getElementById('affFormBody').style.display = 'none';
     okPanel.style.display = 'block';
+    // Google Ads: lead de afiliado
+    try { gtag('event', 'generate_lead', { 'send_to': 'AW-18073890544', 'value': 0, 'currency': 'USD' }); } catch(_) {}
 
   } catch (e) {
     errEl.textContent = 'Error al enviar la solicitud: ' + e.message + '. Intentá de nuevo o escribinos directamente.';
