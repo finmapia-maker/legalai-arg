@@ -41,11 +41,9 @@ function readState() {
     return {
       fecha_inicio: new Date().toISOString(),
       estado: "baseline_inicial",
-      experimento_activo: null,
       cambios_probados: []
     };
   }
-
   return JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
 }
 
@@ -58,50 +56,32 @@ function readRecentLogs() {
     .map(x => JSON.parse(x));
 }
 
-function readMetrics() {
-  return {
-    conversiones_disponibles: false,
-    nota: "Sin integración de métricas reales"
-  };
-}
-
-function buildPrompt({ site, state, logs, metrics }) {
+function buildPrompt({ site, state, logs }) {
   return `
-Actuás como auditor CRO de LegalAI.
+RESPONDER SOLO JSON.
+SIN TEXTO EXTRA.
+SIN MARKDOWN.
+SIN EXPLICACIONES.
 
-OBJETIVO:
-NO cambiar constantemente.
-Solo sugerir cambios si hay evidencia o lógica fuerte.
-
-REGLAS:
-- Máximo 1 cambio
-- No contradicciones
-- Si no hay datos → NO_CAMBIAR
-- Priorizar estabilidad
-
-FORMATO JSON:
+FORMATO EXACTO:
 
 {
   "decision": "NO_CAMBIAR" | "OBSERVAR" | "PROPONER_CAMBIO",
-  "resumen": "...",
-  "motivo": "...",
-  "cambio_sugerido": {
-    "archivo": "...",
-    "seccion": "...",
-    "texto_nuevo": "...",
-    "hipotesis": "...",
-    "plazo_dias": 3
-  }
+  "resumen": "texto corto",
+  "motivo": "texto corto",
+  "cambio_sugerido": null
 }
+
+REGLAS:
+- Si no hay datos → NO_CAMBIAR
+- No contradicciones
+- No cambios innecesarios
 
 ESTADO:
 ${JSON.stringify(state)}
 
 LOGS:
 ${JSON.stringify(logs)}
-
-METRICAS:
-${JSON.stringify(metrics)}
 
 SITIO:
 ${site}
@@ -116,19 +96,37 @@ async function postJson(url, headers, body) {
   });
 
   const text = await res.text();
-  let data;
-
-  try { data = JSON.parse(text); } catch { data = text; }
 
   if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${JSON.stringify(data)}`);
+    throw new Error(`HTTP ${res.status}: ${text}`);
   }
 
-  return data;
+  return text;
+}
+
+// 🔥 parser robusto
+function extractJSON(text) {
+  try {
+    return JSON.parse(text);
+  } catch {}
+
+  const match = text.match(/\{[\s\S]*\}/);
+  if (match) {
+    try {
+      return JSON.parse(match[0]);
+    } catch {}
+  }
+
+  return {
+    decision: "OBSERVAR",
+    resumen: "Claude no devolvió JSON válido",
+    motivo: "Respuesta inválida",
+    raw: text
+  };
 }
 
 async function askClaude(prompt, apiKey) {
-  const data = await postJson(
+  const raw = await postJson(
     "https://api.anthropic.com/v1/messages",
     {
       "x-api-key": apiKey,
@@ -137,23 +135,13 @@ async function askClaude(prompt, apiKey) {
     },
     {
       model: CLAUDE_MODEL,
-      max_tokens: 2000,
+      max_tokens: 1500,
       messages: [{ role: "user", content: prompt }]
     }
   );
 
-  return data.content?.[0]?.text || "";
-}
-
-function parseClaude(text) {
-  try {
-    return JSON.parse(text);
-  } catch {
-    return {
-      decision: "OBSERVAR",
-      resumen: "Claude no devolvió JSON válido"
-    };
-  }
+  const parsed = JSON.parse(raw);
+  return parsed.content?.[0]?.text || "";
 }
 
 function updateState(state, decision) {
@@ -172,24 +160,24 @@ function saveLog(decision, state) {
 }
 
 async function sendEmail(decision, apiKey, to) {
-  await postJson(
-    "https://api.resend.com/emails",
-    {
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json"
     },
-    {
+    body: JSON.stringify({
       from: "LegalAI <onboarding@resend.dev>",
       to: [to],
       subject: "Auditoría LegalAI",
       text: JSON.stringify(decision, null, 2)
-    }
-  );
+    })
+  });
 }
 
 (async () => {
   try {
-    console.log("Modelo usado:", CLAUDE_MODEL);
+    console.log("Modelo:", CLAUDE_MODEL);
 
     ensureDataDir();
 
@@ -200,12 +188,11 @@ async function sendEmail(decision, apiKey, to) {
     const site = readSite();
     const state = readState();
     const logs = readRecentLogs();
-    const metrics = readMetrics();
 
-    const prompt = buildPrompt({ site, state, logs, metrics });
+    const prompt = buildPrompt({ site, state, logs });
 
     const raw = await askClaude(prompt, claudeKey);
-    const decision = parseClaude(raw);
+    const decision = extractJSON(raw);
 
     const newState = updateState(state, decision);
 
