@@ -26,13 +26,13 @@ jobs:
       - name: Ejecutar auditoría
         run: node scripts/auditoria.js
 
-- name: Guardar logs
-  run: |
-    git config user.name "bot"
-    git config user.email "bot@users.noreply.github.com"
+      - name: Guardar logs
+        run: |
+          git config user.name "bot"
+          git config user.email "bot@users.noreply.github.com"
 
-    git add data/auditoria-log.jsonl
-    git add data/auditoria-state.json
+          git add data/auditoria-log.jsonl
+          git add data/auditoria-state.json
 
-    git commit -m "update auditoria logs" || echo "sin cambios"
-    git push
+          git commit -m "update auditoria logs" || echo "sin cambios"
+          git push
