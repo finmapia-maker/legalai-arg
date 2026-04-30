@@ -1201,12 +1201,19 @@ function getUTM() {
     ref: sessionStorage.getItem('legalai_ref') || 'directo',
   };
 }
+// ── Session ID persistente por visita ────────────────────────────
+const _SESSION_ID = sessionStorage.getItem('legalai_sid') || (() => {
+  const sid = 'sid_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  sessionStorage.setItem('legalai_sid', sid);
+  return sid;
+})();
+
 function track(tipo, extra) {
   try {
     fetch(CONFIG.WORKER_URL + '/evento', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, pagina: 'index', ...getUTM(), ...(extra || {}) })
+      body: JSON.stringify({ tipo, pagina: 'index', session_id: _SESSION_ID, ...getUTM(), ...(extra || {}) })
     });
   } catch(_) {}
 }
@@ -1673,6 +1680,7 @@ async function irAPreview() {
     document.getElementById('loadingPreview').classList.remove('visible');
     showCard('25');
     document.getElementById('previewContainer').scrollTop = 0;
+    track('preview_ok', { doc_tipo: G.form?.titulo || G.tipo });
   } catch(err) {
     document.getElementById('loadingPreview').classList.remove('visible');
     document.getElementById('card2').classList.add('visible');
@@ -1845,6 +1853,7 @@ async function generarDocumento(paymentId) {
     sessionStorage.setItem('legalai_paymentId', G.paymentId);
     document.getElementById('loadingDoc').classList.remove('visible');
     showCard(4);
+    track('pago_ok', { doc_tipo: G.form?.titulo || G.tipo, monto: G.precio_usd || 0 });
   } catch(err) {
     document.getElementById('loadingDoc').classList.remove('visible');
     document.getElementById('card3').classList.add('visible');
