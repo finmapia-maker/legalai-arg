@@ -218,7 +218,7 @@ function saveLog(decision, state, metrics) {
     comparacion_vs_dia_anterior: decision.comparacion_vs_dia_anterior,
     cambio_sugerido: decision.cambio_sugerido || null,
     metricas: metrics,
-    modelo: MODEL
+    modelo: CLAUDE_MODEL
   };
 
   fs.appendFileSync(LOG_FILE, JSON.stringify(entry) + "\n");
