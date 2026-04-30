@@ -2,7 +2,7 @@ name: Auditoria LegalAI
 
 on:
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '0 11 * * *' # 08:00 Argentina
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      EMAIL_TO: ${{ secrets.EMAIL_TO }}
 
     steps:
       - name: Clonar repo
@@ -20,6 +22,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Verificar archivos
+        run: |
+          pwd
+          ls -la
+          ls -la scripts || true
 
       - name: Instalar dependencias
         run: npm install axios
