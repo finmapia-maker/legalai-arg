@@ -20,13 +20,10 @@ jobs:
 
       - name: Verificar estructura
         run: |
-          echo "Carpeta actual:"
-          pwd
           echo "Archivos raíz:"
           ls -la
           echo "Carpeta scripts:"
           ls -la scripts || true
-          echo "Node:"
           node -v
 
       - name: Ejecutar auditoría
