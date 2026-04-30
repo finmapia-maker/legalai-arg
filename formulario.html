@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generá tu contrato de alquiler | LegalAI Arg</title>
+<meta name="description" content="Completá los datos y ves el contrato completo gratis. Pagás solo si te sirve.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18073890544');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--ink:#0f1117;--paper:#f7f3ec;--cream:#ede8dc;--surface:#ffffff;--gold:#c8a84b;--gold-dim:rgba(200,168,75,0.12);--sage:#3d5a46;--sage-dim:rgba(61,90,70,0.09);--mist:#6b7580;--line:rgba(15,17,23,0.1);--hdr-bg:#0f1117;--shadow:0 2px 16px rgba(15,17,23,0.07);--btn-bg:#0f1117;--btn-txt:#c8a84b;--btn-hover:#1e2230}
+[data-theme="dark"]{--ink:#eceef2;--paper:#0c0e12;--cream:#141720;--surface:#1c2030;--gold:#d4a847;--gold-dim:rgba(212,168,71,0.13);--sage:#6abf8a;--sage-dim:rgba(106,191,138,0.1);--mist:#7a8494;--line:rgba(255,255,255,0.07);--hdr-bg:#080a0e;--shadow:0 2px 20px rgba(0,0,0,0.4);--btn-bg:#d4a847;--btn-txt:#0c0e12;--btn-hover:#e0b84e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;transition:background .3s,color .3s}
+header{background:var(--hdr-bg);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,168,75,.15);position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.05em;text-decoration:none}
+.logo span{color:rgba(200,168,75,.4)}
+.hdr-right{display:flex;align-items:center;gap:14px}
+.hdr-back{font-size:.75rem;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.hdr-back:hover{color:var(--gold)}
+.theme-toggle{display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px}
+.theme-btn{padding:3px 9px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.63rem;color:rgba(255,255,255,.35);transition:all .2s;font-family:'DM Mono',monospace}
+.theme-btn.active{background:rgba(200,168,75,.2);color:var(--gold)}
+.wrap{max-width:620px;margin:0 auto;padding:44px 24px 80px}
+.intro{text-align:center;margin-bottom:32px}
+.intro-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin-bottom:10px}
+.intro h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.3rem);font-weight:900;line-height:1.12;color:var(--ink);margin-bottom:8px;letter-spacing:-.02em}
+.intro-sub{font-size:.92rem;color:var(--mist);line-height:1.6}
+.intro-sub strong{color:var(--ink)}
+.progress{display:flex;align-items:center;gap:0;margin-bottom:28px}
+.prog-step{flex:1;text-align:center;position:relative}
+.prog-step::after{content:'';position:absolute;top:14px;left:50%;right:-50%;height:2px;background:var(--line);z-index:0}
+.prog-step:last-child::after{display:none}
+.prog-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--mist);position:relative;z-index:1;transition:all .3s}
+.prog-lbl{font-size:.66rem;color:var(--mist);font-family:'DM Mono',monospace;letter-spacing:.03em}
+.prog-step.active .prog-dot{border-color:var(--gold);background:var(--gold-dim);color:var(--gold)}
+.prog-step.active .prog-lbl{color:var(--ink)}
+.prog-step.done .prog-dot{border-color:var(--sage);background:var(--sage-dim);color:var(--sage)}
+.prog-step.done .prog-lbl{color:var(--sage)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:var(--shadow);display:none;transition:background .3s}
+.card.visible{display:block}
+.card-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.card-sub{font-size:.84rem;color:var(--mist);margin-bottom:22px;line-height:1.55}
+.sec-div{display:flex;align-items:center;gap:12px;margin:18px 0 14px}
+.sec-div span{font-family:'DM Mono',monospace;font-size:.63rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);white-space:nowrap}
+.sec-div::before,.sec-div::after{content:'';flex:1;height:1px;background:var(--line)}
+.field{margin-bottom:14px}
+.field-label{display:block;font-size:.7rem;font-weight:500;color:var(--mist);margin-bottom:5px;font-family:'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+.req{color:var(--gold);margin-left:2px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input,select,textarea{width:100%;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:.9rem;background:var(--paper);border:1.5px solid var(--line);border-radius:9px;color:var(--ink);outline:none;transition:border-color .2s,background .3s;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:68px}
+.checks-group{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;background:var(--cream);border:1px solid var(--line);border-radius:9px;cursor:pointer;transition:border-color .2s}
+.check-item:hover{border-color:var(--gold)}
+.check-item input[type=checkbox]{width:16px;height:16px;margin-top:1px;accent-color:var(--gold);flex-shrink:0;cursor:pointer}
+.check-txt strong{display:block;font-size:.87rem;color:var(--ink);cursor:pointer}
+.check-txt span{font-size:.75rem;color:var(--mist);line-height:1.3}
+.btn-main{width:100%;padding:15px;background:var(--btn-bg);color:var(--btn-txt);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
+.btn-main:hover:not(:disabled){background:var(--btn-hover)}
+.btn-main:disabled{opacity:.5;cursor:not-allowed}
+.btn-gold{background:var(--gold);color:#0f1117}
+.btn-gold:hover:not(:disabled){opacity:.88}
+.btn-ghost{width:100%;padding:11px;background:transparent;border:1.5px solid var(--line);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--mist);cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-ghost:hover{color:var(--ink);border-color:var(--gold)}
+.promesa{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+.promesa-item{display:flex;align-items:center;gap:7px;font-size:.79rem;color:var(--mist)}
+.promesa-item::before{content:'✔';color:var(--sage);font-size:.73rem;flex-shrink:0}
+.alert{padding:10px 13px;border-radius:9px;font-size:.82rem;margin-bottom:12px;line-height:1.5;display:none}
+.alert.visible{display:block}
+.alert.err{background:rgba(220,53,69,.07);border:1px solid rgba(220,53,69,.15);color:#c0392b}
+.alert.grn{background:var(--sage-dim);border:1px solid rgba(61,90,70,.15);color:var(--sage)}
+.loading{display:none;text-align:center;padding:48px 24px}
+.spinner{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-lbl{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mist);text-transform:uppercase;letter-spacing:.1em}
+.preview-box{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--cream);max-height:460px;overflow-y:auto;position:relative;margin:14px 0;user-select:none;-webkit-user-select:none}
+#previewCanvas{display:block;width:100%;cursor:default}
+#previewWatermarkOverlay{position:absolute;inset:0;overflow:hidden;opacity:.11;pointer-events:none}
+.precio-box{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.precio-box-lbl{font-size:.84rem;font-weight:600;color:var(--ink)}
+.precio-box-sub{font-size:.74rem;color:var(--mist);margin-top:2px}
+.precio-box-amt{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--ink);text-align:right}
+.precio-box-det{font-family:'DM Mono',monospace;font-size:.63rem;color:var(--mist);text-align:right}
+.success-box{text-align:center;padding:28px 16px}
+.success-icon{font-size:2.6rem;margin-bottom:12px}
+.success-box h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+.success-box p{font-size:.87rem;color:var(--mist);line-height:1.6;margin-bottom:20px}
+footer{background:var(--hdr-bg);padding:24px 32px;text-align:center;border-top:1px solid rgba(200,168,75,.12);margin-top:0}
+footer p{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.22);letter-spacing:.04em;line-height:2}
+footer a{color:rgba(200,168,75,.45);text-decoration:none}
+footer a:hover{color:var(--gold)}
+@media(max-width:480px){.wrap{padding:28px 14px 60px}.card{padding:20px 16px}.field-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="https://legalai-arg.com">LegalAI <span>ARG</span></a>
+  <div class="hdr-right">
+    <a class="hdr-back" href="https://legalai-arg.com">← Inicio</a>
+    <div class="theme-toggle">
+      <button class="theme-btn" id="btnLight"  onclick="setTheme('light')">☀</button>
+      <button class="theme-btn" id="btnSystem" onclick="setTheme('system')">⊙</button>
+      <button class="theme-btn" id="btnDark"   onclick="setTheme('dark')">◗</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    <div class="intro-tag">// Contrato de alquiler · Argentina</div>
+    <h1>Completá los datos<br>y ves tu contrato gratis</h1>
+    <p class="intro-sub"><strong>No necesitás pagar para ver el resultado.</strong><br>Pagás solo si te sirve el documento.</p>
+  </div>
+
+  <div class="progress">
+    <div class="prog-step active" id="ps1"><div class="prog-dot">1</div><div class="prog-lbl">Datos</div></div>
+    <div class="prog-step"        id="ps2"><div class="prog-dot">2</div><div class="prog-lbl">Ver</div></div>
+    <div class="prog-step"        id="ps3"><div class="prog-dot">3</div><div class="prog-lbl">Pagar</div></div>
+    <div class="prog-step"        id="ps4"><div class="prog-dot">4</div><div class="prog-lbl">PDF</div></div>
+  </div>
+
+  <!-- CARD 1: FORMULARIO -->
+  <div class="card visible" id="card1">
+    <div class="card-title">Datos del contrato</div>
+    <div class="card-sub">Completá los campos. Los marcados con <span style="color:var(--gold)">*</span> son obligatorios.</div>
+    <div class="alert err" id="alertForm"></div>
+
+    <div class="sec-div"><span>Partes</span></div>
+    <div class="field">
+      <label class="field-label" for="propietario">Propietario <span class="req">*</span></label>
+      <input type="text" id="propietario" placeholder="Nombre y apellido completo">
+    </div>
+    <div class="field">
+      <label class="field-label" for="inquilino">Inquilino <span class="req">*</span></label>
+      <input type="text" id="inquilino" placeholder="Nombre y apellido completo">
+    </div>
+
+    <div class="sec-div"><span>Propiedad</span></div>
+    <div class="field">
+      <label class="field-label" for="direccion">Dirección del inmueble <span class="req">*</span></label>
+      <input type="text" id="direccion" placeholder="Ej: Av. Corrientes 1234, 3° B">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="ciudad">Ciudad <span class="req">*</span></label>
+        <input type="text" id="ciudad" placeholder="Ej: Buenos Aires">
+      </div>
+      <div class="field">
+        <label class="field-label" for="provincia">Provincia <span class="req">*</span></label>
+        <input type="text" id="provincia" placeholder="Ej: CABA">
+      </div>
+    </div>
+
+    <div class="sec-div"><span>Condiciones</span></div>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="monto">Monto mensual ARS <span class="req">*</span></label>
+        <input type="number" id="monto" placeholder="Ej: 150000" min="1">
+      </div>
+      <div class="field">
+        <label class="field-label" for="duracion">Duración (meses) <span class="req">*</span></label>
+        <input type="number" id="duracion" placeholder="Ej: 24" min="1" max="120">
+      </div>
+    </div>
+    <div class="field">
+      <label class="field-label" for="fecha_inicio">Fecha de inicio <span class="req">*</span></label>
+      <input type="date" id="fecha_inicio">
+    </div>
+
+    <div class="sec-div"><span>¿Qué incluye?</span></div>
+    <div class="checks-group">
+      <label class="check-item">
+        <input type="checkbox" id="chk_deposito" checked>
+        <div class="check-txt"><strong>Depósito en garantía</strong><span>1 mes de alquiler como garantía</span></div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="chk_ajuste" checked>
+        <div class="check-txt"><strong>Cláusula de ajuste</strong><span>Actualización periódica del canon locativo</span></div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="chk_servicios">
+        <div class="check-txt"><strong>Servicios a cargo del inquilino</strong><span>Luz, gas, expensas ordinarias</span></div>
+      </label>
+    </div>
+
+    <div class="sec-div"><span>Observaciones opcionales</span></div>
+    <div class="field">
+      <textarea id="observaciones" rows="3" placeholder="Condiciones adicionales que quieras incluir..."></textarea>
+    </div>
+
+    <button class="btn-main" id="btnGenerar" onclick="generarContrato()">
+      VER MI CONTRATO GRATIS
+    </button>
+    <div class="promesa">
+      <div class="promesa-item">No pagás nada ahora</div>
+      <div class="promesa-item">Ves el contrato completo antes de decidir</div>
+      <div class="promesa-item">Pagás solo si te sirve</div>
+    </div>
+  </div>
+
+  <!-- LOADING generación -->
+  <div class="loading" id="loadingGen">
+    <div class="spinner"></div>
+    <div class="loading-lbl">Generando tu contrato con IA...</div>
+  </div>
+
+  <!-- CARD 2: PREVIEW -->
+  <div class="card" id="card2">
+    <div class="card-title">Tu contrato está listo</div>
+    <div class="card-sub">Leelo completo. Si te sirve, pagás y descargás el PDF.</div>
+    <div class="alert grn visible">✔ Contrato generado · Revisá antes de pagar</div>
+    <div class="preview-box">
+      <canvas id="previewCanvas"></canvas>
+      <div id="previewWatermarkOverlay"></div>
+    </div>
+    <div class="precio-box">
+      <div>
+        <div class="precio-box-lbl">Contrato de alquiler</div>
+        <div class="precio-box-sub">PDF listo para firmar · pago único</div>
+      </div>
+      <div>
+        <div class="precio-box-amt" id="precioAmt">$ —</div>
+        <div class="precio-box-det" id="precioDet">cargando…</div>
+      </div>
+    </div>
+    <p style="font-size:.83rem;color:var(--mist);text-align:center;margin-bottom:10px;font-weight:500">Pagás solo si te sirve el documento</p>
+    <button class="btn-main btn-gold" onclick="pagar()">PAGAR Y DESCARGAR PDF</button>
+    <div class="promesa" style="margin-top:12px">
+      <div class="promesa-item">Pago seguro con MercadoPago</div>
+      <div class="promesa-item">Descarga inmediata tras el pago</div>
+      <div class="promesa-item">Modelo orientativo · no reemplaza abogado</div>
+    </div>
+    <button class="btn-ghost" onclick="volverForm()">← Editar datos</button>
+  </div>
+
+  <!-- LOADING pago / doc -->
+  <div class="loading" id="loadingPago">
+    <div class="spinner"></div>
+    <div class="loading-lbl">Redirigiendo a MercadoPago...</div>
+  </div>
+  <div class="loading" id="loadingDoc">
+    <div class="spinner"></div>
+    <div class="loading-lbl">Generando tu documento final...</div>
+  </div>
+
+  <!-- CARD 4: DESCARGA -->
+  <div class="card" id="card4">
+    <div class="success-box">
+      <div class="success-icon">📄</div>
+      <h2>¡Tu contrato está listo!</h2>
+      <p>Pago confirmado. Descargá el PDF, imprimilo y firmalo con las partes.</p>
+      <button class="btn-main btn-gold" onclick="descargarPDF()">⬇ Descargar PDF</button>
+      <button class="btn-ghost" onclick="reiniciar()" style="max-width:260px;margin:8px auto 0">Generar otro contrato</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>
+    LegalAI Arg · Documentos orientativos generados con inteligencia artificial<br>
+    No constituyen asesoramiento legal profesional · <a href="https://legalai-arg.com">Volver al inicio</a>
+  </p>
+</footer>
+
+<script>
+const WORKER  = 'https://legalai-worker.finmap-ia.workers.dev';
+const DOC_TIPO = 'Contrato de alquiler de vivienda';
+let G = { previewId:null, paymentId:null, precio_usd:11, texto:'' };
+let cotizacion = { valor:null, fuente:null };
+
+// Tema
+function setTheme(t){localStorage.setItem('theme',t);applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));}
+function applyTheme(t){const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((localStorage.getItem('theme')||'system')==='system')applyTheme('system');});
+(function(){const t=localStorage.getItem('theme')||'system';applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));})();
+
+// UTMs
+(function(){const p=new URLSearchParams(window.location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'].forEach(k=>{const v=p.get(k);if(v)sessionStorage.setItem('legalai_'+k,v);});sessionStorage.setItem('legalai_device',/mobile|android|iphone|ipad/i.test(navigator.userAgent)?'Mobile':'Desktop');sessionStorage.setItem('legalai_origen','formulario');const ref=p.get('ref');if(ref)sessionStorage.setItem('legalai_ref',ref);})();
+
+// Cotización
+async function obtenerCotizacion(){
+  const fuentes=[['https://dolarapi.com/v1/dolares/bolsa',d=>d?.venta,'MEP'],['https://dolarapi.com/v1/dolares/oficial',d=>d?.venta,'Oficial'],['https://api.bluelytics.com.ar/v2/latest',d=>d?.official?.value_sell,'BNA']];
+  for(const[url,extract,fuente]of fuentes){try{const r=await fetch(url,{signal:AbortSignal.timeout(5000)});const d=await r.json();const v=extract(d);if(v&&v>0){cotizacion={valor:v,fuente};renderPrecio();return;}}catch(_){}}
+  cotizacion={valor:1200,fuente:'ref.'};renderPrecio();
+}
+function renderPrecio(){
+  if(!cotizacion.valor)return;
+  const ars=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
+  const monto='$ '+ars.toLocaleString('es-AR');
+  const det=cotizacion.fuente==='ref.'?'Precio en pesos · pago único':'USD '+G.precio_usd+' · dólar '+cotizacion.fuente+' $'+Math.round(cotizacion.valor);
+  document.getElementById('precioAmt').textContent=monto;
+  document.getElementById('precioDet').textContent=det;
+  sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
+}
+
+// Progress
+function setProgress(step){[1,2,3,4].forEach(i=>{const el=document.getElementById('ps'+i);el.classList.remove('active','done');if(i<step)el.classList.add('done');if(i===step)el.classList.add('active');});}
+
+// Paneles
+function showPanel(id){
+  ['card1','card2','card4','loadingGen','loadingPago','loadingDoc'].forEach(x=>{const el=document.getElementById(x);if(el){el.classList.remove('visible');el.style.display='';}});
+  const t=document.getElementById(id);if(!t)return;
+  if(id.startsWith('loading'))t.style.display='block';else t.classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Validar
+function validar(){
+  const campos=[{id:'propietario',label:'Nombre del propietario'},{id:'inquilino',label:'Nombre del inquilino'},{id:'direccion',label:'Dirección del inmueble'},{id:'ciudad',label:'Ciudad'},{id:'provincia',label:'Provincia'},{id:'monto',label:'Monto mensual'},{id:'duracion',label:'Duración'},{id:'fecha_inicio',label:'Fecha de inicio'}];
+  for(const c of campos){const el=document.getElementById(c.id);if(!el||!el.value.trim()){showErr('alertForm','El campo "'+c.label+'" es obligatorio.');el&&el.focus();return false;}}
+  hideErr('alertForm');return true;
+}
+function showErr(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('visible');}
+function hideErr(id){const el=document.getElementById(id);if(el)el.classList.remove('visible');}
+
+// Generar
+async function generarContrato(){
+  if(!validar())return;
+  document.getElementById('btnGenerar').disabled=true;
+  const datos={tipo:DOC_TIPO,pais:'Argentina',provincia:document.getElementById('provincia').value.trim(),ciudad:document.getElementById('ciudad').value.trim(),propietario:document.getElementById('propietario').value.trim(),inquilino:document.getElementById('inquilino').value.trim(),direccion:document.getElementById('direccion').value.trim(),monto_mensual:document.getElementById('monto').value.trim(),duracion_meses:document.getElementById('duracion').value.trim(),fecha_inicio:document.getElementById('fecha_inicio').value,deposito:document.getElementById('chk_deposito').checked?'Sí, 1 mes de garantía':'No',ajuste:document.getElementById('chk_ajuste').checked?'Sí, ajuste periódico según índice legal':'No',servicios:document.getElementById('chk_servicios').checked?'A cargo del inquilino (luz, gas, expensas ordinarias)':'A cargo del propietario',observaciones:document.getElementById('observaciones').value.trim()||''};
+  const meta={titulo:DOC_TIPO,categoria:'complejo',precio_usd:G.precio_usd,upgrade_porcentaje:32,requiere_advertencia_legal:false};
+  sessionStorage.setItem('legalai_datos',JSON.stringify(datos));
+  sessionStorage.setItem('legalai_titulo',DOC_TIPO);
+  sessionStorage.setItem('legalai_meta',JSON.stringify(meta));
+  showPanel('loadingGen');setProgress(2);
+  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
+  try{
+    const res=await fetch(WORKER+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datosDoc:datos,metadata:meta})});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    G.previewId=data.previewId;G.texto=data.texto;
+    sessionStorage.setItem('legalai_previewId',data.previewId);
+    renderizarPreview(data.texto);
+    showPanel('card2');setProgress(2);
+  }catch(err){
+    showPanel('card1');document.getElementById('btnGenerar').disabled=false;setProgress(1);
+    showErr('alertForm','Error al generar el contrato: '+err.message+'. Intentá de nuevo.');
+  }
+}
+
+// Preview canvas con marca de agua
+function renderizarPreview(texto){
+  const canvas=document.getElementById('previewCanvas'),overlay=document.getElementById('previewWatermarkOverlay');
+  const W=680,LINE_H=18,FONT=11,ML=36,MR=36,MT=36,CW=W-ML-MR;
+  const ctx=canvas.getContext('2d');
+  canvas.width=W;canvas.height=100;ctx.font=FONT+'px Times New Roman, serif';
+  const lineas=[];
+  for(const raw of texto.split('\n')){
+    if(raw.startsWith('# '))lineas.push({tipo:'h1',txt:raw.replace(/^# /,'').toUpperCase()});
+    else if(raw.startsWith('## ')||raw.startsWith('### '))lineas.push({tipo:'h2',txt:raw.replace(/^#{2,3} /,'')});
+    else if(!raw.trim())lineas.push({tipo:'br'});
+    else{const txt=raw.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').trim();ctx.font=FONT+'px Times New Roman, serif';const words=txt.split(' ');let line='';for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width>CW&&line){lineas.push({tipo:'p',txt:line});line=w;}else{line=test;}}if(line)lineas.push({tipo:'p',txt:line});}
+  }
+  let totalH=MT;
+  for(const l of lineas){if(l.tipo==='h1')totalH+=32;else if(l.tipo==='h2')totalH+=26;else if(l.tipo==='br')totalH+=8;else totalH+=LINE_H;}
+  totalH+=40;canvas.height=totalH;canvas.style.height='';
+  ctx.fillStyle='#faf9f6';ctx.fillRect(0,0,W,totalH);
+  let y=MT;
+  for(const l of lineas){
+    if(l.tipo==='h1'){ctx.font='bold 15px Times New Roman, serif';ctx.fillStyle='#0f1117';ctx.textAlign='center';ctx.fillText(l.txt,W/2,y+12);y+=22;ctx.strokeStyle='#c9a84c';ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(ML+30,y);ctx.lineTo(W-MR-30,y);ctx.stroke();y+=10;}
+    else if(l.tipo==='h2'){ctx.font='bold '+(FONT+1)+'px Times New Roman, serif';ctx.textAlign='left';ctx.fillStyle='#f0ede6';ctx.fillRect(ML-4,y-1,CW+8,18);ctx.fillStyle='#1a1a2e';ctx.fillText(l.txt,ML,y+12);y+=26;}
+    else if(l.tipo==='br'){y+=8;}
+    else{ctx.font=FONT+'px Times New Roman, serif';ctx.fillStyle='#282828';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=LINE_H;}
+  }
+  overlay.innerHTML='';
+  const wText='VISTA PREVIA · LEGALAI ARG · ';
+  const repeat=Math.ceil((W*3)/(wText.length*11))+2,rows=Math.ceil(totalH/38)+4;
+  let html='';for(let r=0;r<rows;r++)html+='<div style="white-space:nowrap;height:38px;line-height:38px;">'+wText.repeat(repeat)+'</div>';
+  overlay.style.cssText='position:absolute;inset:0;overflow:hidden;opacity:0.11;pointer-events:none;font-family:\'DM Mono\',monospace;font-size:13px;font-weight:700;color:#c9a84c;transform:rotate(-25deg) translateY(-10%);transform-origin:center center;word-break:break-all;letter-spacing:3px;';
+  overlay.innerHTML=html;
+}
+
+// Pagar
+async function pagar(){
+  if(!cotizacion.valor){alert('Esperá un momento, cargando precio...');return;}
+  try{gtag('event','conversion',{'send_to':'AW-18073890544','value':G.precio_usd,'currency':'USD'});}catch(_){}
+  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
+  showPanel('loadingPago');setProgress(3);
+  const montoARS=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
+  const sessionId='sess_'+Date.now();
+  sessionStorage.setItem('legalai_sessionId',sessionId);
+  sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
+  sessionStorage.setItem('legalai_origen','formulario');
+  try{
+    const ref=sessionStorage.getItem('legalai_ref')||null;
+    const res=await fetch(WORKER+'/mp/preferencia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'doc',montoARS,descripcion:DOC_TIPO,externalRef:'doc_'+sessionId,ref,datosPago:{titulo:DOC_TIPO,origen:'formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}})});
+    const data=await res.json();
+    if(!data.init_point)throw new Error(data.error||'Error al crear el pago');
+    window.location.href=data.init_point;
+  }catch(err){showPanel('card2');setProgress(2);alert('Error al conectar con MercadoPago: '+err.message);}
+}
+
+// Generar final tras pago
+async function generarFinal(paymentId){
+  showPanel('loadingDoc');setProgress(4);
+  try{
+    const datos=JSON.parse(sessionStorage.getItem('legalai_datos')||'{}');
+    const meta=JSON.parse(sessionStorage.getItem('legalai_meta')||'{}');
+    const previewId=G.previewId||sessionStorage.getItem('legalai_previewId')||null;
+    const res=await fetch(WORKER+'/generar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({paymentId,datosDoc:datos,metadata:meta,previewId})});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    G.texto=data.texto;G.paymentId=data.paymentId||paymentId;
+    sessionStorage.setItem('legalai_texto',data.texto);
+    sessionStorage.setItem('legalai_paymentId',G.paymentId);
+    sessionStorage.removeItem('legalai_previewId');
+    showPanel('card4');setProgress(4);
+    try{gtag('event','conversion',{'send_to':'AW-18073890544','value':parseFloat(sessionStorage.getItem('legalai_precio_usd')||'11')||11,'currency':'USD','transaction_id':G.paymentId});}catch(_){}
+  }catch(err){showPanel('card2');setProgress(2);alert('Error al generar el documento: '+err.message);}
+}
+
+// PDF
+function descargarPDF(){
+  const texto=G.texto||sessionStorage.getItem('legalai_texto');
+  if(!texto){alert('No se encontró el documento.');return;}
+  _generarPDF(texto,'contrato-de-alquiler',true);
+}
+function _generarPDF(texto,nombre,conMarca){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF({format:'a4',unit:'mm'});
+  const PW=210,PH=297,ML=25,MR=25,MT=conMarca?28:20,MB=20,CW=PW-ML-MR,YBOTTOM=PH-MB-14;
+  let y=MT;
+  function enc(){if(!conMarca)return;doc.setFillColor(248,247,244);doc.rect(0,0,PW,16,'F');doc.setDrawColor(200,168,75);doc.setLineWidth(.3);doc.line(ML,16,PW-MR,16);doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(120,110,90);doc.text('LegalAI Arg  ·  Documento Orientativo',ML,11);doc.text(new Date().toLocaleDateString('es-AR'),PW-MR,11,{align:'right'});}
+  function pie(){doc.setDrawColor(180,160,100);doc.setLineWidth(.25);doc.line(ML,PH-MB,PW-MR,PH-MB);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Modelo orientativo · No reemplaza asesoramiento legal profesional',PW/2,PH-MB+5,{align:'center'});}
+  function np(){pie();doc.addPage();y=MT;enc();}
+  function ck(h){if(y+h>YBOTTOM)np();}
+  function lmp(t){return t.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/\[[^\]]{0,40}\]/g,'______________________________').trim();}
+  enc();
+  for(const raw of texto.split('\n')){
+    const l=lmp(raw);
+    if(raw.startsWith('# ')){ck(20);y+=4;doc.setFontSize(13);doc.setFont('times','bold');doc.setTextColor(15,17,23);const w=doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(),CW);for(const p of w){ck(8);doc.text(p,PW/2,y,{align:'center'});y+=7;}y+=3;doc.setDrawColor(200,168,75);doc.setLineWidth(.5);doc.line(ML+20,y,PW-MR-20,y);y+=6;continue;}
+    if(raw.startsWith('## ')||raw.startsWith('### ')){y+=5;ck(12);doc.setFontSize(10.5);doc.setFont('times','bold');doc.setTextColor(20,20,20);const txt=l.replace(/^#{2,3} /,'');const w=doc.splitTextToSize(txt,CW);doc.setFillColor(245,243,238);doc.rect(ML-3,y-5,CW+6,w.length*6+6,'F');for(const p of w){doc.text(p,ML,y);y+=6;}y+=3;continue;}
+    if(!l){y+=3;continue;}
+    doc.setFontSize(10);doc.setFont('times','normal');doc.setTextColor(40,40,40);const w=doc.splitTextToSize(l,CW);ck(w.length*5.5+2);for(const p of w){doc.text(p,ML,y);y+=5.5;}y+=1;
+  }
+  pie();
+  const tot=doc.internal.getNumberOfPages();for(let i=1;i<=tot;i++){doc.setPage(i);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Pág '+i+' / '+tot,PW-MR,PH-MB+5,{align:'right'});}
+  doc.save(nombre+'.pdf');
+}
+
+function volverForm(){showPanel('card1');setProgress(1);}
+function reiniciar(){G={previewId:null,paymentId:null,precio_usd:11,texto:''};['propietario','inquilino','direccion','ciudad','provincia','monto','duracion','observaciones'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('fecha_inicio').value='';document.getElementById('chk_deposito').checked=true;document.getElementById('chk_ajuste').checked=true;document.getElementById('chk_servicios').checked=false;showPanel('card1');setProgress(1);}
+
+window.addEventListener('load',async()=>{
+  obtenerCotizacion();
+  const d=new Date();d.setDate(d.getDate()+7);document.getElementById('fecha_inicio').value=d.toISOString().split('T')[0];
+  const p=new URLSearchParams(window.location.search);
+  const stat=p.get('status');
+  if(stat==='approved'&&(p.get('tipo')||'doc')==='doc'){
+    window.history.replaceState({},'',window.location.pathname);
+    const pid=p.get('payment_id')||p.get('collection_id');
+    if(pid){G.previewId=sessionStorage.getItem('legalai_previewId')||null;await generarFinal(pid);}
+  }else if(stat==='failure'){showPanel('card2');setProgress(2);}
+});
+</script>
+</body>
+</html>
