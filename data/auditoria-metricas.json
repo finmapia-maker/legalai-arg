@@ -1,0 +1,12 @@
+{
+  "fecha": "2026-04-30T18:49:47.016Z",
+  "periodo_48h": null,
+  "periodo_7d": null,
+  "embudo_eventos": {},
+  "total_eventos": 0,
+  "diagnostico": {
+    "problemas": [],
+    "oportunidades": [],
+    "estado": "OK"
+  }
+}
