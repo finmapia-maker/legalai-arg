@@ -1191,6 +1191,27 @@ const CONFIG = {
   PRECIO_GUIA_USD: 2.5,
 };
 
+// ── Tracking /evento ──────────────────────────────────────────────────────
+function getUTM() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    utm_src: p.get('utm_source') || sessionStorage.getItem('legalai_utm_source') || '',
+    utm_cmp: p.get('utm_campaign') || sessionStorage.getItem('legalai_utm_campaign') || '',
+    utm_med: p.get('utm_medium') || sessionStorage.getItem('legalai_utm_medium') || '',
+    ref: sessionStorage.getItem('legalai_ref') || 'directo',
+  };
+}
+function track(tipo, extra) {
+  try {
+    fetch(CONFIG.WORKER_URL + '/evento', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo, pagina: 'index', ...getUTM(), ...(extra || {}) })
+    });
+  } catch(_) {}
+}
+track('page_view');
+
 const CATEGORIAS = {
   contratos: {
     label: '📋 Contratos',
@@ -1411,6 +1432,7 @@ async function enviarSolicitudAfiliado() {
     okPanel.style.display = 'block';
     // Google Ads: lead de afiliado
     try { gtag('event', 'generate_lead', { 'send_to': 'AW-18073890544', 'value': 0, 'currency': 'USD' }); } catch(_) {}
+    track('registro_afiliado');
 
   } catch (e) {
     errEl.textContent = 'Error al enviar la solicitud: ' + e.message + '. Intentá de nuevo o escribinos directamente.';
@@ -1462,6 +1484,7 @@ function showSec(name, _anchor) {
   const secs = ['inicio','generador','suscripcion','afiliados','about'];
   const idx = secs.indexOf(name);
   if (idx >= 0) document.querySelectorAll('.nav-link')[idx].classList.add('active');
+  if (name === 'generador') track('cta_generador');
   if (_anchor === 'aff-form') {
     requestAnimationFrame(() => {
       const el = document.getElementById('aff-form');
@@ -1612,6 +1635,7 @@ async function irAPreview() {
     const el = document.getElementById(c.id);
     if (el && !el.value.trim()) { showErr('alert2', `El campo "${c.label}" es obligatorio.`); el.focus(); return; }
   }
+  track('generar_preview', { doc_tipo: G.form?.titulo || G.tipo });
   // Recopilar datos
   const datos = { tipo: G.tipo, pais: G.pais, provincia: G.provincia };
   G.campos.forEach(c => { const el = document.getElementById(c.id); if (el) datos[c.id] = el.value; });
@@ -1791,6 +1815,7 @@ async function procesarPago() {
   sessionStorage.setItem('legalai_sessionId', sessionId);
   sessionStorage.setItem('legalai_precio_usd', String(G.precio_usd || 5));
   sessionStorage.setItem('legalai_origen', 'index');
+  track('inicio_pago', { doc_tipo: G.form?.titulo || G.tipo, precio_usd: G.precio_usd || 5 });
   await iniciarPagoMP({
     tipo: 'doc', montoARS,
     descripcion: `Documento legal: ${G.form?.titulo || G.tipo}`,
