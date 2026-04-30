@@ -1,10 +1,6 @@
 const fs = require("fs");
 const axios = require("axios");
 
-// ==============================
-// CONFIG
-// ==============================
-
 const ARCHIVOS = [
   "index.html",
   "formulario.html",
@@ -13,152 +9,164 @@ const ARCHIVOS = [
   "contrato-alquiler.html"
 ];
 
-// ==============================
-// FUNCION: leer archivos
-// ==============================
+function validarEnv() {
+  const faltantes = [];
+
+  if (!process.env.CLAUDE_API_KEY) faltantes.push("CLAUDE_API_KEY");
+  if (!process.env.RESEND_API_KEY) faltantes.push("RESEND_API_KEY");
+  if (!process.env.EMAIL_TO) faltantes.push("EMAIL_TO");
+
+  if (faltantes.length > 0) {
+    throw new Error("Faltan secrets: " + faltantes.join(", "));
+  }
+}
 
 function leerArchivos() {
   let contenido = "";
 
-  ARCHIVOS.forEach(file => {
+  for (const file of ARCHIVOS) {
     if (fs.existsSync(file)) {
       const data = fs.readFileSync(file, "utf8");
-      contenido += `\n\n===== ARCHIVO: ${file} =====\n\n${data}`;
+      contenido += `\n\n===== ARCHIVO: ${file} =====\n\n${data.slice(0, 25000)}`;
     } else {
-      contenido += `\n\n===== ARCHIVO: ${file} NO ENCONTRADO =====\n\n`;
+      contenido += `\n\n===== ARCHIVO NO ENCONTRADO: ${file} =====\n\n`;
     }
-  });
+  }
 
   return contenido;
 }
 
-// ==============================
-// PROMPT NIVEL DIOS
-// ==============================
-
 function generarPrompt(contenido) {
   return `
-Actuás como el mejor experto en CRO, UX y monetización en Argentina.
+Actuás como auditor experto en conversión, UX, pricing y monetización para LegalAI Arg.
 
-Tu único objetivo es aumentar ventas HOY.
+OBJETIVO:
+Aumentar ventas reales de LegalAI Arg con cambios concretos en los archivos del sitio.
 
-Analizá este flujo completo de LegalAI como si fuera tu negocio.
+CONTEXTO:
+LegalAI Arg vende generación de documentos legales con IA. El usuario debe entender rápido qué compra, confiar, avanzar al formulario y pagar.
 
-REGLAS ESTRICTAS:
-- No expliques teoría
-- No des alternativas
-- No suavices nada
-- No uses lenguaje genérico
-- Pensá como alguien que vive de vender
-- Todo debe ser aplicable directamente
+REGLAS:
+- No des opciones.
+- No des teoría.
+- No seas genérico.
+- No digas "podría".
+- No expliques de más.
+- Indicá exactamente qué archivo modificar.
+- Indicá exactamente qué texto reemplazar.
+- Priorizá cambios de alto impacto.
+- Si algo está bien, no lo menciones.
+- Máximo 10 cambios.
+- Ordená por impacto en ventas.
 
 FORMATO OBLIGATORIO:
 
-ARCHIVO: [nombre exacto]
-CAMBIO: [sección concreta]
+# Auditoría diaria LegalAI
+
+## 1. Cambio crítico
+
+ARCHIVO:
+[nombre exacto del archivo]
+
+SECCIÓN:
+[hero / CTA / pricing / formulario / confianza / post venta / otro]
+
+PROBLEMA:
+[problema claro en una frase]
+
 REEMPLAZAR POR:
 [texto exacto listo para copiar]
 
----
-
-ERROR:
-[problema directo]
-
-SOLUCIÓN:
-[acción concreta sin explicación]
+INSTRUCCIÓN PARA CLAUDE CODE:
+[orden concreta para que Claude Code aplique el cambio]
 
 ---
 
-PRIORIZAR:
-1. Conversión
-2. Claridad inmediata
-3. Reducción de fricción
-4. Venta directa
-
-FLUJO COMPLETO:
+FLUJO COMPLETO A ANALIZAR:
 ${contenido}
 `;
 }
 
-// ==============================
-// LLAMADA A CLAUDE
-// ==============================
-
-async function analizar(prompt) {
-  try {
-    const response = await axios.post(
-      "https://api.anthropic.com/v1/messages",
-      {
-        model: "claude-3-opus-20240229",
-        max_tokens: 2000,
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ]
-      },
-      {
-        headers: {
-          "x-api-key": process.env.CLAUDE_API_KEY,
-          "anthropic-version": "2023-06-01",
-          "content-type": "application/json"
+async function analizarConClaude(prompt) {
+  const response = await axios.post(
+    "https://api.anthropic.com/v1/messages",
+    {
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 3000,
+      messages: [
+        {
+          role: "user",
+          content: prompt
         }
-      }
-    );
+      ]
+    },
+    {
+      headers: {
+        "x-api-key": process.env.CLAUDE_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      },
+      timeout: 60000
+    }
+  );
 
-    return response.data.content[0].text;
-
-  } catch (error) {
-    console.error("ERROR CLAUDE:", error.response?.data || error.message);
-    return "Error en análisis con Claude";
-  }
+  return response.data.content?.[0]?.text || "Claude no devolvió contenido.";
 }
 
-// ==============================
-// ENVIO POR RESEND
-// ==============================
-
-async function enviarEmail(contenido) {
-  try {
-    await axios.post(
-      "https://api.resend.com/emails",
-      {
-        from: "LegalAI <onboarding@resend.dev>",
-        to: [process.env.EMAIL_TO],
-        subject: "Auditoría diaria LegalAI",
-        text: contenido
+async function enviarPorResend(texto) {
+  const response = await axios.post(
+    "https://api.resend.com/emails",
+    {
+      from: "LegalAI <onboarding@resend.dev>",
+      to: [process.env.EMAIL_TO],
+      subject: "Auditoría diaria LegalAI",
+      text: texto
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
       },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
+      timeout: 30000
+    }
+  );
 
-    console.log("Email enviado correctamente");
-
-  } catch (error) {
-    console.error("ERROR EMAIL:", error.response?.data || error.message);
-  }
+  return response.data;
 }
-
-// ==============================
-// EJECUCION
-// ==============================
 
 async function run() {
-  console.log("Iniciando auditoría...");
+  try {
+    console.log("Iniciando auditoría LegalAI...");
 
-  const contenido = leerArchivos();
-  const prompt = generarPrompt(contenido);
+    validarEnv();
 
-  const resultado = await analizar(prompt);
+    const contenido = leerArchivos();
 
-  await enviarEmail(resultado);
+    if (!contenido.trim()) {
+      throw new Error("No se pudo leer contenido de archivos.");
+    }
 
-  console.log("Auditoría finalizada");
+    console.log("Archivos leídos correctamente.");
+
+    const prompt = generarPrompt(contenido);
+
+    console.log("Enviando análisis a Claude...");
+
+    const resultado = await analizarConClaude(prompt);
+
+    console.log("Claude respondió correctamente.");
+    console.log("Enviando email...");
+
+    await enviarPorResend(resultado);
+
+    console.log("Email enviado correctamente.");
+    console.log("Auditoría finalizada.");
+  } catch (error) {
+    console.error("FALLÓ LA AUDITORÍA:");
+    console.error(error.response?.data || error.message || error);
+
+    process.exit(1);
+  }
 }
 
 run();
