@@ -1,0 +1,192 @@
+/* =========================
+   LEGALAI ARG — THEME CORE
+   ========================= */
+
+/* ===== TIPOGRAFÍAS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+/* ===== VARIABLES BASE ===== */
+:root {
+  /* Fondos */
+  --paper:#f7f3ec;
+  --cream:#ede8dc;
+  --surface:#ffffff;
+
+  /* Texto */
+  --ink:#0c0e12;
+  --mist:rgba(0,0,0,.55);
+
+  /* Bordes */
+  --line:rgba(0,0,0,.08);
+
+  /* Acentos */
+  --gold:#c8a84b;
+  --gold-dim:rgba(200,168,75,.6);
+
+  --sage:#3d5a46;
+  --sage-dim:rgba(61,90,70,.6);
+
+  /* Header */
+  --hdr-bg:#0c0e12;
+
+  /* Botón */
+  --btn-bg:#c8a84b;
+  --btn-txt:#0c0e12;
+  --btn-hover:#b8963f;
+
+  /* Sombra */
+  --shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] {
+  --paper:#0c0e12;
+  --cream:#141720;
+  --surface:#1c2030;
+
+  --ink:#ffffff;
+  --mist:rgba(255,255,255,.6);
+
+  --line:rgba(255,255,255,.08);
+
+  --gold:#d4a847;
+  --gold-dim:rgba(212,168,71,.6);
+
+  --sage:#6abf8a;
+  --sage-dim:rgba(106,191,138,.6);
+
+  --hdr-bg:#000;
+
+  --btn-bg:#d4a847;
+  --btn-txt:#000;
+  --btn-hover:#c19a3f;
+
+  --shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+/* ===== RESET ===== */
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body {
+  font-family:'DM Sans', sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.5;
+}
+
+/* ===== TITULOS ===== */
+h1,h2,h3 {
+  font-family:'Playfair Display', serif;
+  font-weight:700;
+  letter-spacing:-0.5px;
+}
+
+h1 {
+  font-size:2.4rem;
+}
+
+h2 {
+  font-size:1.8rem;
+}
+
+p {
+  color:var(--mist);
+}
+
+/* ===== HEADER ===== */
+.header {
+  position:sticky;
+  top:0;
+  height:62px;
+  background:var(--hdr-bg);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  border-bottom:1px solid rgba(212,168,71,.15);
+  z-index:1000;
+}
+
+.logo {
+  font-family:'Playfair Display', serif;
+  font-size:1.15rem;
+  color:var(--gold);
+}
+
+.logo span {
+  opacity:.4;
+}
+
+/* ===== BOTONES ===== */
+.btn {
+  background:var(--btn-bg);
+  color:var(--btn-txt);
+  padding:10px 16px;
+  border-radius:6px;
+  font-weight:500;
+  border:none;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn:hover {
+  background:var(--btn-hover);
+}
+
+/* ===== CARDS ===== */
+.card {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+/* ===== BADGES ===== */
+.badge {
+  font-family:'DM Mono', monospace;
+  font-size:.7rem;
+  color:var(--gold);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background:var(--hdr-bg);
+  text-align:center;
+  padding:20px;
+  font-family:'DM Mono', monospace;
+  font-size:.62rem;
+  color:rgba(255,255,255,.22);
+}
+
+.footer a {
+  color:var(--gold);
+  opacity:.5;
+}
+
+/* ===== TOGGLE TEMA ===== */
+.theme-toggle {
+  display:flex;
+  gap:6px;
+  background:#111;
+  padding:4px;
+  border-radius:20px;
+}
+
+.theme-toggle button {
+  border:none;
+  padding:6px 10px;
+  border-radius:12px;
+  background:transparent;
+  color:#aaa;
+  cursor:pointer;
+}
+
+.theme-toggle button.active {
+  background:rgba(200,168,75,.2);
+  color:#fff;
+}
