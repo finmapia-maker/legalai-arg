@@ -11,7 +11,7 @@ const ARCHIVOS = [
   "contrato-alquiler.html"
 ];
 
-const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-3-5-sonnet-20241022";
+const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
 console.log("Modelo usado:", CLAUDE_MODEL);
 
 // ==============================
