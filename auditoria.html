@@ -3,58 +3,129 @@
 <head>
 <meta charset="UTF-8" />
 <title>Auditoría LegalAI</title>
+
 <style>
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
   background: #0f1115;
   color: #e5e5e5;
-  padding: 20px;
 }
 
-h1 {
+.header {
+  background: #000;
+  padding: 20px;
+  border-bottom: 1px solid #222;
+}
+
+.header h1 {
+  margin: 0;
   color: #d4af37;
 }
 
+.container {
+  padding: 20px;
+}
+
+/* GRID GENERAL */
+.grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+}
+
+/* CARDS */
 .card {
   background: #1a1d24;
+  border-radius: 12px;
   padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
 }
 
 .label {
-  color: #999;
-  font-size: 12px;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 5px;
 }
 
 .value {
-  margin-top: 5px;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
+/* DECISION */
 .decision {
-  font-weight: bold;
+  display: inline-block;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .NO_CAMBIAR { background: #444; }
 .OBSERVAR { background: #2b5cff; }
 .PROPONER_CAMBIO { background: #2ecc71; }
 
+/* LOG LIST */
+.log {
+  border-bottom: 1px solid #222;
+  padding: 15px 0;
+}
+
+.log:last-child {
+  border-bottom: none;
+}
+
+/* GRID INTERNO */
+.log-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* BLOQUES */
+.block {
+  background: #111;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* JSON */
 pre {
   background: #000;
   padding: 10px;
+  font-size: 11px;
   overflow-x: auto;
-  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* SCROLL */
+.scroll {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 </style>
 </head>
+
 <body>
 
-<h1>📊 Auditoría LegalAI</h1>
+<div class="header">
+  <h1>Auditoría LegalAI</h1>
+</div>
 
-<div id="estado"></div>
-<div id="logs"></div>
+<div class="container">
+  <div class="grid">
+
+    <!-- PANEL IZQUIERDO -->
+    <div id="estado"></div>
+
+    <!-- PANEL DERECHO -->
+    <div class="card scroll">
+      <div id="logs"></div>
+    </div>
+
+  </div>
+</div>
 
 <script>
 async function cargarJSON(path) {
@@ -69,48 +140,65 @@ async function cargarJSON(path) {
 function renderEstado(data) {
   if (!data) return;
 
-  const html = `
+  document.getElementById("estado").innerHTML = `
     <div class="card">
-      <div class="label">Estado actual</div>
+      <div class="label">Estado</div>
       <div class="value">${data.estado || "-"}</div>
 
       <div class="label">Última decisión</div>
-      <div class="value decision ${data.ultima_decision}">
+      <div class="decision ${data.ultima_decision}">
         ${data.ultima_decision || "-"}
       </div>
 
       <div class="label">Fecha</div>
       <div class="value">${data.fecha || "-"}</div>
+
+      <div class="label">Experimento activo</div>
+      <pre>${JSON.stringify(data.experimento_activo, null, 2)}</pre>
     </div>
   `;
-
-  document.getElementById("estado").innerHTML = html;
 }
 
 function renderLogs(logs) {
-  if (!logs || logs.length === 0) return;
+  if (!logs) return;
 
   let html = "";
 
   logs.reverse().forEach(log => {
     html += `
-      <div class="card">
-        <div class="label">Fecha</div>
-        <div class="value">${log.fecha}</div>
+      <div class="log">
 
-        <div class="label">Decisión</div>
-        <div class="value decision ${log.decision?.decision}">
-          ${log.decision?.decision || "-"}
+        <div>
+          <strong>${log.fecha}</strong>
+          <span class="decision ${log.decision?.decision}">
+            ${log.decision?.decision || "-"}
+          </span>
         </div>
 
-        <div class="label">Resumen</div>
-        <div class="value">${log.decision?.resumen || "-"}</div>
+        <div class="log-grid">
 
-        <div class="label">Motivo</div>
-        <div class="value">${log.decision?.motivo || "-"}</div>
+          <div class="block">
+            <div class="label">Resumen</div>
+            <div>${log.decision?.resumen || "-"}</div>
+          </div>
 
-        <div class="label">Cambio sugerido</div>
-        <pre>${JSON.stringify(log.decision?.cambio_sugerido, null, 2)}</pre>
+          <div class="block">
+            <div class="label">Motivo</div>
+            <div>${log.decision?.motivo || "-"}</div>
+          </div>
+
+          <div class="block">
+            <div class="label">Comparación</div>
+            <div>${log.decision?.comparacion_vs_dia_anterior || "-"}</div>
+          </div>
+
+        </div>
+
+        <div class="block" style="margin-top:10px;">
+          <div class="label">Cambio sugerido</div>
+          <pre>${JSON.stringify(log.decision?.cambio_sugerido, null, 2)}</pre>
+        </div>
+
       </div>
     `;
   });
