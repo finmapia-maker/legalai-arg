@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Auditoría LegalAI</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0f1115;
+  color: #e5e5e5;
+  padding: 20px;
+}
+
+h1 {
+  color: #d4af37;
+}
+
+.card {
+  background: #1a1d24;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.label {
+  color: #999;
+  font-size: 12px;
+}
+
+.value {
+  margin-top: 5px;
+}
+
+.decision {
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.NO_CAMBIAR { background: #444; }
+.OBSERVAR { background: #2b5cff; }
+.PROPONER_CAMBIO { background: #2ecc71; }
+
+pre {
+  background: #000;
+  padding: 10px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+</style>
+</head>
+<body>
+
+<h1>📊 Auditoría LegalAI</h1>
+
+<div id="estado"></div>
+<div id="logs"></div>
+
+<script>
+async function cargarJSON(path) {
+  try {
+    const res = await fetch(path);
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function renderEstado(data) {
+  if (!data) return;
+
+  const html = `
+    <div class="card">
+      <div class="label">Estado actual</div>
+      <div class="value">${data.estado || "-"}</div>
+
+      <div class="label">Última decisión</div>
+      <div class="value decision ${data.ultima_decision}">
+        ${data.ultima_decision || "-"}
+      </div>
+
+      <div class="label">Fecha</div>
+      <div class="value">${data.fecha || "-"}</div>
+    </div>
+  `;
+
+  document.getElementById("estado").innerHTML = html;
+}
+
+function renderLogs(logs) {
+  if (!logs || logs.length === 0) return;
+
+  let html = "";
+
+  logs.reverse().forEach(log => {
+    html += `
+      <div class="card">
+        <div class="label">Fecha</div>
+        <div class="value">${log.fecha}</div>
+
+        <div class="label">Decisión</div>
+        <div class="value decision ${log.decision?.decision}">
+          ${log.decision?.decision || "-"}
+        </div>
+
+        <div class="label">Resumen</div>
+        <div class="value">${log.decision?.resumen || "-"}</div>
+
+        <div class="label">Motivo</div>
+        <div class="value">${log.decision?.motivo || "-"}</div>
+
+        <div class="label">Cambio sugerido</div>
+        <pre>${JSON.stringify(log.decision?.cambio_sugerido, null, 2)}</pre>
+      </div>
+    `;
+  });
+
+  document.getElementById("logs").innerHTML = html;
+}
+
+async function init() {
+  const estado = await cargarJSON("data/auditoria-state.json");
+
+  const logsRaw = await fetch("data/auditoria-log.jsonl")
+    .then(r => r.text())
+    .then(text => text.split("\n").filter(Boolean).map(x => JSON.parse(x)));
+
+  renderEstado(estado);
+  renderLogs(logsRaw);
+}
+
+init();
+</script>
+
+</body>
+</html>
