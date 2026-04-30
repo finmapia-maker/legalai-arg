@@ -2,202 +2,358 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Auditoría LegalAI</title>
-
 <link rel="stylesheet" href="legalai-theme.css">
-
 <style>
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0a0a0a;color:#e5e5e5;min-height:100vh}
+.container{max-width:1280px;margin:auto;padding:24px 20px}
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+/* Header */
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid rgba(201,168,76,.15)}
+.title{font-family:"Playfair Display",serif;font-size:26px;color:#c9a84c;font-style:italic}
+.refresh-btn{background:rgba(201,168,76,.1);color:#c9a84c;border:1px solid rgba(201,168,76,.3);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;transition:all .2s}
+.refresh-btn:hover{background:rgba(201,168,76,.2)}
 
-.title {
-  font-family: "Playfair Display", serif;
-  font-size: 28px;
-  color: var(--gold);
-}
+/* Status badge */
+.status-bar{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.status-pill{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:.04em}
+.pill-ok{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3)}
+.pill-problema{background:rgba(231,76,60,.15);color:#e74c3c;border:1px solid rgba(231,76,60,.3)}
+.pill-oportunidad{background:rgba(241,196,15,.15);color:#f1c40f;border:1px solid rgba(241,196,15,.3)}
+.pill-desconocido{background:rgba(255,255,255,.08);color:#888;border:1px solid rgba(255,255,255,.1)}
+.last-run{font-size:12px;color:#555;font-family:'DM Mono',monospace}
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 15px;
-}
+/* Métricas grid */
+.section-title{font-size:12px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;font-family:'DM Mono',monospace}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:28px}
+.metric-card{background:#111;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:18px}
+.metric-card.highlight{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.05)}
+.metric-label{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:'DM Mono',monospace}
+.metric-value{font-size:28px;font-weight:700;line-height:1;color:#e5e5e5;font-family:'DM Mono',monospace}
+.metric-value.gold{color:#c9a84c}
+.metric-value.green{color:#2ecc71}
+.metric-value.red{color:#e74c3c}
+.metric-sub{font-size:11px;color:#555;margin-top:6px}
 
-.card {
-  background: var(--surface);
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
+/* Decisión actual */
+.decision-card{background:#111;border-radius:14px;padding:24px;margin-bottom:28px;border:1px solid rgba(255,255,255,.06)}
+.decision-badge{display:inline-block;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.06em;margin-bottom:14px}
+.NO_CAMBIAR{background:rgba(68,68,68,.5);color:#aaa;border:1px solid #444}
+.OBSERVAR{background:rgba(43,92,255,.2);color:#6b9fff;border:1px solid rgba(43,92,255,.4)}
+.PROPONER_CAMBIO{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.4)}
+.decision-title{font-size:16px;font-weight:600;color:#e5e5e5;margin-bottom:6px}
+.decision-motivo{font-size:13px;color:#888;line-height:1.6}
 
-.kicker {
-  font-size: 11px;
-  color: var(--mist);
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
+/* Cambio activo */
+.cambio-activo-card{background:rgba(241,196,15,.05);border:1px solid rgba(241,196,15,.25);border-radius:12px;padding:18px;margin-bottom:28px}
+.cambio-activo-title{font-size:12px;color:#f1c40f;text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;margin-bottom:10px}
+.cambio-desc{font-size:14px;color:#e5e5e5;margin-bottom:8px}
+.cambio-meta{font-size:12px;color:#888;font-family:'DM Mono',monospace}
 
-.value {
-  font-size: 16px;
-}
+/* Diagnóstico */
+.diag-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.diag-card{background:#111;border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06)}
+.diag-card.problemas{border-color:rgba(231,76,60,.2)}
+.diag-card.oportunidades{border-color:rgba(46,204,113,.2)}
+.diag-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;margin-bottom:10px}
+.diag-card.problemas .diag-label{color:#e74c3c}
+.diag-card.oportunidades .diag-label{color:#2ecc71}
+.diag-item{font-size:13px;color:#888;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.5}
+.diag-item:last-child{border-bottom:none}
+.diag-empty{font-size:13px;color:#444;font-style:italic}
 
-.big {
-  font-size: 22px;
-  font-weight: bold;
-}
+/* Por fuente */
+.fuente-table{width:100%;border-collapse:collapse;margin-bottom:28px}
+.fuente-table th{font-size:11px;color:#555;text-align:left;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
+.fuente-table td{font-size:13px;color:#ccc;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);font-family:'DM Mono',monospace}
+.fuente-table tr:hover td{background:rgba(255,255,255,.02)}
+.fuente-table .val-gold{color:#c9a84c}
+.fuente-table .val-green{color:#2ecc71}
+.conv-bar{height:4px;background:rgba(201,168,76,.15);border-radius:2px;margin-top:4px}
+.conv-fill{height:100%;background:#c9a84c;border-radius:2px;transition:width .6s ease}
 
-.decision {
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-weight: 500;
-  display: inline-block;
-}
+/* Historial */
+.log-card{background:#111;border-radius:12px;padding:16px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+.log-fecha{font-size:11px;color:#555;font-family:'DM Mono',monospace;margin-bottom:6px}
+.log-resumen{font-size:13px;color:#ccc;line-height:1.5}
+.log-snap{font-size:11px;color:#555;font-family:'DM Mono',monospace;margin-top:6px}
 
-.NO_CAMBIAR { background: #444; }
-.OBSERVAR { background: #2b5cff; }
-.PROPONER_CAMBIO { background: #2ecc71; }
+/* Embudo */
+.embudo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:28px}
+.embudo-item{background:#111;border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,.05);text-align:center}
+.embudo-count{font-size:24px;font-weight:700;color:#c9a84c;font-family:'DM Mono',monospace}
+.embudo-tipo{font-size:11px;color:#555;margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
 
-.logs {
-  margin-top: 25px;
-}
+/* Spinner */
+.loading{display:flex;justify-content:center;align-items:center;height:120px;color:#555;font-size:13px;gap:10px}
+.spinner{width:18px;height:18px;border:2px solid rgba(201,168,76,.2);border-top-color:#c9a84c;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.log-card {
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 12px;
-}
-
-.log-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-pre {
-  background: #000;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  overflow-x: auto;
+@media(max-width:700px){
+  .diag-grid{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .log-card{grid-template-columns:1fr}
 }
 </style>
 </head>
-
 <body>
-
 <div class="container">
 
   <div class="header">
     <div class="title">Auditoría LegalAI</div>
+    <button class="refresh-btn" onclick="init()">↺ Actualizar</button>
   </div>
 
-  <div class="grid" id="estado"></div>
-
-  <div class="logs">
-    <div class="title" style="font-size:20px;">Historial</div>
-    <div id="logs"></div>
-  </div>
+  <div id="app"><div class="loading"><div class="spinner"></div> Cargando datos...</div></div>
 
 </div>
 
 <script>
-async function cargarJSON(path) {
+const DATA_DIR = "data";
+
+async function fetchJSON(path) {
   try {
-    const res = await fetch(path);
-    return await res.json();
-  } catch {
-    return null;
-  }
+    const r = await fetch(path + "?v=" + Date.now());
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
 }
 
-function renderEstado(data) {
-  if (!data) return;
+async function fetchText(path) {
+  try {
+    const r = await fetch(path + "?v=" + Date.now());
+    if (!r.ok) return "";
+    return await r.text();
+  } catch { return ""; }
+}
 
-  const html = `
-    <div class="card">
-      <div class="kicker">Estado</div>
-      <div class="big">${data.estado || "-"}</div>
+function fmtFecha(iso) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", dateStyle: "short", timeStyle: "short" });
+}
+
+function fmtARS(n) {
+  if (!n && n !== 0) return "—";
+  return "$" + Number(n).toLocaleString("es-AR");
+}
+
+function estadoPill(estado) {
+  const map = {
+    PROBLEMA:     ["pill-problema",    "🔴 PROBLEMA"],
+    OPORTUNIDAD:  ["pill-oportunidad", "🟡 OPORTUNIDAD"],
+    OK:           ["pill-ok",          "🟢 OK"],
+  };
+  const [cls, lbl] = map[estado] || ["pill-desconocido", "⚪ Sin datos"];
+  return `<span class="status-pill ${cls}">${lbl}</span>`;
+}
+
+function renderMetricas(m48, m7d) {
+  if (!m48) return `<div class="metric-card"><div class="metric-label">Estado</div><div class="metric-value" style="font-size:16px;color:#555">Sin datos de métricas</div></div>`;
+
+  const convColor = parseFloat(m48.tasa_conv) >= 5 ? "green" : parseFloat(m48.tasa_conv) > 0 ? "gold" : "red";
+
+  return `
+    <div class="metric-card">
+      <div class="metric-label">Clics 48h</div>
+      <div class="metric-value">${m48.clics ?? "—"}</div>
+      <div class="metric-sub">7d: ${m7d?.clics ?? "—"}</div>
     </div>
-
-    <div class="card">
-      <div class="kicker">Última decisión</div>
-      <div class="decision ${data.ultima_decision}">
-        ${data.ultima_decision || "-"}
-      </div>
+    <div class="metric-card">
+      <div class="metric-label">Ventas 48h</div>
+      <div class="metric-value ${m48.ventas > 0 ? 'green' : ''}">${m48.ventas ?? "—"}</div>
+      <div class="metric-sub">7d: ${m7d?.ventas ?? "—"}</div>
     </div>
-
-    <div class="card">
-      <div class="kicker">Fecha</div>
-      <div class="value">${data.fecha || "-"}</div>
+    <div class="metric-card highlight">
+      <div class="metric-label">Conv Rate 48h</div>
+      <div class="metric-value ${convColor}">${m48.tasa_conv ?? "—"}</div>
+      <div class="metric-sub">7d: ${m7d?.tasa_conv ?? "—"}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">ARS 48h</div>
+      <div class="metric-value gold" style="font-size:20px">${fmtARS(m48.total_ars)}</div>
+      <div class="metric-sub">7d: ${fmtARS(m7d?.total_ars)}</div>
     </div>
   `;
+}
 
-  document.getElementById("estado").innerHTML = html;
+function renderFuentes(porFuente) {
+  if (!porFuente || Object.keys(porFuente).length === 0) {
+    return `<div style="color:#444;font-size:13px;padding:12px 0">Sin datos por fuente</div>`;
+  }
+  const maxClics = Math.max(...Object.values(porFuente).map(f => f.clics || 0), 1);
+  const rows = Object.entries(porFuente)
+    .sort((a, b) => (b[1].ventas || 0) - (a[1].ventas || 0))
+    .map(([fuente, d]) => {
+      const pct = Math.round(((d.clics || 0) / maxClics) * 100);
+      return `
+        <tr>
+          <td class="val-gold">${fuente}</td>
+          <td>${d.clics || 0}<div class="conv-bar"><div class="conv-fill" style="width:${pct}%"></div></div></td>
+          <td class="val-green">${d.ventas || 0}</td>
+          <td>${d.tasa_conv || "—"}</td>
+          <td>${fmtARS(d.monto_ars)}</td>
+        </tr>`;
+    }).join("");
+  return `
+    <table class="fuente-table">
+      <thead><tr><th>Fuente</th><th>Clics</th><th>Ventas</th><th>Conv%</th><th>ARS</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function renderEmbudo(embudo) {
+  if (!embudo || Object.keys(embudo).length === 0) {
+    return `<div style="color:#444;font-size:13px">Sin eventos registrados</div>`;
+  }
+  return Object.entries(embudo)
+    .sort((a, b) => b[1] - a[1])
+    .map(([tipo, count]) => `
+      <div class="embudo-item">
+        <div class="embudo-count">${count}</div>
+        <div class="embudo-tipo">${tipo}</div>
+      </div>`).join("");
+}
+
+function renderCambioActivo(state) {
+  if (!state?.cambio_activo) return "";
+  const horas = Math.round((Date.now() - new Date(state.cambio_activo_desde).getTime()) / 3600000);
+  return `
+    <div class="cambio-activo-card">
+      <div class="cambio-activo-title">🔄 Cambio activo en prueba</div>
+      <div class="cambio-desc">${state.cambio_activo.descripcion}</div>
+      <div class="cambio-meta">Archivo: ${state.cambio_activo.archivo || "—"} · Tipo: ${state.cambio_activo.tipo || "—"} · ${horas}h activo · Base conv: ${state.cambio_activo.conv_base ?? "—"}</div>
+      ${state.cambio_activo.hipotesis ? `<div class="cambio-meta" style="margin-top:6px">Hipótesis: ${state.cambio_activo.hipotesis}</div>` : ""}
+    </div>`;
 }
 
 function renderLogs(logs) {
-  if (!logs || logs.length === 0) return;
-
-  let html = "";
-
-  logs.reverse().forEach(log => {
-    html += `
+  if (!logs.length) return `<div style="color:#444;font-size:13px;padding:12px 0">Sin historial</div>`;
+  return [...logs].reverse().map(log => {
+    const d = log.decision || {};
+    const s = log.snapshot_metricas || {};
+    return `
       <div class="log-card">
-        <div class="log-header">
-          <div>${log.fecha}</div>
-          <div class="decision ${log.decision?.decision}">
-            ${log.decision?.decision || "-"}
-          </div>
+        <div>
+          <div class="log-fecha">${fmtFecha(log.fecha)}</div>
+          <div class="log-resumen">${d.resumen || "—"}</div>
+          ${d.motivo ? `<div class="log-snap" style="margin-top:4px">Motivo: ${d.motivo}</div>` : ""}
+          ${d.embudo  ? `<div class="log-snap">Embudo: ${d.embudo}</div>` : ""}
+          <div class="log-snap">Clics: ${s.clics_48h ?? "—"} · Ventas: ${s.ventas_48h ?? "—"} · Conv: ${s.tasa_conv ?? "—"} · ARS: ${fmtARS(s.ars_48h)}</div>
         </div>
-
-        <div class="grid">
-
-          <div>
-            <div class="kicker">Resumen</div>
-            <div>${log.decision?.resumen || "-"}</div>
-          </div>
-
-          <div>
-            <div class="kicker">Motivo</div>
-            <div>${log.decision?.motivo || "-"}</div>
-          </div>
-
-        </div>
-
-        <div style="margin-top:10px;">
-          <div class="kicker">Cambio sugerido</div>
-          <pre>${JSON.stringify(log.decision?.cambio_sugerido, null, 2)}</pre>
+        <div>
+          <span class="decision-badge ${d.decision}">${d.decision || "—"}</span>
+          ${d.prioridad ? `<div style="font-size:11px;color:#555;font-family:'DM Mono',monospace;margin-top:4px">prioridad: ${d.prioridad}</div>` : ""}
         </div>
       </div>
     `;
-  });
-
-  document.getElementById("logs").innerHTML = html;
+  }).join("");
 }
 
 async function init() {
-  const estado = await cargarJSON("data/auditoria-state.json");
+  document.getElementById("app").innerHTML = `<div class="loading"><div class="spinner"></div> Actualizando...</div>`;
 
-  const logsRaw = await fetch("data/auditoria-log.jsonl")
-    .then(r => r.text())
-    .then(text => text.split("\n").filter(Boolean).map(x => JSON.parse(x)));
+  const [estado, logsText] = await Promise.all([
+    fetchJSON(`${DATA_DIR}/auditoria-state.json`),
+    fetchText(`${DATA_DIR}/auditoria-log.jsonl`),
+  ]);
 
-  renderEstado(estado);
-  renderLogs(logsRaw);
+  const logs = logsText
+    ? logsText.split("\n").filter(Boolean).map(x => { try { return JSON.parse(x); } catch { return null; } }).filter(Boolean)
+    : [];
+
+  const ultimoLog    = logs.length ? logs[logs.length - 1] : null;
+  const ultimaDec    = ultimoLog?.decision || {};
+  const snap         = ultimoLog?.snapshot_metricas || {};
+  const diagEstado   = snap.estado_diag || "desconocido";
+
+  // Reconstruir métricas desde snapshot del último log (disponibles sin llamar al worker)
+  const m48Snap = snap.clics_48h != null ? {
+    clics:     snap.clics_48h,
+    ventas:    snap.ventas_48h,
+    tasa_conv: snap.tasa_conv,
+    total_ars: snap.ars_48h,
+    por_fuente: ultimaDec.cambio_sugerido ? {} : {},
+  } : null;
+
+  // Intentar leer métricas extendidas desde un snapshot guardado si existe
+  const metricasExtra = await fetchJSON(`${DATA_DIR}/auditoria-metricas.json`);
+
+  const m48     = metricasExtra?.periodo_48h || m48Snap;
+  const m7d     = metricasExtra?.periodo_7d  || null;
+  const embudo  = metricasExtra?.embudo_eventos || {};
+  const diag    = metricasExtra?.diagnostico || { problemas: [], oportunidades: [], estado: diagEstado };
+
+  document.getElementById("app").innerHTML = `
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      ${estadoPill(diag.estado)}
+      <span class="status-pill ${ultimaDec.decision}">${ultimaDec.decision || "Sin decisión"}</span>
+      <span class="last-run">Última auditoría: ${fmtFecha(estado?.fecha)}</span>
+    </div>
+
+    <!-- Cambio activo -->
+    ${renderCambioActivo(estado)}
+
+    <!-- Decisión actual -->
+    <div class="section-title">Decisión actual</div>
+    <div class="decision-card">
+      <div class="decision-badge ${ultimaDec.decision}">${ultimaDec.decision || "—"}</div>
+      <div class="decision-title">${ultimaDec.resumen || "Sin resumen"}</div>
+      <div class="decision-motivo">${ultimaDec.motivo || "—"}</div>
+      ${ultimaDec.cambio_sugerido ? `
+        <div style="margin-top:14px;background:#0a0a0a;border-radius:8px;padding:12px;font-size:12px;font-family:'DM Mono',monospace;color:#888">
+          <div style="color:#c9a84c;margin-bottom:6px">Cambio sugerido</div>
+          <div>Archivo: <span style="color:#e5e5e5">${ultimaDec.cambio_sugerido.archivo || "—"}</span></div>
+          <div>Tipo: <span style="color:#e5e5e5">${ultimaDec.cambio_sugerido.tipo || "—"}</span></div>
+          <div>Qué: <span style="color:#e5e5e5">${ultimaDec.cambio_sugerido.descripcion || "—"}</span></div>
+          <div>Hipótesis: <span style="color:#e5e5e5">${ultimaDec.cambio_sugerido.hipotesis || "—"}</span></div>
+        </div>` : ""}
+    </div>
+
+    <!-- Métricas -->
+    <div class="section-title">Métricas</div>
+    <div class="metrics-grid">
+      ${renderMetricas(m48, m7d)}
+    </div>
+
+    <!-- Diagnóstico -->
+    <div class="section-title">Diagnóstico automático</div>
+    <div class="diag-grid" style="margin-bottom:28px">
+      <div class="diag-card problemas">
+        <div class="diag-label">⚠ Problemas detectados</div>
+        ${diag.problemas.length
+          ? diag.problemas.map(p => `<div class="diag-item">${p}</div>`).join("")
+          : `<div class="diag-empty">Ninguno</div>`}
+      </div>
+      <div class="diag-card oportunidades">
+        <div class="diag-label">✦ Oportunidades</div>
+        ${diag.oportunidades.length
+          ? diag.oportunidades.map(o => `<div class="diag-item">${o}</div>`).join("")
+          : `<div class="diag-empty">Ninguna</div>`}
+      </div>
+    </div>
+
+    <!-- Por fuente -->
+    <div class="section-title">Por fuente (48h)</div>
+    ${renderFuentes(m48?.por_fuente || (metricasExtra?.periodo_48h?.por_fuente) || {})}
+
+    <!-- Embudo eventos -->
+    <div class="section-title">Embudo de eventos (24h)</div>
+    <div class="embudo-grid" style="margin-bottom:28px">
+      ${renderEmbudo(embudo)}
+    </div>
+
+    <!-- Historial -->
+    <div class="section-title">Historial (${logs.length} entradas)</div>
+    ${renderLogs(logs)}
+
+  `;
 }
 
 init();
 </script>
-
 </body>
 </html>
