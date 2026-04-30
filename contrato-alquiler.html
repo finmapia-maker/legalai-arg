@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="system">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,24 +16,62 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --acento:#c9a84c;
+  --ink:       #0f1117;
+  --paper:     #f7f3ec;
+  --cream:     #ede8dc;
+  --surface:   #ffffff;
+  --gold:      #c8a84b;
+  --gold-dim:  rgba(200,168,75,0.12);
+  --sage:      #3d5a46;
+  --sage-dim:  rgba(61,90,70,0.09);
+  --mist:      #6b7580;
+  --line:      rgba(15,17,23,0.1);
+  --hdr-bg:    #0f1117;
+  --shadow:    0 2px 16px rgba(15,17,23,0.07);
+  --btn-bg:    #0f1117;
+  --btn-txt:   #c8a84b;
+  /* compat aliases */
+  --acento:    #c8a84b;
   --acento-dim:#a8863c;
-  --txt:#0d0d0d;
-  --txt-dim:#444;
-  --txt-muted:#888;
-  --bg:#f5f4f0;
-  --white:#ffffff;
-  --border:#e0ddd6;
-  --gold:#c9a84c;
-  --r:12px;
+  --txt:       #0f1117;
+  --txt-dim:   #444;
+  --txt-muted: #6b7580;
+  --bg:        #f7f3ec;
+  --white:     #ffffff;
+  --border:    rgba(15,17,23,0.1);
+  --r:         12px;
+}
+[data-theme="dark"]{
+  --ink:       #eceef2;
+  --paper:     #0c0e12;
+  --cream:     #141720;
+  --surface:   #1c2030;
+  --gold:      #d4a847;
+  --gold-dim:  rgba(212,168,71,0.13);
+  --sage:      #6abf8a;
+  --sage-dim:  rgba(106,191,138,0.1);
+  --mist:      #7a8494;
+  --line:      rgba(255,255,255,0.07);
+  --hdr-bg:    #080a0e;
+  --shadow:    0 2px 20px rgba(0,0,0,0.4);
+  --btn-bg:    #d4a847;
+  --btn-txt:   #0c0e12;
+  --acento:    #d4a847;
+  --acento-dim:#e0b84e;
+  --txt:       #eceef2;
+  --txt-dim:   #b0b8c4;
+  --txt-muted: #7a8494;
+  --bg:        #0c0e12;
+  --white:     #1c2030;
+  --border:    rgba(255,255,255,0.07);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:'Figtree',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
 
 /* ── NAV ── */
 nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
@@ -49,12 +87,12 @@ nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 2
 
 /* precio */
 .precio-pill{display:inline-flex;flex-direction:column;align-items:center;background:var(--bg);border:2px solid var(--border);border-radius:var(--r);padding:16px 32px;margin-bottom:24px;min-width:220px}
-.precio-monto{font-family:'Figtree',sans-serif;font-size:2.2rem;font-weight:800;color:var(--txt);line-height:1;min-height:2.4rem}
+.precio-monto{font-family:'DM Sans',sans-serif;font-size:2.2rem;font-weight:800;color:var(--txt);line-height:1;min-height:2.4rem}
 .precio-det{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--txt-muted);margin-top:4px}
 .precio-nota-pill{font-size:.75rem;color:var(--acento-dim);font-weight:600;margin-top:4px}
 
 /* CTA principal */
-.btn-cta{display:inline-block;background:var(--acento);color:#0a0a0a;font-family:'Figtree',sans-serif;font-weight:800;font-size:1.1rem;padding:18px 48px;border-radius:10px;text-decoration:none;transition:background .15s,transform .12s,box-shadow .15s;box-shadow:0 4px 20px rgba(201,168,76,.28);letter-spacing:-.01em}
+.btn-cta{display:inline-block;background:var(--acento);color:#0a0a0a;font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.1rem;padding:18px 48px;border-radius:10px;text-decoration:none;transition:background .15s,transform .12s,box-shadow .15s;box-shadow:0 4px 20px rgba(201,168,76,.28);letter-spacing:-.01em}
 .btn-cta:hover{background:var(--acento-dim);transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,76,.4)}
 .btn-cta:active{transform:translateY(0)}
 .trust-line{margin-top:14px;font-size:.8rem;color:var(--txt-muted);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
@@ -123,7 +161,7 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 .sticky-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:480px;margin:0 auto}
 .sticky-price{font-size:.82rem;color:var(--txt-dim);line-height:1.3}
 .sticky-price strong{display:block;font-size:1.1rem;font-weight:800;color:var(--txt)}
-.sticky-btn{background:var(--acento);color:#0a0a0a;font-family:'Figtree',sans-serif;font-weight:800;font-size:.92rem;padding:13px 22px;border-radius:9px;text-decoration:none;white-space:nowrap;box-shadow:0 3px 12px rgba(201,168,76,.3);flex-shrink:0;transition:background .15s}
+.sticky-btn{background:var(--acento);color:#0a0a0a;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.92rem;padding:13px 22px;border-radius:9px;text-decoration:none;white-space:nowrap;box-shadow:0 3px 12px rgba(201,168,76,.3);flex-shrink:0;transition:background .15s}
 .sticky-btn:hover{background:var(--acento-dim)}
 
 /* responsive */
@@ -141,9 +179,16 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 <body>
 
 <!-- NAV -->
-<nav>
-  <a class="logo" href="https://legalai-arg.com">Legal<span>AI</span> Arg</a>
-  <a href="https://legalai-arg.com/formulario" style="background:var(--acento);color:#0a0a0a;font-weight:700;font-size:.82rem;padding:9px 20px;border-radius:8px;text-decoration:none;">Crear contrato</a>
+<nav style="background:var(--hdr-bg);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,168,75,.15);position:sticky;top:0;z-index:100">
+  <a style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.05em;text-decoration:none" href="https://legalai-arg.com">LegalAI <span style="color:rgba(200,168,75,.4)">ARG</span></a>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px">
+      <button class="theme-btn" id="btnLight"  onclick="setTheme('light')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">☀ Claro</button>
+      <button class="theme-btn" id="btnSystem" onclick="setTheme('system')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">⊙ Auto</button>
+      <button class="theme-btn" id="btnDark"   onclick="setTheme('dark')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">◗ Oscuro</button>
+    </div>
+    <a href="https://legalai-arg.com/formulario" style="background:var(--gold);color:#0a0a0a;font-weight:700;font-size:.82rem;padding:9px 20px;border-radius:8px;text-decoration:none;">Ver mi contrato →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -151,7 +196,7 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
   <!-- Social proof -->
   <div class="social-proof">
     <span class="social-dot"></span>
-    Usado hoy por propietarios e inquilinos en Argentina
+    +500 contratos generados en Argentina · CABA, GBA y todo el país
   </div>
 
   <!-- Checks directos ANTES del título -->
@@ -159,57 +204,58 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
     <div class="hero-check">Contrato legal válido en Argentina</div>
     <div class="hero-check">Listo en 5 minutos</div>
     <div class="hero-check">Descarga inmediata en PDF</div>
-    <div class="hero-check">Sin abogado ni turnos</div>
+    <div class="hero-check">Vista previa antes de pagar</div>
   </div>
 
-  <h1>Contrato de alquiler listo<br><mark>en 5 minutos</mark></h1>
-  <p class="hero-sub">Completás los datos en 2 minutos, pagás y el PDF se descarga al instante. Revisás antes de pagar. Sin compromiso.</p>
+  <h1>Creá tu contrato de alquiler<br><mark>en 5 minutos</mark> — <em style="font-style:normal;font-size:.7em;color:var(--txt-dim);display:block;font-weight:600;margin-top:6px">vista previa antes de pagar</em></h1>
+  <p class="hero-sub">Completás los datos y <strong>ves el contrato completo gratis</strong>.<br>Pagás solo si te sirve.</p>
 
   <div class="precio-pill">
+    <span style="font-size:.72rem;color:var(--txt-muted);font-family:'DM Mono',monospace;display:block;margin-bottom:2px">Desde</span>
     <span class="precio-monto" id="heroMonto">$ 6.000</span>
-    <span class="precio-det" id="heroDet">Precio final en pesos · pago único</span>
-    <span class="precio-nota-pill">Sin suscripción · sin costos ocultos</span>
+    <span class="precio-det" id="heroDet">Precio final · sin costos ocultos</span>
+    <span class="precio-nota-pill">Pago único · sin suscripción</span>
   </div>
 
-  <p style="font-size:.82rem;color:var(--txt-muted);margin-bottom:10px;font-weight:500">
-    Sin pagar hasta ver el resultado
+  <p style="font-size:.83rem;color:var(--txt-muted);margin-bottom:10px;font-weight:600">
+    No necesitás pagar para ver el resultado
   </p>
   <a class="btn-cta" href="https://legalai-arg.com/formulario"
     onclick="fireConversion('hero_landing')">
-    CREAR MI CONTRATO AHORA
+    VER MI CONTRATO GRATIS
   </a>
   <div class="trust-line">
     <span>🔒 Pago seguro MercadoPago</span>
-    <span>⚡ Descarga inmediata</span>
-    <span>📄 Revisás antes de pagar</span>
+    <span>⚡ Generalo ahora · descargalo en minutos</span>
+    <span>⚖️ Modelo orientativo · no reemplaza abogado</span>
   </div>
 </section>
 
 <!-- PASOS -->
 <section class="pasos">
-  <div class="sec-title">3 pasos y está listo</div>
+  <div class="sec-title">3 pasos, sin sorpresas</div>
   <div class="pasos-grid">
     <div class="paso">
       <div class="paso-num">1</div>
       <strong>Completás los datos</strong>
-      <p>Nombre, domicilio, monto, duración y condiciones de tu alquiler.</p>
+      <p>Nombre, domicilio, monto, duración y condiciones. Menos de 2 minutos.</p>
     </div>
     <div class="paso">
       <div class="paso-num">2</div>
-      <strong>Pagás</strong>
-      <p>Con tarjeta, débito o transferencia a través de MercadoPago.</p>
+      <strong>Ves el contrato completo</strong>
+      <p>El documento se genera al instante. Lo leés completo antes de pagar.</p>
     </div>
     <div class="paso">
       <div class="paso-num">3</div>
-      <strong>Descargás el PDF</strong>
-      <p>Listo para imprimir, revisar y firmar con las partes.</p>
+      <strong>Pagás solo si te sirve</strong>
+      <p>Si está bien, pagás y descargás el PDF. Sin cargos hasta que confirmés.</p>
     </div>
   </div>
 </section>
 
 <!-- BENEFICIOS -->
 <section class="beneficios">
-  <div class="sec-title">Por qué usarlo</div>
+  <div class="sec-title">Por qué lo eligen</div>
   <div class="bene-grid">
     <div class="bene-item">
       <div class="bene-icon">🇦🇷</div>
@@ -242,17 +288,18 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 <section class="precio-sec">
   <div class="sec-title">Precio</div>
   <div class="precio-card">
+    <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--txt-muted);margin-bottom:2px">Desde</div>
     <div class="monto" id="precioGrande"><span class="ld"></span></div>
-    <div class="det" id="precioGrandeDet">cargando…</div>
-    <p style="font-size:.8rem;color:var(--txt-muted);margin-bottom:10px;font-weight:500">
-      Sin pagar hasta ver el resultado
+    <div class="det" id="precioGrandeDet">Pago único · sin costos ocultos</div>
+    <p style="font-size:.83rem;color:var(--txt-muted);margin-bottom:10px;font-weight:600">
+      No necesitás pagar para ver el resultado
     </p>
     <a class="btn-cta" href="https://legalai-arg.com/formulario"
       onclick="fireConversion('precio_landing')"
       style="display:block;width:100%">
-      CREAR MI CONTRATO AHORA
+      VER MI CONTRATO GRATIS
     </a>
-    <div class="nota">🔒 Pago seguro · Descarga inmediata · PDF listo para firmar</div>
+    <div class="nota">🔒 Pago seguro MercadoPago · Pagás solo si te sirve · Sin costos ocultos</div>
   </div>
 </section>
 
@@ -285,16 +332,16 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 
 <!-- CTA FINAL -->
 <section class="cta-final">
-  <h2>Tu contrato, listo en 5 minutos</h2>
-  <p>Sin abogado · Sin esperas · Revisás antes de pagar</p>
+  <h2>Ves el resultado antes de pagar</h2>
+  <p>Sin abogado · Sin sorpresas · Pagás solo si te sirve</p>
   <div class="precio-inline" id="ctaInlinePrecio">$ 6.000 · pago único</div>
   <a class="btn-cta" href="https://legalai-arg.com/formulario"
     onclick="fireConversion('cta_final_landing')"
     style="font-size:1rem;padding:16px 40px">
-    CREAR MI CONTRATO AHORA
+    VER MI CONTRATO GRATIS
   </a>
   <p style="margin-top:14px;font-size:.75rem;color:rgba(255,255,255,.35)">
-    Precio final · sin sorpresas · sin suscripción
+    Generalo ahora · descargalo en minutos · modelo orientativo
   </p>
 </section>
 
@@ -309,6 +356,12 @@ const PRECIO_USD    = 5;
 const FALLBACK_ARS  = 1200;
 const WORKER_URL    = 'https://legalai-worker.finmap-ia.workers.dev';
 let   cotizacion    = { valor: null, fuente: null };
+
+// ── Tema ──────────────────────────────────────────────────────────
+function setTheme(t){localStorage.setItem('theme',t);applyTheme(t);['Light','System','Dark'].forEach(x=>{const b=document.getElementById('btn'+x);if(b)b.style.background=x.toLowerCase()===t?'rgba(200,168,75,.2)':'transparent';if(b)b.style.color=x.toLowerCase()===t?'var(--gold)':'rgba(255,255,255,.4)';});}
+function applyTheme(t){const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((localStorage.getItem('theme')||'system')==='system')applyTheme('system');});
+(function(){const t=localStorage.getItem('theme')||'system';applyTheme(t);['Light','System','Dark'].forEach(x=>{const b=document.getElementById('btn'+x);if(!b)return;b.style.background=x.toLowerCase()===t?'rgba(200,168,75,.2)':'transparent';b.style.color=x.toLowerCase()===t?'var(--gold)':'rgba(255,255,255,.4)';});})();
 
 // ── Capturar UTMs al cargar ────────────────────────────────────────
 (function(){
@@ -414,7 +467,7 @@ window.addEventListener('load', async function() {
     </div>
     <a class="sticky-btn" href="https://legalai-arg.com/formulario"
       onclick="fireConversion('sticky_landing')">
-      Crear contrato →
+      Ver mi contrato →
     </a>
   </div>
 </div>
