@@ -5,7 +5,8 @@ const ARCHIVOS = [
   "formulario.html",
   "planes.html",
   "gracias.html",
-  "contrato-alquiler.html"
+  "contrato-alquiler.html",
+  "acerca_de_legal_ai_layout_dinamico.html"
 ];
 
 const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
