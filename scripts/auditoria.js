@@ -9,7 +9,6 @@ const ARCHIVOS = [
 ];
 
 const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
-console.log("Modelo usado:", CLAUDE_MODEL);
 
 const DATA_DIR = "data";
 const LOG_FILE = "data/auditoria-log.jsonl";
@@ -43,8 +42,7 @@ function readState() {
       fecha_inicio: new Date().toISOString(),
       estado: "baseline_inicial",
       experimento_activo: null,
-      cambios_probados: [],
-      regla: "No proponer cambios diarios. Primero observar, comparar y registrar."
+      cambios_probados: []
     };
   }
 
@@ -57,78 +55,55 @@ function readRecentLogs() {
     .split("\n")
     .filter(Boolean)
     .slice(-10)
-    .map(x => {
-      try { return JSON.parse(x); } catch { return null; }
-    })
-    .filter(Boolean);
+    .map(x => JSON.parse(x));
 }
 
 function readMetrics() {
-  if (!fs.existsSync("data/metrics.json")) {
-    return {
-      fuente: "sin_metricas_conectadas",
-      aviso: "GitHub no informa conversiones reales. Faltan métricas externas.",
-      visitas: null,
-      clics_cta: null,
-      formularios: null,
-      pagos: null,
-      conversiones: null
-    };
-  }
-
-  return JSON.parse(fs.readFileSync("data/metrics.json", "utf8"));
+  return {
+    conversiones_disponibles: false,
+    nota: "Sin integración de métricas reales"
+  };
 }
 
-function prompt({ site, state, logs, metrics }) {
+function buildPrompt({ site, state, logs, metrics }) {
   return `
-Actuás como auditor CRO de LegalAI Arg.
+Actuás como auditor CRO de LegalAI.
 
 OBJETIVO:
-No cambiar por cambiar. Mantener memoria, comparar contra el día anterior y solo recomendar cambios cuando haya motivo real.
+NO cambiar constantemente.
+Solo sugerir cambios si hay evidencia o lógica fuerte.
 
-REGLAS ESTRICTAS:
-- No propongas cambios contradictorios con cambios recientes.
-- No propongas cambios diarios si no hubo plazo suficiente.
-- Si no hay métricas reales, priorizá "mantener y observar".
-- Si hay un experimento activo con menos de 3 días, no recomendar cambios nuevos.
-- Si ya se probó un cambio antes, indicarlo.
-- Máximo 1 cambio sugerido.
-- Si no hay evidencia suficiente, responder "NO CAMBIAR".
-- Separar observación, hipótesis, plazo y métrica esperada.
-- No tocar diseño ni copy si no hay justificación fuerte.
+REGLAS:
+- Máximo 1 cambio
+- No contradicciones
+- Si no hay datos → NO_CAMBIAR
+- Priorizar estabilidad
 
-FORMATO OBLIGATORIO EN JSON PURO:
+FORMATO JSON:
+
 {
   "decision": "NO_CAMBIAR" | "OBSERVAR" | "PROPONER_CAMBIO",
   "resumen": "...",
-  "comparacion_vs_dia_anterior": "...",
-  "conversiones_disponibles": true/false,
   "motivo": "...",
   "cambio_sugerido": {
     "archivo": "...",
     "seccion": "...",
-    "accion": "...",
-    "texto_actual_estimado": "...",
     "texto_nuevo": "...",
     "hipotesis": "...",
-    "metrica_a_medir": "...",
-    "plazo_minimo_dias": 3,
-    "riesgo": "bajo" | "medio" | "alto"
-  },
-  "instruccion_para_claude_code": "...",
-  "nota_final": "..."
+    "plazo_dias": 3
+  }
 }
 
-ESTADO ACTUAL:
-${JSON.stringify(state, null, 2)}
+ESTADO:
+${JSON.stringify(state)}
 
-LOGS RECIENTES:
-${JSON.stringify(logs, null, 2)}
+LOGS:
+${JSON.stringify(logs)}
 
 METRICAS:
-${JSON.stringify(metrics, null, 2)}
+${JSON.stringify(metrics)}
 
-ARCHIVOS DEL SITIO:
+SITIO:
 ${site}
 `;
 }
@@ -146,24 +121,24 @@ async function postJson(url, headers, body) {
   try { data = JSON.parse(text); } catch { data = text; }
 
   if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${JSON.stringify(data, null, 2)}`);
+    throw new Error(`HTTP ${res.status}: ${JSON.stringify(data)}`);
   }
 
   return data;
 }
 
-async function askClaude(p, key) {
+async function askClaude(prompt, apiKey) {
   const data = await postJson(
     "https://api.anthropic.com/v1/messages",
     {
-      "x-api-key": key,
+      "x-api-key": apiKey,
       "anthropic-version": "2023-06-01",
       "content-type": "application/json"
     },
     {
-      model: MODEL,
-      max_tokens: 2500,
-      messages: [{ role: "user", content: p }]
+      model: CLAUDE_MODEL,
+      max_tokens: 2000,
+      messages: [{ role: "user", content: prompt }]
     }
   );
 
@@ -176,99 +151,46 @@ function parseClaude(text) {
   } catch {
     return {
       decision: "OBSERVAR",
-      resumen: "Claude no devolvió JSON válido.",
-      raw: text
+      resumen: "Claude no devolvió JSON válido"
     };
   }
 }
 
 function updateState(state, decision) {
-  const today = new Date().toISOString();
-
-  state.ultima_auditoria = today;
   state.ultima_decision = decision.decision;
-  state.ultimo_resumen = decision.resumen;
-
-  if (decision.decision === "PROPONER_CAMBIO" && decision.cambio_sugerido) {
-    state.experimento_activo = {
-      fecha_inicio: today,
-      estado: "propuesto_no_aplicado",
-      cambio: decision.cambio_sugerido
-    };
-
-    state.cambios_probados = state.cambios_probados || [];
-    state.cambios_probados.push({
-      fecha: today,
-      archivo: decision.cambio_sugerido.archivo,
-      seccion: decision.cambio_sugerido.seccion,
-      hipotesis: decision.cambio_sugerido.hipotesis,
-      plazo_minimo_dias: decision.cambio_sugerido.plazo_minimo_dias
-    });
-  }
-
+  state.fecha = new Date().toISOString();
   return state;
 }
 
-function saveLog(decision, state, metrics) {
-  const entry = {
+function saveLog(decision, state) {
+  fs.appendFileSync(LOG_FILE, JSON.stringify({
     fecha: new Date().toISOString(),
-    decision: decision.decision,
-    resumen: decision.resumen,
-    motivo: decision.motivo,
-    comparacion_vs_dia_anterior: decision.comparacion_vs_dia_anterior,
-    cambio_sugerido: decision.cambio_sugerido || null,
-    metricas: metrics,
-    modelo: CLAUDE_MODEL
-  };
+    decision
+  }) + "\n");
 
-  fs.appendFileSync(LOG_FILE, JSON.stringify(entry) + "\n");
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
 }
 
-async function sendEmail(decision, resendKey, to) {
-  const body = `
-Auditoría diaria LegalAI
-
-DECISIÓN:
-${decision.decision}
-
-RESUMEN:
-${decision.resumen || ""}
-
-COMPARACIÓN VS DÍA ANTERIOR:
-${decision.comparacion_vs_dia_anterior || ""}
-
-MOTIVO:
-${decision.motivo || ""}
-
-CAMBIO SUGERIDO:
-${decision.cambio_sugerido ? JSON.stringify(decision.cambio_sugerido, null, 2) : "Sin cambio sugerido"}
-
-INSTRUCCIÓN PARA CLAUDE CODE:
-${decision.instruccion_para_claude_code || "No aplicar cambios."}
-
-NOTA:
-${decision.nota_final || ""}
-`;
-
+async function sendEmail(decision, apiKey, to) {
   await postJson(
     "https://api.resend.com/emails",
     {
-      Authorization: `Bearer ${resendKey}`,
+      Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json"
     },
     {
       from: "LegalAI <onboarding@resend.dev>",
       to: [to],
-      subject: `Auditoría LegalAI - ${decision.decision}`,
-      text: body
+      subject: "Auditoría LegalAI",
+      text: JSON.stringify(decision, null, 2)
     }
   );
 }
 
 (async () => {
   try {
-    console.log("Modelo usado:", MODEL);
+    console.log("Modelo usado:", CLAUDE_MODEL);
+
     ensureDataDir();
 
     const claudeKey = env("CLAUDE_API_KEY");
@@ -280,19 +202,21 @@ ${decision.nota_final || ""}
     const logs = readRecentLogs();
     const metrics = readMetrics();
 
-    const p = prompt({ site, state, logs, metrics });
-    const raw = await askClaude(p, claudeKey);
+    const prompt = buildPrompt({ site, state, logs, metrics });
+
+    const raw = await askClaude(prompt, claudeKey);
     const decision = parseClaude(raw);
 
     const newState = updateState(state, decision);
 
-    saveLog(decision, newState, metrics);
+    saveLog(decision, newState);
     await sendEmail(decision, resendKey, emailTo);
 
-    console.log("Auditoría finalizada:", decision.decision);
+    console.log("OK:", decision.decision);
+
   } catch (e) {
     console.error("ERROR REAL:");
-    console.error(e.message || e);
+    console.error(e.message);
     process.exit(1);
   }
 })();
