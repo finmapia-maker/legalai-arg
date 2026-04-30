@@ -1,9 +1,11 @@
 const fs = require("fs");
 const axios = require("axios");
-const nodemailer = require("nodemailer");
 
-// Archivos a analizar
-const archivos = [
+// ==============================
+// CONFIG
+// ==============================
+
+const ARCHIVOS = [
   "index.html",
   "formulario.html",
   "planes.html",
@@ -11,80 +13,152 @@ const archivos = [
   "contrato-alquiler.html"
 ];
 
-// Leer contenido
-let contenido = "";
+// ==============================
+// FUNCION: leer archivos
+// ==============================
 
-archivos.forEach(file => {
-  if (fs.existsSync(file)) {
-    const data = fs.readFileSync(file, "utf8");
-    contenido += `\n\n===== ARCHIVO: ${file} =====\n\n${data}`;
-  }
-});
+function leerArchivos() {
+  let contenido = "";
 
-// Prompt nivel DIOS
-const prompt = `
+  ARCHIVOS.forEach(file => {
+    if (fs.existsSync(file)) {
+      const data = fs.readFileSync(file, "utf8");
+      contenido += `\n\n===== ARCHIVO: ${file} =====\n\n${data}`;
+    } else {
+      contenido += `\n\n===== ARCHIVO: ${file} NO ENCONTRADO =====\n\n`;
+    }
+  });
+
+  return contenido;
+}
+
+// ==============================
+// PROMPT NIVEL DIOS
+// ==============================
+
+function generarPrompt(contenido) {
+  return `
 Actuás como el mejor experto en CRO, UX y monetización en Argentina.
 
-Objetivo: aumentar ventas inmediatamente.
+Tu único objetivo es aumentar ventas HOY.
 
-Analizá este flujo completo de LegalAI.
+Analizá este flujo completo de LegalAI como si fuera tu negocio.
 
-REGLAS:
+REGLAS ESTRICTAS:
 - No expliques teoría
-- No des opciones
-- No uses frases genéricas
-- Solo cambios aplicables YA
-- Pensá como alguien que quiere vender más hoy
+- No des alternativas
+- No suavices nada
+- No uses lenguaje genérico
+- Pensá como alguien que vive de vender
+- Todo debe ser aplicable directamente
 
 FORMATO OBLIGATORIO:
 
-ARCHIVO: [nombre]
-CAMBIO: [qué parte]
+ARCHIVO: [nombre exacto]
+CAMBIO: [sección concreta]
 REEMPLAZAR POR:
-[texto exacto nuevo]
+[texto exacto listo para copiar]
 
 ---
 
 ERROR:
-[problema claro]
+[problema directo]
 
 SOLUCIÓN:
-[acción concreta]
+[acción concreta sin explicación]
 
 ---
+
+PRIORIZAR:
+1. Conversión
+2. Claridad inmediata
+3. Reducción de fricción
+4. Venta directa
 
 FLUJO COMPLETO:
 ${contenido}
 `;
+}
+
+// ==============================
+// LLAMADA A CLAUDE
+// ==============================
+
+async function analizar(prompt) {
+  try {
+    const response = await axios.post(
+      "https://api.anthropic.com/v1/messages",
+      {
+        model: "claude-3-opus-20240229",
+        max_tokens: 2000,
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ]
+      },
+      {
+        headers: {
+          "x-api-key": process.env.CLAUDE_API_KEY,
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json"
+        }
+      }
+    );
+
+    return response.data.content[0].text;
+
+  } catch (error) {
+    console.error("ERROR CLAUDE:", error.response?.data || error.message);
+    return "Error en análisis con Claude";
+  }
+}
+
+// ==============================
+// ENVIO POR RESEND
+// ==============================
+
+async function enviarEmail(contenido) {
+  try {
+    await axios.post(
+      "https://api.resend.com/emails",
+      {
+        from: "LegalAI <onboarding@resend.dev>",
+        to: [process.env.EMAIL_TO],
+        subject: "Auditoría diaria LegalAI",
+        text: contenido
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("Email enviado correctamente");
+
+  } catch (error) {
+    console.error("ERROR EMAIL:", error.response?.data || error.message);
+  }
+}
+
+// ==============================
+// EJECUCION
+// ==============================
 
 async function run() {
-  const response = await axios.post("https://api.anthropic.com/v1/messages", {
-    model: "claude-3-opus-20240229",
-    max_tokens: 2000,
-    messages: [{ role: "user", content: prompt }]
-  }, {
-    headers: {
-      "x-api-key": process.env.CLAUDE_API_KEY,
-      "anthropic-version": "2023-06-01"
-    }
-  });
+  console.log("Iniciando auditoría...");
 
-  const resultado = response.data.content[0].text;
+  const contenido = leerArchivos();
+  const prompt = generarPrompt(contenido);
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_FROM,
-      pass: process.env.EMAIL_PASS
-    }
-  });
+  const resultado = await analizar(prompt);
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
-    to: process.env.EMAIL_TO,
-    subject: "Auditoría diaria LegalAI",
-    text: resultado
-  });
+  await enviarEmail(resultado);
+
+  console.log("Auditoría finalizada");
 }
 
 run();
