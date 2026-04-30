@@ -3,8 +3,8 @@
   "estado": "baseline_inicial",
   "experimento_activo": null,
   "cambios_probados": [],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-04-30T18:49:47.015Z",
+  "ultima_decision": "OBSERVAR",
+  "fecha": "2026-04-30T19:29:16.141Z",
   "ultima_prioridad": "baja",
   "ultimo_embudo": null
 }

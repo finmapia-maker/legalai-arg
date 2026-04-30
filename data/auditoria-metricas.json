@@ -1,12 +1,147 @@
 {
-  "fecha": "2026-04-30T18:49:47.016Z",
-  "periodo_48h": null,
-  "periodo_7d": null,
+  "fecha": "2026-04-30T19:29:16.142Z",
+  "periodo_48h": {
+    "clics": 21,
+    "ventas": 1,
+    "tasa_conv": "4.8%",
+    "total_ars": 15900,
+    "por_fuente": {
+      "directo": {
+        "clics": 21,
+        "ventas": 1,
+        "tasa_conv": "4.8%",
+        "monto_ars": 15900
+      }
+    },
+    "top_documentos": [
+      {
+        "titulo": "Contrato de Alquiler de Vivienda Residencial",
+        "count": 1
+      }
+    ],
+    "ultimas_conversiones": [
+      {
+        "ts_ar": "29/4/2026, 04:04:23",
+        "tipo": "doc",
+        "titulo": "Contrato de Alquiler de Vivienda Residencial",
+        "monto": 15900,
+        "utm_src": "directo",
+        "utm_cmp": "—",
+        "device": "Mobile",
+        "email": "soniaestrada963@gmail.com"
+      }
+    ]
+  },
+  "periodo_7d": {
+    "clics": 31,
+    "ventas": 1,
+    "tasa_conv": "3.2%",
+    "total_ars": 15900,
+    "por_fuente": {
+      "directo": {
+        "clics": 31,
+        "ventas": 1,
+        "tasa_conv": "3.2%",
+        "monto_ars": 15900
+      }
+    },
+    "top_documentos": [
+      {
+        "titulo": "Contrato de Alquiler de Vivienda Residencial",
+        "count": 1
+      }
+    ],
+    "ultimas_conversiones": [
+      {
+        "ts_ar": "29/4/2026, 04:04:23",
+        "tipo": "doc",
+        "titulo": "Contrato de Alquiler de Vivienda Residencial",
+        "monto": 15900,
+        "utm_src": "directo",
+        "utm_cmp": "—",
+        "device": "Mobile",
+        "email": "soniaestrada963@gmail.com"
+      }
+    ]
+  },
   "embudo_eventos": {},
   "total_eventos": 0,
+  "funnel_doc": [
+    {
+      "key": "page_view",
+      "label": "Visita",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "cta_generador",
+      "label": "Click generador",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "generar_preview",
+      "label": "Genera preview",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "preview_ok",
+      "label": "Preview OK",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "inicio_pago",
+      "label": "Inicia pago",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "pago_ok",
+      "label": "Pago confirmado",
+      "count": 0,
+      "drop_pct": 0
+    }
+  ],
+  "funnel_plan": [
+    {
+      "key": "page_view",
+      "label": "Visita planes",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "click_plan",
+      "label": "Click plan",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "email_confirm",
+      "label": "Email confirmado",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "inicio_pago",
+      "label": "Inicia pago",
+      "count": 0,
+      "drop_pct": 0
+    },
+    {
+      "key": "conversion_plan",
+      "label": "Plan pagado",
+      "count": 0,
+      "drop_pct": 0
+    }
+  ],
+  "cuello_botella": null,
   "diagnostico": {
     "problemas": [],
-    "oportunidades": [],
-    "estado": "OK"
+    "oportunidades": [
+      "Fuente más rentable: \"directo\" (1 ventas)"
+    ],
+    "estado": "OPORTUNIDAD"
   }
 }
