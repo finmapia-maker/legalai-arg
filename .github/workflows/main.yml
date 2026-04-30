@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       EMAIL_TO: ${{ secrets.EMAIL_TO }}
+      CLAUDE_MODEL: ${{ secrets.CLAUDE_MODEL }}
 
     steps:
       - name: Clonar repo
