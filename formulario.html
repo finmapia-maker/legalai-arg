@@ -282,6 +282,25 @@ const DOC_TIPO = 'Contrato de alquiler de vivienda';
 let G = { previewId:null, paymentId:null, precio_usd:11, texto:'' };
 let cotizacion = { valor:null, fuente:null };
 
+// ── Tracking /evento ──────────────────────────────────────────────────────
+function track(tipo, extra) {
+  try {
+    fetch(WORKER + '/evento', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo, pagina: 'formulario',
+        utm_src: sessionStorage.getItem('legalai_utm_source') || '',
+        utm_cmp: sessionStorage.getItem('legalai_utm_campaign') || '',
+        utm_med: sessionStorage.getItem('legalai_utm_medium') || '',
+        ref: sessionStorage.getItem('legalai_ref') || 'directo',
+        ...(extra || {})
+      })
+    });
+  } catch(_) {}
+}
+track('page_view');
+
 // Tema
 function setTheme(t){localStorage.setItem('theme',t);applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));}
 function applyTheme(t){const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}
@@ -338,6 +357,7 @@ async function generarContrato(){
   sessionStorage.setItem('legalai_meta',JSON.stringify(meta));
   showPanel('loadingGen');setProgress(2);
   fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
+  track('generar_preview', { doc_tipo: DOC_TIPO });
   try{
     const res=await fetch(WORKER+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datosDoc:datos,metadata:meta})});
     const data=await res.json();
@@ -389,6 +409,7 @@ async function pagar(){
   if(!cotizacion.valor){alert('Esperá un momento, cargando precio...');return;}
   try{gtag('event','conversion',{'send_to':'AW-18073890544','value':G.precio_usd,'currency':'USD'});}catch(_){}
   fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
+  track('inicio_pago', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
   showPanel('loadingPago');setProgress(3);
   const montoARS=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
   const sessionId='sess_'+Date.now();
@@ -419,6 +440,7 @@ async function generarFinal(paymentId){
     sessionStorage.setItem('legalai_paymentId',G.paymentId);
     sessionStorage.removeItem('legalai_previewId');
     showPanel('card4');setProgress(4);
+    track('documento_generado', { doc_tipo: DOC_TIPO, precio_usd: parseFloat(sessionStorage.getItem('legalai_precio_usd') || '11') });
     try{gtag('event','conversion',{'send_to':'AW-18073890544','value':parseFloat(sessionStorage.getItem('legalai_precio_usd')||'11')||11,'currency':'USD','transaction_id':G.paymentId});}catch(_){}
   }catch(err){showPanel('card2');setProgress(2);alert('Error al generar el documento: '+err.message);}
 }
