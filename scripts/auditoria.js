@@ -12,6 +12,7 @@ const ARCHIVOS = [
 ];
 
 const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-3-5-sonnet-20241022";
+console.log("Modelo usado:", CLAUDE_MODEL);
 
 // ==============================
 // HELPERS
