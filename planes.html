@@ -60,10 +60,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 
 /* ── HEADER ── */
 header{background:var(--hdr-bg);padding:0 40px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(200,168,75,.15)}
-nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;display:flex;gap:0;overflow-x:auto;transition:background .3s;position:sticky;top:62px;z-index:199;}
-.nav-link{padding:14px 20px;font-size:.82rem;font-weight:500;color:var(--mist);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;text-decoration:none;display:block;}
-.nav-link:hover{color:var(--ink);}
-.nav-link.active{color:var(--ink);border-bottom-color:var(--gold);}
 .logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);letter-spacing:.05em;text-decoration:none}
 .logo span{color:rgba(200,168,75,.4)}
 .hdr-right{display:flex;align-items:center;gap:16px}
@@ -173,7 +169,6 @@ footer a:hover{color:var(--gold)}
 @media(max-width:900px){.planes-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){
   header{padding:0 16px}
-  nav{padding:0 8px;}
   .hero{padding:52px 20px 40px}
   .planes-grid{grid-template-columns:1fr 1fr}
   .plan-card.pro{transform:none}
@@ -188,6 +183,7 @@ footer a:hover{color:var(--gold)}
 <header>
   <a class="logo" href="/">LegalAI <span>ARG</span></a>
   <div class="hdr-right">
+    <a class="hdr-back" href="/">← Volver al generador</a>
     <div class="theme-toggle">
       <button class="theme-btn" id="btnLight"  onclick="setTheme('light')">☀ Claro</button>
       <button class="theme-btn" id="btnSystem" onclick="setTheme('system')">⊙ Auto</button>
@@ -195,14 +191,6 @@ footer a:hover{color:var(--gold)}
     </div>
   </div>
 </header>
-
-<nav>
-  <a class="nav-link" href="/">Inicio</a>
-  <a class="nav-link" href="/#generador" onclick="sessionStorage.setItem('legalai_goto','generador')">Generador</a>
-  <a class="nav-link active" href="planes.html">Plan ilimitado</a>
-  <a class="nav-link" href="/#afiliados" onclick="sessionStorage.setItem('legalai_goto','afiliados')">Afiliados</a>
-  <a class="nav-link" href="/acerca_de_legal_ai_layout_dinamico.html">Acerca de</a>
-</nav>
 
 <!-- HERO -->
 <div class="hero">
@@ -329,12 +317,18 @@ function getUTM() {
     ref: sessionStorage.getItem('legalai_ref') || 'directo',
   };
 }
+const _SESSION_ID = sessionStorage.getItem('legalai_sid') || (() => {
+  const sid = 'sid_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  sessionStorage.setItem('legalai_sid', sid);
+  return sid;
+})();
+
 function track(tipo, extra) {
   try {
     fetch(WORKER + '/evento', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, pagina: 'planes', ...getUTM(), ...(extra || {}) })
+      body: JSON.stringify({ tipo, pagina: 'planes', session_id: _SESSION_ID, ...getUTM(), ...(extra || {}) })
     });
   } catch(_) {}
 }
