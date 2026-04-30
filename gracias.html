@@ -139,9 +139,16 @@ footer span{font-size:.75rem;color:var(--mist)}
 </head>
 <body>
 
-<nav>
-  <a class="logo" href="https://legalai-arg.com">Legal<span>AI</span> Arg</a>
-  <a class="nav-link" href="https://legalai-arg.com">Volver al inicio</a>
+<nav style="background:var(--hdr-bg,#0f1117);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,168,75,.15)">
+  <a style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.05em;text-decoration:none" href="https://legalai-arg.com">LegalAI <span style="color:rgba(200,168,75,.4)">ARG</span></a>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px">
+      <button id="btnLight"  onclick="setTheme('light')"  style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">☀ Claro</button>
+      <button id="btnSystem" onclick="setTheme('system')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">⊙ Auto</button>
+      <button id="btnDark"   onclick="setTheme('dark')"   style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">◗ Oscuro</button>
+    </div>
+    <a style="font-size:.82rem;color:rgba(255,255,255,.35);text-decoration:none;font-family:'DM Mono',monospace" href="https://legalai-arg.com">← Inicio</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -165,7 +172,7 @@ footer span{font-size:.75rem;color:var(--mist)}
       <h3>¿Necesitás más documentos?</h3>
       <p>Con el pack de 3 documentos pagás menos por cada uno. Ideal si tenés que hacer más contratos o necesitás otro tipo de documento.</p>
     </div>
-    <a class="btn-pack" href="https://legalai-arg.com/#formulario">Armar mi pack →</a>
+    <a class="btn-pack" href="https://legalai-arg.com/formulario">Armar mi pack →</a>
   </div>
 
   <!-- Documentos sugeridos -->
@@ -173,37 +180,37 @@ footer span{font-size:.75rem;color:var(--mist)}
   <p class="reconv-sub">Generados con los mismos datos, listos en minutos</p>
 
   <div class="docs-grid">
-    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Carta documento')">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Carta documento')">
       <div class="doc-icon">📨</div>
       <div class="doc-name">Carta documento</div>
       <div class="doc-desc">Para notificar formalmente al inquilino o propietario ante incumplimientos.</div>
       <div class="doc-badge">Muy solicitado</div>
     </a>
-    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Acuerdo de rescisión de contrato de alquiler')">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Acuerdo de rescisión de contrato de alquiler')">
       <div class="doc-icon">🤝</div>
       <div class="doc-name">Rescisión de alquiler</div>
       <div class="doc-desc">Para finalizar el contrato de mutuo acuerdo antes del vencimiento.</div>
       <div class="doc-badge">Relacionado</div>
     </a>
-    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Addenda o modificación de contrato de alquiler')">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Addenda o modificación de contrato de alquiler')">
       <div class="doc-icon">📝</div>
       <div class="doc-name">Addenda al contrato</div>
       <div class="doc-desc">Para agregar cláusulas o modificar condiciones del contrato original.</div>
       <div class="doc-badge">Relacionado</div>
     </a>
-    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Recibo de pago de alquiler')">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Recibo de pago de alquiler')">
       <div class="doc-icon">🧾</div>
       <div class="doc-name">Recibo de alquiler</div>
       <div class="doc-desc">Comprobante de pago mensual del canon locativo.</div>
       <div class="doc-badge">Popular</div>
     </a>
-    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Contrato de comodato')">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Contrato de comodato')">
       <div class="doc-icon">🏠</div>
       <div class="doc-name">Comodato</div>
       <div class="doc-desc">Para préstamo de un inmueble sin cobrar alquiler, con todas las garantías.</div>
       <div class="doc-badge">Alternativa</div>
     </a>
-    <a class="doc-card" href="https://legalai-arg.com/#formulario" onclick="sugerirDoc('Poder simple de representación')">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Poder simple de representación')">
       <div class="doc-icon">📋</div>
       <div class="doc-name">Poder simple</div>
       <div class="doc-desc">Para autorizar a otra persona a actuar en tu nombre en trámites.</div>
@@ -223,12 +230,26 @@ footer span{font-size:.75rem;color:var(--mist)}
 
 </div>
 
-<footer>
-  <span>© LegalAI Arg</span>
-  <span>Orientativo. No reemplaza asesoramiento legal profesional.</span>
+<footer style="background:var(--hdr-bg,#0f1117);padding:28px 32px;text-align:center;border-top:1px solid rgba(200,168,75,.12)">
+  <p style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2">
+    LegalAI Arg · Documentos orientativos generados con inteligencia artificial<br>
+    No constituyen asesoramiento legal profesional · <a href="https://legalai-arg.com" style="color:rgba(200,168,75,.5);text-decoration:none">legalai-arg.com</a>
+  </p>
 </footer>
 
 <script>
+// ── Toggle tema ──────────────────────────────────────────────────
+function setTheme(t){localStorage.setItem('theme',t);aplicarTema(t);actualizarBotones(t);}
+function aplicarTema(t){
+  var p=new URLSearchParams(window.location.search);
+  var origen=p.get('origen')||sessionStorage.getItem('legalai_origen')||'';
+  if(origen==='landing'){return;} // landing siempre claro
+  var dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+}
+function actualizarBotones(t){['Light','System','Dark'].forEach(function(x){var b=document.getElementById('btn'+x);if(!b)return;b.style.background=x.toLowerCase()===t?'rgba(200,168,75,.2)':'transparent';b.style.color=x.toLowerCase()===t?'var(--gold)':'rgba(255,255,255,.4)';});}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if((localStorage.getItem('theme')||'system')==='system')aplicarTema('system');});
+
 // ── Heredar tema ──────────────────────────────────────────────────
 (function() {
   var p = new URLSearchParams(window.location.search);
@@ -249,6 +270,8 @@ footer span{font-size:.75rem;color:var(--mist)}
         document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
       }
     });
+    var t2 = localStorage.getItem('theme') || 'system';
+    actualizarBotones(t2);
   }
 })();
 
