@@ -65,20 +65,24 @@ function readRecentLogs() {
 async function fetchStats(adminKey) {
   const desde48h = new Date(Date.now() - 48 * 3600 * 1000).toISOString().slice(0, 10);
   const desde7d  = new Date(Date.now() - 7  * 86400 * 1000).toISOString().slice(0, 10);
+  const desde48hTs = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
+  const desde7dTs  = new Date(Date.now() - 7  * 86400 * 1000).toISOString();
 
-  const [r48, r7d, rEventos] = await Promise.all([
-    fetch(`${WORKER_URL}/stats?desde=${desde48h}`, { headers: { "x-admin-key": adminKey } }),
-    fetch(`${WORKER_URL}/stats?desde=${desde7d}`,  { headers: { "x-admin-key": adminKey } }),
-    fetch(`${WORKER_URL}/eventos`),
+  const [r48, r7d, rEv48, rEv7d] = await Promise.all([
+    fetch(`${WORKER_URL}/stats?desde=${desde48h}`,       { headers: { "x-admin-key": adminKey } }),
+    fetch(`${WORKER_URL}/stats?desde=${desde7d}`,        { headers: { "x-admin-key": adminKey } }),
+    fetch(`${WORKER_URL}/eventos?desde=${desde48hTs}`),
+    fetch(`${WORKER_URL}/eventos?desde=${desde7dTs}`),
   ]);
 
-  const [stats48, stats7d, eventosRaw] = await Promise.all([
-    r48.ok      ? r48.json()      : null,
-    r7d.ok      ? r7d.json()      : null,
-    rEventos.ok ? rEventos.json() : null,
+  const [stats48, stats7d, eventosRaw48, eventosRaw7d] = await Promise.all([
+    r48.ok   ? r48.json()   : null,
+    r7d.ok   ? r7d.json()   : null,
+    rEv48.ok ? rEv48.json() : null,
+    rEv7d.ok ? rEv7d.json() : null,
   ]);
 
-  return { stats48, stats7d, eventosRaw };
+  return { stats48, stats7d, eventosRaw: eventosRaw48, eventosRaw7d };
 }
 
 // ── Calcular métricas procesadas ──────────────────────────────────────────
@@ -97,14 +101,13 @@ function calcularMetricas({ stats48, stats7d, eventosRaw }) {
     };
   };
 
-  // Embudo por tipo de evento
-  const embudoEventos = {};
-  if (eventosRaw?.eventos) {
-    for (const ev of eventosRaw.eventos) {
-      const k = ev.tipo || "unknown";
-      embudoEventos[k] = (embudoEventos[k] || 0) + 1;
-    }
-  }
+  // Funnel calculado por el worker
+  const funnel_doc  = eventosRaw?.funnel_doc  || [];
+  const funnel_plan = eventosRaw?.funnel_plan || [];
+  const cuello      = eventosRaw?.cuello_botella || null;
+
+  // Embudo simple por tipo (compatibilidad)
+  const embudoEventos = eventosRaw?.por_tipo || {};
 
   const m48 = metricasPeriodo(stats48);
   const problemas     = [];
@@ -140,6 +143,9 @@ function calcularMetricas({ stats48, stats7d, eventosRaw }) {
     periodo_7d:     metricasPeriodo(stats7d),
     embudo_eventos: embudoEventos,
     total_eventos:  eventosRaw?.total || 0,
+    funnel_doc,
+    funnel_plan,
+    cuello_botella: cuello,
     diagnostico: {
       problemas,
       oportunidades,
@@ -172,54 +178,59 @@ function buildPrompt({ metricas, state, logs, cambioEval }) {
     ventas:   l.snapshot_metricas?.ventas_48h,
   }));
 
-  return `
-ERES UN AUDITOR DE CONVERSIONES DE UN SITIO WEB DE DOCUMENTOS LEGALES (ARGENTINA).
-RESPONDÉ SOLO JSON. SIN TEXTO EXTRA. SIN MARKDOWN. SIN BACKTICKS.
+  const funnelStr = (funnel) => funnel.length
+    ? funnel.map(p => `  ${p.label}: ${p.count}${p.drop_pct > 0 ? ' (↓'+p.drop_pct+'%)' : ''}`).join('\n')
+    : '  Sin datos';
 
-FORMATO EXACTO:
+  return `
+ERES UN AUDITOR DE CONVERSIONES. RESPONDÉ SOLO JSON. SIN TEXTO. SIN BACKTICKS.
+
+FORMATO:
 {
   "decision": "NO_CAMBIAR" | "OBSERVAR" | "PROPONER_CAMBIO",
-  "resumen": "1 línea máx",
-  "motivo": "dato clave que justifica la decisión",
+  "resumen": "1 línea",
+  "motivo": "dato clave",
   "prioridad": "alta" | "media" | "baja",
-  "embudo": "donde cae el usuario o null",
+  "embudo": "etapa donde cae o null",
   "cambio_sugerido": {
-    "archivo": "nombre_archivo.html o null",
+    "archivo": "archivo.html o null",
     "tipo": "copy" | "precio" | "flujo_pago" | "cta" | "ads" | "observar_mas",
-    "descripcion": "qué cambiar exactamente (1-2 líneas)",
-    "hipotesis": "si cambiamos X esperamos Y",
+    "descripcion": "qué cambiar",
+    "hipotesis": "si X → Y",
     "esperar_horas": 48
   }
 }
 
 REGLAS:
-- Menos de 5 clics → NO_CAMBIAR (sin datos)
-- Problema claro con datos → PROPONER_CAMBIO (cambio_sugerido completo)
-- Señal débil → OBSERVAR (cambio_sugerido null)
+- < 5 visitas → NO_CAMBIAR
+- Cuello de botella claro (>50% drop) → PROPONER_CAMBIO
+- Señal débil → OBSERVAR
 - No repetir cambios ya probados
-- Si hay cambio activo < 48h → NO_CAMBIAR automático
-- Priorizar: conversiones > clics > tráfico
+- Cambio activo < 48h → NO_CAMBIAR
+
+FUNNEL DOC (48h):
+${funnelStr(metricas.funnel_doc)}
+
+FUNNEL PLANES (48h):
+${funnelStr(metricas.funnel_plan)}
+
+CUELLO DE BOTELLA DETECTADO:
+${JSON.stringify(metricas.cuello_botella)}
 
 MÉTRICAS 48H:
-${JSON.stringify(metricas.periodo_48h, null, 2)}
+  Clics: ${metricas.periodo_48h?.clics ?? 'N/A'}
+  Ventas: ${metricas.periodo_48h?.ventas ?? 'N/A'}
+  Conv%: ${metricas.periodo_48h?.tasa_conv ?? 'N/A'}
+  ARS: ${metricas.periodo_48h?.total_ars ?? 'N/A'}
 
-MÉTRICAS 7 DÍAS:
-${JSON.stringify(metricas.periodo_7d, null, 2)}
+DIAGNÓSTICO:
+  Estado: ${metricas.diagnostico.estado}
+  Problemas: ${metricas.diagnostico.problemas.join(' | ') || 'Ninguno'}
+  Oport.: ${metricas.diagnostico.oportunidades.join(' | ') || 'Ninguna'}
 
-DIAGNÓSTICO AUTOMÁTICO:
-${JSON.stringify(metricas.diagnostico, null, 2)}
+CAMBIO ACTIVO: ${JSON.stringify(cambioEval)}
 
-EMBUDO EVENTOS (24h):
-${JSON.stringify(metricas.embudo_eventos, null, 2)}
-Total eventos: ${metricas.total_eventos}
-
-ESTADO Y CAMBIO ACTIVO:
-${JSON.stringify(state, null, 2)}
-
-EVALUACIÓN CAMBIO ACTIVO:
-${JSON.stringify(cambioEval, null, 2)}
-
-HISTORIAL (últimas 5 decisiones):
+HISTORIAL:
 ${JSON.stringify(logsResumen, null, 2)}
 `;
 }
@@ -324,6 +335,9 @@ function saveLog(decision, state, metricas) {
     periodo_7d:     metricas.periodo_7d,
     embudo_eventos: metricas.embudo_eventos,
     total_eventos:  metricas.total_eventos,
+    funnel_doc:     metricas.funnel_doc,
+    funnel_plan:    metricas.funnel_plan,
+    cuello_botella: metricas.cuello_botella,
     diagnostico:    metricas.diagnostico,
   }, null, 2));
 }
