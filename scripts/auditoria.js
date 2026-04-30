@@ -10,7 +10,7 @@ const ARCHIVOS = [
   "acerca_de_legal_ai_layout_dinamico.html"
 ];
 
-const WORKER_URL   = "https://legalai-arg-worker.finmap-ia.workers.dev";
+const WORKER_URL   = "https://legalai-worker.finmap-ia.workers.dev";
 const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
 const DATA_DIR     = "data";
 const LOG_FILE     = "data/auditoria-log.jsonl";
