@@ -1,1 +1,2 @@
 {"fecha":"2026-04-30T16:31:42.579Z","decision":{"decision":"OBSERVAR","resumen":"Claude no devolvió JSON válido"}}
+{"fecha":"2026-04-30T16:43:34.857Z","decision":{"decision":"NO_CAMBIAR","resumen":"Sitio con contenido estático completo, sin datos de conversión ni métricas","motivo":"No hay experimentos activos ni datos de performance para evaluar cambios. Estado en baseline_inicial.","cambio_sugerido":null}}
