@@ -18,6 +18,7 @@ jobs:
       CLAUDE_MODEL: ${{ secrets.CLAUDE_MODEL }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       EMAIL_TO: ${{ secrets.EMAIL_TO }}
+      ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
 
     steps:
       - name: Checkout
@@ -33,6 +34,7 @@ jobs:
 
           git add data/auditoria-log.jsonl
           git add data/auditoria-state.json
+          git add data/auditoria-metricas.json || true
 
-          git commit -m "update auditoria logs" || echo "sin cambios"
+          git commit -m "update auditoria logs [skip ci]" || echo "sin cambios"
           git push
