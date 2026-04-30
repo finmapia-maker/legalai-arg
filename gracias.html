@@ -285,12 +285,30 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',func
   if (!paymentId) return;
 
   try {
-    var precioUSD = parseFloat(sessionStorage.getItem('legalai_precio_usd') || '5') || 5;
+    var esPlan    = (tipo === 'plan');
+    var precioUSD = esPlan
+      ? (parseFloat(sessionStorage.getItem('legalai_plan_precio_usd') || '0') || 0)
+      : (parseFloat(sessionStorage.getItem('legalai_precio_usd') || '5') || 5);
+
+    // Conversión principal Google Ads
     gtag('event', 'conversion', {
       'send_to':        'AW-18073890544',
       'value':          precioUSD,
       'currency':       'USD',
       'transaction_id': paymentId,
+    });
+
+    // Evento purchase para GA4 / reportes
+    gtag('event', 'purchase', {
+      'transaction_id': paymentId,
+      'value':          precioUSD,
+      'currency':       'USD',
+      'items': [{
+        'item_id':   esPlan ? (sessionStorage.getItem('legalai_plan_id') || 'plan') : 'documento',
+        'item_name': esPlan ? 'Plan ' + (sessionStorage.getItem('legalai_plan_id') || '') : 'Documento legal',
+        'price':     precioUSD,
+        'quantity':  1,
+      }]
     });
   } catch(_) {}
 })();
