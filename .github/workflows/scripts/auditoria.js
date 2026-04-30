@@ -1,5 +1,4 @@
 const fs = require("fs");
-const axios = require("axios");
 
 const ARCHIVOS = [
   "index.html",
@@ -9,28 +8,45 @@ const ARCHIVOS = [
   "contrato-alquiler.html"
 ];
 
-function validarEnv() {
-  const faltantes = [];
+const CLAUDE_MODEL = "claude-3-5-sonnet-20241022";
 
-  if (!process.env.CLAUDE_API_KEY) faltantes.push("CLAUDE_API_KEY");
-  if (!process.env.RESEND_API_KEY) faltantes.push("RESEND_API_KEY");
-  if (!process.env.EMAIL_TO) faltantes.push("EMAIL_TO");
+function log(title, value) {
+  console.log(`\n=== ${title} ===`);
+  console.log(value);
+}
 
-  if (faltantes.length > 0) {
-    throw new Error("Faltan secrets: " + faltantes.join(", "));
+function requiredEnv(name) {
+  const value = process.env[name];
+
+  if (!value || !value.trim()) {
+    throw new Error(`Falta configurar la secret: ${name}`);
   }
+
+  return value;
 }
 
 function leerArchivos() {
   let contenido = "";
+  let encontrados = 0;
 
   for (const file of ARCHIVOS) {
-    if (fs.existsSync(file)) {
-      const data = fs.readFileSync(file, "utf8");
-      contenido += `\n\n===== ARCHIVO: ${file} =====\n\n${data.slice(0, 25000)}`;
-    } else {
-      contenido += `\n\n===== ARCHIVO NO ENCONTRADO: ${file} =====\n\n`;
+    if (!fs.existsSync(file)) {
+      contenido += `\n\n===== ARCHIVO NO ENCONTRADO: ${file} =====\n`;
+      continue;
     }
+
+    encontrados++;
+    const data = fs.readFileSync(file, "utf8");
+
+    contenido += `
+    
+===== ARCHIVO: ${file} =====
+${data.slice(0, 22000)}
+`;
+  }
+
+  if (encontrados === 0) {
+    throw new Error("No se encontró ninguno de los archivos definidos para auditar.");
   }
 
   return contenido;
@@ -51,13 +67,13 @@ REGLAS:
 - No des teoría.
 - No seas genérico.
 - No digas "podría".
-- No expliques de más.
 - Indicá exactamente qué archivo modificar.
 - Indicá exactamente qué texto reemplazar.
 - Priorizá cambios de alto impacto.
 - Si algo está bien, no lo menciones.
-- Máximo 10 cambios.
+- Máximo 8 cambios.
 - Ordená por impacto en ventas.
+- Escribí en español argentino, claro y directo.
 
 FORMATO OBLIGATORIO:
 
@@ -87,11 +103,39 @@ ${contenido}
 `;
 }
 
-async function analizarConClaude(prompt) {
-  const response = await axios.post(
+async function postJson(url, headers, body) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body)
+  });
+
+  const text = await response.text();
+
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} en ${url}: ${JSON.stringify(data, null, 2)}`);
+  }
+
+  return data;
+}
+
+async function analizarConClaude(prompt, claudeKey) {
+  const data = await postJson(
     "https://api.anthropic.com/v1/messages",
     {
-      model: "claude-3-5-sonnet-20241022",
+      "x-api-key": claudeKey,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    {
+      model: CLAUDE_MODEL,
       max_tokens: 3000,
       messages: [
         {
@@ -99,72 +143,63 @@ async function analizarConClaude(prompt) {
           content: prompt
         }
       ]
-    },
-    {
-      headers: {
-        "x-api-key": process.env.CLAUDE_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json"
-      },
-      timeout: 60000
     }
   );
 
-  return response.data.content?.[0]?.text || "Claude no devolvió contenido.";
+  const texto = data?.content?.[0]?.text;
+
+  if (!texto) {
+    throw new Error("Claude respondió, pero no devolvió texto útil.");
+  }
+
+  return texto;
 }
 
-async function enviarPorResend(texto) {
-  const response = await axios.post(
+async function enviarPorResend(resultado, resendKey, emailTo) {
+  const data = await postJson(
     "https://api.resend.com/emails",
     {
-      from: "LegalAI <onboarding@resend.dev>",
-      to: [process.env.EMAIL_TO],
-      subject: "Auditoría diaria LegalAI",
-      text: texto
+      Authorization: `Bearer ${resendKey}`,
+      "Content-Type": "application/json"
     },
     {
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      timeout: 30000
+      from: "LegalAI <onboarding@resend.dev>",
+      to: [emailTo],
+      subject: "Auditoría diaria LegalAI",
+      text: resultado
     }
   );
 
-  return response.data;
+  return data;
 }
 
 async function run() {
   try {
-    console.log("Iniciando auditoría LegalAI...");
+    log("INICIO", "Auditoría LegalAI iniciada");
 
-    validarEnv();
+    const claudeKey = requiredEnv("CLAUDE_API_KEY");
+    const resendKey = requiredEnv("RESEND_API_KEY");
+    const emailTo = requiredEnv("EMAIL_TO");
+
+    log("SECRETS", "Secrets detectadas correctamente");
 
     const contenido = leerArchivos();
-
-    if (!contenido.trim()) {
-      throw new Error("No se pudo leer contenido de archivos.");
-    }
-
-    console.log("Archivos leídos correctamente.");
+    log("ARCHIVOS", "Archivos leídos correctamente");
 
     const prompt = generarPrompt(contenido);
 
-    console.log("Enviando análisis a Claude...");
+    log("CLAUDE", "Enviando análisis a Claude...");
+    const resultado = await analizarConClaude(prompt, claudeKey);
+    log("CLAUDE", "Respuesta recibida correctamente");
 
-    const resultado = await analizarConClaude(prompt);
+    log("RESEND", "Enviando email...");
+    const resendResult = await enviarPorResend(resultado, resendKey, emailTo);
+    log("RESEND", JSON.stringify(resendResult, null, 2));
 
-    console.log("Claude respondió correctamente.");
-    console.log("Enviando email...");
-
-    await enviarPorResend(resultado);
-
-    console.log("Email enviado correctamente.");
-    console.log("Auditoría finalizada.");
+    log("FINAL", "Auditoría finalizada correctamente");
   } catch (error) {
-    console.error("FALLÓ LA AUDITORÍA:");
-    console.error(error.response?.data || error.message || error);
-
+    console.error("\n=== ERROR REAL ===");
+    console.error(error.message || error);
     process.exit(1);
   }
 }
