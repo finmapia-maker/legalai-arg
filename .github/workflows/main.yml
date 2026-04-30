@@ -13,30 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+      CLAUDE_MODEL: ${{ secrets.CLAUDE_MODEL }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       EMAIL_TO: ${{ secrets.EMAIL_TO }}
-      CLAUDE_MODEL: ${{ secrets.CLAUDE_MODEL }}
 
     steps:
-      - name: Clonar repo
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Verificar estructura
-        run: |
-          echo "Archivos raíz:"
-          ls -la
-          echo "Carpeta scripts:"
-          ls -la scripts || true
-          node -v
 
       - name: Ejecutar auditoría
         run: node scripts/auditoria.js
 
-      - name: Guardar historial en repo
+      - name: Guardar logs
         run: |
-          git config user.name "legalai-auditor"
-          git config user.email "legalai-auditor@users.noreply.github.com"
-          git add data/auditoria-log.jsonl data/auditoria-state.json || true
-          git commit -m "Actualiza auditoría diaria LegalAI" || echo "Sin cambios para commitear"
+          git config user.name "bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data || true
+          git commit -m "log auditoria" || echo "sin cambios"
           git push || true
