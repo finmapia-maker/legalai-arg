@@ -1,116 +1,193 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="system">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acerca de - LegalAI ARG</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Lato:wght@300;400;700&family=DM+Mono&display=swap" rel="stylesheet">
+<title>Acerca de LegalAI Arg</title>
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18073890544');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#0a0a0a;color:#e5e5e5;font-family:'Lato',sans-serif}
-.header-line{height:3px;background:#c9a84c;width:100%}
-.container{max-width:1100px;margin:auto;padding:30px 20px}
-h1{font-family:'Playfair Display',serif;font-size:34px;text-align:center;margin-bottom:26px}
-h1 em{color:#c9a84c}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.card{background:#111;padding:18px;border-radius:12px;border:1px solid rgba(201,168,76,.15);transition:all .25s ease;position:relative;overflow:hidden}
-.card:hover{transform:translateY(-4px);border-color:#c9a84c;box-shadow:0 0 20px rgba(201,168,76,0.15)}
-.card.large{grid-column:span 2}
-.title{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:6px}
-.highlight{color:#c9a84c}
-.icon{font-size:18px;margin-bottom:6px;display:block}
-.badge{display:inline-block;padding:4px 8px;border-radius:5px;font-size:11px;margin-right:5px}
-.red{background:#3a1e1e;color:#f87171}
-.green{background:#1e3a2f;color:#4ade80}
-.center{text-align:center}
-.btn{display:inline-block;background:#c9a84c;color:#000;padding:12px 18px;border-radius:6px;text-decoration:none;font-weight:bold;margin-top:8px}
-.highlight-box{background:linear-gradient(135deg,#1a1510,#111);border:1px solid rgba(201,168,76,.35)}
-.highlight-box:hover{box-shadow:0 0 30px rgba(201,168,76,.25)}
-@media(max-width:700px){.card.large{grid-column:span 1}}
-.row.center-row{grid-column:1/-1;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:6px}
-.row.center-row .card{max-width:320px;width:100%}
-
+:root{
+  --ink:#0f1117;--paper:#f7f3ec;--cream:#ede8dc;--surface:#ffffff;
+  --gold:#c8a84b;--gold-dim:rgba(200,168,75,0.12);
+  --sage:#3d5a46;--sage-dim:rgba(61,90,70,0.09);
+  --mist:#6b7580;--line:rgba(15,17,23,0.1);
+  --hdr-bg:#0f1117;--shadow:0 2px 16px rgba(15,17,23,0.07);
+  --btn-bg:#0f1117;--btn-txt:#c8a84b;--btn-hover:#1e2230;
+}
+[data-theme="dark"]{
+  --ink:#eceef2;--paper:#0c0e12;--cream:#141720;--surface:#1c2030;
+  --gold:#d4a847;--gold-dim:rgba(212,168,71,0.13);
+  --sage:#6abf8a;--sage-dim:rgba(106,191,138,0.1);
+  --mist:#7a8494;--line:rgba(255,255,255,0.07);
+  --hdr-bg:#080a0e;--shadow:0 2px 20px rgba(0,0,0,0.4);
+  --btn-bg:#d4a847;--btn-txt:#0c0e12;--btn-hover:#e0b84e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;transition:background .3s,color .3s}
+header{background:var(--hdr-bg);padding:0 40px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(200,168,75,.15)}
+.logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);letter-spacing:.05em;text-decoration:none}
+.logo span{color:rgba(200,168,75,.4)}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.hdr-back{font-size:.8rem;color:rgba(255,255,255,.35);text-decoration:none;font-family:'DM Mono',monospace;letter-spacing:.04em;transition:color .2s}
+.hdr-back:hover{color:var(--gold)}
+.theme-toggle{display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px}
+.theme-btn{padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);transition:all .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.theme-btn.active{background:rgba(200,168,75,.2);color:var(--gold)}
+.wrap{max-width:900px;margin:0 auto;padding:64px 24px 80px}
+.hero{text-align:center;margin-bottom:56px;padding-bottom:48px;border-bottom:1px solid var(--line)}
+.hero-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:14px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.12;color:var(--ink);margin-bottom:16px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{font-size:.95rem;color:var(--mist);line-height:1.75;max-width:520px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;transition:border-color .2s,box-shadow .2s,background .3s;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--gold);box-shadow:0 6px 24px rgba(200,168,75,.1)}
+.card.featured{border-color:rgba(200,168,75,.35);background:var(--gold-dim)}
+.card.span2{grid-column:span 2}
+.card.span3{grid-column:span 3}
+.card-icon{font-size:1.5rem;margin-bottom:10px}
+.card-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.25}
+.card p{font-size:.85rem;color:var(--mist);line-height:1.7}
+.card p strong{color:var(--ink)}
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.68rem;padding:3px 10px;border-radius:10px;margin:2px;font-weight:500}
+.tag-sage{background:var(--sage-dim);color:var(--sage);border:1px solid rgba(61,90,70,.2)}
+.tag-gold{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.2)}
+.tag-err{background:rgba(192,57,43,.07);color:#c0392b;border:1px solid rgba(192,57,43,.15)}
+.docs-list{font-size:.84rem;color:var(--mist);line-height:1.9;margin-top:6px}
+.docs-list strong{color:var(--gold)}
+.btn-cta{display:inline-block;background:var(--btn-bg);color:var(--btn-txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;padding:13px 28px;border-radius:8px;text-decoration:none;transition:opacity .15s,transform .12s;margin-top:12px}
+.btn-cta:hover{opacity:.88;transform:translateY(-1px)}
+.section-label{font-family:'DM Mono',monospace;font-size:.63rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:10px}
+footer{background:var(--hdr-bg);padding:32px 40px;text-align:center;border-top:1px solid rgba(200,168,75,.12);margin-top:24px}
+footer p{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2}
+footer a{color:rgba(200,168,75,.5);text-decoration:none}
+footer a:hover{color:var(--gold)}
+@media(max-width:680px){
+  .grid{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .card.span2,.card.span3{grid-column:span 1}
+  header{padding:0 16px}
+  .wrap{padding:40px 16px 60px}
+}
 </style>
 </head>
 <body>
-<div class="header-line"></div>
-<div class="container">
-<h1><em>Acerca de</em> LegalAI</h1>
-<div class="grid">
 
-<!-- IMPACTO INICIAL -->
-<div class="card large center">
-  <span class="icon">💰</span>
-  <div class="title">Generá ingresos compartiendo un link</div>
-  <p>Sin inversión • Sin producto • Sin experiencia</p>
-  <p><a href="https://legalai-arg.com/" class="highlight">legalai-arg.com</a></p>
-</div>
+<header>
+  <a class="logo" href="https://legalai-arg.com">LegalAI <span>ARG</span></a>
+  <div class="hdr-right">
+    <a class="hdr-back" href="https://legalai-arg.com">← Inicio</a>
+    <div class="theme-toggle">
+      <button class="theme-btn" id="btnLight"  onclick="setTheme('light')">☀ Claro</button>
+      <button class="theme-btn" id="btnSystem" onclick="setTheme('system')">⊙ Auto</button>
+      <button class="theme-btn" id="btnDark"   onclick="setTheme('dark')">◗ Oscuro</button>
+    </div>
+  </div>
+</header>
 
-<!-- QUÉ ES -->
-<div class="card">
-  <span class="icon">💡</span>
-  <div class="title">Qué es</div>
-  <p>Plataforma para crear <span class="highlight">documentos con IA</span> en minutos.</p>
-</div>
+<div class="wrap">
 
-<!-- CÓMO FUNCIONA -->
-<div class="card">
-  <span class="icon">⚙️</span>
-  <div class="title">Cómo funciona</div>
-  <p>Te registrás → recibís link → lo compartís.</p>
-</div>
-
-<!-- EJEMPLO -->
-<div class="card large">
-  <span class="icon">📌</span>
-  <div class="title">Ejemplo real</div>
-  <p>Le pasás tu link a alguien → genera un documento → paga → ganás comisión.</p>
-</div>
-
-<!-- DESTACADO PRINCIPAL -->
-<div class="card large highlight-box">
-  <span class="icon">🧾</span>
-  <div class="title">Qué documentos se pueden crear</div>
-  <p class="highlight">Contratos de Alquiler, Airbnb, compra/venta, acuerdos, laborales, freelance, servicios, presupuestos, cartas documento, reclamos, autorizaciones, pagarés, cesiones, confidencialidad, sociedades, T&C, políticas de privacidad y más.</p>
-</div>
-
-<!-- GANANCIAS -->
-<div class="card">
-  <span class="icon">💵</span>
-  <div class="title">Ganancias</div>
-  <p><span class="highlight">20% por venta</span></p>
-  <div class="badge green">USDT o ARS</div>
-</div>
-
+  <div class="hero">
+    <div class="hero-tag">// Programa de afiliados</div>
+    <h1>Generá ingresos compartiendo <em>un link</em></h1>
+    <p>Sin inversión, sin producto, sin experiencia previa. Compartís tu link de afiliado y ganás el 20% de cada venta confirmada.</p>
   </div>
 
-<!-- FILA FINAL CENTRADA (SIN DUPLICADOS) -->
-<div class="row center-row">
-
-  <div class="card">
-    <span class="icon">➕</span>
-    <div class="title">Extra</div>
-    <p>Podés generar documentos para otros y cobrar.</p>
+  <!-- Qué es + Cómo funciona -->
+  <div class="grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-icon">💡</div>
+      <div class="card-title">Qué es LegalAI Arg</div>
+      <p>Plataforma para crear <strong>documentos legales con IA</strong> en minutos. Contratos, cartas documento, autorizaciones y más — listos para firmar.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">Cómo funciona el programa</div>
+      <p>Te registrás como afiliado → recibís tu link personal → lo compartís donde quieras → alguien compra → ganás la comisión.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📌</div>
+      <div class="card-title">Ejemplo real</div>
+      <p>Le pasás tu link a alguien que necesita un contrato de alquiler → lo genera → paga → vos cobrás el 20% de esa venta automáticamente.</p>
+    </div>
   </div>
 
-  <div class="card">
-    <span class="icon">🚫</span>
-    <div class="title">No es</div>
-    <div class="badge red">Multinivel</div>
-    <div class="badge red">Inversión</div>
+  <!-- Documentos disponibles -->
+  <div class="card featured" style="margin-bottom:16px">
+    <div class="card-icon">🧾</div>
+    <div class="card-title">Qué documentos se pueden crear</div>
+    <div class="docs-list">
+      <strong>Contratos:</strong> alquiler residencial, local comercial, temporario, compraventa de inmueble/vehículo, sociedad simple, comodato<br>
+      <strong>Freelance:</strong> diseño gráfico, desarrollo web, community manager, consultoría, NDA, acuerdos de colaboración<br>
+      <strong>Reclamos:</strong> cartas documento, intimaciones, reclamos por garantía/entrega/servicios públicos<br>
+      <strong>Personales:</strong> autorización viaje menor, carta de renuncia, declaración jurada, poder notarial, préstamo, convenio de cuotas<br>
+      <strong>Legal/Digital:</strong> términos y condiciones, política de privacidad, y más
+    </div>
   </div>
 
-  <div class="card center">
-    <span class="icon">🟢</span>
-    <div class="title">Empezar</div>
-    <p>Registrate, obtené tu link y empezá.</p>
-    <a href="https://legalai-arg.com/index.html#afiliados" class="btn">Quiero ser afiliado →</a>
+  <!-- Comisiones + Extra + No es -->
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-icon">💵</div>
+      <div class="card-title">Comisiones</div>
+      <p><strong>20% por cada venta confirmada.</strong> Se acumula en tu cuenta y la pedís cuando querés. Pagamos en ARS o USDT.</p>
+      <div style="margin-top:10px">
+        <span class="tag tag-sage">Sin mínimo</span>
+        <span class="tag tag-sage">Sin vencimiento</span>
+        <span class="tag tag-gold">48hs hábiles</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">➕</div>
+      <div class="card-title">Extra: generá para otros</div>
+      <p>Si tenés un plan de suscripción activo, podés generar documentos para tus clientes y cobrar lo que consideres justo por cada uno. Tu plan se paga solo.</p>
+    </div>
+  </div>
+
+  <!-- No es + CTA -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-icon">🚫</div>
+      <div class="card-title">No es multinivel</div>
+      <p>No necesitás reclutar a nadie. Ganás por tus propias ventas, no por las de otros. Sin pirámides, sin cuotas de entrada, sin estructura.</p>
+      <div style="margin-top:10px">
+        <span class="tag tag-err">No es multinivel</span>
+        <span class="tag tag-err">No es inversión</span>
+      </div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="card-icon">🟢</div>
+      <div class="card-title">Empezar es gratis</div>
+      <p>Registrate en un minuto, obtené tu link personal y empezá a compartir. Sin costo, sin compromiso.</p>
+      <a href="https://legalai-arg.com/#aff-form" class="btn-cta">Quiero ser afiliado →</a>
+    </div>
   </div>
 
 </div>
 
-</div>
+<footer>
+  <p>
+    LegalAI Arg · Programa de Afiliados<br>
+    Documentos orientativos · No constituyen asesoramiento legal profesional<br>
+    <a href="https://legalai-arg.com">legalai-arg.com</a>
+  </p>
+</footer>
 
-</div>
-</div>
+<script>
+function setTheme(t){localStorage.setItem('theme',t);applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));}
+function applyTheme(t){const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((localStorage.getItem('theme')||'system')==='system')applyTheme('system');});
+(function(){const t=localStorage.getItem('theme')||'system';applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));})();
+</script>
 </body>
 </html>
