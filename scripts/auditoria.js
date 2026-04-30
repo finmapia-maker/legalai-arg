@@ -11,7 +11,7 @@ const ARCHIVOS = [
   "contrato-alquiler.html"
 ];
 
-const CLAUDE_MODEL = "claude-3-5-sonnet-20241022";
+const CLAUDE_MODEL = "claude-3-sonnet-20240229";
 
 // ==============================
 // HELPERS
