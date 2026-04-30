@@ -1,0 +1,95 @@
+/* ===== BOTONES ===== */
+.btn-primary {
+  background:var(--btn-bg);
+  color:var(--btn-txt);
+  padding:12px 18px;
+  border-radius:8px;
+  font-weight:500;
+  border:none;
+  cursor:pointer;
+}
+
+.btn-secondary {
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--ink);
+}
+
+/* ===== CARDS ===== */
+.card-basic {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.card-hover:hover {
+  transform:translateY(-3px);
+  transition:.2s;
+}
+
+/* ===== PLANES ===== */
+.plan-card {
+  padding:24px;
+  border-radius:14px;
+  border:1px solid var(--line);
+}
+
+.plan-price {
+  font-family:'Playfair Display';
+  font-size:2rem;
+  color:var(--gold);
+}
+
+/* ===== FORMULARIOS ===== */
+.input {
+  width:100%;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:var(--surface);
+  color:var(--ink);
+}
+
+.label {
+  font-size:.8rem;
+  color:var(--mist);
+}
+
+/* ===== BADGES ===== */
+.badge-gold {
+  font-family:'DM Mono';
+  color:var(--gold);
+  font-size:.7rem;
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+.grid-3 {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+/* ===== ALERTAS ===== */
+.alert {
+  padding:12px;
+  border-radius:6px;
+  font-size:.9rem;
+}
+
+.alert-success {
+  background:rgba(50,200,120,.1);
+  color:#2ecc71;
+}
+
+.alert-error {
+  background:rgba(255,80,80,.1);
+  color:#e74c3c;
+}
