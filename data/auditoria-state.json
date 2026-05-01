@@ -2,9 +2,24 @@
   "fecha_inicio": "2026-04-30T16:31:33.275Z",
   "estado": "baseline_inicial",
   "experimento_activo": null,
-  "cambios_probados": [],
-  "ultima_decision": "OBSERVAR",
-  "fecha": "2026-04-30T19:29:16.141Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null
+  "cambios_probados": [
+    {
+      "descripcion": "Investigar y corregir el error que impide generar el preview: revisar validaciones del formulario, errores de JS en consola, endpoints caídos o campos requeridos bloqueantes. Si el generador está roto, el funnel entero es inútil.",
+      "fecha": "2026-05-01T12:01:27.756Z",
+      "resultado_pendiente": true
+    }
+  ],
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-05-01T12:01:27.756Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Genera preview",
+  "cambio_activo": {
+    "descripcion": "Investigar y corregir el error que impide generar el preview: revisar validaciones del formulario, errores de JS en consola, endpoints caídos o campos requeridos bloqueantes. Si el generador está roto, el funnel entero es inútil.",
+    "archivo": "generador.html",
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el generador produce previews correctamente → los usuarios avanzan al pago y la conversión sube desde 0",
+    "conv_base": 1,
+    "clics_base": 15
+  },
+  "cambio_activo_desde": "2026-05-01T12:01:27.756Z"
 }

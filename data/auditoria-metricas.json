@@ -1,15 +1,15 @@
 {
-  "fecha": "2026-04-30T19:29:16.142Z",
+  "fecha": "2026-05-01T12:01:27.756Z",
   "periodo_48h": {
-    "clics": 21,
+    "clics": 15,
     "ventas": 1,
-    "tasa_conv": "4.8%",
+    "tasa_conv": "6.7%",
     "total_ars": 15900,
     "por_fuente": {
       "directo": {
-        "clics": 21,
+        "clics": 15,
         "ventas": 1,
-        "tasa_conv": "4.8%",
+        "tasa_conv": "6.7%",
         "monto_ars": 15900
       }
     },
@@ -33,15 +33,15 @@
     ]
   },
   "periodo_7d": {
-    "clics": 31,
+    "clics": 29,
     "ventas": 1,
-    "tasa_conv": "3.2%",
+    "tasa_conv": "3.4%",
     "total_ars": 15900,
     "por_fuente": {
       "directo": {
-        "clics": 31,
+        "clics": 29,
         "ventas": 1,
-        "tasa_conv": "3.2%",
+        "tasa_conv": "3.4%",
         "monto_ars": 15900
       }
     },
@@ -64,26 +64,29 @@
       }
     ]
   },
-  "embudo_eventos": {},
-  "total_eventos": 0,
+  "embudo_eventos": {
+    "page_view": 19,
+    "cta_generador": 2
+  },
+  "total_eventos": 21,
   "funnel_doc": [
     {
       "key": "page_view",
       "label": "Visita",
-      "count": 0,
+      "count": 19,
       "drop_pct": 0
     },
     {
       "key": "cta_generador",
       "label": "Click generador",
-      "count": 0,
-      "drop_pct": 0
+      "count": 2,
+      "drop_pct": 89
     },
     {
       "key": "generar_preview",
       "label": "Genera preview",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "key": "preview_ok",
@@ -108,14 +111,14 @@
     {
       "key": "page_view",
       "label": "Visita planes",
-      "count": 0,
+      "count": 10,
       "drop_pct": 0
     },
     {
       "key": "click_plan",
       "label": "Click plan",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "key": "email_confirm",
@@ -136,7 +139,11 @@
       "drop_pct": 0
     }
   ],
-  "cuello_botella": null,
+  "cuello_botella": {
+    "en": "Genera preview",
+    "drop": "100%",
+    "tipo": "generar_preview"
+  },
   "diagnostico": {
     "problemas": [],
     "oportunidades": [
