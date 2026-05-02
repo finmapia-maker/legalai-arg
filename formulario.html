@@ -359,7 +359,8 @@ async function generarContrato(){
   fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
   track('generar_preview', { doc_tipo: DOC_TIPO });
   try{
-    const res=await fetch(WORKER+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datosDoc:datos,metadata:meta})});
+    const res=await fetch(WORKER+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datosDoc:datos,metadata:meta}),signal:AbortSignal.timeout(30000)});
+    if(!res.ok){const errData=await res.json().catch(()=>({}));throw new Error(errData.error||`Error del servidor (${res.status})`);}
     const data=await res.json();
     if(data.error)throw new Error(data.error);
     G.previewId=data.previewId;G.texto=data.texto;
@@ -368,7 +369,10 @@ async function generarContrato(){
     showPanel('card2');setProgress(2);
   }catch(err){
     showPanel('card1');document.getElementById('btnGenerar').disabled=false;setProgress(1);
-    showErr('alertForm','Error al generar el contrato: '+err.message+'. Intentá de nuevo.');
+    let msg=err.message||'Error desconocido';
+    if(err.name==='TimeoutError'||err.name==='AbortError'){msg='La generación tardó demasiado. Intentá de nuevo.';}
+    else if(msg.includes('Unexpected token')||msg.includes('JSON')||msg.includes('fetch')){msg='Error de conexión. Verificá tu internet e intentá de nuevo.';}
+    showErr('alertForm','⚠️ '+msg);
   }
 }
 
