@@ -1,311 +1,138 @@
-<!-- Tipografía visual (referencia del sistema) -->
-<!--
-Títulos: Playfair Display
-Texto: DM Sans
-Datos / métricas: DM Mono
--->
-
 # ⚖️ LegalAI Arg
 
-**Infraestructura legal automatizada para Argentina**
+**Documentos legales en minutos. Sin abogados. Sin vueltas.**
 
 ---
 
-## 🧠 Qué es
+## Qué es LegalAI
 
-LegalAI Arg permite generar documentos legales personalizados en minutos:
+LegalAI Arg es una herramienta que permite crear documentos legales de forma simple.
 
-- Contratos
-- Cartas documento
-- Acuerdos
-- Documentos legales varios
+La idea es directa:
 
-👉 El usuario completa datos  
-👉 Ve el documento GRATIS  
-👉 Paga solo si le sirve  
+El usuario completa algunos datos, ve el documento completo gratis y decide si le sirve.  
+Solo paga si realmente lo necesita.
+
+No hay descargas ocultas, ni suscripciones obligatorias, ni fricción.
 
 ---
 
-## 🚀 Producto (ya funcionando)
+## Cómo funciona
 
-### Generador de documentos
-- Personalización en tiempo real
-- Adaptado a normativa argentina
-- Entrega inmediata en PDF
+Todo el sistema está pensado para que cualquier persona pueda usarlo sin experiencia legal.
 
----
+1. El usuario ingresa a la web  
+2. Completa un formulario simple  
+3. El sistema genera el documento automáticamente  
+4. Puede leerlo completo antes de pagar  
+5. Si le sirve, paga y descarga el PDF  
 
-### Sistema de monetización
-- Pago por documento
-- Upgrade sin marca de agua
-- Planes mensuales ilimitados
-
----
-
-### Infraestructura
-- Frontend estático (GitHub Pages)
-- Backend serverless (Cloudflare Workers)
-- Base KV (rápida y económica)
-- Emails automatizados (Resend)
-- Pagos:
-  - :contentReference[oaicite:2]{index=2} (ARS)
-  - :contentReference[oaicite:3]{index=3} (USDT)
-
-👉 Costo operativo casi cero
+Ese punto es clave:  
+👉 primero ve valor, después paga
 
 ---
 
-## 📊 Modelo de negocio
+## Qué tipo de documentos genera
 
-### 1. Venta directa (B2C)
+Hoy el foco principal está en documentos de uso cotidiano en Argentina:
 
-- Ticket promedio: USD 6 – 15  
-- Pago único  
-- Margen alto  
+- Contratos de alquiler  
+- Cartas documento  
+- Acuerdos simples  
+- Documentos administrativos  
 
----
-
-### 2. Upsell automático
-
-- Versión sin marca  
-- +25% a +50% sobre precio base  
+La lógica es expandirse a cualquier documento repetitivo que hoy requiera tiempo o dinero innecesario.
 
 ---
 
-### 3. Suscripciones
+## Qué problema resuelve
 
-Planes activos:
+Hoy, para generar un documento legal, la mayoría de las personas tiene dos opciones:
 
-- Starter → USD 19  
-- Standard → USD 49  
-- PRO → USD 99  
-- Business → USD 249  
-- Enterprise → USD 599  
+- Pagar un abogado (caro y lento)  
+- Copiar modelos de internet (riesgoso e incompleto)  
 
----
+LegalAI aparece en el medio:
 
-### 4. Afiliados
-
-- Comisión: ~20%  
-- Pago solo por venta  
-- Escala sin costo fijo  
+👉 rápido como internet  
+👉 más confiable que copiar y pegar  
+👉 mucho más accesible que un profesional  
 
 ---
 
-### 5. Escalabilidad futura
+## Cómo gana dinero
 
-- API legal (B2B)
-- White-label
-- Integración con fintech / estudios
-- Venta de datos procesados
+El modelo es simple.
 
----
+El usuario no paga por probar.  
+Paga solo cuando decide usar el documento.
 
-## 📈 Unit economics
+Además:
 
-[inferencia]
+- Puede pagar una versión sin marca de agua  
+- Puede comprar packs  
+- Puede acceder a planes mensuales si necesita volumen  
 
-### Costos por operación
-- Infraestructura: ~0  
-- IA: bajo  
-- Email: bajo  
-- Pago: 5%–10%  
-
-👉 Margen estimado: **85%+**
+Esto permite monetizar sin frenar el uso.
 
 ---
 
-### CAC
-- Orgánico: ~0  
-- Afiliados: variable  
+## Por qué funciona
+
+Hay tres decisiones que hacen que el sistema convierta:
+
+Primero, mostrar el documento completo antes de pagar  
+Segundo, precios bajos que no generan fricción  
+Tercero, un flujo extremadamente simple  
+
+No hay registros obligatorios, ni pasos innecesarios.
 
 ---
 
-### LTV
+## Cómo está construido
 
-- Usuario individual: bajo  
-- Profesional / empresa: alto  
+El sistema está armado para ser liviano y escalable.
 
----
+- Frontend simple (HTML + CSS)
+- Backend serverless
+- Generación automática con IA
+- Pagos integrados con :contentReference[oaicite:0]{index=0} y :contentReference[oaicite:1]{index=1}  
 
-## 📊 Métricas actuales
-
-El sistema ya trackea:
-
-- Clicks
-- Conversiones
-- Fuente (UTM)
-- Afiliados
-- Eventos del funnel
-- Emails
+Esto permite operar con costos muy bajos y escalar sin estructura.
 
 ---
 
-## ⚠️ Problema actual
+## En qué estado está
 
-No existe un panel central consolidado.
+El producto ya funciona.
 
-Impacto:
+- Se generan documentos reales  
+- Hay usuarios pagando  
+- El sistema es automático  
 
-- No se mide ROI real
-- No se optimizan campañas
-- No se escala correctamente
-
-👉 Principal cuello de botella
+El foco ahora no es construir más, sino optimizar lo que ya existe.
 
 ---
 
-## 📉 Funnel real (estructura)
+## Hacia dónde va
 
-1. Landing  
-2. Click “ver contrato”  
-3. Generación  
-4. Preview  
-5. Pago  
-6. Descarga  
+LegalAI no es solo un generador de documentos.
 
-👉 El mayor drop suele estar en:
-- Generación
-- Preview
+Es una base para construir:
 
----
+- Un sistema legal automatizado  
+- Integraciones con empresas  
+- APIs para terceros  
+- Servicios legales sin intervención humana  
 
-## 📊 Proyección
+El objetivo es claro:
 
-[inferencia]
-
-### Escenario base
-- 10 ventas/día  
-- USD 8 ticket  
-
-👉 USD 2.400 / mes  
+👉 simplificar el acceso a lo legal  
+👉 eliminar intermediarios innecesarios  
+👉 escalar sin estructura tradicional  
 
 ---
 
-### Escenario optimizado
-- 50 ventas/día  
-- USD 10 ticket  
+## LegalAI Arg
 
-👉 USD 15.000 / mes  
-
----
-
-### Escenario escala
-- 200 ventas/día  
-
-👉 USD 60.000 / mes  
-
----
-
-### Escenario completo
-- +100 suscripciones promedio USD 50  
-
-👉 USD 65.000 / mes  
-
----
-
-## 🔥 Ventajas competitivas
-
-- Costo marginal ≈ 0  
-- Automatización total  
-- Escalable sin equipo  
-- Distribución integrada  
-
----
-
-## 🧩 Arquitectura
-
-Frontend:
-- HTML + CSS (design system propio)
-- Tipografías:
-  - Playfair Display (títulos)
-  - DM Sans (contenido)
-  - DM Mono (datos)
-
-Backend:
-- Cloudflare Workers
-- KV storage
-- Integración IA
-
-Pagos:
-- MercadoPago (local)
-- NOWPayments (crypto)
-
----
-
-## ⚙️ Motor de crecimiento
-
-### 1. Tráfico
-- SEO
-- Ads
-- Afiliados
-
----
-
-### 2. Conversión
-- Preview gratis
-- Bajo precio
-- Fricción mínima
-
----
-
-### 3. Monetización
-- Pago inmediato
-- Upsell automático
-- Planes recurrentes
-
----
-
-### 4. Escala
-- Afiliados
-- Automatización
-- B2B futuro
-
----
-
-## 🧠 Prioridades estratégicas
-
-### 1. Panel OWNER (crítico)
-- Ventas
-- Conversiones
-- ROI
-- Afiliados
-
----
-
-### 2. Optimización de funnel
-- Reducir drop en preview
-- Mejorar generación
-
----
-
-### 3. Afiliados
-- Dashboard mejorado
-- Incentivos
-
----
-
-### 4. Catálogo
-- Más documentos
-- Más casos de uso
-
----
-
-## 🏁 Conclusión
-
-LegalAI ya tiene:
-
-✔ Producto validado  
-✔ Monetización activa  
-✔ Infraestructura escalable  
-✔ Automatización total  
-
-Falta:
-
-👉 Control + métricas + optimización  
-
----
-
-## ⚖️ LegalAI Arg
-
-**Acceso legal simple, rápido y automatizado**
+Acceso legal simple, rápido y directo.
