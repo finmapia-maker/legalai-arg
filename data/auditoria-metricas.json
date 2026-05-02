@@ -1,47 +1,31 @@
 {
-  "fecha": "2026-05-01T12:01:27.756Z",
+  "fecha": "2026-05-02T11:49:19.816Z",
   "periodo_48h": {
-    "clics": 15,
-    "ventas": 1,
-    "tasa_conv": "6.7%",
-    "total_ars": 15900,
+    "clics": 9,
+    "ventas": 0,
+    "tasa_conv": "0.0%",
+    "total_ars": 0,
     "por_fuente": {
       "directo": {
-        "clics": 15,
-        "ventas": 1,
-        "tasa_conv": "6.7%",
-        "monto_ars": 15900
+        "clics": 9,
+        "ventas": 0,
+        "tasa_conv": "0.0%",
+        "monto_ars": 0
       }
     },
-    "top_documentos": [
-      {
-        "titulo": "Contrato de Alquiler de Vivienda Residencial",
-        "count": 1
-      }
-    ],
-    "ultimas_conversiones": [
-      {
-        "ts_ar": "29/4/2026, 04:04:23",
-        "tipo": "doc",
-        "titulo": "Contrato de Alquiler de Vivienda Residencial",
-        "monto": 15900,
-        "utm_src": "directo",
-        "utm_cmp": "—",
-        "device": "Mobile",
-        "email": "soniaestrada963@gmail.com"
-      }
-    ]
+    "top_documentos": [],
+    "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "clics": 29,
+    "clics": 30,
     "ventas": 1,
-    "tasa_conv": "3.4%",
+    "tasa_conv": "3.3%",
     "total_ars": 15900,
     "por_fuente": {
       "directo": {
-        "clics": 29,
+        "clics": 30,
         "ventas": 1,
-        "tasa_conv": "3.4%",
+        "tasa_conv": "3.3%",
         "monto_ars": 15900
       }
     },
@@ -65,34 +49,35 @@
     ]
   },
   "embudo_eventos": {
-    "page_view": 19,
+    "page_view": 21,
+    "generar_preview": 1,
     "cta_generador": 2
   },
-  "total_eventos": 21,
+  "total_eventos": 24,
   "funnel_doc": [
     {
       "key": "page_view",
       "label": "Visita",
-      "count": 19,
+      "count": 21,
       "drop_pct": 0
     },
     {
       "key": "cta_generador",
       "label": "Click generador",
       "count": 2,
-      "drop_pct": 89
+      "drop_pct": 90
     },
     {
       "key": "generar_preview",
       "label": "Genera preview",
-      "count": 0,
-      "drop_pct": 100
+      "count": 1,
+      "drop_pct": 50
     },
     {
       "key": "preview_ok",
       "label": "Preview OK",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "key": "inicio_pago",
@@ -140,15 +125,15 @@
     }
   ],
   "cuello_botella": {
-    "en": "Genera preview",
+    "en": "Preview OK",
     "drop": "100%",
-    "tipo": "generar_preview"
+    "tipo": "preview_ok"
   },
   "diagnostico": {
-    "problemas": [],
-    "oportunidades": [
-      "Fuente más rentable: \"directo\" (1 ventas)"
+    "problemas": [
+      "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago"
     ],
-    "estado": "OPORTUNIDAD"
+    "oportunidades": [],
+    "estado": "PROBLEMA"
   }
 }

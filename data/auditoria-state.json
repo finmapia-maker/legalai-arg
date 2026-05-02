@@ -9,10 +9,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-05-01T12:01:27.756Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Genera preview",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-05-02T11:49:19.815Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Investigar y corregir el error que impide generar el preview: revisar validaciones del formulario, errores de JS en consola, endpoints caídos o campos requeridos bloqueantes. Si el generador está roto, el funnel entero es inútil.",
     "archivo": "generador.html",
