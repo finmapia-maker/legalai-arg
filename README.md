@@ -1,223 +1,311 @@
+<!-- Tipografía visual (referencia del sistema) -->
+<!--
+Títulos: Playfair Display
+Texto: DM Sans
+Datos / métricas: DM Mono
+-->
+
 # ⚖️ LegalAI Arg
 
-**La forma más simple de crear, vender y escalar documentos legales en Argentina.**
-
-Generá contratos en minutos. Automatizá cobros. Escalá con afiliados.  
-Todo en un sistema integrado, sin fricción.
+**Infraestructura legal automatizada para Argentina**
 
 ---
 
-## 🚀 Qué es LegalAI
+## 🧠 Qué es
 
-LegalAI Arg es una plataforma que transforma la creación legal en un proceso:
+LegalAI Arg permite generar documentos legales personalizados en minutos:
 
-**rápido · automatizado · escalable**
+- Contratos
+- Cartas documento
+- Acuerdos
+- Documentos legales varios
 
-Diseñada para:
-
-- Personas que necesitan contratos sin complicaciones  
-- Profesionales que quieren ahorrar tiempo  
-- Afiliados que buscan ingresos sin producto propio  
-- Equipos que quieren vender servicios legales automatizados  
-
----
-
-## ✨ Qué podés hacer
-
-### 🧾 Generar documentos legales
-- Contratos listos para firmar
-- Adaptados a normativa argentina
-- Personalizados en segundos
+👉 El usuario completa datos  
+👉 Ve el documento GRATIS  
+👉 Paga solo si le sirve  
 
 ---
 
-### 💰 Monetizar automáticamente
+## 🚀 Producto (ya funcionando)
+
+### Generador de documentos
+- Personalización en tiempo real
+- Adaptado a normativa argentina
+- Entrega inmediata en PDF
+
+---
+
+### Sistema de monetización
 - Pago por documento
-- Upgrade sin marca
-- Planes mensuales
-- Checkout integrado
+- Upgrade sin marca de agua
+- Planes mensuales ilimitados
 
 ---
 
-### 🤝 Escalar con afiliados
-- Links únicos por usuario
-- Tracking automático
-- Comisión por cada venta
+### Infraestructura
+- Frontend estático (GitHub Pages)
+- Backend serverless (Cloudflare Workers)
+- Base KV (rápida y económica)
+- Emails automatizados (Resend)
+- Pagos:
+  - :contentReference[oaicite:2]{index=2} (ARS)
+  - :contentReference[oaicite:3]{index=3} (USDT)
+
+👉 Costo operativo casi cero
 
 ---
 
-### 📩 Gestionar contactos y ventas
-- Base de leads integrada
-- Envío de emails masivos
-- Personalización automática
+## 📊 Modelo de negocio
+
+### 1. Venta directa (B2C)
+
+- Ticket promedio: USD 6 – 15  
+- Pago único  
+- Margen alto  
 
 ---
 
-### 📊 Operar todo desde paneles
+### 2. Upsell automático
+
+- Versión sin marca  
+- +25% a +50% sobre precio base  
+
+---
+
+### 3. Suscripciones
+
+Planes activos:
+
+- Starter → USD 19  
+- Standard → USD 49  
+- PRO → USD 99  
+- Business → USD 249  
+- Enterprise → USD 599  
+
+---
+
+### 4. Afiliados
+
+- Comisión: ~20%  
+- Pago solo por venta  
+- Escala sin costo fijo  
+
+---
+
+### 5. Escalabilidad futura
+
+- API legal (B2B)
+- White-label
+- Integración con fintech / estudios
+- Venta de datos procesados
+
+---
+
+## 📈 Unit economics
+
+[inferencia]
+
+### Costos por operación
+- Infraestructura: ~0  
+- IA: bajo  
+- Email: bajo  
+- Pago: 5%–10%  
+
+👉 Margen estimado: **85%+**
+
+---
+
+### CAC
+- Orgánico: ~0  
+- Afiliados: variable  
+
+---
+
+### LTV
+
+- Usuario individual: bajo  
+- Profesional / empresa: alto  
+
+---
+
+## 📊 Métricas actuales
+
+El sistema ya trackea:
+
+- Clicks
+- Conversiones
+- Fuente (UTM)
 - Afiliados
+- Eventos del funnel
 - Emails
-- Ventas (en expansión)
 
 ---
 
-## ⚙️ Cómo funciona
-El usuario entra → landing o afiliado
-Completa datos → documento
-Paga → MercadoPago / Cripto
-Se genera automáticamente
-Descarga inmediata
-Se registra afiliado (si aplica)
+## ⚠️ Problema actual
 
+No existe un panel central consolidado.
 
-Sin intervención manual.  
-Sin fricción.  
-Sin tiempos muertos.
+Impacto:
 
----
+- No se mide ROI real
+- No se optimizan campañas
+- No se escala correctamente
 
-## 🧠 Arquitectura
-
-### Frontend
-- GitHub Pages (ultra rápido, sin costo)
-- HTML + JS optimizado
-- UX orientada a conversión
+👉 Principal cuello de botella
 
 ---
 
-### Backend
-- Cloudflare Workers (serverless)
-- Procesamiento en tiempo real
-- Endpoints centralizados
+## 📉 Funnel real (estructura)
+
+1. Landing  
+2. Click “ver contrato”  
+3. Generación  
+4. Preview  
+5. Pago  
+6. Descarga  
+
+👉 El mayor drop suele estar en:
+- Generación
+- Preview
 
 ---
 
-### Pagos
-- MercadoPago (ARS)
-- NOWPayments (USDT / USD)
+## 📊 Proyección
+
+[inferencia]
+
+### Escenario base
+- 10 ventas/día  
+- USD 8 ticket  
+
+👉 USD 2.400 / mes  
 
 ---
 
-### Email
-- Resend (envío automatizado)
-- Cloudflare Email Routing
+### Escenario optimizado
+- 50 ventas/día  
+- USD 10 ticket  
+
+👉 USD 15.000 / mes  
 
 ---
 
-## 🧩 Módulos del sistema
+### Escenario escala
+- 200 ventas/día  
 
-### 🧾 Generador legal
-- Formularios dinámicos
-- Generación automática
-- Documento descargable
+👉 USD 60.000 / mes  
 
 ---
 
-### 💳 Sistema de planes
-- Starter → Enterprise
-- Pago en cripto o tarjeta
-- Activación por código
+### Escenario completo
+- +100 suscripciones promedio USD 50  
+
+👉 USD 65.000 / mes  
 
 ---
 
-### 🤝 Sistema de afiliados
-- Tracking por `ref`
-- Panel individual
-- Comisiones automáticas
+## 🔥 Ventajas competitivas
+
+- Costo marginal ≈ 0  
+- Automatización total  
+- Escalable sin equipo  
+- Distribución integrada  
 
 ---
 
-### 📩 Mail Panel (mini CRM)
-- Gestión de contactos
-- Envío masivo
-- Variables dinámicas
+## 🧩 Arquitectura
+
+Frontend:
+- HTML + CSS (design system propio)
+- Tipografías:
+  - Playfair Display (títulos)
+  - DM Sans (contenido)
+  - DM Mono (datos)
+
+Backend:
+- Cloudflare Workers
+- KV storage
+- Integración IA
+
+Pagos:
+- MercadoPago (local)
+- NOWPayments (crypto)
 
 ---
 
-### 📊 Paneles internos
-- Afiliados ✔️
-- Mailing ✔️
-- Owner (en evolución)
+## ⚙️ Motor de crecimiento
+
+### 1. Tráfico
+- SEO
+- Ads
+- Afiliados
 
 ---
 
-## 📈 Crecimiento integrado
-
-LegalAI no es solo un generador.
-
-Es un sistema diseñado para crecer:
-
-- Tráfico → landing optimizada  
-- Conversión → checkout inmediato  
-- Escala → afiliados  
-- Retención → planes  
+### 2. Conversión
+- Preview gratis
+- Bajo precio
+- Fricción mínima
 
 ---
 
-## 🔥 Diferencial
-
-Lo que hace distinto a LegalAI:
-
-- No dependés de abogados  
-- No necesitás crear contenido  
-- No necesitás equipo  
-- No necesitás inversión inicial  
-
-👉 Es un sistema listo para operar.
+### 3. Monetización
+- Pago inmediato
+- Upsell automático
+- Planes recurrentes
 
 ---
 
-## ⚠️ Estado actual
-
-✔ Generación funcional  
-✔ Pagos activos  
-✔ Afiliados operativos  
-✔ CRM básico activo  
-
-🔜 En desarrollo:
-- Panel owner completo
-- Métricas avanzadas
-- Base de datos estructurada
+### 4. Escala
+- Afiliados
+- Automatización
+- B2B futuro
 
 ---
 
-## 🚀 Hacia dónde va
+## 🧠 Prioridades estratégicas
 
-El próximo paso es claro:
-
-👉 Convertir LegalAI en un sistema completo de gestión legal automatizada
-
-Incluyendo:
-
-- Dashboard total de negocio  
-- Métricas en tiempo real  
-- Automatización avanzada  
-- API para terceros  
+### 1. Panel OWNER (crítico)
+- Ventas
+- Conversiones
+- ROI
+- Afiliados
 
 ---
 
-## 🧠 Filosofía
-
-LegalAI está construido sobre una idea simple:
-
-> "Lo legal no debería ser lento, caro ni complejo."
+### 2. Optimización de funnel
+- Reducir drop en preview
+- Mejorar generación
 
 ---
 
-## 🏁 Resumen
+### 3. Afiliados
+- Dashboard mejorado
+- Incentivos
 
-LegalAI Arg ya es:
+---
 
-✔ Producto  
-✔ Sistema de cobro  
-✔ Canal de ventas  
-✔ Motor de crecimiento  
+### 4. Catálogo
+- Más documentos
+- Más casos de uso
 
-Solo falta una cosa para escalar fuerte:
+---
 
-👉 centralizar el control
+## 🏁 Conclusión
+
+LegalAI ya tiene:
+
+✔ Producto validado  
+✔ Monetización activa  
+✔ Infraestructura escalable  
+✔ Automatización total  
+
+Falta:
+
+👉 Control + métricas + optimización  
 
 ---
 
 ## ⚖️ LegalAI Arg
 
-**Documentos legales. Automatizados. Escalables. Rentables.**
+**Acceso legal simple, rápido y automatizado**
