@@ -1571,8 +1571,13 @@ async function generarFormulario() {
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/campos`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipoDocumento: doc, pais, provincia })
+      body: JSON.stringify({ tipoDocumento: doc, pais, provincia }),
+      signal: AbortSignal.timeout(30000),
     });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Error del servidor (${res.status})`);
+    }
     const data = await res.json();
     if (!data.campos?.length) throw new Error('No se pudieron generar los campos.');
     G.form = data; G.campos = data.campos;
@@ -1614,7 +1619,13 @@ async function generarFormulario() {
   } catch(err) {
     document.getElementById('loadingForm').classList.remove('visible');
     document.getElementById('card1').classList.add('visible');
-    showErr('alert1', 'Error al conectar con la IA: ' + err.message);
+    let msg = err.message || 'Error desconocido';
+    if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+      msg = 'La IA tardó demasiado. Intentá de nuevo.';
+    } else if (msg.includes('fetch') || msg.includes('Failed')) {
+      msg = 'Error de conexión. Verificá tu internet e intentá de nuevo.';
+    }
+    showErr('alert1', '⚠️ ' + msg);
   }
 }
 
@@ -1666,7 +1677,12 @@ async function irAPreview() {
     const res  = await fetch(`${CONFIG.WORKER_URL}/preview`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ datosDoc: datos, metadata: meta }),
+      signal: AbortSignal.timeout(30000),
     });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Error del servidor (${res.status})`);
+    }
     const data = await res.json();
     if (data.error) throw new Error(data.error);
 
@@ -1684,7 +1700,13 @@ async function irAPreview() {
   } catch(err) {
     document.getElementById('loadingPreview').classList.remove('visible');
     document.getElementById('card2').classList.add('visible');
-    showErr('alert2', 'Error al generar la vista previa: ' + err.message);
+    let msg = err.message || 'Error desconocido';
+    if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+      msg = 'La generación tardó demasiado. Intentá de nuevo.';
+    } else if (msg.includes('Unexpected token') || msg.includes('JSON') || msg.includes('fetch')) {
+      msg = 'Error de conexión con el servidor. Verificá tu internet e intentá de nuevo.';
+    }
+    showErr('alert2', '⚠️ ' + msg);
   }
 }
 
