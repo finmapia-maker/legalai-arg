@@ -1,13 +1,13 @@
 {
-  "fecha": "2026-05-03T11:46:33.634Z",
+  "fecha": "2026-05-04T12:22:09.739Z",
   "periodo_48h": {
-    "clics": 9,
+    "clics": 11,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
     "por_fuente": {
       "directo": {
-        "clics": 9,
+        "clics": 11,
         "ventas": 0,
         "tasa_conv": "0.0%",
         "monto_ars": 0
@@ -17,15 +17,15 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "clics": 35,
+    "clics": 37,
     "ventas": 1,
-    "tasa_conv": "2.9%",
+    "tasa_conv": "2.7%",
     "total_ars": 15900,
     "por_fuente": {
       "directo": {
-        "clics": 35,
+        "clics": 37,
         "ventas": 1,
-        "tasa_conv": "2.9%",
+        "tasa_conv": "2.7%",
         "monto_ars": 15900
       }
     },
@@ -49,29 +49,29 @@
     ]
   },
   "embudo_eventos": {
-    "page_view": 18,
-    "generar_preview": 2,
+    "page_view": 23,
+    "generar_preview": 1,
     "cta_generador": 2
   },
-  "total_eventos": 22,
+  "total_eventos": 26,
   "funnel_doc": [
     {
       "key": "page_view",
       "label": "Visita",
-      "count": 18,
+      "count": 23,
       "drop_pct": 0
     },
     {
       "key": "cta_generador",
       "label": "Click generador",
       "count": 2,
-      "drop_pct": 89
+      "drop_pct": 91
     },
     {
       "key": "generar_preview",
       "label": "Genera preview",
-      "count": 2,
-      "drop_pct": 0
+      "count": 1,
+      "drop_pct": 50
     },
     {
       "key": "preview_ok",
@@ -96,7 +96,7 @@
     {
       "key": "page_view",
       "label": "Visita planes",
-      "count": 2,
+      "count": 3,
       "drop_pct": 0
     },
     {
@@ -131,7 +131,8 @@
   },
   "diagnostico": {
     "problemas": [
-      "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago"
+      "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
+      "Fuente \"directo\": 11 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"

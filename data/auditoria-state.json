@@ -7,19 +7,24 @@
       "descripcion": "Investigar y corregir el error que impide generar el preview: revisar validaciones del formulario, errores de JS en consola, endpoints caídos o campos requeridos bloqueantes. Si el generador está roto, el funnel entero es inútil.",
       "fecha": "2026-05-01T12:01:27.756Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "El fix previo no funcionó. Escalar intervención: (1) agregar log visible de errores en pantalla para el usuario, (2) implementar fallback que permita continuar al pago aunque el preview falle, (3) verificar si el endpoint de generación responde con 200 o error silencioso. Si el preview sigue roto, desacoplar preview del flujo de conversión para que no bloquee el pago.",
+      "fecha": "2026-05-04T12:22:09.739Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-05-03T11:46:33.633Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-05-04T12:22:09.739Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Preview OK",
   "cambio_activo": {
-    "descripcion": "Investigar y corregir el error que impide generar el preview: revisar validaciones del formulario, errores de JS en consola, endpoints caídos o campos requeridos bloqueantes. Si el generador está roto, el funnel entero es inútil.",
+    "descripcion": "El fix previo no funcionó. Escalar intervención: (1) agregar log visible de errores en pantalla para el usuario, (2) implementar fallback que permita continuar al pago aunque el preview falle, (3) verificar si el endpoint de generación responde con 200 o error silencioso. Si el preview sigue roto, desacoplar preview del flujo de conversión para que no bloquee el pago.",
     "archivo": "generador.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el generador produce previews correctamente → los usuarios avanzan al pago y la conversión sube desde 0",
-    "conv_base": 1,
-    "clics_base": 15
+    "hipotesis": "Si el preview deja de ser un requisito bloqueante para iniciar el pago → al menos algunos usuarios completarán la conversión mientras se resuelve el bug técnico",
+    "conv_base": 0,
+    "clics_base": 11
   },
-  "cambio_activo_desde": "2026-05-01T12:01:27.756Z"
+  "cambio_activo_desde": "2026-05-04T12:22:09.739Z"
 }
