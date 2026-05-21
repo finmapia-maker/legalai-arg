@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contrato de Alquiler Argentina 2026 | Personalizado · Ley 27.551 · Listo en 5 min</title>
-<meta name="description" content="Creá tu contrato de alquiler en 5 minutos. Válido en Argentina, personalizado, listo para firmar. Sin abogado. Desde $X ARS.">
+<title>¡Gracias por tu compra! | LegalAI Arg</title>
 
-<!-- Google tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -16,485 +14,267 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="legalai-theme.css">
+<link rel="stylesheet" href="components.css">
 <style>
-:root{
-  --ink:       #0f1117;
-  --paper:     #f7f3ec;
-  --cream:     #ede8dc;
-  --surface:   #ffffff;
-  --gold:      #c8a84b;
-  --gold-dim:  rgba(200,168,75,0.12);
-  --sage:      #3d5a46;
-  --sage-dim:  rgba(61,90,70,0.09);
-  --mist:      #6b7580;
-  --line:      rgba(15,17,23,0.1);
-  --hdr-bg:    #0f1117;
-  --shadow:    0 2px 16px rgba(15,17,23,0.07);
-  --btn-bg:    #0f1117;
-  --btn-txt:   #c8a84b;
-  /* compat aliases */
-  --acento:    #c8a84b;
-  --acento-dim:#a8863c;
-  --txt:       #0f1117;
-  --txt-dim:   #444;
-  --txt-muted: #6b7580;
-  --bg:        #f7f3ec;
-  --white:     #ffffff;
-  --border:    rgba(15,17,23,0.1);
-  --r:         12px;
+/* ── OVERRIDE: landing (desde contrato-alquiler) fuerza tema claro ── */
+[data-from="landing"] {
+  --paper:    #f5f4f0;
+  --cream:    #ede8dc;
+  --surface:  #ffffff;
+  --ink:      #0f1117;
+  --mist:     #6b7580;
+  --line:     rgba(15,17,23,0.1);
+  --gold:     #c9a84c;
+  --gold-dim: rgba(201,168,76,0.1);
+  --btn-bg:   #c9a84c;
+  --btn-txt:  #0a0a0a;
 }
-[data-theme="dark"]{
-  --ink:       #eceef2;
-  --paper:     #0c0e12;
-  --cream:     #141720;
-  --surface:   #1c2030;
-  --gold:      #d4a847;
-  --gold-dim:  rgba(212,168,71,0.13);
-  --sage:      #6abf8a;
-  --sage-dim:  rgba(106,191,138,0.1);
-  --mist:      #7a8494;
-  --line:      rgba(255,255,255,0.07);
-  --hdr-bg:    #080a0e;
-  --shadow:    0 2px 20px rgba(0,0,0,0.4);
-  --btn-bg:    #d4a847;
-  --btn-txt:   #0c0e12;
-  --acento:    #d4a847;
-  --acento-dim:#e0b84e;
-  --txt:       #eceef2;
-  --txt-dim:   #b0b8c4;
-  --txt-muted: #7a8494;
-  --bg:        #0c0e12;
-  --white:     #1c2030;
-  --border:    rgba(255,255,255,0.07);
-}
+
+/* ── PAGE-SPECIFIC ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;transition:background .25s,color .25s}
 
-/* ── NAV ── */
-nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-weight:800;font-size:1.05rem;color:var(--txt);text-decoration:none}
-.logo span{color:var(--acento)}
+/* ── HERO GRACIAS ── */
+.gracias-hero{padding:64px 24px 48px;text-align:center;max-width:640px;margin:0 auto}
+.check-circle{width:72px;height:72px;border-radius:50%;background:var(--sage-dim);border:2px solid var(--sage);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;font-size:2rem}
+[data-theme="dark"] .check-circle,[data-from="landing"] .check-circle{background:rgba(201,168,76,.12);border-color:var(--gold)}
+.gracias-kicker{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.gracias-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,2.8rem);font-weight:900;line-height:1.12;margin-bottom:14px;letter-spacing:-.02em}
+.gracias-hero p{font-size:1rem;color:var(--mist);max-width:420px;margin:0 auto 32px;line-height:1.65}
 
-/* ── HERO ── */
-.hero{background:var(--white);padding:52px 24px 44px;text-align:center;border-bottom:1px solid var(--border)}
-.hero-kicker{display:inline-block;background:#fdf6e3;color:#7a5c1e;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:22px}
-.hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;color:var(--txt);max-width:640px;margin:0 auto 16px}
-.hero h1 mark{background:none;color:var(--acento-dim)}
-.hero-sub{font-size:1.05rem;color:var(--txt-dim);max-width:480px;margin:0 auto 32px;font-weight:400}
+.btn-primary{display:inline-block;background:var(--btn-bg);color:var(--btn-txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.92rem;padding:13px 32px;border-radius:8px;text-decoration:none;transition:opacity .15s,transform .12s}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
 
-/* precio */
-.precio-pill{display:inline-flex;flex-direction:column;align-items:center;background:var(--bg);border:2px solid var(--border);border-radius:var(--r);padding:16px 32px;margin-bottom:24px;min-width:220px}
-.precio-monto{font-family:'DM Sans',sans-serif;font-size:2.2rem;font-weight:800;color:var(--txt);line-height:1;min-height:2.4rem}
-.precio-det{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--txt-muted);margin-top:4px}
-.precio-nota-pill{font-size:.75rem;color:var(--acento-dim);font-weight:600;margin-top:4px}
+.divider{height:1px;background:var(--line);margin:0 24px}
 
-/* CTA principal */
-.btn-cta{display:inline-block;background:var(--acento);color:#0a0a0a;font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.1rem;padding:18px 48px;border-radius:10px;text-decoration:none;transition:background .15s,transform .12s,box-shadow .15s;box-shadow:0 4px 20px rgba(201,168,76,.28);letter-spacing:-.01em}
-.btn-cta:hover{background:var(--acento-dim);transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,76,.4)}
-.btn-cta:active{transform:translateY(0)}
-.trust-line{margin-top:14px;font-size:.8rem;color:var(--txt-muted);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.trust-line span::before{margin-right:4px}
+/* ── RECONVERSIÓN ── */
+.reconv-section{padding:52px 24px;max-width:900px;margin:0 auto}
+.reconv-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:8px}
+.reconv-sub{font-size:.88rem;color:var(--mist);text-align:center;margin-bottom:36px}
 
-/* ── PASOS ── */
-.pasos{background:var(--white);padding:48px 24px;border-bottom:1px solid var(--border)}
-.sec-title{text-align:center;font-size:1.5rem;font-weight:800;margin-bottom:32px;color:var(--txt)}
-.pasos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:760px;margin:0 auto}
-.paso{text-align:center;padding:24px 16px}
-.paso-num{width:40px;height:40px;border-radius:50%;background:var(--acento);color:#fff;font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.paso strong{display:block;font-size:.95rem;font-weight:700;margin-bottom:4px}
-.paso p{font-size:.83rem;color:var(--txt-dim)}
+.docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px}
+.doc-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;cursor:pointer;text-decoration:none;color:var(--ink);transition:border-color .2s,transform .15s,box-shadow .15s;display:block}
+.doc-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+[data-theme="dark"] .doc-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.doc-icon{font-size:1.6rem;margin-bottom:10px}
+.doc-name{font-weight:600;font-size:.9rem;margin-bottom:4px;line-height:1.3}
+.doc-desc{font-size:.78rem;color:var(--mist);line-height:1.45}
+.doc-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);padding:2px 8px;border-radius:10px;margin-top:8px}
 
-/* ── BENEFICIOS ── */
-.beneficios{background:var(--bg);padding:48px 24px;border-bottom:1px solid var(--border)}
-.bene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px;margin:0 auto}
-.bene-item{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:flex-start;gap:12px}
-.bene-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px}
-.bene-txt strong{display:block;font-size:.93rem;font-weight:700;margin-bottom:2px}
-.bene-txt span{font-size:.82rem;color:var(--txt-dim)}
+/* ── AFILIADOS CTA ── */
+.aff-banner{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:32px 36px;display:flex;align-items:center;gap:28px;margin-bottom:48px}
+.aff-icon{font-size:2.4rem;flex-shrink:0}
+.aff-txt h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.aff-txt p{font-size:.85rem;color:var(--mist);line-height:1.55;margin-bottom:14px}
+.btn-aff{display:inline-block;background:var(--gold);color:#0a0a0a;font-weight:700;font-size:.83rem;padding:10px 22px;border-radius:7px;text-decoration:none;transition:opacity .15s}
+.btn-aff:hover{opacity:.85}
 
-/* ── PRECIO SECCIÓN ── */
-.precio-sec{background:var(--white);padding:48px 24px;border-bottom:1px solid var(--border);text-align:center}
-.precio-card{display:inline-block;border:2px solid var(--acento);border-radius:16px;padding:36px 48px;max-width:400px;width:100%}
-.precio-card .monto{font-size:3rem;font-weight:800;color:var(--txt);line-height:1;min-height:3.2rem}
-.precio-card .det{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--txt-muted);margin-top:6px;margin-bottom:24px}
-.precio-card .nota{font-size:.82rem;color:var(--txt-muted);margin-top:12px}
+/* ── PACK BANNER ── */
+.pack-banner{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:48px}
+.pack-left h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;margin-bottom:5px}
+.pack-left p{font-size:.83rem;color:var(--mist);line-height:1.5}
+.pack-badge{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--sage);background:var(--sage-dim);padding:3px 10px;border-radius:10px;margin-bottom:10px;display:inline-block}
+[data-theme="dark"] .pack-badge{color:#6abf8a}
+.btn-pack{display:inline-block;background:var(--btn-bg);color:var(--btn-txt);font-weight:700;font-size:.83rem;padding:10px 22px;border-radius:7px;text-decoration:none;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+.btn-pack:hover{opacity:.85}
 
-/* ── FAQ ── */
-.faq{background:var(--bg);padding:48px 24px;border-bottom:1px solid var(--border)}
-.faq-wrap{max-width:600px;margin:0 auto}
-.faq-item{background:var(--white);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
-.faq-q{padding:16px 20px;font-weight:700;font-size:.93rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.faq-arrow{font-size:1.1rem;color:var(--acento);transition:transform .2s;flex-shrink:0}
-.faq-a{font-size:.87rem;color:var(--txt-dim);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;padding:0 20px}
-.faq-item.open .faq-arrow{transform:rotate(45deg)}
-.faq-item.open .faq-a{max-height:120px;padding:0 20px 16px}
-
-/* ── CTA FINAL ── */
-.cta-final{background:var(--txt);padding:56px 24px;text-align:center}
-.cta-final h2{font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:10px}
-.cta-final p{color:rgba(255,255,255,.6);font-size:.97rem;margin-bottom:28px}
-.cta-final .precio-inline{color:rgba(255,255,255,.85);font-family:'DM Mono',monospace;font-size:.8rem;margin-bottom:20px;min-height:1.2rem}
-
-/* footer */
-footer{background:var(--txt);border-top:1px solid rgba(255,255,255,.08);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
-
-/* loading skeleton */
-.ld{display:inline-block;width:80px;height:1em;background:linear-gradient(90deg,#eee 25%,#ddd 50%,#eee 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;vertical-align:middle}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* ── CHECKS ARRIBA DEL HERO ── */
-.hero-checks{display:flex;flex-direction:column;gap:6px;max-width:340px;margin:0 auto 24px;text-align:left}
-.hero-check{display:flex;align-items:center;gap:10px;font-size:.9rem;font-weight:600;color:var(--txt)}
-.hero-check::before{content:'✔';color:var(--acento);font-size:1rem;flex-shrink:0}
-
-/* ── SOCIAL PROOF ── */
-.social-proof{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:.78rem;color:var(--txt-dim);font-weight:500;margin-bottom:20px}
-.social-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:pulse-dot 2s infinite}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-
-/* ── STICKY CTA MOBILE ── */
-.sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--white);border-top:1px solid var(--border);padding:12px 20px;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
-.sticky-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:480px;margin:0 auto}
-.sticky-price{font-size:.82rem;color:var(--txt-dim);line-height:1.3}
-.sticky-price strong{display:block;font-size:1.1rem;font-weight:800;color:var(--txt)}
-.sticky-btn{background:var(--acento);color:#0a0a0a;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.92rem;padding:13px 22px;border-radius:9px;text-decoration:none;white-space:nowrap;box-shadow:0 3px 12px rgba(201,168,76,.3);flex-shrink:0;transition:background .15s}
-.sticky-btn:hover{background:var(--acento-dim)}
-
-/* responsive */
-@media(max-width:600px){
-  .pasos-grid{grid-template-columns:1fr}
-  .bene-grid{grid-template-columns:1fr}
-  .precio-card{padding:28px 24px}
-  .btn-cta{padding:16px 32px;font-size:1rem;width:100%;max-width:360px;display:block;margin:0 auto}
-  footer{justify-content:center;text-align:center}
-  .sticky-cta{display:block}
-  body{padding-bottom:80px}
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .docs-grid{grid-template-columns:1fr 1fr}
+  .aff-banner{flex-direction:column;text-align:center;padding:24px 20px}
+  .pack-banner{flex-direction:column;gap:16px}
+  .reconv-section{padding:36px 20px}
+  .gracias-hero{padding:48px 20px 36px}
 }
+@media(max-width:420px){.docs-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav style="background:var(--hdr-bg);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,168,75,.15);position:sticky;top:0;z-index:100">
-  <div style="display:flex;align-items:center;gap:16px;">
-    <a style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.05em;text-decoration:none" href="https://legalai-arg.com">LegalAI <span style="color:rgba(200,168,75,.4)">ARG</span></a>
-    <a href="https://legalai-arg.com" style="font-size:.75rem;color:rgba(255,255,255,.4);text-decoration:none;font-family:'DM Mono',monospace;letter-spacing:.04em;transition:color .2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">← Inicio</a>
-    <a href="https://legalai-arg.com#sec-generador" style="font-size:.75rem;color:rgba(255,255,255,.3);text-decoration:none;font-family:'DM Mono',monospace;" onclick="sessionStorage.setItem('legalai_open_generador','1')">Otros documentos</a>
-  </div>
+<header style="background:var(--hdr-bg);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,168,75,.15);position:sticky;top:0;z-index:200">
+  <a href="https://legalai-arg.com" style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.05em;text-decoration:none">LegalAI <span style="color:rgba(200,168,75,.4)">ARG</span></a>
   <div style="display:flex;align-items:center;gap:14px">
-    <div style="display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px">
-      <button class="theme-btn" id="btnLight"  onclick="setTheme('light')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">☀ Claro</button>
-      <button class="theme-btn" id="btnSystem" onclick="setTheme('system')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">⊙ Auto</button>
-      <button class="theme-btn" id="btnDark"   onclick="setTheme('dark')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">◗ Oscuro</button>
+    <div class="theme-toggle">
+      <button class="theme-btn" id="btnLight"  onclick="setTheme('light')">☀ Claro</button>
+      <button class="theme-btn" id="btnSystem" onclick="setTheme('system')">⊙ Auto</button>
+      <button class="theme-btn" id="btnDark"   onclick="setTheme('dark')">◗ Oscuro</button>
     </div>
-    <a href="formulario.html" style="background:var(--gold);color:#0a0a0a;font-weight:700;font-size:.82rem;padding:9px 20px;border-radius:8px;text-decoration:none;">Crear contrato ahora →</a>
+    <a href="https://legalai-arg.com" style="font-size:.82rem;color:rgba(255,255,255,.35);text-decoration:none;font-family:'DM Mono',monospace">← Inicio</a>
   </div>
-</nav>
+</header>
 
 <!-- HERO -->
-<section class="hero">
-  <!-- Social proof -->
-  <div class="social-proof">
-    <span class="social-dot"></span>
-    +500 contratos generados en Argentina · CABA, GBA y todo el país
+<div class="gracias-hero">
+  <div class="check-circle">✓</div>
+  <div class="gracias-kicker">Pago confirmado</div>
+  <h1>¡Tu documento está listo!</h1>
+  <p>Revisá tu correo — el PDF llegó a tu casilla. También podés volver al sitio para descargarlo nuevamente.</p>
+  <a class="btn-primary" href="https://legalai-arg.com">Volver al inicio →</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- RECONVERSIÓN -->
+<div class="reconv-section">
+
+  <!-- Pack -->
+  <div class="pack-banner">
+    <div class="pack-left">
+      <span class="pack-badge">💰 Ahorrás 20%</span>
+      <h3>¿Necesitás más documentos?</h3>
+      <p>Con el pack de 3 documentos pagás menos por cada uno. Ideal si tenés que hacer más contratos o necesitás otro tipo de documento.</p>
+    </div>
+    <a class="btn-pack" href="https://legalai-arg.com/formulario">Armar mi pack →</a>
   </div>
 
-  <!-- Checks directos ANTES del título -->
-  <div class="hero-checks">
-    <div class="hero-check">Contrato legal válido en Argentina</div>
-    <div class="hero-check">Listo en 5 minutos</div>
-    <div class="hero-check">Descarga inmediata en PDF</div>
-    <div class="hero-check">Preview instantáneo mientras completás</div>
-  </div>
+  <!-- Documentos sugeridos -->
+  <div class="reconv-title">Otros documentos que suelen necesitar</div>
+  <p class="reconv-sub">Generados con los mismos datos, listos en minutos</p>
 
-  <h1>Contrato de alquiler personalizado<br>listo para firmar en <mark>5 minutos</mark></h1>
-  <p style="font-size:.95rem;color:var(--txt-muted);max-width:520px;margin:0 auto 16px;line-height:1.65;font-weight:400;">Completás los datos, lo revisás y descargás el PDF. Sin abogado, sin turnos, sin esperas. Adaptado a tu provincia y a la Ley 27.551.</p>
-  <p class="hero-sub">Completás los datos, ves el preview instantáneo y pagás.<br><strong>PDF listo para firmar en menos de 2 minutos.</strong></p>
-
-  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;">
-    <span style="font-size:.75rem;color:var(--txt-muted);font-family:'DM Mono',monospace;">✓ Normativa argentina vigente</span>
-    <span style="font-size:.75rem;color:var(--txt-muted);font-family:'DM Mono',monospace;">✓ PDF listo para imprimir</span>
-    <span style="font-size:.75rem;color:var(--txt-muted);font-family:'DM Mono',monospace;">✓ Sin registro</span>
-    <span style="font-size:.75rem;color:var(--txt-muted);font-family:'DM Mono',monospace;">✓ Pago único</span>
-  </div>
-  <div class="precio-pill">
-    <span style="font-size:.72rem;color:var(--txt-muted);font-family:'DM Mono',monospace;display:block;margin-bottom:2px">Desde</span>
-    <span class="precio-monto" id="heroMonto">$ 6.000</span>
-    <span class="precio-det" id="heroDet">Precio final · sin costos ocultos</span>
-    <span class="precio-nota-pill">Pago único · sin suscripción</span>
-  </div>
-
-  <p style="font-size:.83rem;color:var(--txt-muted);margin-bottom:10px;font-weight:600">
-    No necesitás pagar para ver el resultado
-  </p>
-  <a class="btn-cta" href="formulario.html"
-    onclick="fireConversion('hero_landing')">
-    Crear mi contrato ahora →
-  </a>
-  <p style="font-size:.8rem;color:var(--txt-muted);margin-bottom:8px;">⏱ Listo en menos de 2 minutos · Sin abogado · Sin turnos</p>
-  <div class="trust-line">
-    <span>🔒 Pago seguro MercadoPago</span>
-    <span>⚡ Generalo ahora · descargalo en minutos</span>
-    <span>⚖️ Modelo orientativo · no reemplaza abogado</span>
-  </div>
-</section>
-
-<!-- PASOS -->
-<section class="pasos">
-  <div class="sec-title">3 pasos, sin sorpresas</div>
-  <div class="pasos-grid">
-    <div class="paso">
-      <div class="paso-num">1</div>
-      <strong>Completás los datos</strong>
-      <p>Nombre, domicilio, monto, duración y condiciones. Menos de 2 minutos.</p>
-    </div>
-    <div class="paso">
-      <div class="paso-num">2</div>
-      <strong>Ves el contrato completo</strong>
-      <p>El documento se genera al instante. Lo leés completo antes de pagar.</p>
-    </div>
-    <div class="paso">
-      <div class="paso-num">3</div>
-      <strong>Pagás solo si te sirve</strong>
-      <p>Si está bien, pagás y descargás el PDF. Sin cargos hasta que confirmés.</p>
-    </div>
-  </div>
-</section>
-
-<!-- BENEFICIOS -->
-<section class="beneficios">
-  <div class="sec-title">Por qué lo eligen</div>
-  <div class="bene-grid">
-    <div class="bene-item">
-      <div class="bene-icon">🇦🇷</div>
-      <div class="bene-txt"><strong>Normativa actualizada</strong><span>Basado en normativa vigente y Código Civil.</span></div>
-    </div>
-    <div class="bene-item">
-      <div class="bene-icon">✏️</div>
-      <div class="bene-txt"><strong>Personalizado para vos</strong><span>Cada cláusula refleja tu caso real, no uno genérico.</span></div>
-    </div>
-    <div class="bene-item">
-      <div class="bene-icon">⚡</div>
-      <div class="bene-txt"><strong>En menos de 5 minutos</strong><span>Sin turnos, sin esperas, sin burocracia.</span></div>
-    </div>
-    <div class="bene-item">
-      <div class="bene-icon">🔄</div>
-      <div class="bene-txt"><strong>Editable después</strong><span>Recibís el documento en formato que podés ajustar.</span></div>
-    </div>
-    <div class="bene-item">
-      <div class="bene-icon">🛡️</div>
-      <div class="bene-txt"><strong>Sin abogado obligatorio</strong><span>Para usos estándar, no necesitás intermediarios.</span></div>
-    </div>
-    <div class="bene-item">
-      <div class="bene-icon">💳</div>
-      <div class="bene-txt"><strong>Pago único</strong><span>Sin suscripción. Pagás una vez y es tuyo.</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- PRECIO -->
-<section class="precio-sec">
-  <div class="sec-title">Precio</div>
-  <div class="precio-card">
-    <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--txt-muted);margin-bottom:2px">Desde</div>
-    <div class="monto" id="precioGrande"><span class="ld"></span></div>
-    <div class="det" id="precioGrandeDet">Pago único · sin costos ocultos</div>
-    <p style="font-size:.83rem;color:var(--txt-muted);margin-bottom:10px;font-weight:600">
-      No necesitás pagar para ver el resultado
-    </p>
-    <a class="btn-cta" href="formulario.html"
-      onclick="fireConversion('precio_landing')"
-      style="display:block;width:100%">
-      Crear mi contrato ahora →
+  <div class="docs-grid">
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Carta documento')">
+      <div class="doc-icon">📨</div>
+      <div class="doc-name">Carta documento</div>
+      <div class="doc-desc">Para notificar formalmente al inquilino o propietario ante incumplimientos.</div>
+      <div class="doc-badge">Muy solicitado</div>
     </a>
-    <div class="nota">🔒 Pago seguro MercadoPago · Pagás solo si te sirve · Sin costos ocultos</div>
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Acuerdo de rescisión de contrato de alquiler')">
+      <div class="doc-icon">🤝</div>
+      <div class="doc-name">Rescisión de alquiler</div>
+      <div class="doc-desc">Para finalizar el contrato de mutuo acuerdo antes del vencimiento.</div>
+      <div class="doc-badge">Relacionado</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Addenda o modificación de contrato de alquiler')">
+      <div class="doc-icon">📝</div>
+      <div class="doc-name">Addenda al contrato</div>
+      <div class="doc-desc">Para agregar cláusulas o modificar condiciones del contrato original.</div>
+      <div class="doc-badge">Relacionado</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Recibo de pago de alquiler')">
+      <div class="doc-icon">🧾</div>
+      <div class="doc-name">Recibo de alquiler</div>
+      <div class="doc-desc">Comprobante de pago mensual del canon locativo.</div>
+      <div class="doc-badge">Popular</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Contrato de comodato')">
+      <div class="doc-icon">🏠</div>
+      <div class="doc-name">Comodato</div>
+      <div class="doc-desc">Para préstamo de un inmueble sin cobrar alquiler, con todas las garantías.</div>
+      <div class="doc-badge">Alternativa</div>
+    </a>
+    <a class="doc-card" href="https://legalai-arg.com/formulario" onclick="sugerirDoc('Poder simple de representación')">
+      <div class="doc-icon">📋</div>
+      <div class="doc-name">Poder simple</div>
+      <div class="doc-desc">Para autorizar a otra persona a actuar en tu nombre en trámites.</div>
+      <div class="doc-badge">Complementario</div>
+    </a>
   </div>
-</section>
 
-<!-- FAQ -->
-
-<section style="background:var(--white);padding:48px 24px;border-bottom:1px solid var(--border);">
-  <div style="max-width:680px;margin:0 auto;">
-    <h2 class="sec-title">¿Qué incluye el contrato?</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:24px;">
-      <div style="padding:15px;background:var(--bg);border:1px solid var(--border);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">📋</div><div style="font-weight:700;font-size:.85rem;color:var(--txt);margin-bottom:3px;">Datos de las partes</div><div style="font-size:.76rem;color:var(--txt-muted);line-height:1.5;">Propietario, inquilino y garante con DNI y domicilio completo.</div></div>
-      <div style="padding:15px;background:var(--bg);border:1px solid var(--border);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">💰</div><div style="font-weight:700;font-size:.85rem;color:var(--txt);margin-bottom:3px;">Condiciones económicas</div><div style="font-size:.76rem;color:var(--txt-muted);line-height:1.5;">Monto del alquiler, depósito en garantía y cláusula de ajuste.</div></div>
-      <div style="padding:15px;background:var(--bg);border:1px solid var(--border);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">⚖️</div><div style="font-weight:700;font-size:.85rem;color:var(--txt);margin-bottom:3px;">Cláusulas legales</div><div style="font-size:.76rem;color:var(--txt-muted);line-height:1.5;">Rescisión, incumplimiento, mantenimiento y obligaciones de cada parte.</div></div>
-      <div style="padding:15px;background:var(--bg);border:1px solid var(--border);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">🏠</div><div style="font-weight:700;font-size:.85rem;color:var(--txt);margin-bottom:3px;">Descripción del inmueble</div><div style="font-size:.76rem;color:var(--txt-muted);line-height:1.5;">Dirección, ambientes y uso permitido del inmueble.</div></div>
-      <div style="padding:15px;background:var(--bg);border:1px solid var(--border);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">📅</div><div style="font-weight:700;font-size:.85rem;color:var(--txt);margin-bottom:3px;">Plazo y renovación</div><div style="font-size:.76rem;color:var(--txt-muted);line-height:1.5;">Duración del contrato, vencimiento y condiciones de renovación.</div></div>
-      <div style="padding:15px;background:var(--bg);border:1px solid var(--border);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">✍️</div><div style="font-weight:700;font-size:.85rem;color:var(--txt);margin-bottom:3px;">Firmas y fecha</div><div style="font-size:.76rem;color:var(--txt-muted);line-height:1.5;">Espacios para propietario, inquilino y garante. Listo para imprimir.</div></div>
-    </div>
-    <div style="background:#edf7ed;border:1px solid #a8d5a8;border-radius:9px;padding:12px 16px;font-size:.82rem;color:#2a5e2a;line-height:1.6;margin-bottom:10px;">✓ Adaptado a la <strong>Ley 27.551</strong> de Alquileres y la legislación de tu provincia.</div>
-    <div style="background:#fef9e7;border:1px solid #d4b840;border-radius:9px;padding:12px 16px;font-size:.8rem;color:#7a6010;line-height:1.6;">⚠️ <strong>¿Cuándo conviene consultar a un abogado?</strong> Si el inmueble tiene deudas, embargos, o la operación supera los USD 100.000 — siempre es conveniente la revisión profesional adicional.</div>
-  </div>
-</section>
-<section class="faq">
-  <div class="sec-title">Preguntas frecuentes</div>
-  <div class="faq-wrap">
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">¿El contrato tiene validez legal? <span class="faq-arrow">+</span></div>
-      <div class="faq-a">Sí. Está basado en normativa argentina vigente y es apto para ser firmado entre las partes. Como todo contrato privado, su validez depende del acuerdo entre propietario e inquilino.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">¿Necesito un abogado para usarlo? <span class="faq-arrow">+</span></div>
-      <div class="faq-a">No. Para contratos estándar de alquiler no es obligatorio. El documento se genera automáticamente con tus datos.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">¿Cómo pago? <span class="faq-arrow">+</span></div>
-      <div class="faq-a">Con tarjeta de crédito, débito o transferencia bancaria a través de MercadoPago. Es 100% seguro.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">¿Cuánto tarda? <span class="faq-arrow">+</span></div>
-      <div class="faq-a">Menos de 5 minutos. Completás el formulario, pagás y el PDF se descarga al instante.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">¿Puedo modificarlo después? <span class="faq-arrow">+</span></div>
-      <div class="faq-a">Sí. Recibís el documento en formato editable para ajustar cualquier detalle antes de imprimir y firmar.</div>
+  <!-- Afiliados -->
+  <div class="aff-banner">
+    <div class="aff-icon">💼</div>
+    <div class="aff-txt">
+      <h3>¿Conocés a alguien que alquila o arrienda?</h3>
+      <p>Compartí tu link de afiliado y ganás el 20% de cada venta confirmada. Sin inversión, sin límite de ganancias. Te pagamos en 48hs hábiles.</p>
+      <a class="btn-aff" href="https://legalai-arg.com/#aff-form">Quiero ser afiliado →</a>
     </div>
   </div>
-</section>
 
-<!-- CTA FINAL -->
-<section class="cta-final">
-  <h2>Ves el resultado antes de pagar</h2>
-  <p>Sin abogado · Sin sorpresas · Pagás solo si te sirve</p>
-  <div class="precio-inline" id="ctaInlinePrecio">$ 6.000 · pago único</div>
-  <a class="btn-cta" href="formulario.html"
-    onclick="fireConversion('cta_final_landing')"
-    style="font-size:1rem;padding:16px 40px">
-    Crear mi contrato ahora →
-  </a>
-  <p style="margin-top:14px;font-size:.75rem;color:rgba(255,255,255,.35)">
-    Generalo ahora · descargalo en minutos · modelo orientativo
+</div>
+
+<footer style="background:var(--hdr-bg);padding:28px 32px;text-align:center;border-top:1px solid rgba(200,168,75,.12)">
+  <p style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.22);letter-spacing:.05em;line-height:2">
+    LegalAI Arg · Documentos orientativos generados con inteligencia artificial<br>
+    No constituyen asesoramiento legal profesional · <a href="https://legalai-arg.com" style="color:rgba(200,168,75,.5);text-decoration:none">legalai-arg.com</a>
   </p>
-</section>
-
-<footer>
-  <span>© LegalAI Arg</span>
-  <span>Orientativo. No reemplaza asesoramiento legal profesional.</span>
 </footer>
 
 <script>
-// ── Config ─────────────────────────────────────────────────────────
-const PRECIO_USD    = 11; // Contrato de alquiler complejo
-const FALLBACK_ARS  = 1200;
-const WORKER_URL    = 'https://legalai-worker.finmap-ia.workers.dev';
-let   cotizacion    = { valor: null, fuente: null };
-
-// ── Tema ──────────────────────────────────────────────────────────
-function setTheme(t){localStorage.setItem('theme',t);applyTheme(t);['Light','System','Dark'].forEach(x=>{const b=document.getElementById('btn'+x);if(b)b.style.background=x.toLowerCase()===t?'rgba(200,168,75,.2)':'transparent';if(b)b.style.color=x.toLowerCase()===t?'var(--gold)':'rgba(255,255,255,.4)';});}
-function applyTheme(t){const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((localStorage.getItem('theme')||'system')==='system')applyTheme('system');});
-(function(){const t=localStorage.getItem('theme')||'system';applyTheme(t);['Light','System','Dark'].forEach(x=>{const b=document.getElementById('btn'+x);if(!b)return;b.style.background=x.toLowerCase()===t?'rgba(200,168,75,.2)':'transparent';b.style.color=x.toLowerCase()===t?'var(--gold)':'rgba(255,255,255,.4)';});})();
-
-// ── Capturar UTMs al cargar ────────────────────────────────────────
-(function(){
-  var p = new URLSearchParams(window.location.search);
-  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'].forEach(function(k){
-    var v = p.get(k); if(v) sessionStorage.setItem('legalai_'+k, v);
+// ── Toggle tema ───────────────────────────────────────────────────
+function setTheme(t){localStorage.setItem('theme',t);aplicarTema(t);actualizarBotones(t);}
+function aplicarTema(t){
+  const p=new URLSearchParams(window.location.search);
+  const origen=p.get('origen')||sessionStorage.getItem('legalai_origen')||'';
+  if(origen==='landing'){return;}
+  const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+}
+function actualizarBotones(t){
+  ['Light','System','Dark'].forEach(function(x){
+    const b=document.getElementById('btn'+x);if(!b)return;
+    b.style.background=x.toLowerCase()===t?'rgba(200,168,75,.2)':'transparent';
+    b.style.color=x.toLowerCase()===t?'var(--gold)':'rgba(255,255,255,.4)';
   });
-  sessionStorage.setItem('legalai_device', /mobile|android|iphone|ipad/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop');
-})();
-
-// ── Cotización precio ──────────────────────────────────────────────
-async function obtenerCotizacion() {
-  // Prioridad BNA (dólar oficial) para pesificar precios
-  const fuentes = [
-    ['https://api.bluelytics.com.ar/v2/latest',  d => d?.official?.value_sell, 'BNA'],
-    ['https://dolarapi.com/v1/dolares/oficial',  d => d?.venta,              'BNA'],
-    ['https://dolarapi.com/v1/dolares/bolsa',   d => d?.venta,              'MEP'],
-  ];
-  for (const [url, extract, fuente] of fuentes) {
-    try {
-      const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      const d = await r.json();
-      const v = extract(d);
-      if (v && v > 0) { cotizacion = { valor: v, fuente }; return cotizacion; }
-    } catch(_) {}
-  }
-  cotizacion = { valor: FALLBACK_ARS, fuente: 'ref.' };
-  return cotizacion;
 }
-
-function formatearPrecio(cot) {
-  const totalARS = Math.ceil(PRECIO_USD * cot.valor / 100) * 100;
-  const monto = '$ ' + totalARS.toLocaleString('es-AR');
-  const det = cot.fuente === 'ref.'
-    ? 'Precio en pesos argentinos'
-    : 'USD ' + PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
-  return { monto, det };
-}
-
-function renderPrecios(cot) {
-  const { monto, det } = formatearPrecio(cot);
-  ['heroMonto','precioGrande'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = monto; });
-  ['heroDet'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = 'Precio final en pesos · pago único'; });
-  ['precioGrandeDet'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = det; });
-  const ci = document.getElementById('ctaInlinePrecio');
-  if(ci) ci.textContent = monto + ' · pago único';
-  const sm = document.getElementById('stickyMonto');
-  if(sm) sm.textContent = monto;
-}
-
-// ── Conversión + tracking ──────────────────────────────────────────
-function fireConversion(boton) {
-  // Solo tracking de interacción — gtag conversion se dispara ÚNICAMENTE en gracias.html
-  // tras confirmación real de MercadoPago (status=approved + payment_id)
-  try {
-    var ss = sessionStorage;
-    var u  = new URLSearchParams(location.search);
-    fetch(WORKER_URL + '/interaccion', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        boton,
-        utm_src: ss.getItem('legalai_utm_source')   || u.get('utm_source')   || '',
-        utm_cmp: ss.getItem('legalai_utm_campaign')  || u.get('utm_campaign') || '',
-        utm_med: ss.getItem('legalai_utm_medium')    || u.get('utm_medium')   || '',
-      })
-    }).catch(function(){});
-  } catch(_) {}
-}
-
-// ── FAQ ───────────────────────────────────────────────────────────
-function toggleFaq(el) {
-  var open = el.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(function(i){ i.classList.remove('open'); });
-  if (!open) el.classList.add('open');
-}
-
-// Precio visible desde el primer frame (sin esperar API)
-(function(){
-  var ars = Math.ceil(PRECIO_USD * FALLBACK_ARS / 100) * 100;
-  var monto = '$ ' + ars.toLocaleString('es-AR');
-  ['heroMonto','precioGrande'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=monto;});
-  var sm=document.getElementById('stickyMonto');if(sm)sm.textContent=monto;
-  var ci=document.getElementById('ctaInlinePrecio');if(ci)ci.textContent=monto+' · pago único';
-})();
-
-// ── Init ──────────────────────────────────────────────────────────
-window.addEventListener('load', async function() {
-  var cot = await obtenerCotizacion();
-  renderPrecios(cot);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){
+  if((localStorage.getItem('theme')||'system')==='system')aplicarTema('system');
 });
-</script>
-<!-- STICKY CTA MOBILE -->
-<div class="sticky-cta" id="stickyCTA">
-  <div class="sticky-cta-inner">
-    <div class="sticky-price">
-      <strong id="stickyMonto">$ 6.000</strong>
-      Pago único · sin suscripción
-    </div>
-    <a class="sticky-btn" href="formulario.html"
-      onclick="fireConversion('sticky_landing')">
-      Ver mi contrato →
-    </a>
-  </div>
-</div>
 
+// ── Heredar tema ──────────────────────────────────────────────────
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const origen = p.get('origen') || sessionStorage.getItem('legalai_origen') || '';
+  if (origen === 'landing') {
+    document.documentElement.setAttribute('data-from', 'landing');
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    const t = localStorage.getItem('theme') || 'system';
+    const dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+      if ((localStorage.getItem('theme') || 'system') === 'system') {
+        document.documentElement.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      }
+    });
+    actualizarBotones(t);
+  }
+})();
+
+// ── Tracking conversión ───────────────────────────────────────────
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const paymentId = p.get('payment_id') || p.get('collection_id') || '';
+  const tipo = p.get('tipo') || 'doc';
+  if (!paymentId) return;
+  try {
+    const esPlan    = (tipo === 'plan');
+    const precioUSD = esPlan
+      ? (parseFloat(sessionStorage.getItem('legalai_plan_precio_usd') || '0') || 0)
+      : (parseFloat(sessionStorage.getItem('legalai_precio_usd') || '5.5') || 5.5);
+    gtag('event', 'conversion', {
+      'send_to':        'AW-18073890544',
+      'value':          precioUSD,
+      'currency':       'USD',
+      'transaction_id': paymentId,
+    });
+    gtag('event', 'purchase', {
+      'transaction_id': paymentId,
+      'value':          precioUSD,
+      'currency':       'USD',
+      'items': [{
+        'item_id':   esPlan ? (sessionStorage.getItem('legalai_plan_id') || 'plan') : 'documento',
+        'item_name': esPlan ? 'Plan ' + (sessionStorage.getItem('legalai_plan_id') || '') : 'Documento legal',
+        'price':     precioUSD,
+        'quantity':  1,
+      }]
+    });
+  } catch(_) {}
+})();
+
+// ── Sugerir doc ───────────────────────────────────────────────────
+function sugerirDoc(nombre) {
+  try { sessionStorage.setItem('legalai_sugerencia', nombre); } catch(_) {}
+}
+
+// ── Limpiar params de MP ──────────────────────────────────────────
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('payment_id') || p.get('collection_id') || p.get('status')) {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+})();
+</script>
 </body>
 </html>
