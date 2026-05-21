@@ -531,7 +531,7 @@ footer a:hover{color:var(--gold);}
 <nav>
   <div class="nav-link active" data-sec="inicio"    onclick="showSec('inicio')">Inicio</div>
   <div class="nav-link"        data-sec="generador" onclick="trackCTA('nav_generador');showSec('generador');">Generador</div>
-  <div class="nav-link"        data-sec=""          onclick="window.location.href='contrato-alquiler.html'">Contrato alquiler</div>
+  <div class="nav-link"        data-sec=""          onclick="window.location.href='formulario.html'">Contrato alquiler</div>
   <div class="nav-link"        data-sec=""          onclick="window.location.href='planes.html'">Plan ilimitado</div>
   <div class="nav-link"        data-sec="afiliados" onclick="showSec('afiliados')">Afiliados</div>
   <div class="nav-link"        data-sec="about"     onclick="showSec('about')">Acerca de</div>
@@ -543,7 +543,7 @@ footer a:hover{color:var(--gold);}
 
   <!-- STICKY CTA MOBILE — visible siempre en la hero -->
   <div id="hero-sticky-mobile" style="display:none;position:fixed;bottom:0;left:0;right:0;padding:10px 16px 20px;background:linear-gradient(to top,var(--paper) 80%,transparent);z-index:200;">
-    <a href="contrato-alquiler.html" class="btn gold" style="display:block;text-align:center;text-decoration:none;font-size:.95rem;font-weight:800;padding:15px;" onclick="trackCTA('sticky_hero');">
+    <a class="btn gold" style="display:block;text-align:center;font-size:.95rem;font-weight:800;padding:15px;cursor:pointer;" onclick="trackCTA('sticky_hero');setDoc('Contrato de alquiler de vivienda');showSec('generador');">
       Crear contrato de alquiler ahora →
     </a>
   </div>
@@ -555,7 +555,7 @@ footer a:hover{color:var(--gold);}
 
     <!-- CTA PRINCIPAL — enorme, dominante -->
     <div style="margin:28px auto 16px;max-width:440px;">
-      <a href="contrato-alquiler.html" class="btn gold" style="display:block;text-align:center;text-decoration:none;font-size:1.1rem;font-weight:800;padding:18px 24px;border-radius:10px;box-shadow:0 6px 24px rgba(200,168,75,.35);" onclick="trackCTA('hero_alquiler');">
+      <a class="btn gold" style="display:block;text-align:center;font-size:1.1rem;font-weight:800;padding:18px 24px;border-radius:10px;box-shadow:0 6px 24px rgba(200,168,75,.35);cursor:pointer;" onclick="trackCTA('hero_alquiler');setDoc('Contrato de alquiler de vivienda');showSec('generador');">
         Crear mi contrato ahora →
       </a>
       <p style="text-align:center;font-size:.75rem;color:var(--mist);margin-top:8px;font-family:'DM Mono',monospace;">
@@ -605,7 +605,7 @@ footer a:hover{color:var(--gold);}
     </div>
 
     <div style="text-align:center;">
-      <a href="contrato-alquiler.html" class="btn gold" style="display:inline-block;max-width:340px;text-decoration:none;font-weight:800;font-size:1rem;padding:16px 28px;" onclick="trackCTA('how_cta');">
+      <a class="btn gold" style="display:inline-block;max-width:340px;font-weight:800;font-size:1rem;padding:16px 28px;cursor:pointer;" onclick="trackCTA('how_cta');setDoc('Contrato de alquiler de vivienda');showSec('generador');">
         Crear mi contrato →
       </a>
       <p style="margin-top:12px;font-size:.76rem;color:var(--mist);font-family:'DM Mono',monospace;">
@@ -1416,7 +1416,7 @@ footer a:hover{color:var(--gold);}
 const CONFIG = {
   WORKER_URL:    'https://legalai-worker.finmap-ia.workers.dev',
   CONTACT_EMAIL: 'finmap.ia@gmail.com',
-  PRECIO_GUIA_USD: 2.5,
+  PRECIO_GUIA_USD: 1.25,
 };
 
 // ── Tracking /evento ──────────────────────────────────────────────────────
@@ -1906,7 +1906,7 @@ let G = {
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
 function empezarDeNuevo() {
-  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, previewId:null, precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
+  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, previewId:null, precio_usd:4, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
   const pci = document.getElementById('packCodeInput');
   const pcs = document.getElementById('packCodeStatus');
   const pcb = document.getElementById('packCodeBox');
@@ -1981,7 +1981,7 @@ async function generarFormulario() {
     const data = await res.json();
     if (!data.campos?.length) throw new Error('No se pudieron generar los campos.');
     G.form = data; G.campos = data.campos;
-    G.precio_usd = data.precio_usd || 8;
+    G.precio_usd = data.precio_usd || 4;
     G.upgrade_porcentaje = data.upgrade_porcentaje || 40;
     G.categoria = data.categoria || 'intermedio';
     G.requiere_advertencia_legal = data.requiere_advertencia_legal || false;
@@ -2040,7 +2040,7 @@ function irAlPago() {
     try {
       const metaStr = sessionStorage.getItem('legalai_meta');
       const tituloStr = sessionStorage.getItem('legalai_titulo');
-      if (metaStr) { const m = JSON.parse(metaStr); G.precio_usd = m.precio_usd||8; G.upgrade_porcentaje = m.upgrade_porcentaje||40; G.categoria = m.categoria||'intermedio'; }
+      if (metaStr) { const m = JSON.parse(metaStr); G.precio_usd = m.precio_usd||4; G.upgrade_porcentaje = m.upgrade_porcentaje||40; G.categoria = m.categoria||'intermedio'; }
       if (tituloStr) { G.tipo = tituloStr; if(!G.form) G.form = {titulo: tituloStr}; }
     } catch(_) {}
   }
@@ -2476,7 +2476,7 @@ async function cotizarPack() {
     const cot = cotizacion?.valor;
     function fmtUSD(usd) { return cot ? '$ ' + Math.ceil(usd * cot / 100) * 100 .toLocaleString('es-AR') : 'USD ' + usd; }
     const doc1Meta   = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
-    const doc1Precio = doc1Meta.precio_usd || 8;
+    const doc1Precio = doc1Meta.precio_usd || 4;
     const rows = [
       { label: doc1Meta.titulo || sessionStorage.getItem('legalai_titulo') || 'Documento 1', precio: doc1Precio, cat: doc1Meta.categoria || 'intermedio', badge: 'Ya generado' },
       { label: data.doc2.titulo, precio: data.doc2.precio_usd, cat: data.doc2.categoria },
@@ -2730,7 +2730,7 @@ window.addEventListener('load', () => {
   // Mostrar precio en ARS desde el inicio (precio mínimo USD 6)
   obtenerCotizacion().then(cot => {
     if (cot?.valor) {
-      const ars = Math.ceil(6 * cot.valor / 100) * 100;
+      const ars = Math.ceil(3 * cot.valor / 100) * 100;
       const fmt = '$ ' + ars.toLocaleString('es-AR');
       const el1 = document.getElementById('hero-precio-desde');
       const el2 = document.getElementById('card1-precio-desde');
