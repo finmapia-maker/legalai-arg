@@ -38,3 +38,4 @@ jobs:
 
           git commit -m "update auditoria logs [skip ci]" || echo "sin cambios"
           git push
+ 
