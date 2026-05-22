@@ -5,12 +5,17 @@ const OWNER_ALLOWED_ORIGINS = new Set([
   "http://localhost:3000"
 ]);
 
+const OWNER_EVENTS_KEY = "events";
+const AFFILIATES_KEY = "afiliados";
+const AFFILIATE_CONVERSIONS_KEY = "afiliados_conversiones";
+
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-
     const ownerResponse = await handleOwnerRoutes(request, env);
     if (ownerResponse) return ownerResponse;
+
+    const affiliateAdminResponse = await handleAdminAffiliateRoutes(request, env);
+    if (affiliateAdminResponse) return affiliateAdminResponse;
 
     if (env.ASSETS) {
       return env.ASSETS.fetch(request);
@@ -23,6 +28,314 @@ export default {
     }, 500);
   }
 };
+
+/* =========================================================
+   ADMIN AFILIADOS
+   ========================================================= */
+
+async function handleAdminAffiliateRoutes(request, env) {
+  const url = new URL(request.url);
+
+  if (!url.pathname.startsWith("/admin/afiliado")) return null;
+
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders(request)
+    });
+  }
+
+  if (!isOwnerAuthorized(request, env)) {
+    return json(request, {
+      ok: false,
+      error: "unauthorized",
+      message: "ADMIN_KEY ausente o incorrecta."
+    }, 401);
+  }
+
+  if (!env.OWNER_EVENTS_KV) {
+    return json(request, {
+      ok: false,
+      error: "missing_kv",
+      message: "Falta vincular OWNER_EVENTS_KV."
+    }, 500);
+  }
+
+  if (request.method === "GET" && url.pathname === "/admin/afiliado/lista") {
+    const afiliados = await buildAffiliateList(env);
+    return json(request, { ok: true, afiliados });
+  }
+
+  if (request.method === "GET" && url.pathname === "/admin/afiliado/detalle") {
+    const ref = normalizeRef(url.searchParams.get("ref"));
+    if (!ref) {
+      return json(request, { ok: false, error: "missing_ref" }, 400);
+    }
+
+    const afiliados = await readAffiliates(env);
+    const afiliado = afiliados.find(a => normalizeRef(a.ref) === ref);
+
+    if (!afiliado) {
+      return json(request, { ok: false, error: "affiliate_not_found" }, 404);
+    }
+
+    const conversiones = (await readAffiliateConversions(env))
+      .filter(c => normalizeRef(c.ref) === ref)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    const earnings = calcAffiliateEarnings(conversiones);
+
+    return json(request, {
+      ok: true,
+      afiliado,
+      earnings,
+      conversiones
+    });
+  }
+
+  if (request.method === "POST" && url.pathname === "/admin/afiliado/crear") {
+    const body = await readRequestBody(request);
+
+    const ref = normalizeRef(body.ref);
+    const nombre = String(body.nombre || "").trim();
+    const email = String(body.email || "").trim().toLowerCase();
+    const commission_pct = Number(body.commission_pct ?? body.pct ?? 20);
+
+    if (!ref || !nombre || !email) {
+      return json(request, {
+        ok: false,
+        error: "missing_fields",
+        message: "Faltan ref, nombre o email."
+      }, 400);
+    }
+
+    const afiliados = await readAffiliates(env);
+    const existingIndex = afiliados.findIndex(a => normalizeRef(a.ref) === ref);
+
+    const afiliado = {
+      ref,
+      nombre,
+      email,
+      commission_pct: Number.isFinite(commission_pct) ? commission_pct : 20,
+      active: true,
+      created_at: existingIndex >= 0 ? afiliados[existingIndex].created_at : new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (existingIndex >= 0) {
+      afiliados[existingIndex] = { ...afiliados[existingIndex], ...afiliado };
+    } else {
+      afiliados.unshift(afiliado);
+    }
+
+    await writeAffiliates(env, afiliados);
+
+    const dashboard_url = `https://legalai-arg.com/afiliado.html?ref=${encodeURIComponent(ref)}`;
+    const link_afiliado = `https://legalai-arg.com/?ref=${encodeURIComponent(ref)}`;
+
+    await appendOwnerEvent(env, {
+      type: "afiliado",
+      product: "Alta / actualización de afiliado",
+      category: "admin",
+      status: "approved",
+      customer: email,
+      affiliate: ref,
+      amount: 0,
+      amount_ars: 0,
+      currency: "ARS",
+      date: new Date().toISOString()
+    });
+
+    return json(request, {
+      ok: true,
+      afiliado,
+      dashboard_url,
+      link_afiliado
+    });
+  }
+
+  if (request.method === "POST" && url.pathname === "/admin/afiliado/pagar") {
+    const body = await readRequestBody(request);
+    const ref = normalizeRef(body.ref);
+
+    if (!ref) {
+      return json(request, { ok: false, error: "missing_ref" }, 400);
+    }
+
+    const conversiones = await readAffiliateConversions(env);
+    let count = 0;
+    let total = 0;
+    const now = new Date().toISOString();
+
+    const updated = conversiones.map(c => {
+      if (normalizeRef(c.ref) !== ref) return c;
+
+      const shouldPay = body.all_pending || (body.conversion_id && c.id === body.conversion_id);
+      if (!shouldPay || c.paid) return c;
+
+      count += 1;
+      total += Number(c.commission || 0);
+
+      return {
+        ...c,
+        paid: true,
+        paid_at: now,
+        updated_at: now
+      };
+    });
+
+    await writeAffiliateConversions(env, updated);
+
+    await appendOwnerEvent(env, {
+      type: "audit",
+      product: "Pago de comisiones afiliado",
+      category: "afiliados",
+      status: "approved",
+      affiliate: ref,
+      amount: total,
+      amount_ars: total,
+      currency: "ARS",
+      date: now,
+      ref
+    });
+
+    return json(request, {
+      ok: true,
+      conversiones_pagadas: count,
+      monto_total: total,
+      comision_pagada: total
+    });
+  }
+
+  if (request.method === "POST" && url.pathname === "/admin/afiliado/conversion") {
+    const body = await readRequestBody(request);
+    const saved = await appendAffiliateConversion(env, body);
+
+    return json(request, {
+      ok: true,
+      conversion: saved
+    });
+  }
+
+  return json(request, {
+    ok: false,
+    error: "admin_affiliate_route_not_found",
+    path: url.pathname
+  }, 404);
+}
+
+async function buildAffiliateList(env) {
+  const afiliados = await readAffiliates(env);
+  const conversiones = await readAffiliateConversions(env);
+
+  return afiliados.map(a => {
+    const ref = normalizeRef(a.ref);
+    const convs = conversiones.filter(c => normalizeRef(c.ref) === ref);
+    const earnings = calcAffiliateEarnings(convs);
+
+    return {
+      ...a,
+      ref,
+      active: a.active !== false,
+      total_conv: convs.length,
+      earnings
+    };
+  });
+}
+
+function calcAffiliateEarnings(conversiones) {
+  const total = conversiones.reduce((s, c) => s + Number(c.commission || 0), 0);
+  const paid = conversiones.filter(c => c.paid).reduce((s, c) => s + Number(c.commission || 0), 0);
+  const pending = conversiones.filter(c => !c.paid).reduce((s, c) => s + Number(c.commission || 0), 0);
+
+  return { total, paid, pending };
+}
+
+async function readAffiliates(env) {
+  return await readJsonKV(env, AFFILIATES_KEY, []);
+}
+
+async function writeAffiliates(env, afiliados) {
+  return await writeJsonKV(env, AFFILIATES_KEY, afiliados);
+}
+
+async function readAffiliateConversions(env) {
+  return await readJsonKV(env, AFFILIATE_CONVERSIONS_KEY, []);
+}
+
+async function writeAffiliateConversions(env, conversiones) {
+  return await writeJsonKV(env, AFFILIATE_CONVERSIONS_KEY, conversiones.slice(0, 5000));
+}
+
+async function appendAffiliateConversion(env, input = {}) {
+  const ref = normalizeRef(input.ref || input.affiliate || input.afiliado);
+  if (!ref) throw new Error("missing_ref");
+
+  const afiliados = await readAffiliates(env);
+  const afiliado = afiliados.find(a => normalizeRef(a.ref) === ref);
+  const pct = Number(input.commission_pct ?? afiliado?.commission_pct ?? 20);
+
+  const amount = Number(input.amount ?? input.monto ?? input.total ?? 0);
+  const commission = Number(input.commission ?? input.comision ?? (amount * pct / 100));
+
+  const conversion = {
+    id: String(input.id || input.conversion_id || input.payment_id || crypto.randomUUID()),
+    ref,
+    created_at: input.created_at || input.date || input.fecha || new Date().toISOString(),
+    plan_id: input.plan_id || input.plan || input.product || input.producto || "venta",
+    amount,
+    currency: input.currency || input.moneda || "ARS",
+    commission,
+    commission_pct: pct,
+    paid: Boolean(input.paid),
+    paid_at: input.paid_at || null,
+    customer: input.customer || input.email || input.cliente || "",
+    source_event_id: input.source_event_id || input.event_id || "",
+    raw: input
+  };
+
+  const current = await readAffiliateConversions(env);
+
+  const exists = current.some(c =>
+    String(c.id) === String(conversion.id) ||
+    (conversion.source_event_id && String(c.source_event_id) === String(conversion.source_event_id))
+  );
+
+  if (!exists) {
+    current.unshift(conversion);
+    await writeAffiliateConversions(env, current);
+  }
+
+  return conversion;
+}
+
+async function maybeCreateAffiliateConversionFromOwnerEvent(env, event) {
+  if (!event || !event.affiliate) return;
+  if (!["approved", "active"].includes(event.status)) return;
+
+  const afiliados = await readAffiliates(env);
+  const afiliado = afiliados.find(a => normalizeRef(a.ref) === normalizeRef(event.affiliate));
+  if (!afiliado) return;
+
+  const amount = Number(event.amount || event.amount_ars || 0);
+  const pct = Number(afiliado.commission_pct || 20);
+  const commission = Number(event.commission_amount || (amount * pct / 100));
+
+  await appendAffiliateConversion(env, {
+    id: event.id,
+    source_event_id: event.id,
+    ref: event.affiliate,
+    created_at: event.date,
+    plan_id: event.plan_name || event.product || event.type,
+    amount,
+    currency: event.currency || "ARS",
+    commission,
+    commission_pct: pct,
+    paid: false,
+    customer: event.customer,
+    raw_event: event
+  });
+}
 
 /* =========================================================
    OWNER PANEL ROUTES
@@ -45,9 +358,10 @@ async function handleOwnerRoutes(request, env) {
       ok: true,
       worker: "alive",
       owner_routes: true,
+      affiliate_admin_routes: true,
       configured_key_exists: Boolean(getConfiguredOwnerKey(env)),
       kv_binding_exists: Boolean(env.OWNER_EVENTS_KV),
-      compatibility: "LegalAI Owner Panel",
+      compatibility: "LegalAI Owner + Afiliados",
       time: new Date().toISOString()
     });
   }
@@ -159,7 +473,10 @@ function getReceivedOwnerKey(request) {
   const url = new URL(request.url);
 
   const queryKey = url.searchParams.get("admin_key") || "";
-  const headerKey = request.headers.get("X-Admin-Key") || "";
+  const headerKey =
+    request.headers.get("X-Admin-Key") ||
+    request.headers.get("x-admin-key") ||
+    "";
   const bearerKey = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
 
   return queryKey || headerKey || bearerKey || "";
@@ -173,28 +490,34 @@ function isOwnerAuthorized(request, env) {
 }
 
 /* =========================================================
-   STORAGE
+   STORAGE GENERAL
    ========================================================= */
 
-async function readOwnerEvents(env) {
-  if (!env.OWNER_EVENTS_KV) return [];
+async function readJsonKV(env, key, fallback) {
+  if (!env.OWNER_EVENTS_KV) return fallback;
 
-  const txt = await env.OWNER_EVENTS_KV.get("events");
-  if (!txt) return [];
+  const txt = await env.OWNER_EVENTS_KV.get(key);
+  if (!txt) return fallback;
 
   try {
-    const parsed = JSON.parse(txt);
-    return Array.isArray(parsed) ? parsed.map(normalizeOwnerEvent) : [];
-  } catch (err) {
-    return [];
+    return JSON.parse(txt);
+  } catch {
+    return fallback;
   }
 }
 
-async function writeOwnerEvents(env, events) {
+async function writeJsonKV(env, key, value) {
   if (!env.OWNER_EVENTS_KV) return;
+  await env.OWNER_EVENTS_KV.put(key, JSON.stringify(value));
+}
 
+async function readOwnerEvents(env) {
+  return await readJsonKV(env, OWNER_EVENTS_KEY, []);
+}
+
+async function writeOwnerEvents(env, events) {
   const limited = events.slice(0, 5000);
-  await env.OWNER_EVENTS_KV.put("events", JSON.stringify(limited));
+  await writeJsonKV(env, OWNER_EVENTS_KEY, limited);
 }
 
 async function appendOwnerEvent(env, event) {
@@ -211,6 +534,7 @@ async function appendOwnerEvent(env, event) {
   current.unshift(normalized);
 
   await writeOwnerEvents(env, current);
+  await maybeCreateAffiliateConversionFromOwnerEvent(env, normalized);
 
   return normalized;
 }
@@ -218,6 +542,13 @@ async function appendOwnerEvent(env, event) {
 /* =========================================================
    DATA NORMALIZATION
    ========================================================= */
+
+function normalizeRef(ref) {
+  return String(ref || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9_-]/g, "");
+}
 
 function normalizeOwnerEvent(input = {}) {
   const now = new Date().toISOString();
@@ -278,7 +609,7 @@ function normalizeOwnerEvent(input = {}) {
     payment_method: input.payment_method || input.metodo_pago || input.gateway || input.provider || "",
     status,
     customer: input.customer || input.email || input.customer_email || input.cliente || "",
-    affiliate: input.affiliate || input.afiliado || input.ref || input.affiliate_ref || input.afiliado_ref || "",
+    affiliate: normalizeRef(input.affiliate || input.afiliado || input.ref || input.affiliate_ref || input.afiliado_ref || ""),
     affiliate_source: input.affiliate_source || input.fuente || input.utm_source || "",
     commission_amount: Number(input.commission_amount ?? input.comision_monto ?? 0),
     commission_currency: input.commission_currency || input.comision_moneda || "",
@@ -472,7 +803,7 @@ function corsHeaders(request) {
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Admin-Key",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Admin-Key, x-admin-key",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin"
   };
