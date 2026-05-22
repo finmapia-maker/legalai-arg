@@ -170,8 +170,14 @@ const state = {
 
 function boot(){
   const params = new URLSearchParams(location.search);
+  const customWorker = params.get('worker_url');
+  if(customWorker){ sessionStorage.setItem('owner_worker_url', customWorker.replace(/\/$/, '')); }
+  CONFIG.WORKER_URL = sessionStorage.getItem('owner_worker_url') || CONFIG.WORKER_URL;
   const k = params.get('admin_key');
-  if(k){ sessionStorage.setItem('owner_admin_key', k); history.replaceState({}, '', location.pathname); }
+  if(k){
+    sessionStorage.setItem('owner_admin_key', k);
+    history.replaceState({}, '', location.pathname);
+  }
   state.adminKey = sessionStorage.getItem('owner_admin_key') || '';
   setDefaultDates();
   document.getElementById('lk').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
@@ -295,24 +301,68 @@ async function tryFetchAny(paths, params={}, optional=false){
   throw lastErr || new Error('Sin endpoints configurados');
 }
 
-async function apiGet(path, extraParams={}){
+function buildApiUrl(path, extraParams={}){
   const params = new URLSearchParams();
+  // IMPORTANTE: la clave va solo por querystring.
+  // No se envían X-Admin-Key ni Authorization para evitar preflight CORS (OPTIONS).
   params.set('admin_key', state.adminKey);
-  Object.entries(extraParams || {}).forEach(([k,v]) => { if(v !== undefined && v !== null && v !== '') params.set(k, v); });
+  Object.entries(extraParams || {}).forEach(([k,v]) => {
+    if(v !== undefined && v !== null && v !== '') params.set(k, v);
+  });
   params.set('_', Date.now());
-  const url = `${CONFIG.WORKER_URL}${path}?${params.toString()}`;
-  const res = await fetch(url, {method:'GET', headers:{'Accept':'application/json'}, cache:'no-store'});
-  if(!res.ok) throw new Error(`${path} HTTP ${res.status}`);
-  const data = await res.json();
+  return `${CONFIG.WORKER_URL}${path}?${params.toString()}`;
+}
+
+async function apiGet(path, extraParams={}){
+  const url = buildApiUrl(path, extraParams);
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 15000);
+  let res;
+  try{
+    res = await fetch(url, {
+      method:'GET',
+      cache:'no-store',
+      mode:'cors',
+      credentials:'omit',
+      signal: controller.signal
+    });
+  }catch(err){
+    const msg = err.name === 'AbortError'
+      ? 'timeout de conexión'
+      : (err.message || 'fallo de red/CORS');
+    throw new Error(`${path} sin respuesta (${msg}). Revisar URL del Worker y CORS.`);
+  }finally{
+    clearTimeout(t);
+  }
+
+  const text = await res.text().catch(() => '');
+  if(!res.ok){
+    throw new Error(`${path} HTTP ${res.status}${text ? ' · '+text.slice(0,220) : ''}`);
+  }
+  let data;
+  try{ data = text ? JSON.parse(text) : null; }
+  catch{ throw new Error(`${path}: el Worker respondió, pero no devolvió JSON válido`); }
   if(data && data.error) throw new Error(`${path}: ${data.error}`);
   return {path, data};
 }
 
 async function apiPost(path, body={}){
-  const url = `${CONFIG.WORKER_URL}${path}`;
-  const res = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({...body, admin_key: state.adminKey})});
-  if(!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
+  // También evita preflight: admin_key por query y body text/plain.
+  const url = buildApiUrl(path);
+  const res = await fetch(url, {
+    method:'POST',
+    cache:'no-store',
+    mode:'cors',
+    credentials:'omit',
+    headers:{'Content-Type':'text/plain;charset=UTF-8'},
+    body: JSON.stringify({...body, admin_key: state.adminKey})
+  });
+  const text = await res.text().catch(() => '');
+  if(!res.ok){
+    throw new Error(`${path} HTTP ${res.status}${text ? ' · '+text.slice(0,220) : ''}`);
+  }
+  let data;
+  try{ data = text ? JSON.parse(text) : {}; }catch{ data = {ok:true, raw:text}; }
   if(data && data.error) throw new Error(data.error);
   return data;
 }
@@ -490,7 +540,7 @@ function renderAudit(){
   document.getElementById('alist').innerHTML = state.auditoria.length ? state.auditoria.map(a=>`<div class="ai"><div class="am">${esc(a.fecha)} · ${esc(a.u)} · Ref: <span style="color:var(--gold)">${esc(a.ref)||'—'}</span></div><div class="ad"><strong>${esc(a.accion)||'Acción'}</strong>${a.det?' — '+esc(a.det):''}</div><div class="adf">${a.ant?`<span class="old">— ${esc(a.campo)}: "${esc(a.ant)}"</span> `:''}${a.nvo?`<span class="nw">+ ${esc(a.campo)}: "${esc(a.nvo)}"</span>`:''}</div></div>`).join('') : empty('No hay registros de auditoría reales.');
 }
 function renderRaw(){
-  const out = {worker:CONFIG.WORKER_URL,lastLoadedAt:state.lastLoadedAt,counts:{operaciones:state.ops.length,afiliados:state.afiliados.length,comisiones:state.comisiones.length,logs:state.logs.length,emails:state.emails.length,auditoria:state.auditoria.length},errors:state.errors,raw:state.raw};
+  const out = {worker:CONFIG.WORKER_URL,modoConexion:'GET sin headers custom para evitar CORS preflight',lastLoadedAt:state.lastLoadedAt,counts:{operaciones:state.ops.length,afiliados:state.afiliados.length,comisiones:state.comisiones.length,logs:state.logs.length,emails:state.emails.length,auditoria:state.auditoria.length},errors:state.errors,raw:state.raw};
   document.getElementById('rawBox').textContent = JSON.stringify(out, null, 2);
 }
 
