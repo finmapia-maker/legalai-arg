@@ -1,133 +1,15 @@
 {
-  "fecha": "2026-05-21T14:15:42.970Z",
-  "periodo_48h": {
-    "clics": 17,
-    "ventas": 0,
-    "tasa_conv": "0.0%",
-    "total_ars": 0,
-    "por_fuente": {
-      "directo": {
-        "clics": 17,
-        "ventas": 0,
-        "tasa_conv": "0.0%",
-        "monto_ars": 0
-      }
-    },
-    "top_documentos": [],
-    "ultimas_conversiones": []
-  },
-  "periodo_7d": {
-    "clics": 40,
-    "ventas": 0,
-    "tasa_conv": "0.0%",
-    "total_ars": 0,
-    "por_fuente": {
-      "directo": {
-        "clics": 40,
-        "ventas": 0,
-        "tasa_conv": "0.0%",
-        "monto_ars": 0
-      }
-    },
-    "top_documentos": [],
-    "ultimas_conversiones": []
-  },
-  "embudo_eventos": {
-    "cta_generador": 23,
-    "inicio_formulario": 5,
-    "click_generar": 6,
-    "scroll_75pct": 10,
-    "scroll_50pct": 11,
-    "scroll_25pct": 11,
-    "page_view": 29,
-    "scroll_form_50pct": 3,
-    "scroll_form_100pct": 2,
-    "inicio_pago": 1,
-    "preview_ok": 2,
-    "generar_preview": 2
-  },
-  "total_eventos": 105,
-  "funnel_doc": [
-    {
-      "key": "page_view",
-      "label": "Visita",
-      "count": 29,
-      "drop_pct": 0
-    },
-    {
-      "key": "cta_generador",
-      "label": "Click generador",
-      "count": 23,
-      "drop_pct": 21
-    },
-    {
-      "key": "generar_preview",
-      "label": "Genera preview",
-      "count": 2,
-      "drop_pct": 91
-    },
-    {
-      "key": "preview_ok",
-      "label": "Preview OK",
-      "count": 2,
-      "drop_pct": 0
-    },
-    {
-      "key": "inicio_pago",
-      "label": "Inicia pago",
-      "count": 1,
-      "drop_pct": 50
-    },
-    {
-      "key": "pago_ok",
-      "label": "Pago confirmado",
-      "count": 0,
-      "drop_pct": 100
-    }
-  ],
-  "funnel_plan": [
-    {
-      "key": "page_view",
-      "label": "Visita planes",
-      "count": 0,
-      "drop_pct": 0
-    },
-    {
-      "key": "click_plan",
-      "label": "Click plan",
-      "count": 0,
-      "drop_pct": 0
-    },
-    {
-      "key": "email_confirm",
-      "label": "Email confirmado",
-      "count": 0,
-      "drop_pct": 0
-    },
-    {
-      "key": "inicio_pago",
-      "label": "Inicia pago",
-      "count": 0,
-      "drop_pct": 0
-    },
-    {
-      "key": "conversion_plan",
-      "label": "Plan pagado",
-      "count": 0,
-      "drop_pct": 0
-    }
-  ],
-  "cuello_botella": {
-    "en": "Pago confirmado",
-    "drop": "100%",
-    "tipo": "pago_ok"
-  },
+  "fecha": "2026-05-22T13:32:59.722Z",
+  "periodo_48h": null,
+  "periodo_7d": null,
+  "embudo_eventos": {},
+  "total_eventos": 0,
+  "funnel_doc": [],
+  "funnel_plan": [],
+  "cuello_botella": null,
   "diagnostico": {
-    "problemas": [
-      "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"directo\": 17 clics y 0 ventas → landing o segmentación"
-    ],
+    "problemas": [],
     "oportunidades": [],
-    "estado": "PROBLEMA"
+    "estado": "OK"
   }
 }
