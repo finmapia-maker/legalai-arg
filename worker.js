@@ -9,7 +9,10 @@ const OWNER_EVENTS_KEY = "events";
 const AFFILIATES_KEY = "afiliados";
 const AFFILIATE_CONVERSIONS_KEY = "afiliados_conversiones";
 const PREVIEWS_KEY = "previews";
+
 const PACKS_KEY = "packs";
+
+const PRICE_MULTIPLIER = 0.5;
 
 export default {
   async fetch(request, env, ctx) {
@@ -318,7 +321,7 @@ async function handleProductRoutes(request, env) {
   if (request.method === "POST" && url.pathname === "/pack/cotizar") {
     const body = await readRequestBody(request);
     const cantidad = Math.max(1, Number(body.cantidad || 3));
-    const precio_usd = Math.round((cantidad * 8 * 0.8) * 100) / 100;
+    const precio_usd = Math.round((cantidad * 8 * 0.8 * PRICE_MULTIPLIER) * 100) / 100;
     return json(request, { ok: true, cantidad, precio_usd, descuento: 20 });
   }
 
@@ -373,7 +376,7 @@ async function generarCamposConFallback(env, tipoDocumento, pais, provincia) {
     titulo: toTitle(tipoDocumento),
     descripcion: `Formulario para generar ${tipoDocumento}.`,
     legislacion: pais === "Argentina" ? `Argentina${provincia && provincia !== "No especificada" ? " · " + provincia : ""}` : pais,
-    precio_usd: lower.includes("alquiler") ? 11 : 8,
+    precio_usd: (lower.includes("alquiler") ? 11 : 8) * PRICE_MULTIPLIER,
     upgrade_porcentaje: lower.includes("alquiler") ? 32 : 40,
     categoria: lower.includes("reclamo") || lower.includes("carta documento") ? "complejo" : "intermedio",
     requiere_advertencia_legal: lower.includes("carta documento") || lower.includes("intim") || lower.includes("reclamo"),
