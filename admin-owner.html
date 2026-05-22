@@ -47,6 +47,7 @@ body{min-height:100vh;background:var(--bg);overflow:hidden}button,input,select,t
     <nav class="snav">
       <div class="nsec">Principal</div>
       <div class="ni active" onclick="goto('dashboard',this)"><span class="ic">◈</span><span>Dashboard</span></div>
+      <div class="ni" onclick="goto('sistema',this)"><span class="ic">⌁</span><span>Sistema / Flujo</span></div>
       <div class="ni" onclick="goto('operaciones',this)"><span class="ic">≡</span><span>Operaciones</span></div>
       <div class="nsec">Gestión</div>
       <div class="ni" onclick="goto('afiliados',this)"><span class="ic">◎</span><span>Afiliados</span></div>
@@ -85,6 +86,37 @@ body{min-height:100vh;background:var(--bg);overflow:hidden}button,input,select,t
         <div class="cr" id="dc"></div>
         <div class="sh"><div><span class="sh-t">Últimas operaciones</span><span class="sh-c" id="recentCount"></span></div></div>
         <div class="tw" id="dr2"></div>
+      </div>
+
+
+      <div class="page" id="page-sistema">
+        <div class="ph">
+          <div>
+            <div class="ph-title">Mapa del <em>sistema</em></div>
+            <div class="ph-sub">Vista simple del recorrido real: entrada, formulario, preview, pago, documento, email y errores. Se alimenta con eventos enviados por la web al Worker.</div>
+          </div>
+          <button class="btn-exp" onclick="loadAllData(true)">↻ Actualizar</button>
+        </div>
+
+        <div class="status-box ok">
+          <b>Cómo leerlo:</b> cada bloque representa una etapa del negocio. Si una etapa cae mucho respecto de la anterior, ahí está el cuello de botella.
+        </div>
+
+        <div class="cards" id="flowCards"></div>
+
+        <div class="cr">
+          <div class="cb">
+            <div class="ct">Embudo visual</div>
+            <div class="bc" id="flowBars"></div>
+          </div>
+          <div class="cb">
+            <div class="ct">Estado del sistema</div>
+            <div class="bc" id="systemHealth"></div>
+          </div>
+        </div>
+
+        <div class="sh"><div><span class="sh-t">Últimos eventos por sesión</span><span class="sh-c" id="sessionCount"></span></div></div>
+        <div class="tw" id="sessionTable"></div>
       </div>
 
       <div class="page" id="page-operaciones">
@@ -484,7 +516,104 @@ function mergeLogs(logs, ops){
   return all.filter(l => { const k = l.id + '|' + l.detalle; if(seen.has(k)) return false; seen.add(k); return true; }).sort((a,b)=>new Date(b.fechaISO)-new Date(a.fechaISO));
 }
 
-function renderAll(){ renderTopDate(); renderDash(); renderOps(); renderAfil(); renderCom(); renderLogs(); renderAudit(); renderRaw(); }
+
+function renderSystemFlow(){
+  const flowCards = document.getElementById('flowCards');
+  if(!flowCards) return;
+
+  const ops = state.ops || [];
+  const confirmedSales = ops.filter(isConfirmedSale);
+  const errors = (state.logs || []).length + ops.filter(o=>o.error_flag || o.estado === 'Error').length;
+
+  const steps = [
+    {key:'page_view', label:'Visitas registradas', types:['page_view'], desc:'usuarios que cargaron páginas'},
+    {key:'form_start', label:'Formulario iniciado', types:['form_start'], desc:'primer dato completado'},
+    {key:'preview', label:'Preview / interacción', types:['preview_ok','preview_generado','preview_generated','preview_action','form_page_view'], desc:'vista previa o página de formulario'},
+    {key:'checkout', label:'Checkout iniciado', types:['checkout_start','checkout_click','pagar_preview'], desc:'clic de pago'},
+    {key:'payment_pending', label:'Pagos pendientes', custom:()=>ops.filter(o=>o.tipo==='venta' && o.estado==='Pendiente').length, desc:'MP pendiente / mediación'},
+    {key:'payment_approved', label:'Ventas confirmadas', custom:()=>confirmedSales.length, desc:'pagos aprobados reales'},
+    {key:'document', label:'Documento listo', types:['document_generated','document_ready_page_view','document_download_click'], desc:'generado o descargado'},
+    {key:'email', label:'Emails enviados', types:['email','email_sent'], custom:()=>Math.max((state.emails||[]).length, countTypes(['email','email_sent'])), desc:'entregas registradas'}
+  ];
+
+  const values = steps.map(s => ({...s, value: typeof s.custom === 'function' ? s.custom() : countTypes(s.types)}));
+  const max = Math.max(1, ...values.map(v=>v.value));
+
+  flowCards.innerHTML = values.map((s)=>{
+    const cls = s.key === 'payment_approved' ? 'green' : (s.key === 'checkout' ? 'gold' : '');
+    return card({l:s.label, v:s.value, s:s.desc, c:cls});
+  }).join('') + card({l:'Errores detectados', v:errors, s:'logs + eventos de error', c:errors?'red':'green'});
+
+  document.getElementById('flowBars').innerHTML = values.map(s=>{
+    const pct = Math.max(2, Math.round((s.value / max) * 100));
+    return `<div class="bi"><div class="bl">${esc(s.label)}</div><div class="bt"><div class="bf ${s.key==='payment_approved'?'g':''}" style="width:${pct}%"></div></div><div class="bv">${s.value}</div></div>`;
+  }).join('');
+
+  const health = [
+    {name:'Worker / API', ok: !state.errors.length, detail: state.errors.length ? state.errors.length+' error(es)' : 'OK'},
+    {name:'KV eventos', ok: state.raw?.all?.data?.source === 'OWNER_EVENTS_KV', detail: state.raw?.all?.data?.source || 'sin dato'},
+    {name:'Ventas MercadoPago', ok: ops.some(o=>String(o.metodo_pago).toLowerCase().includes('mercado')) || ops.length === 0, detail: ops.some(o=>String(o.metodo_pago).toLowerCase().includes('mercado')) ? 'con eventos' : 'sin eventos MP'},
+    {name:'Afiliados', ok: state.afiliados.length >= 0, detail: state.afiliados.length + ' afiliado(s)'},
+    {name:'Errores', ok: errors === 0, detail: errors ? errors + ' revisar' : 'sin errores'}
+  ];
+
+  document.getElementById('systemHealth').innerHTML = health.map(h=>{
+    return `<div class="bi"><div class="bl">${esc(h.name)}</div><div class="bt"><div class="bf ${h.ok?'g':'o'}" style="width:${h.ok?100:55}%"></div></div><div class="bv">${h.ok?'🟢':'🟡'} ${esc(h.detail)}</div></div>`;
+  }).join('');
+
+  renderSessionTable();
+}
+
+function countTypes(types){
+  const set = new Set((types || []).map(t=>String(t).toLowerCase()));
+  return (state.ops || []).filter(o => {
+    const tipo = String(o.tipo || '').toLowerCase();
+    const rawType = String(o.raw?.type || o.raw?.event || o.raw?.raw?.type || '').toLowerCase();
+    return set.has(tipo) || set.has(rawType);
+  }).length;
+}
+
+function getSessionIdFromOp(o){
+  return o.raw?.session_id || o.raw?.raw?.session_id || o.raw?.anonymous_id || o.raw?.raw?.anonymous_id || '';
+}
+
+function renderSessionTable(){
+  const el = document.getElementById('sessionTable');
+  if(!el) return;
+
+  const groups = new Map();
+  for(const o of (state.ops || [])){
+    const sid = getSessionIdFromOp(o) || 'sin_sesion';
+    if(!groups.has(sid)) groups.set(sid, []);
+    groups.get(sid).push(o);
+  }
+
+  const rows = Array.from(groups.entries())
+    .map(([sid, items]) => {
+      items.sort((a,b)=>new Date(a.fechaISO)-new Date(b.fechaISO));
+      const last = items[items.length-1] || {};
+      const hasSale = items.some(isConfirmedSale);
+      const hasCheckout = items.some(o=>['checkout_start','checkout_click'].includes(String(o.tipo).toLowerCase()));
+      const hasError = items.some(o=>o.error_flag || o.estado === 'Error');
+      return {sid, items, last, hasSale, hasCheckout, hasError};
+    })
+    .sort((a,b)=>new Date(b.last.fechaISO)-new Date(a.last.fechaISO))
+    .slice(0,25);
+
+  document.getElementById('sessionCount').textContent = rows.length ? `· ${rows.length}` : '';
+
+  if(!rows.length){
+    el.innerHTML = empty('Todavía no hay sesiones registradas. Al publicar legalai-tracker.js empezarán a aparecer page_view, form_start y clicks.');
+    return;
+  }
+
+  el.innerHTML = `<table><thead><tr><th>Sesión</th><th>Eventos</th><th>Último evento</th><th>Estado</th><th>Última fecha</th></tr></thead><tbody>${rows.map(r=>{
+    const status = r.hasSale ? 'Venta' : (r.hasError ? 'Error' : (r.hasCheckout ? 'Checkout' : 'Navegación'));
+    return `<tr><td style="font-family:var(--mono);font-size:10px;color:var(--gold)">${esc(r.sid).slice(0,28)}</td><td>${r.items.length}</td><td>${esc(r.last.tipo || '—')}</td><td>${bdg(status)}</td><td style="font-family:var(--mono);font-size:10px">${esc(r.last.fecha || '—')}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function renderAll(){ renderTopDate(); renderDash(); renderSystemFlow(); renderOps(); renderAfil(); renderCom(); renderLogs(); renderAudit(); renderRaw(); }
 function renderTopDate(){ document.getElementById('tbd').textContent = new Date().toLocaleString('es-AR',{dateStyle:'medium',timeStyle:'short'}); }
 function renderDash(){
   const ops = state.ops;
