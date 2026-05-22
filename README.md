@@ -1,138 +1,331 @@
 # ⚖️ LegalAI Arg
 
-**Documentos legales en minutos. Sin abogados. Sin vueltas.**
+Sistema automatizado de generación de documentos legales para Argentina.
 
 ---
 
-## Qué es LegalAI
+# Qué es LegalAI
 
-LegalAI Arg es una herramienta que permite crear documentos legales de forma simple.
+LegalAI Arg permite generar documentos legales en minutos mediante formularios dinámicos, automatización e inteligencia artificial.
 
-La idea es directa:
+El usuario:
 
-El usuario completa algunos datos, ve el documento completo gratis y decide si le sirve.  
-Solo paga si realmente lo necesita.
+1. Ingresa a la web
+2. Selecciona el tipo de documento
+3. Completa un formulario guiado
+4. Visualiza una vista previa
+5. Decide si pagar
+6. Descarga el documento final
 
-No hay descargas ocultas, ni suscripciones obligatorias, ni fricción.
+El objetivo principal es reducir fricción:
 
----
-
-## Cómo funciona
-
-Todo el sistema está pensado para que cualquier persona pueda usarlo sin experiencia legal.
-
-1. El usuario ingresa a la web  
-2. Completa un formulario simple  
-3. El sistema genera el documento automáticamente  
-4. Puede leerlo completo antes de pagar  
-5. Si le sirve, paga y descarga el PDF  
-
-Ese punto es clave:  
-👉 primero ve valor, después paga
+* sin abogados para tareas repetitivas
+* sin registros obligatorios
+* sin esperas
+* sin procesos complejos
 
 ---
 
-## Qué tipo de documentos genera
+# Estado actual del proyecto
 
-Hoy el foco principal está en documentos de uso cotidiano en Argentina:
+El sistema ya se encuentra funcionando online.
 
-- Contratos de alquiler  
-- Cartas documento  
-- Acuerdos simples  
-- Documentos administrativos  
+Actualmente incluye:
 
-La lógica es expandirse a cualquier documento repetitivo que hoy requiera tiempo o dinero innecesario.
-
----
-
-## Qué problema resuelve
-
-Hoy, para generar un documento legal, la mayoría de las personas tiene dos opciones:
-
-- Pagar un abogado (caro y lento)  
-- Copiar modelos de internet (riesgoso e incompleto)  
-
-LegalAI aparece en el medio:
-
-👉 rápido como internet  
-👉 más confiable que copiar y pegar  
-👉 mucho más accesible que un profesional  
+* generación automática de documentos
+* formularios dinámicos
+* integración con MercadoPago
+* panel administrativo
+* sistema de afiliados
+* tracking de eventos
+* panel visual de métricas
+* backend serverless sobre Cloudflare Workers
+* almacenamiento persistente mediante KV
 
 ---
 
-## Cómo gana dinero
+# Arquitectura general
 
-El modelo es simple.
+## Frontend
 
-El usuario no paga por probar.  
-Paga solo cuando decide usar el documento.
+La interfaz está desarrollada principalmente con:
 
-Además:
+* HTML
+* CSS
+* JavaScript vanilla
 
-- Puede pagar una versión sin marca de agua  
-- Puede comprar packs  
-- Puede acceder a planes mensuales si necesita volumen  
+Archivos principales:
 
-Esto permite monetizar sin frenar el uso.
-
----
-
-## Por qué funciona
-
-Hay tres decisiones que hacen que el sistema convierta:
-
-Primero, mostrar el documento completo antes de pagar  
-Segundo, precios bajos que no generan fricción  
-Tercero, un flujo extremadamente simple  
-
-No hay registros obligatorios, ni pasos innecesarios.
+* `index.html`
+* `formulario.html`
+* `contrato-alquiler.html`
+* `gracias.html`
+* `admin-owner.html`
+* `admin-afiliados.html`
 
 ---
 
-## Cómo está construido
+## Backend
 
-El sistema está armado para ser liviano y escalable.
+El backend corre sobre Cloudflare Workers.
 
-- Frontend simple (HTML + CSS)
-- Backend serverless
-- Generación automática con IA
-- Pagos integrados con :contentReference[oaicite:0]{index=0} y :contentReference[oaicite:1]{index=1}  
+Archivo principal:
 
-Esto permite operar con costos muy bajos y escalar sin estructura.
+* `worker.js`
 
----
+Funciones principales:
 
-## En qué estado está
-
-El producto ya funciona.
-
-- Se generan documentos reales  
-- Hay usuarios pagando  
-- El sistema es automático  
-
-El foco ahora no es construir más, sino optimizar lo que ya existe.
+* generación de formularios
+* generación de previews
+* creación de pagos MercadoPago
+* generación de documentos
+* tracking de eventos
+* administración de afiliados
+* APIs del panel owner
 
 ---
 
-## Hacia dónde va
+## Persistencia
 
-LegalAI no es solo un generador de documentos.
+El sistema utiliza Cloudflare KV.
 
-Es una base para construir:
+Namespaces utilizados:
 
-- Un sistema legal automatizado  
-- Integraciones con empresas  
-- APIs para terceros  
-- Servicios legales sin intervención humana  
+* `OWNER_EVENTS_KV`
+* `PAGOS_KV`
+* `LEGALAI_TELEGRAM_KV`
 
-El objetivo es claro:
+Se utilizan para almacenar:
 
-👉 simplificar el acceso a lo legal  
-👉 eliminar intermediarios innecesarios  
-👉 escalar sin estructura tradicional  
+* operaciones
+* pagos
+* logs
+* afiliados
+* conversiones
+* eventos de tracking
+* auditoría
 
 ---
 
-## LegalAI Arg
+# Sistema de tracking
 
-Acceso legal simple, rápido y directo.
+LegalAI incluye tracking interno propio.
+
+Eventos registrados:
+
+* page_view
+* form_start
+* preview_generado
+* checkout_start
+* pago_pendiente
+* pago_aprobado
+* documento_generado
+* descarga_documento
+* errores
+
+Esto permite visualizar:
+
+* embudo de conversión
+* puntos de abandono
+* errores de integración
+* rendimiento de campañas
+* comportamiento de usuarios
+
+---
+
+# Panel Owner
+
+URL:
+
+```txt
+/admin-owner.html
+```
+
+Incluye:
+
+* métricas generales
+* operaciones
+* reclamos
+* afiliados
+* comisiones
+* auditoría
+* estado del sistema
+* embudo visual
+* eventos en tiempo real
+* debug API
+
+---
+
+# Sistema de afiliados
+
+URL:
+
+```txt
+/admin-afiliados.html
+```
+
+Permite:
+
+* crear afiliados
+* generar links únicos
+* calcular comisiones
+* registrar conversiones
+* marcar pagos
+* visualizar ganancias
+
+---
+
+# Integraciones
+
+## MercadoPago
+
+Variables utilizadas:
+
+```txt
+MERCADOPAGO_ACCESS_TOKEN
+MERCADOPAGO_PUBLIC_KEY
+```
+
+El sistema crea preferencias automáticamente y habilita la descarga luego del pago.
+
+---
+
+## OpenAI
+
+Variable:
+
+```txt
+OPENAI_API_KEY
+```
+
+Se utiliza para generación y asistencia IA.
+
+---
+
+## Claude
+
+Variable:
+
+```txt
+CLAUDE_API_KEY
+```
+
+Utilizado como proveedor alternativo o complementario.
+
+---
+
+## Resend
+
+Variables:
+
+```txt
+RESEND_API_KEY
+EMAIL_TO
+```
+
+Utilizado para:
+
+* envío de emails
+* reportes
+* notificaciones
+* auditoría
+
+---
+
+# Variables importantes de Cloudflare
+
+Secrets principales:
+
+```txt
+ADMIN_KEY
+OPENAI_API_KEY
+CLAUDE_API_KEY
+MERCADOPAGO_ACCESS_TOKEN
+MERCADOPAGO_PUBLIC_KEY
+RESEND_API_KEY
+EMAIL_TO
+```
+
+---
+
+# Wrangler
+
+Archivo:
+
+```txt
+wrangler.toml
+```
+
+Bindings actuales:
+
+```toml
+[[kv_namespaces]]
+binding = "OWNER_EVENTS_KV"
+
+[[kv_namespaces]]
+binding = "PAGOS_KV"
+
+[[kv_namespaces]]
+binding = "LEGALAI_TELEGRAM_KV"
+```
+
+---
+
+# Flujo simplificado del sistema
+
+```txt
+Usuario entra
+↓
+Selecciona documento
+↓
+Completa formulario
+↓
+Se genera preview
+↓
+Se crea preferencia MercadoPago
+↓
+Usuario paga
+↓
+Worker valida estado
+↓
+Se genera documento final
+↓
+Se habilita descarga
+↓
+Se registran eventos y métricas
+```
+
+---
+
+# Objetivos del proyecto
+
+* automatizar procesos legales repetitivos
+* reducir costos operativos
+* minimizar fricción de compra
+* escalar sin estructura tradicional
+* centralizar métricas y eventos
+* integrar APIs y automatizaciones
+* crear un ecosistema legal automatizado
+
+---
+
+# Roadmap
+
+Próximos objetivos:
+
+* más tipos de documentos
+* API pública
+* integración empresas
+* dashboard avanzado
+* IA contextual por documento
+* automatización de reclamos
+* recuperación automática de pagos
+* analítica avanzada
+* sistema de packs dinámicos
+* generación multilenguaje
+
+---
+
+# LegalAI Arg
+
+Acceso legal simple, automatizado y escalable.
