@@ -170,15 +170,27 @@ const state = {
 
 function boot(){
   const params = new URLSearchParams(location.search);
-  const customWorker = params.get('worker_url');
-  if(customWorker){ sessionStorage.setItem('owner_worker_url', customWorker.replace(/\/$/, '')); }
-  CONFIG.WORKER_URL = sessionStorage.getItem('owner_worker_url') || CONFIG.WORKER_URL;
+
+  if(params.get('reset_admin_key') === '1'){
+    sessionStorage.removeItem('owner_admin_key');
+    history.replaceState({}, '', location.pathname);
+  }
+
   const k = params.get('admin_key');
   if(k){
     sessionStorage.setItem('owner_admin_key', k);
     history.replaceState({}, '', location.pathname);
   }
+
   state.adminKey = sessionStorage.getItem('owner_admin_key') || '';
+
+  // Evita que quede guardada la clave local/demo del panel viejo.
+  // Si en Cloudflare realmente configuraste ADMIN_KEY=owner2024, eliminá este if.
+  if(state.adminKey === 'owner2024'){
+    sessionStorage.removeItem('owner_admin_key');
+    state.adminKey = '';
+  }
+
   setDefaultDates();
   document.getElementById('lk').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
   document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if(e.target === m) m.classList.remove('open'); }));
@@ -187,10 +199,24 @@ function boot(){
 
 function doLogin(){
   const key = document.getElementById('lk').value.trim();
-  if(!key){ showLoginError('Pegá el admin_key configurado en el Worker.'); return; }
+  if(!key){ showLoginError('Pegá el admin_key real configurado en Cloudflare Worker.'); return; }
+  if(key === 'owner2024'){
+    showLoginError('owner2024 era la clave local/demo del HTML anterior. Usá la ADMIN_KEY real del Worker.');
+    return;
+  }
   sessionStorage.setItem('owner_admin_key', key);
   state.adminKey = key;
   showApp();
+}
+
+function resetAdminKey(msg){
+  sessionStorage.removeItem('owner_admin_key');
+  state.adminKey = '';
+  if(state.timer) clearInterval(state.timer);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('lk').value = '';
+  showLoginError(msg || 'La clave fue rechazada por el Worker. Pegá la ADMIN_KEY real.');
 }
 
 function doLogout(){
@@ -286,6 +312,12 @@ async function loadAllData(manual){
     state.errors.push({endpoint:'general', error: err.message});
     state.ops = []; state.afiliados = []; state.comisiones = []; state.logs = []; state.emails = []; state.auditoria = [];
     renderAll(); setLive('Error', 'err');
+
+    if(err && err.isAuth401){
+      resetAdminKey('El Worker respondió HTTP 401. La clave guardada no coincide con la variable ADMIN_KEY del Worker, o el Worker valida otro nombre de variable.');
+      return;
+    }
+
     setConnection('No se pudieron cargar datos reales del Worker: ' + err.message, 'error');
     if(manual) toast('No se pudo conectar al Worker', 'error');
   }
@@ -301,68 +333,47 @@ async function tryFetchAny(paths, params={}, optional=false){
   throw lastErr || new Error('Sin endpoints configurados');
 }
 
-function buildApiUrl(path, extraParams={}){
-  const params = new URLSearchParams();
-  // IMPORTANTE: la clave va solo por querystring.
-  // No se envían X-Admin-Key ni Authorization para evitar preflight CORS (OPTIONS).
-  params.set('admin_key', state.adminKey);
-  Object.entries(extraParams || {}).forEach(([k,v]) => {
-    if(v !== undefined && v !== null && v !== '') params.set(k, v);
-  });
-  params.set('_', Date.now());
-  return `${CONFIG.WORKER_URL}${path}?${params.toString()}`;
-}
-
 async function apiGet(path, extraParams={}){
-  const url = buildApiUrl(path, extraParams);
-  const controller = new AbortController();
-  const t = setTimeout(() => controller.abort(), 15000);
-  let res;
-  try{
-    res = await fetch(url, {
-      method:'GET',
-      cache:'no-store',
-      mode:'cors',
-      credentials:'omit',
-      signal: controller.signal
-    });
-  }catch(err){
-    const msg = err.name === 'AbortError'
-      ? 'timeout de conexión'
-      : (err.message || 'fallo de red/CORS');
-    throw new Error(`${path} sin respuesta (${msg}). Revisar URL del Worker y CORS.`);
-  }finally{
-    clearTimeout(t);
+  const params = new URLSearchParams();
+  params.set('admin_key', state.adminKey);
+  Object.entries(extraParams || {}).forEach(([k,v]) => { if(v !== undefined && v !== null && v !== '') params.set(k, v); });
+  params.set('_', Date.now());
+
+  const url = `${CONFIG.WORKER_URL}${path}?${params.toString()}`;
+  const res = await fetch(url, {method:'GET', cache:'no-store', credentials:'omit'});
+
+  if(!res.ok){
+    const e = new Error(`${path} HTTP ${res.status}`);
+    if(res.status === 401) e.isAuth401 = true;
+    throw e;
   }
 
-  const text = await res.text().catch(() => '');
-  if(!res.ok){
-    throw new Error(`${path} HTTP ${res.status}${text ? ' · '+text.slice(0,220) : ''}`);
-  }
-  let data;
-  try{ data = text ? JSON.parse(text) : null; }
-  catch{ throw new Error(`${path}: el Worker respondió, pero no devolvió JSON válido`); }
+  const data = await res.json();
   if(data && data.error) throw new Error(`${path}: ${data.error}`);
   return {path, data};
 }
 
 async function apiPost(path, body={}){
-  // También evita preflight: admin_key por query y body text/plain.
-  const url = buildApiUrl(path);
+  const params = new URLSearchParams();
+  params.set('admin_key', state.adminKey);
+  params.set('_', Date.now());
+  const url = `${CONFIG.WORKER_URL}${path}?${params.toString()}`;
+
   const res = await fetch(url, {
     method:'POST',
     cache:'no-store',
-    mode:'cors',
     credentials:'omit',
     headers:{'Content-Type':'text/plain;charset=UTF-8'},
     body: JSON.stringify({...body, admin_key: state.adminKey})
   });
-  const text = await res.text().catch(() => '');
+
   if(!res.ok){
-    throw new Error(`${path} HTTP ${res.status}${text ? ' · '+text.slice(0,220) : ''}`);
+    const e = new Error(`HTTP ${res.status}`);
+    if(res.status === 401) e.isAuth401 = true;
+    throw e;
   }
-  let data;
-  try{ data = text ? JSON.parse(text) : {}; }catch{ data = {ok:true, raw:text}; }
+
+  const data = await res.json();
   if(data && data.error) throw new Error(data.error);
   return data;
 }
@@ -540,7 +551,7 @@ function renderAudit(){
   document.getElementById('alist').innerHTML = state.auditoria.length ? state.auditoria.map(a=>`<div class="ai"><div class="am">${esc(a.fecha)} · ${esc(a.u)} · Ref: <span style="color:var(--gold)">${esc(a.ref)||'—'}</span></div><div class="ad"><strong>${esc(a.accion)||'Acción'}</strong>${a.det?' — '+esc(a.det):''}</div><div class="adf">${a.ant?`<span class="old">— ${esc(a.campo)}: "${esc(a.ant)}"</span> `:''}${a.nvo?`<span class="nw">+ ${esc(a.campo)}: "${esc(a.nvo)}"</span>`:''}</div></div>`).join('') : empty('No hay registros de auditoría reales.');
 }
 function renderRaw(){
-  const out = {worker:CONFIG.WORKER_URL,modoConexion:'GET sin headers custom para evitar CORS preflight',lastLoadedAt:state.lastLoadedAt,counts:{operaciones:state.ops.length,afiliados:state.afiliados.length,comisiones:state.comisiones.length,logs:state.logs.length,emails:state.emails.length,auditoria:state.auditoria.length},errors:state.errors,raw:state.raw};
+  const out = {worker:CONFIG.WORKER_URL,lastLoadedAt:state.lastLoadedAt,counts:{operaciones:state.ops.length,afiliados:state.afiliados.length,comisiones:state.comisiones.length,logs:state.logs.length,emails:state.emails.length,auditoria:state.auditoria.length},errors:state.errors,raw:state.raw};
   document.getElementById('rawBox').textContent = JSON.stringify(out, null, 2);
 }
 
