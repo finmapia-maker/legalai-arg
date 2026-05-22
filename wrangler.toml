@@ -6,3 +6,15 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "."
 binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "OWNER_EVENTS_KV"
+id = "21f0cd2f79114e85939ce4db969a79f6"
+
+[[kv_namespaces]]
+binding = "PAGOS_KV"
+id = "fa7ab1df1ce94d9aa985fa7c6ab1ba86"
+
+[[kv_namespaces]]
+binding = "LEGALAI_TELEGRAM_KV"
+id = "012e8109e76f42d9bdf1266bde2a01d5"
