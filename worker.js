@@ -11,6 +11,9 @@ const AFFILIATE_CONVERSIONS_KEY = "afiliados_conversiones";
 
 export default {
   async fetch(request, env, ctx) {
+    const publicTrackResponse = await handlePublicTrackRoutes(request, env);
+    if (publicTrackResponse) return publicTrackResponse;
+
     const ownerResponse = await handleOwnerRoutes(request, env);
     if (ownerResponse) return ownerResponse;
 
@@ -28,6 +31,139 @@ export default {
     }, 500);
   }
 };
+
+
+/* =========================================================
+   PUBLIC TRACKING ROUTES — Web completa
+   ========================================================= */
+
+async function handlePublicTrackRoutes(request, env) {
+  const url = new URL(request.url);
+
+  if (!["/track", "/track/batch", "/event"].includes(url.pathname) && url.pathname !== "/track/ping") {
+    return null;
+  }
+
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders(request)
+    });
+  }
+
+  if (url.pathname === "/track/ping") {
+    return json(request, {
+      ok: true,
+      tracking_routes: true,
+      kv_binding_exists: Boolean(env.OWNER_EVENTS_KV),
+      time: new Date().toISOString()
+    });
+  }
+
+  if (request.method !== "POST") {
+    return json(request, { ok: false, error: "method_not_allowed" }, 405);
+  }
+
+  if (!env.OWNER_EVENTS_KV) {
+    return json(request, {
+      ok: false,
+      error: "missing_kv",
+      message: "Falta OWNER_EVENTS_KV."
+    }, 500);
+  }
+
+  const body = await readRequestBody(request);
+  const events = Array.isArray(body.events) ? body.events : [body];
+  const saved = [];
+
+  for (const item of events.slice(0, 25)) {
+    const event = normalizePublicTrackEvent(item, request);
+    const stored = await appendOwnerEvent(env, event);
+    saved.push(stored.id);
+  }
+
+  return json(request, {
+    ok: true,
+    saved_count: saved.length,
+    saved
+  });
+}
+
+function normalizePublicTrackEvent(input = {}, request) {
+  const url = new URL(request.url);
+  const now = new Date().toISOString();
+  const eventName = String(input.event || input.type || input.tipo || "web_event").slice(0, 80);
+
+  const path = String(input.path || input.pathname || input.page || "").slice(0, 240);
+  const title = String(input.title || input.product || input.producto || path || eventName).slice(0, 180);
+
+  const ref = normalizeRef(
+    input.ref ||
+    input.affiliate ||
+    input.afiliado ||
+    input.utm_ref ||
+    input.codigo_afiliado ||
+    ""
+  );
+
+  const email = String(input.email || input.customer || input.user_email || "").slice(0, 180);
+
+  return {
+    id: String(input.id || input.event_id || crypto.randomUUID()),
+    date: input.date || input.created_at || now,
+    type: eventName,
+    product: title,
+    category: String(input.category || input.categoria || "web_tracking").slice(0, 80),
+    amount: Number(input.amount ?? input.monto ?? 0),
+    currency: input.currency || input.moneda || "ARS",
+    amount_ars: Number(input.amount_ars ?? input.monto_ars ?? 0),
+    payment_method: input.payment_method || input.metodo_pago || "",
+    status: String(input.status || "tracked"),
+    customer: email,
+    affiliate: ref,
+    affiliate_source: input.affiliate_source || input.utm_source || "",
+    commission_amount: Number(input.commission_amount ?? input.comision_monto ?? 0),
+    commission_currency: input.commission_currency || "",
+    commission_status: input.commission_status || "",
+    plan_name: input.plan_name || input.plan || "",
+    active_code: false,
+    error_flag: Boolean(input.error || input.error_flag),
+    error_tipo: input.error_tipo || input.error_type || "",
+    error_detalle: String(input.error_detalle || input.error_detail || input.message || "").slice(0, 500),
+    raw: {
+      ...safeTrackRaw(input),
+      event: eventName,
+      path,
+      title,
+      url: String(input.url || "").slice(0, 500),
+      ref,
+      ip_country: request.cf?.country || "",
+      user_agent: String(request.headers.get("User-Agent") || "").slice(0, 240),
+      received_at: now
+    }
+  };
+}
+
+function safeTrackRaw(input = {}) {
+  const allowed = [
+    "session_id", "anonymous_id", "event", "type", "path", "pathname", "url", "title",
+    "button", "button_id", "button_text", "href", "form_id", "page_group",
+    "preview_id", "payment_id", "preference_id", "status", "email", "ref",
+    "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+    "viewport", "screen", "language", "timezone", "metadata"
+  ];
+
+  const out = {};
+  for (const key of allowed) {
+    if (input[key] === undefined || input[key] === null) continue;
+    if (typeof input[key] === "object") {
+      try { out[key] = JSON.parse(JSON.stringify(input[key])); } catch { out[key] = String(input[key]).slice(0, 500); }
+    } else {
+      out[key] = String(input[key]).slice(0, 500);
+    }
+  }
+  return out;
+}
 
 /* =========================================================
    ADMIN AFILIADOS
@@ -419,6 +555,14 @@ async function handleOwnerRoutes(request, env) {
   const filteredEvents = filterOwnerEventsByDate(allEvents, url);
   const payload = buildOwnerPayload(filteredEvents, Boolean(env.OWNER_EVENTS_KV));
 
+  try {
+    const adminAfiliados = await buildAffiliateList(env);
+    payload.afiliados = mergeOwnerAffiliates(payload.afiliados, adminAfiliados);
+    payload.metrics.total_afiliados = payload.afiliados.length;
+  } catch (err) {
+    payload.affiliate_merge_error = String(err?.message || err);
+  }
+
   if (url.pathname === "/owner/dashboard" || url.pathname === "/owner/all") {
     return json(request, payload);
   }
@@ -644,6 +788,40 @@ function filterOwnerEventsByDate(events, url) {
 
     return true;
   });
+}
+
+
+function mergeOwnerAffiliates(ownerAfiliados = [], adminAfiliados = []) {
+  const map = new Map();
+
+  for (const a of ownerAfiliados || []) {
+    const key = normalizeRef(a.codigo || a.ref || a.id || a.email);
+    if (!key) continue;
+    map.set(key, a);
+  }
+
+  for (const a of adminAfiliados || []) {
+    const key = normalizeRef(a.ref || a.codigo || a.email);
+    if (!key) continue;
+
+    const prev = map.get(key) || {};
+    map.set(key, {
+      ...prev,
+      codigo: key,
+      ref: key,
+      nombre: a.nombre || prev.nombre || "",
+      email: a.email || prev.email || "",
+      estado: a.active === false ? "Inactivo" : "Activo",
+      porcentaje: Number(a.commission_pct ?? prev.porcentaje ?? 0),
+      clientes_referidos: Number(a.total_conv ?? prev.clientes_referidos ?? 0),
+      total_ars: Number(a.earnings?.total ?? prev.total_ars ?? 0),
+      total_usdt: Number(prev.total_usdt ?? 0),
+      pendiente_ars: Number(a.earnings?.pending ?? prev.pendiente_ars ?? 0),
+      fecha_alta: a.created_at || prev.fecha_alta || ""
+    });
+  }
+
+  return Array.from(map.values());
 }
 
 function buildOwnerPayload(events, hasKv) {
