@@ -2,6 +2,7 @@ name = "legalai-worker"
 main = "worker.js"
 compatibility_date = "2026-05-22"
 compatibility_flags = ["nodejs_compat"]
+keep_vars = true
 
 [assets]
 directory = "."
@@ -18,3 +19,14 @@ id = "fa7ab1df1ce94d9aa985fa7c6ab1ba86"
 [[kv_namespaces]]
 binding = "LEGALAI_TELEGRAM_KV"
 id = "012e8109e76f42d9bdf1266bde2a01d5"
+
+[secrets]
+required = [
+  "ADMIN_KEY",
+  "CLAUDE_API_KEY",
+  "EMAIL_TO",
+  "MERCADOPAGO_ACCESS_TOKEN",
+  "MERCADOPAGO_PUBLIC_KEY",
+  "OPENAI_API_KEY",
+  "RESEND_API_KEY"
+]
