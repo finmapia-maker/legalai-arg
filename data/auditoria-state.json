@@ -47,19 +47,24 @@
       "descripcion": "Auditar y corregir el flujo de checkout: verificar que el procesador de pagos esté activo y correctamente configurado, que no haya errores JS en el paso de confirmación, que los webhooks de pago respondan, y que el botón de pago final no esté bloqueado. Si hay un formulario de pago, reducirlo al mínimo (solo email + método de pago). Agregar feedback visual claro en cada paso del checkout.",
       "fecha": "2026-05-21T14:15:42.969Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Activar o revisar fuente de tráfico: si no hay clics entrando al funnel, el problema no está en el checkout sino en que nadie llega. Verificar campañas activas, links de adquisición, y que el CTA principal sea visible desde la landing. Si el tráfico orgánico está detenido, lanzar al menos 1 campaña paga o post orgánico dirigido.",
+      "fecha": "2026-05-24T12:01:40.164Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-05-23T12:01:16.893Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-05-24T12:01:40.164Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "adquisición / tráfico",
   "cambio_activo": {
-    "descripcion": "Auditar y corregir el flujo de checkout: verificar que el procesador de pagos esté activo y correctamente configurado, que no haya errores JS en el paso de confirmación, que los webhooks de pago respondan, y que el botón de pago final no esté bloqueado. Si hay un formulario de pago, reducirlo al mínimo (solo email + método de pago). Agregar feedback visual claro en cada paso del checkout.",
-    "archivo": "checkout.html",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si el checkout funciona sin errores técnicos y con mínima fricción → se obtienen las primeras conversiones pagas",
+    "descripcion": "Activar o revisar fuente de tráfico: si no hay clics entrando al funnel, el problema no está en el checkout sino en que nadie llega. Verificar campañas activas, links de adquisición, y que el CTA principal sea visible desde la landing. Si el tráfico orgánico está detenido, lanzar al menos 1 campaña paga o post orgánico dirigido.",
+    "archivo": "index.html",
+    "tipo": "ads",
+    "hipotesis": "Si se reactiva el flujo de tráfico hacia el funnel → se obtienen clics reales y se puede evaluar si el checkout convertirá",
     "conv_base": 0,
-    "clics_base": 17
+    "clics_base": 0
   },
-  "cambio_activo_desde": "2026-05-21T14:15:42.969Z"
+  "cambio_activo_desde": "2026-05-24T12:01:40.164Z"
 }
