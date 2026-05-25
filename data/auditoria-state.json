@@ -54,10 +54,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-05-24T12:01:40.164Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "adquisición / tráfico",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-05-25T14:10:51.933Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Activar o revisar fuente de tráfico: si no hay clics entrando al funnel, el problema no está en el checkout sino en que nadie llega. Verificar campañas activas, links de adquisición, y que el CTA principal sea visible desde la landing. Si el tráfico orgánico está detenido, lanzar al menos 1 campaña paga o post orgánico dirigido.",
     "archivo": "index.html",
