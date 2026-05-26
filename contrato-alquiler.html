@@ -17,61 +17,12 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legalai-theme.css">
 
 <style>
-:root{
-  --ink:       #0f1117;
-  --paper:     #f7f3ec;
-  --cream:     #ede8dc;
-  --surface:   #ffffff;
-  --gold:      #c8a84b;
-  --gold-dim:  rgba(200,168,75,0.12);
-  --sage:      #3d5a46;
-  --sage-dim:  rgba(61,90,70,0.09);
-  --mist:      #6b7580;
-  --line:      rgba(15,17,23,0.1);
-  --hdr-bg:    #0f1117;
-  --shadow:    0 2px 16px rgba(15,17,23,0.07);
-  --btn-bg:    #0f1117;
-  --btn-txt:   #c8a84b;
-  /* compat aliases */
-  --acento:    #c8a84b;
-  --acento-dim:#a8863c;
-  --txt:       #0f1117;
-  --txt-dim:   #444;
-  --txt-muted: #6b7580;
-  --bg:        #f7f3ec;
-  --white:     #ffffff;
-  --border:    rgba(15,17,23,0.1);
-  --r:         12px;
-}
-[data-theme="dark"]{
-  --ink:       #eceef2;
-  --paper:     #0c0e12;
-  --cream:     #141720;
-  --surface:   #1c2030;
-  --gold:      #d4a847;
-  --gold-dim:  rgba(212,168,71,0.13);
-  --sage:      #6abf8a;
-  --sage-dim:  rgba(106,191,138,0.1);
-  --mist:      #7a8494;
-  --line:      rgba(255,255,255,0.07);
-  --hdr-bg:    #080a0e;
-  --shadow:    0 2px 20px rgba(0,0,0,0.4);
-  --btn-bg:    #d4a847;
-  --btn-txt:   #0c0e12;
-  --acento:    #d4a847;
-  --acento-dim:#e0b84e;
-  --txt:       #eceef2;
-  --txt-dim:   #b0b8c4;
-  --txt-muted: #7a8494;
-  --bg:        #0c0e12;
-  --white:     #1c2030;
-  --border:    rgba(255,255,255,0.07);
-}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
 
 /* ── NAV ── */
 nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
@@ -316,7 +267,6 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 </section>
 
 <!-- FAQ -->
-
 <section style="background:var(--white);padding:48px 24px;border-bottom:1px solid var(--border);">
   <div style="max-width:680px;margin:0 auto;">
     <h2 class="sec-title">¿Qué incluye el contrato?</h2>
@@ -332,6 +282,7 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
     <div style="background:#fef9e7;border:1px solid #d4b840;border-radius:9px;padding:12px 16px;font-size:.8rem;color:#7a6010;line-height:1.6;">⚠️ <strong>¿Cuándo conviene consultar a un abogado?</strong> Si el inmueble tiene deudas, embargos, o la operación supera los USD 100.000 — siempre es conveniente la revisión profesional adicional.</div>
   </div>
 </section>
+
 <section class="faq">
   <div class="sec-title">Preguntas frecuentes</div>
   <div class="faq-wrap">
@@ -380,7 +331,8 @@ footer span{font-size:.75rem;color:rgba(255,255,255,.35)}
 
 <script>
 // ── Config ─────────────────────────────────────────────────────────
-const PRECIO_USD    = 5.5; // Contrato de alquiler complejo
+const PRICE_MULTIPLIER = 0.5;
+const PRECIO_USD    = 11 * PRICE_MULTIPLIER;
 const FALLBACK_ARS  = 1200;
 const WORKER_URL    = 'https://legalai-worker.finmap-ia.workers.dev';
 let   cotizacion    = { valor: null, fuente: null };
@@ -402,7 +354,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>
 
 // ── Cotización precio ──────────────────────────────────────────────
 async function obtenerCotizacion() {
-  // Prioridad BNA (dólar oficial) para pesificar precios
   const fuentes = [
     ['https://api.bluelytics.com.ar/v2/latest',  d => d?.official?.value_sell, 'BNA'],
     ['https://dolarapi.com/v1/dolares/oficial',  d => d?.venta,              'BNA'],
@@ -425,7 +376,7 @@ function formatearPrecio(cot) {
   const monto = '$ ' + totalARS.toLocaleString('es-AR');
   const det = cot.fuente === 'ref.'
     ? 'Precio en pesos argentinos'
-    : 'USD ' + PRECIO_USD + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor);
+    : 'USD ' + PRECIO_USD.toFixed(1) + ' · dólar ' + cot.fuente + ' $' + Math.round(cot.valor) + ' · ARS ' + totalARS.toLocaleString('es-AR');
   return { monto, det };
 }
 
@@ -442,8 +393,6 @@ function renderPrecios(cot) {
 
 // ── Conversión + tracking ──────────────────────────────────────────
 function fireConversion(boton) {
-  // Solo tracking de interacción — gtag conversion se dispara ÚNICAMENTE en gracias.html
-  // tras confirmación real de MercadoPago (status=approved + payment_id)
   try {
     var ss = sessionStorage;
     var u  = new URLSearchParams(location.search);
@@ -482,6 +431,7 @@ window.addEventListener('load', async function() {
   renderPrecios(cot);
 });
 </script>
+
 <!-- STICKY CTA MOBILE -->
 <div class="sticky-cta" id="stickyCTA">
   <div class="sticky-cta-inner">
