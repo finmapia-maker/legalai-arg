@@ -14,10 +14,9 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legalai-theme.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--ink:#0f1117;--paper:#f7f3ec;--cream:#ede8dc;--surface:#ffffff;--gold:#c8a84b;--gold-dim:rgba(200,168,75,0.12);--sage:#3d5a46;--sage-dim:rgba(61,90,70,0.09);--mist:#6b7580;--line:rgba(15,17,23,0.1);--hdr-bg:#0f1117;--shadow:0 2px 16px rgba(15,17,23,0.07);--btn-bg:#0f1117;--btn-txt:#c8a84b;--btn-hover:#1e2230}
-[data-theme="dark"]{--ink:#eceef2;--paper:#0c0e12;--cream:#141720;--surface:#1c2030;--gold:#d4a847;--gold-dim:rgba(212,168,71,0.13);--sage:#6abf8a;--sage-dim:rgba(106,191,138,0.1);--mist:#7a8494;--line:rgba(255,255,255,0.07);--hdr-bg:#080a0e;--shadow:0 2px 20px rgba(0,0,0,0.4);--btn-bg:#d4a847;--btn-txt:#0c0e12;--btn-hover:#e0b84e}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;transition:background .3s,color .3s}
@@ -66,7 +65,6 @@ textarea{resize:vertical;min-height:68px}
 .check-item input[type=checkbox]{width:16px;height:16px;margin-top:1px;accent-color:var(--gold);flex-shrink:0;cursor:pointer}
 .check-txt strong{display:block;font-size:.87rem;color:var(--ink);cursor:pointer}
 .check-txt span{font-size:.75rem;color:var(--mist);line-height:1.3}
-/* ── BOTONES TOGGLE SELECCIONABLES ── */
 .toggle-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
 .toggle-btn{padding:9px 14px;border:1.5px solid var(--line);border-radius:20px;background:var(--cream);color:var(--mist);font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;transition:all .15s;user-select:none;font-weight:500}
 .toggle-btn:hover{border-color:var(--gold);color:var(--ink)}
@@ -92,8 +90,6 @@ textarea{resize:vertical;min-height:68px}
 .loading-lbl{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mist);text-transform:uppercase;letter-spacing:.1em}
 .preview-box{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--cream);max-height:460px;overflow-y:auto;position:relative;margin:14px 0;user-select:none;-webkit-user-select:none}
 #previewCanvas{display:block;width:100%;cursor:default}
-
-/* ── PREVIEW LIVE LOCAL ─────────────────────────────────────────── */
 #form-layout{display:block}
 @media(min-width:720px){
   #form-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
@@ -111,7 +107,6 @@ textarea{resize:vertical;min-height:68px}
 #plv-cta{position:absolute;bottom:0;left:0;right:0;padding:14px 12px 16px;text-align:center;z-index:4}
 .plv-btn{display:block;width:100%;padding:12px 16px;background:var(--gold);color:#0f1117;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;border:none;border-radius:9px;cursor:pointer;box-shadow:0 4px 16px rgba(200,168,75,.3)}
 .plv-sub{font-size:.68rem;color:var(--mist);font-family:'DM Mono',monospace;margin-top:5px}
-/* Sticky CTA mobile */
 #sticky-cta-f{display:none;position:fixed;bottom:0;left:0;right:0;padding:10px 16px 18px;background:linear-gradient(to top,var(--paper) 80%,transparent);z-index:100}
 @media(max-width:719px){#sticky-cta-f{display:block}}
 @media print{#form-layout,#preview-live-col,#card1{display:none!important}}
@@ -155,7 +150,7 @@ footer a:hover{color:var(--gold)}
     <p class="intro-sub">Completás los datos → pagás → descargás el PDF. Sin esperas, sin abogados.</p>
     <!-- Precio + trust visible desde el inicio -->
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;">
-      <span style="background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);color:var(--gold);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;font-weight:600;">USD 11 · Pago único</span>
+      <span style="background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);color:var(--gold);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;font-weight:600;"><span id="precioIntro">USD 5.5</span> · Pago único</span>
       <span style="background:var(--sage-dim);border:1px solid rgba(61,90,70,.15);color:var(--sage);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;">🔒 MercadoPago</span>
       <span style="background:var(--cream);border:1px solid var(--line);color:var(--mist);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;">📄 PDF inmediato</span>
     </div>
@@ -219,6 +214,7 @@ footer a:hover{color:var(--gold)}
     </div>
 
     <div class="sec-div"><span>¿Qué incluye?</span></div>
+
     <!-- Depósito -->
     <div class="field" style="margin-bottom:10px;">
       <label class="field-label">Depósito en garantía</label>
@@ -273,7 +269,7 @@ footer a:hover{color:var(--gold)}
     <button class="btn-main btn-gold" id="btnPagarDirecto" onclick="pagarDirecto()" style="margin-bottom:6px;font-size:1.05rem;font-weight:800;padding:17px;">
       Pagar y descargar mi contrato →
     </button>
-    <p style="text-align:center;font-size:.72rem;color:var(--mist);margin-bottom:10px;font-family:'DM Mono',monospace;">USD 11 · Pago único · Descarga inmediata · Sin suscripción</p>
+    <p style="text-align:center;font-size:.72rem;color:var(--mist);margin-bottom:10px;font-family:'DM Mono',monospace;"><span id="precioBoton">USD 5.5</span> · Pago único · Descarga inmediata · Sin suscripción</p>
     <div class="promesa">
       <div class="promesa-item">PDF listo para firmar e imprimir</div>
       <div class="promesa-item">Pago 100% seguro con MercadoPago</div>
@@ -342,66 +338,71 @@ footer a:hover{color:var(--gold)}
   <!-- LOADING pago / doc -->
   <div class="loading" id="loadingPago">
     <div class="spinner"></div>
-    <div class="loading-lbl">Redirigiendo a MercadoPago...</div>
+    <div class="loading-lbl">Conectando con MercadoPago...</div>
   </div>
+
   <div class="loading" id="loadingDoc">
     <div class="spinner"></div>
     <div class="loading-lbl">Generando tu documento final...</div>
   </div>
 
-  <!-- CARD 4: DESCARGA -->
+  <!-- CARD 4: SUCCESS -->
   <div class="card" id="card4">
     <div class="success-box">
-      <div class="success-icon">📄</div>
+      <div class="success-icon">✅</div>
       <h2>¡Tu contrato está listo!</h2>
-      <p>Pago confirmado. Descargá el PDF, imprimilo y firmalo con las partes.</p>
-      <button class="btn-main btn-gold" onclick="descargarPDF()">⬇ Descargar PDF</button>
-      <button class="btn-ghost" onclick="reiniciar()" style="max-width:260px;margin:8px auto 0">Generar otro contrato</button>
+      <p>Hemos generado tu contrato personalizado. Descargalo ahora y está listo para firmar e imprimir.</p>
+      <button class="btn-main btn-gold" onclick="descargarPDF()" style="font-size:1.05rem;font-weight:800;padding:17px;margin-top:6px;">
+        📥 Descargar PDF
+      </button>
+      <div class="promesa" style="margin-top:12px">
+        <div class="promesa-item">Documento personalizado con tus datos</div>
+        <div class="promesa-item">Válido según normativa argentina</div>
+        <div class="promesa-item">Listo para firmar e imprimir</div>
+      </div>
+      <button class="btn-ghost" onclick="reiniciar()">Crear otro contrato</button>
     </div>
   </div>
 
 </div>
 
 <footer>
-  <p>
-    LegalAI Arg · Documentos orientativos generados con inteligencia artificial<br>
-    No constituyen asesoramiento legal profesional · <a href="https://legalai-arg.com">Volver al inicio</a>
-  </p>
+  <p>© LegalAI Arg · <a href="https://legalai-arg.com#faq">Preguntas</a> · <a href="https://legalai-arg.com">Inicio</a> · <a href="https://legalai-arg.com">Contacto</a></p>
+  <p style="margin-top:8px;">Modelo orientativo · No reemplaza asesoramiento legal profesional</p>
 </footer>
 
 <script>
-const WORKER  = 'https://legalai-worker.finmap-ia.workers.dev';
-const DOC_TIPO = 'Contrato de alquiler de vivienda';
-let G = { previewId:null, paymentId:null, precio_usd:11, texto:'' };
-let cotizacion = { valor:null, fuente:null };
+// ── Config ─────────────────────────────────────────────────────────
+const PRICE_MULTIPLIER = 0.5;
+const PRECIO_USD = 11 * PRICE_MULTIPLIER;
+const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
+const DOC_TIPO = 'Contrato de alquiler Argentina 2026';
+let G = {previewId:null, paymentId:null, precio_usd:PRECIO_USD, texto:''};
+let cotizacion = {valor:null, fuente:null};
 
-// ── Tracking /evento ──────────────────────────────────────────────────────
-function track(tipo, extra) {
-  try {
-    fetch(WORKER + '/evento', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tipo, pagina: 'formulario',
-        utm_src: sessionStorage.getItem('legalai_utm_source') || '',
-        utm_cmp: sessionStorage.getItem('legalai_utm_campaign') || '',
-        utm_med: sessionStorage.getItem('legalai_utm_medium') || '',
-        ref: sessionStorage.getItem('legalai_ref') || 'directo',
-        ...(extra || {})
-      })
-    });
-  } catch(_) {}
-}
-track('page_view');
+// Mostrar precio inicial
+(function(){
+  ['precioIntro','precioBoton'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent='USD '+PRECIO_USD.toFixed(1);
+  });
+})();
 
 // Tema
-function setTheme(t){localStorage.setItem('theme',t);applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));}
-function applyTheme(t){const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((localStorage.getItem('theme')||'system')==='system')applyTheme('system');});
-(function(){const t=localStorage.getItem('theme')||'system';applyTheme(t);['Light','System','Dark'].forEach(x=>document.getElementById('btn'+x).classList.toggle('active',x.toLowerCase()===t));})();
+function setTheme(t){
+  localStorage.setItem('theme',t);
+  const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  ['Light','System','Dark'].forEach(x=>{
+    const b=document.getElementById('btn'+x);
+    if(!b)return;
+    b.classList.toggle('active',x.toLowerCase()===t);
+  });
+}
+(function(){const t=localStorage.getItem('theme')||'system';setTheme(t);})();
 
-// UTMs
-(function(){const p=new URLSearchParams(window.location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'].forEach(k=>{const v=p.get(k);if(v)sessionStorage.setItem('legalai_'+k,v);});sessionStorage.setItem('legalai_device',/mobile|android|iphone|ipad/i.test(navigator.userAgent)?'Mobile':'Desktop');sessionStorage.setItem('legalai_origen','formulario');const ref=p.get('ref');if(ref)sessionStorage.setItem('legalai_ref',ref);})();
+// Analytics
+const track=(ev,data)=>{try{gtag('event',ev,data);}catch(_){}};
 
 // Cotización
 async function obtenerCotizacion(){
@@ -413,7 +414,7 @@ function renderPrecio(){
   if(!cotizacion.valor)return;
   const ars=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
   const monto='$ '+ars.toLocaleString('es-AR');
-  const det=cotizacion.fuente==='ref.'?'Precio en pesos · pago único':'USD '+G.precio_usd+' · dólar '+cotizacion.fuente+' $'+Math.round(cotizacion.valor);
+  const det=cotizacion.fuente==='ref.'?'Precio en pesos · pago único':'USD '+G.precio_usd.toFixed(1)+' · dólar '+cotizacion.fuente+' $'+Math.round(cotizacion.valor)+' · ARS '+ars.toLocaleString('es-AR');
   document.getElementById('precioAmt').textContent=monto;
   document.getElementById('precioDet').textContent=det;
   sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
@@ -430,8 +431,7 @@ function showPanel(id){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// Validar
-// ── Toggle botones seleccionables ────────────────────────────────
+// Toggle
 function toggleOpcion(grupoId, btn, hiddenId) {
   document.querySelectorAll('#'+grupoId+' .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -446,6 +446,7 @@ function toggleMulti(grupoId, btn, hiddenId) {
   if(typeof actualizarPreviewFormulario === 'function') actualizarPreviewFormulario();
 }
 
+// Validar
 function validar(){
   const campos=[{id:'propietario',label:'Nombre del propietario'},{id:'inquilino',label:'Nombre del inquilino'},{id:'direccion',label:'Dirección del inmueble'},{id:'ciudad',label:'Ciudad'},{id:'provincia',label:'Provincia'},{id:'monto',label:'Monto mensual'},{id:'duracion',label:'Duración'},{id:'fecha_inicio',label:'Fecha de inicio'}];
   for(const c of campos){const el=document.getElementById(c.id);if(!el||!el.value.trim()){showErr('alertForm','El campo "'+c.label+'" es obligatorio.');el&&el.focus();return false;}}
@@ -483,11 +484,9 @@ async function generarContrato(){
     renderizarPreview(data.texto);
     showPanel('card2');setProgress(2);
   }catch(err){
-    // FALLBACK: preview falló → mostrar aviso y avanzar al pago igualmente
     G.previewId = null;
     sessionStorage.removeItem('legalai_previewId');
     track('preview_fallback', { doc_tipo: DOC_TIPO, error: (err.message||'').slice(0,80) });
-    // Mostrar preview vacío con mensaje y avanzar al pago
     renderizarPreviewFallback();
     showPanel('card2'); setProgress(2);
     showErr('alertForm2','⚠️ No pudimos generar la vista previa, pero podés continuar al pago — el contrato se genera correctamente luego del pago.');
@@ -533,7 +532,117 @@ async function pagarDirecto(){
   await pagar();
 }
 
-// ══ PREVIEW LIVE LOCAL — instantáneo, sin IA ══════════════════════
+// Preview canvas
+function renderizarPreview(texto){
+  const canvas=document.getElementById('previewCanvas'),overlay=document.getElementById('previewWatermarkOverlay');
+  const W=680,LINE_H=18,FONT=11,ML=36,MR=36,MT=36,CW=W-ML-MR;
+  const ctx=canvas.getContext('2d');
+  canvas.width=W;canvas.height=100;ctx.font=FONT+'px Times New Roman, serif';
+  const lineasAll=[];
+  for(const raw of texto.split('\n')){
+    if(raw.startsWith('# '))lineasAll.push({tipo:'h1',txt:raw.replace(/^# /,'').toUpperCase()});
+    else if(raw.startsWith('## ')||raw.startsWith('### '))lineasAll.push({tipo:'h2',txt:raw.replace(/^#{2,3} /,'')});
+    else if(!raw.trim())lineasAll.push({tipo:'br'});
+    else{const txt=raw.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').trim();ctx.font=FONT+'px Times New Roman, serif';const words=txt.split(' ');let line='';for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width>CW&&line){lineasAll.push({tipo:'p',txt:line});line=w;}else{line=test;}}if(line)lineasAll.push({tipo:'p',txt:line});}
+  }
+  const corte=Math.ceil(lineasAll.length*0.40);
+  const lineas=lineasAll.slice(0,corte);
+  let totalH=MT;
+  for(const l of lineas){if(l.tipo==='h1')totalH+=32;else if(l.tipo==='h2')totalH+=26;else if(l.tipo==='br')totalH+=8;else totalH+=LINE_H;}
+  totalH+=40;canvas.height=totalH;canvas.style.height='';
+  ctx.fillStyle='#faf9f6';ctx.fillRect(0,0,W,totalH);
+  let y=MT;
+  for(const l of lineas){
+    if(l.tipo==='h1'){ctx.font='bold 15px Times New Roman, serif';ctx.fillStyle='#0f1117';ctx.textAlign='center';ctx.fillText(l.txt,W/2,y+12);y+=22;ctx.strokeStyle='#c9a84c';ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(ML+30,y);ctx.lineTo(W-MR-30,y);ctx.stroke();y+=10;}
+    else if(l.tipo==='h2'){ctx.font='bold '+(FONT+1)+'px Times New Roman, serif';ctx.fillStyle='#f0ede6';ctx.fillRect(ML-4,y-1,CW+8,18);ctx.fillStyle='#1a1a2e';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=26;}
+    else if(l.tipo==='br'){y+=8;}
+    else{ctx.font=FONT+'px Times New Roman, serif';ctx.fillStyle='#282828';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=LINE_H;}
+  }
+  const fadeStart=totalH*0.65;
+  const grad=ctx.createLinearGradient(0,fadeStart,0,totalH);
+  grad.addColorStop(0,'rgba(250,249,246,0)');
+  grad.addColorStop(1,'rgba(250,249,246,1)');
+  ctx.fillStyle=grad;ctx.fillRect(0,fadeStart,W,totalH-fadeStart);
+  overlay.innerHTML='';
+  const wText='VISTA PREVIA · LEGALAI ARG · ';
+  const repeat=Math.ceil((W*3)/(wText.length*11))+2,rows=Math.ceil(totalH/38)+4;
+  let html='';for(let r=0;r<rows;r++)html+='<div style="white-space:nowrap;height:38px;line-height:38px;">'+wText.repeat(repeat)+'</div>';
+  overlay.style.cssText='position:absolute;inset:0;overflow:hidden;opacity:0.13;pointer-events:none;font-family:\'DM Mono\',monospace;font-size:13px;font-weight:700;color:#c9a84c;transform:rotate(-25deg) translateY(-10%);transform-origin:center center;word-break:break-all;letter-spacing:3px;';
+  overlay.innerHTML=html;
+}
+
+// Pagar
+async function pagar(){
+  if(!cotizacion.valor){alert('Esperá un momento, cargando precio...');return;}
+  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
+  track('inicio_pago', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
+  showPanel('loadingPago');setProgress(3);
+  const montoARS=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
+  const sessionId='sess_'+Date.now();
+  sessionStorage.setItem('legalai_sessionId',sessionId);
+  sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
+  sessionStorage.setItem('legalai_origen','formulario');
+  try{
+    const ref=sessionStorage.getItem('legalai_ref')||null;
+    const res=await fetch(WORKER+'/mp/preferencia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'doc',montoARS,descripcion:DOC_TIPO,externalRef:'doc_'+sessionId,ref,datosPago:{titulo:DOC_TIPO,origen:'formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}})});
+    const data=await res.json();
+    if(!data.init_point)throw new Error(data.error||'Error al crear el pago');
+    window.location.href=data.init_point;
+  }catch(err){showPanel('card2');setProgress(2);alert('Error al conectar con MercadoPago: '+err.message);}
+}
+
+// Generar final
+async function generarFinal(paymentId){
+  showPanel('loadingDoc');setProgress(4);
+  try{
+    const datos=JSON.parse(sessionStorage.getItem('legalai_datos')||'{}');
+    const meta=JSON.parse(sessionStorage.getItem('legalai_meta')||'{}');
+    const previewId=G.previewId||sessionStorage.getItem('legalai_previewId')||null;
+    const res=await fetch(WORKER+'/generar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({paymentId,datosDoc:datos,metadata:meta,previewId}),signal:AbortSignal.timeout(35000)});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    G.texto=data.texto;G.paymentId=data.paymentId||paymentId;
+    sessionStorage.setItem('legalai_texto',data.texto);
+    sessionStorage.setItem('legalai_paymentId',G.paymentId);
+    sessionStorage.removeItem('legalai_previewId');
+    showPanel('card4');setProgress(4);
+    track('documento_generado', { doc_tipo: DOC_TIPO, precio_usd: parseFloat(sessionStorage.getItem('legalai_precio_usd') || String(PRECIO_USD)) });
+    try{gtag('event','conversion',{'send_to':'AW-18073890544','value':parseFloat(sessionStorage.getItem('legalai_precio_usd')||String(PRECIO_USD))||PRECIO_USD,'currency':'USD','transaction_id':G.paymentId});}catch(_){}
+  }catch(err){showPanel('card2');setProgress(2);alert('Error al generar el documento: '+err.message);}
+}
+
+// PDF
+function descargarPDF(){
+  const texto=G.texto||sessionStorage.getItem('legalai_texto');
+  if(!texto){alert('No se encontró el documento.');return;}
+  _generarPDF(texto,'contrato-de-alquiler',true);
+}
+function _generarPDF(texto,nombre,conMarca){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF({format:'a4',unit:'mm'});
+  const PW=210,PH=297,ML=25,MR=25,MT=conMarca?28:20,MB=20,CW=PW-ML-MR,YBOTTOM=PH-MB-14;
+  let y=MT;
+  function enc(){if(!conMarca)return;doc.setFillColor(248,247,244);doc.rect(0,0,PW,16,'F');doc.setDrawColor(200,168,75);doc.setLineWidth(.3);doc.line(ML,16,PW-MR,16);doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(120,110,90);doc.text('LegalAI Arg  ·  Documento Orientativo',ML,11);doc.text(new Date().toLocaleDateString('es-AR'),PW-MR,11,{align:'right'});}
+  function pie(){doc.setDrawColor(180,160,100);doc.setLineWidth(.25);doc.line(ML,PH-MB,PW-MR,PH-MB);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Modelo orientativo · No reemplaza asesoramiento legal profesional',PW/2,PH-MB+5,{align:'center'});}
+  function np(){pie();doc.addPage();y=MT;enc();}
+  function ck(h){if(y+h>YBOTTOM)np();}
+  function lmp(t){return t.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/\[[^\]]{0,40}\]/g,'______________________________').trim();}
+  enc();
+  for(const raw of texto.split('\n')){
+    const l=lmp(raw);
+    if(raw.startsWith('# ')){ck(20);y+=4;doc.setFontSize(13);doc.setFont('times','bold');doc.setTextColor(15,17,23);const w=doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(),CW);for(const p of w){ck(8);doc.text(p,PW/2,y,{align:'center'});y+=7;}y+=3;doc.setDrawColor(200,168,75);doc.setLineWidth(.5);doc.line(ML+20,y,PW-MR-20,y);y+=6;continue;}
+    if(raw.startsWith('## ')||raw.startsWith('### ')){y+=5;ck(12);doc.setFontSize(10.5);doc.setFont('times','bold');doc.setTextColor(20,20,20);const txt=l.replace(/^#{2,3} /,'');const w=doc.splitTextToSize(txt,CW);doc.setFillColor(245,243,238);doc.rect(ML-3,y-5,CW+6,w.length*6+6,'F');for(const p of w){doc.text(p,ML,y);y+=6;}y+=3;continue;}
+    if(!l){y+=3;continue;}
+    doc.setFontSize(10);doc.setFont('times','normal');doc.setTextColor(40,40,40);const w=doc.splitTextToSize(l,CW);ck(w.length*5.5+2);for(const p of w){doc.text(p,ML,y);y+=5.5;}y+=1;
+  }
+  pie();
+  const tot=doc.internal.getNumberOfPages();for(let i=1;i<=tot;i++){doc.setPage(i);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Pág '+i+' / '+tot,PW-MR,PH-MB+5,{align:'right'});}
+  doc.save(nombre+'.pdf');
+}
+
+function volverForm(){showPanel('card1');setProgress(1);}
+function reiniciar(){G={previewId:null,paymentId:null,precio_usd:PRECIO_USD,texto:''};['propietario','inquilino','direccion','ciudad','provincia','monto','duracion','observaciones'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('fecha_inicio').value='';document.getElementById('chk_deposito').checked=true;document.getElementById('chk_ajuste').checked=true;document.getElementById('chk_servicios').checked=false;showPanel('card1');setProgress(1);}
+
+// ── PREVIEW LIVE LOCAL ──────────────────────────────────────────────
 document.addEventListener('contextmenu', e => { if(document.getElementById('preview-live-doc')?.contains(e.target)) e.preventDefault(); });
 document.addEventListener('keydown', e => {
   if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P'))e.preventDefault();
@@ -582,16 +691,6 @@ function actualizarPreviewFormulario() {
   if(content) content.innerHTML = html;
 }
 
-// Enganchar a todos los inputs del formulario
-// Tracking granular scroll en formulario
-(function(){
-  const milestones = {50:false,100:false};
-  window.addEventListener('scroll', function(){
-    const pct = Math.round((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100);
-    [50,100].forEach(m => { if(!milestones[m]&&pct>=m){milestones[m]=true;track('scroll_form_'+m+'pct');} });
-  },{passive:true});
-})();
-
 function initPreviewFormulario() {
   const campos = ['propietario','inquilino','garante','direccion','ciudad','provincia',
                   'monto','duracion','fecha_inicio','observaciones'];
@@ -602,134 +701,17 @@ function initPreviewFormulario() {
       el.addEventListener('change', actualizarPreviewFormulario);
     }
   });
-  // También checkboxes
   document.querySelectorAll('input[type=checkbox]').forEach(cb => {
     cb.addEventListener('change', actualizarPreviewFormulario);
   });
-  actualizarPreviewFormulario(); // render inicial
+  actualizarPreviewFormulario();
 }
 
-// Inicializar al cargar
 window.addEventListener('load', () => {
   setTimeout(initPreviewFormulario, 100);
 });
 
-// Preview canvas con marca de agua
-function renderizarPreview(texto){
-  const canvas=document.getElementById('previewCanvas'),overlay=document.getElementById('previewWatermarkOverlay');
-  const W=680,LINE_H=18,FONT=11,ML=36,MR=36,MT=36,CW=W-ML-MR;
-  const ctx=canvas.getContext('2d');
-  canvas.width=W;canvas.height=100;ctx.font=FONT+'px Times New Roman, serif';
-  // Parsear todas las líneas
-  const lineasAll=[];
-  for(const raw of texto.split('\n')){
-    if(raw.startsWith('# '))lineasAll.push({tipo:'h1',txt:raw.replace(/^# /,'').toUpperCase()});
-    else if(raw.startsWith('## ')||raw.startsWith('### '))lineasAll.push({tipo:'h2',txt:raw.replace(/^#{2,3} /,'')});
-    else if(!raw.trim())lineasAll.push({tipo:'br'});
-    else{const txt=raw.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').trim();ctx.font=FONT+'px Times New Roman, serif';const words=txt.split(' ');let line='';for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width>CW&&line){lineasAll.push({tipo:'p',txt:line});line=w;}else{line=test;}}if(line)lineasAll.push({tipo:'p',txt:line});}
-  }
-  // TRUNCAR al 40%
-  const corte=Math.ceil(lineasAll.length*0.40);
-  const lineas=lineasAll.slice(0,corte);
-  let totalH=MT;
-  for(const l of lineas){if(l.tipo==='h1')totalH+=32;else if(l.tipo==='h2')totalH+=26;else if(l.tipo==='br')totalH+=8;else totalH+=LINE_H;}
-  totalH+=40;canvas.height=totalH;canvas.style.height='';
-  ctx.fillStyle='#faf9f6';ctx.fillRect(0,0,W,totalH);
-  let y=MT;
-  for(const l of lineas){
-    if(l.tipo==='h1'){ctx.font='bold 15px Times New Roman, serif';ctx.fillStyle='#0f1117';ctx.textAlign='center';ctx.fillText(l.txt,W/2,y+12);y+=22;ctx.strokeStyle='#c9a84c';ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(ML+30,y);ctx.lineTo(W-MR-30,y);ctx.stroke();y+=10;}
-    else if(l.tipo==='h2'){ctx.font='bold '+(FONT+1)+'px Times New Roman, serif';ctx.fillStyle='#f0ede6';ctx.fillRect(ML-4,y-1,CW+8,18);ctx.fillStyle='#1a1a2e';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=26;}
-    else if(l.tipo==='br'){y+=8;}
-    else{ctx.font=FONT+'px Times New Roman, serif';ctx.fillStyle='#282828';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=LINE_H;}
-  }
-  // Gradiente fade en el bottom 35%
-  const fadeStart=totalH*0.65;
-  const grad=ctx.createLinearGradient(0,fadeStart,0,totalH);
-  grad.addColorStop(0,'rgba(250,249,246,0)');
-  grad.addColorStop(1,'rgba(250,249,246,1)');
-  ctx.fillStyle=grad;ctx.fillRect(0,fadeStart,W,totalH-fadeStart);
-  // Watermark
-  overlay.innerHTML='';
-  const wText='VISTA PREVIA · LEGALAI ARG · ';
-  const repeat=Math.ceil((W*3)/(wText.length*11))+2,rows=Math.ceil(totalH/38)+4;
-  let html='';for(let r=0;r<rows;r++)html+='<div style="white-space:nowrap;height:38px;line-height:38px;">'+wText.repeat(repeat)+'</div>';
-  overlay.style.cssText='position:absolute;inset:0;overflow:hidden;opacity:0.13;pointer-events:none;font-family:\'DM Mono\',monospace;font-size:13px;font-weight:700;color:#c9a84c;transform:rotate(-25deg) translateY(-10%);transform-origin:center center;word-break:break-all;letter-spacing:3px;';
-  overlay.innerHTML=html;
-}
-
-// Pagar
-async function pagar(){
-  if(!cotizacion.valor){alert('Esperá un momento, cargando precio...');return;}
-  // gtag conversion se dispara SOLO en gracias.html tras pago aprobado
-  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
-  track('inicio_pago', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
-  showPanel('loadingPago');setProgress(3);
-  const montoARS=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
-  const sessionId='sess_'+Date.now();
-  sessionStorage.setItem('legalai_sessionId',sessionId);
-  sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
-  sessionStorage.setItem('legalai_origen','formulario');
-  try{
-    const ref=sessionStorage.getItem('legalai_ref')||null;
-    const res=await fetch(WORKER+'/mp/preferencia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'doc',montoARS,descripcion:DOC_TIPO,externalRef:'doc_'+sessionId,ref,datosPago:{titulo:DOC_TIPO,origen:'formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}})});
-    const data=await res.json();
-    if(!data.init_point)throw new Error(data.error||'Error al crear el pago');
-    window.location.href=data.init_point;
-  }catch(err){showPanel('card2');setProgress(2);alert('Error al conectar con MercadoPago: '+err.message);}
-}
-
-// Generar final tras pago
-async function generarFinal(paymentId){
-  showPanel('loadingDoc');setProgress(4);
-  try{
-    const datos=JSON.parse(sessionStorage.getItem('legalai_datos')||'{}');
-    const meta=JSON.parse(sessionStorage.getItem('legalai_meta')||'{}');
-    const previewId=G.previewId||sessionStorage.getItem('legalai_previewId')||null;
-    const res=await fetch(WORKER+'/generar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({paymentId,datosDoc:datos,metadata:meta,previewId}),signal:AbortSignal.timeout(35000)});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-    G.texto=data.texto;G.paymentId=data.paymentId||paymentId;
-    sessionStorage.setItem('legalai_texto',data.texto);
-    sessionStorage.setItem('legalai_paymentId',G.paymentId);
-    sessionStorage.removeItem('legalai_previewId');
-    showPanel('card4');setProgress(4);
-    track('documento_generado', { doc_tipo: DOC_TIPO, precio_usd: parseFloat(sessionStorage.getItem('legalai_precio_usd') || '11') });
-    // Conversión real — se ejecuta tras pago aprobado por MercadoPago
-    try{gtag('event','conversion',{'send_to':'AW-18073890544','value':parseFloat(sessionStorage.getItem('legalai_precio_usd')||'11')||11,'currency':'USD','transaction_id':G.paymentId});}catch(_){}
-  }catch(err){showPanel('card2');setProgress(2);alert('Error al generar el documento: '+err.message);}
-}
-
-// PDF
-function descargarPDF(){
-  const texto=G.texto||sessionStorage.getItem('legalai_texto');
-  if(!texto){alert('No se encontró el documento.');return;}
-  _generarPDF(texto,'contrato-de-alquiler',true);
-}
-function _generarPDF(texto,nombre,conMarca){
-  const{jsPDF}=window.jspdf;const doc=new jsPDF({format:'a4',unit:'mm'});
-  const PW=210,PH=297,ML=25,MR=25,MT=conMarca?28:20,MB=20,CW=PW-ML-MR,YBOTTOM=PH-MB-14;
-  let y=MT;
-  function enc(){if(!conMarca)return;doc.setFillColor(248,247,244);doc.rect(0,0,PW,16,'F');doc.setDrawColor(200,168,75);doc.setLineWidth(.3);doc.line(ML,16,PW-MR,16);doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(120,110,90);doc.text('LegalAI Arg  ·  Documento Orientativo',ML,11);doc.text(new Date().toLocaleDateString('es-AR'),PW-MR,11,{align:'right'});}
-  function pie(){doc.setDrawColor(180,160,100);doc.setLineWidth(.25);doc.line(ML,PH-MB,PW-MR,PH-MB);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Modelo orientativo · No reemplaza asesoramiento legal profesional',PW/2,PH-MB+5,{align:'center'});}
-  function np(){pie();doc.addPage();y=MT;enc();}
-  function ck(h){if(y+h>YBOTTOM)np();}
-  function lmp(t){return t.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/\[[^\]]{0,40}\]/g,'______________________________').trim();}
-  enc();
-  for(const raw of texto.split('\n')){
-    const l=lmp(raw);
-    if(raw.startsWith('# ')){ck(20);y+=4;doc.setFontSize(13);doc.setFont('times','bold');doc.setTextColor(15,17,23);const w=doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(),CW);for(const p of w){ck(8);doc.text(p,PW/2,y,{align:'center'});y+=7;}y+=3;doc.setDrawColor(200,168,75);doc.setLineWidth(.5);doc.line(ML+20,y,PW-MR-20,y);y+=6;continue;}
-    if(raw.startsWith('## ')||raw.startsWith('### ')){y+=5;ck(12);doc.setFontSize(10.5);doc.setFont('times','bold');doc.setTextColor(20,20,20);const txt=l.replace(/^#{2,3} /,'');const w=doc.splitTextToSize(txt,CW);doc.setFillColor(245,243,238);doc.rect(ML-3,y-5,CW+6,w.length*6+6,'F');for(const p of w){doc.text(p,ML,y);y+=6;}y+=3;continue;}
-    if(!l){y+=3;continue;}
-    doc.setFontSize(10);doc.setFont('times','normal');doc.setTextColor(40,40,40);const w=doc.splitTextToSize(l,CW);ck(w.length*5.5+2);for(const p of w){doc.text(p,ML,y);y+=5.5;}y+=1;
-  }
-  pie();
-  const tot=doc.internal.getNumberOfPages();for(let i=1;i<=tot;i++){doc.setPage(i);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Pág '+i+' / '+tot,PW-MR,PH-MB+5,{align:'right'});}
-  doc.save(nombre+'.pdf');
-}
-
-function volverForm(){showPanel('card1');setProgress(1);}
-function reiniciar(){G={previewId:null,paymentId:null,precio_usd:11,texto:''};['propietario','inquilino','direccion','ciudad','provincia','monto','duracion','observaciones'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('fecha_inicio').value='';document.getElementById('chk_deposito').checked=true;document.getElementById('chk_ajuste').checked=true;document.getElementById('chk_servicios').checked=false;showPanel('card1');setProgress(1);}
-
+// Init
 window.addEventListener('load',async()=>{
   obtenerCotizacion();
   const d=new Date();d.setDate(d.getDate()+7);document.getElementById('fecha_inicio').value=d.toISOString().split('T')[0];
@@ -742,5 +724,6 @@ window.addEventListener('load',async()=>{
   }else if(stat==='failure'){showPanel('card2');setProgress(2);}
 });
 </script>
+
 </body>
 </html>
