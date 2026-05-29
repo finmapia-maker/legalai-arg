@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="system">
+<html lang="es" data-theme="dark">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,36 +16,37 @@
     rel="stylesheet"
   />
 
-  <!-- CSS GLOBAL DEL SITIO -->
+  <!-- CSS GLOBAL -->
   <link rel="stylesheet" href="legalai-theme.css" />
   <link rel="stylesheet" href="components.css" />
 
   <style>
+
     .generator-shell{
-      max-width:1200px;
+      max-width:1400px;
       margin:auto;
-      padding:48px 24px 80px;
+      padding:72px 32px 90px;
     }
 
     .generator-hero{
       text-align:center;
-      margin-bottom:42px;
+      margin-bottom:46px;
     }
 
     .generator-kicker{
       font-family:'DM Mono',monospace;
-      font-size:.74rem;
-      letter-spacing:.16em;
+      font-size:.78rem;
+      letter-spacing:.18em;
       text-transform:uppercase;
       color:var(--gold);
-      margin-bottom:14px;
+      margin-bottom:18px;
     }
 
     .generator-hero h1{
       font-family:'Playfair Display',serif;
-      font-size:clamp(2.2rem,5vw,4rem);
-      line-height:1.02;
-      margin-bottom:18px;
+      font-size:clamp(2.5rem,6vw,5.2rem);
+      line-height:.98;
+      margin-bottom:22px;
       color:var(--ink);
     }
 
@@ -53,178 +55,255 @@
       margin:auto;
       color:var(--mist);
       line-height:1.7;
-      font-size:1.02rem;
+      font-size:1.06rem;
     }
 
     .quick-access{
-      margin-top:28px;
+      margin-top:34px;
       display:flex;
       justify-content:center;
-      flex-wrap:wrap;
-      gap:14px;
-    }
-
-    .quick-access a{
-      text-decoration:none;
     }
 
     .generator-block{
-      background:var(--surface);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:28px;
-      margin-bottom:28px;
-      box-shadow:var(--shadow);
+      background:linear-gradient(
+        180deg,
+        rgba(28,34,61,.92),
+        rgba(23,27,49,.92)
+      );
+
+      border:1px solid rgba(255,255,255,.06);
+
+      border-radius:26px;
+
+      padding:32px;
+
+      margin-bottom:30px;
+
+      box-shadow:
+        0 10px 40px rgba(0,0,0,.25);
     }
 
     .block-title{
       font-family:'DM Mono',monospace;
-      font-size:.74rem;
-      letter-spacing:.16em;
+      font-size:.78rem;
+      letter-spacing:.18em;
       text-transform:uppercase;
       color:var(--gold);
-      margin-bottom:18px;
+      margin-bottom:24px;
     }
 
     .category-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:16px;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
     }
 
     .category-btn{
       border:1px solid rgba(200,168,75,.18);
+
       background:
         linear-gradient(
           135deg,
-          rgba(200,168,75,.12),
-          rgba(200,168,75,.03)
+          rgba(255,255,255,.03),
+          rgba(255,255,255,.01)
         );
-      border-radius:18px;
-      padding:22px;
+
+      border-radius:20px;
+
+      padding:26px;
+
       cursor:pointer;
-      transition:.25s ease;
+
+      transition:.22s ease;
+
       color:var(--ink);
+
       text-align:left;
     }
 
     .category-btn:hover{
       transform:translateY(-2px);
-      border-color:rgba(200,168,75,.5);
+      border-color:rgba(200,168,75,.4);
     }
 
     .category-btn.active{
       border-color:var(--gold);
-      box-shadow:0 0 0 1px rgba(200,168,75,.2);
+
+      box-shadow:
+        0 0 0 1px rgba(200,168,75,.14),
+        inset 0 0 0 1px rgba(200,168,75,.08);
     }
 
     .category-title{
-      font-size:1rem;
+      font-size:1.1rem;
       font-weight:700;
-      margin-bottom:8px;
+      margin-bottom:10px;
     }
 
     .category-desc{
-      font-size:.92rem;
+      font-size:.96rem;
       color:var(--mist);
-      line-height:1.5;
+      line-height:1.6;
     }
 
-    .subtypes-wrapper{
-      margin-top:10px;
+    .helper-text{
+      margin-top:18px;
+      color:var(--mist);
+      font-size:.95rem;
     }
 
     .subtypes-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
       gap:14px;
     }
 
     .sub-btn{
+      min-height:78px;
+
       display:flex;
       align-items:center;
       justify-content:center;
-      text-align:center;
-      min-height:78px;
 
-      background:var(--paper);
-      border:1px solid var(--line);
+      text-align:center;
+
+      padding:16px;
+
       border-radius:16px;
 
+      border:1px solid rgba(255,255,255,.06);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.03),
+          rgba(255,255,255,.01)
+        );
+
       text-decoration:none;
+
       color:var(--ink);
 
       font-weight:500;
 
       transition:.2s ease;
-      padding:14px;
     }
 
     .sub-btn:hover{
       transform:translateY(-2px);
-      border-color:rgba(200,168,75,.5);
-      background:rgba(200,168,75,.05);
-    }
 
-    .helper-text{
-      margin-top:14px;
-      color:var(--mist);
-      font-size:.92rem;
-      line-height:1.6;
+      border-color:rgba(200,168,75,.35);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(200,168,75,.08),
+          rgba(255,255,255,.02)
+        );
     }
 
     @media(max-width:768px){
 
       .generator-shell{
-        padding:34px 18px 70px;
+        padding:46px 18px 70px;
       }
 
       .generator-block{
         padding:22px;
       }
 
+      .generator-hero h1{
+        line-height:1.04;
+      }
+
     }
+
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER IGUAL AL RESTO -->
-  <header class="site-header">
-    <div class="container header-inner">
+  <!-- HEADER SUPERIOR EXACTO ESTILO INDEX -->
+
+  <header class="topbar">
+
+    <div class="topbar-inner">
 
       <a href="index.html" class="brand">
         <span class="brand-main">LegalAI</span>
-        <span class="brand-sub">Arg</span>
+        <span class="brand-sub">ARG</span>
       </a>
 
-      <nav class="main-nav">
-        <a href="index.html">Inicio</a>
-        <a href="generador.html" class="active">Generador</a>
-        <a href="contrato-alquiler.html">Contrato alquiler</a>
-        <a href="planes.html">Plan ilimitado</a>
-        <a href="#">Afiliados</a>
-        <a href="#">Acerca de</a>
-      </nav>
+      <div class="topbar-right">
 
-      <!-- TOGGLE DEL TEMA -->
-      <button
-        id="themeToggle"
-        class="theme-toggle"
-        aria-label="Cambiar tema"
-      >
-        ☀️
-      </button>
+        <div class="topbar-mini">
+          DOCUMENTOS LEGALES · IA
+        </div>
+
+        <div class="theme-switch">
+
+          <button class="theme-btn" data-theme="light">
+            ☀ Claro
+          </button>
+
+          <button class="theme-btn" data-theme="system">
+            ⊙ Auto
+          </button>
+
+          <button class="theme-btn active" data-theme="dark">
+            ◐ Oscuro
+          </button>
+
+        </div>
+
+      </div>
 
     </div>
+
   </header>
+
+  <!-- NAV -->
+
+  <nav class="main-nav">
+
+    <div class="main-nav-inner">
+
+      <a href="index.html" class="nav-link">
+        Inicio
+      </a>
+
+      <a href="generador.html" class="nav-link active">
+        Generador
+      </a>
+
+      <a href="contrato-alquiler.html" class="nav-link">
+        Contrato alquiler
+      </a>
+
+      <a href="planes.html" class="nav-link">
+        Plan ilimitado
+      </a>
+
+      <a href="#" class="nav-link">
+        Afiliados
+      </a>
+
+      <a href="#" class="nav-link">
+        Acerca de
+      </a>
+
+    </div>
+
+  </nav>
+
+  <!-- CONTENIDO -->
 
   <main class="generator-shell">
 
     <section class="generator-hero">
 
       <div class="generator-kicker">
-        Generador inteligente
+        GENERADOR INTELIGENTE
       </div>
 
       <h1>
@@ -247,6 +326,7 @@
     </section>
 
     <!-- CATEGORÍAS -->
+
     <section class="generator-block">
 
       <div class="block-title">
@@ -256,6 +336,7 @@
       <div class="category-grid">
 
         <button class="category-btn active" data-cat="contratos">
+
           <div class="category-title">
             📋 Contratos
           </div>
@@ -263,9 +344,11 @@
           <div class="category-desc">
             Alquileres, acuerdos, sociedades y documentos legales generales.
           </div>
+
         </button>
 
         <button class="category-btn" data-cat="freelance">
+
           <div class="category-title">
             💼 Freelance
           </div>
@@ -273,9 +356,11 @@
           <div class="category-desc">
             Servicios digitales, propuestas, colaboración y trabajo remoto.
           </div>
+
         </button>
 
         <button class="category-btn" data-cat="reclamos">
+
           <div class="category-title">
             ⚠️ Reclamos
           </div>
@@ -283,9 +368,11 @@
           <div class="category-desc">
             Defensa al consumidor, incumplimientos y notificaciones.
           </div>
+
         </button>
 
         <button class="category-btn" data-cat="personales">
+
           <div class="category-title">
             👤 Personales
           </div>
@@ -293,19 +380,20 @@
           <div class="category-desc">
             NDA, privacidad, términos y documentos personales.
           </div>
+
         </button>
 
       </div>
 
       <div class="helper-text">
-        Primero elegís una categoría principal. Luego aparecen automáticamente
-        los formularios relacionados.
+        Primero elegís una categoría principal. Luego aparecen automáticamente los formularios relacionados.
       </div>
 
     </section>
 
     <!-- SUBTIPOS -->
-    <section class="generator-block subtypes-wrapper">
+
+    <section class="generator-block">
 
       <div class="block-title">
         Formularios disponibles
@@ -317,7 +405,8 @@
 
   </main>
 
-  <!-- SCRIPT -->
+  <!-- JS SUBTIPOS -->
+
   <script>
 
     const data = {
@@ -395,49 +484,63 @@
 
   </script>
 
-  <!-- SCRIPT DEL TEMA -->
-  <script>
-    const html = document.documentElement;
-    const toggle = document.getElementById("themeToggle");
+  <!-- THEME -->
 
-    function setTheme(theme){
-      html.setAttribute("data-theme", theme);
+  <script>
+
+    const html = document.documentElement;
+    const themeButtons = document.querySelectorAll(".theme-btn");
+
+    function applyTheme(theme){
+
+      if(theme === "system"){
+
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+        html.setAttribute(
+          "data-theme",
+          prefersDark ? "dark" : "light"
+        );
+
+      } else {
+
+        html.setAttribute("data-theme", theme);
+
+      }
+
       localStorage.setItem("theme", theme);
 
-      toggle.innerHTML =
-        theme === "dark"
-        ? "🌙"
-        : "☀️";
+      themeButtons.forEach(btn => {
+
+        btn.classList.remove("active");
+
+        if(btn.dataset.theme === theme){
+
+          btn.classList.add("active");
+
+        }
+
+      });
+
     }
 
     const savedTheme =
-      localStorage.getItem("theme") || "system";
+      localStorage.getItem("theme") || "dark";
 
-    if(savedTheme === "system"){
+    applyTheme(savedTheme);
 
-      const prefersDark =
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
+    themeButtons.forEach(btn => {
 
-      setTheme(prefersDark ? "dark" : "light");
+      btn.addEventListener("click", () => {
 
-    }else{
+        applyTheme(btn.dataset.theme);
 
-      setTheme(savedTheme);
-
-    }
-
-    toggle.addEventListener("click", () => {
-
-      const current =
-        html.getAttribute("data-theme");
-
-      setTheme(
-        current === "dark"
-        ? "light"
-        : "dark"
-      );
+      });
 
     });
+
   </script>
 
 </body>
