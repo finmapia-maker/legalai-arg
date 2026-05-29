@@ -97,7 +97,7 @@ nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;d
 <nav>
   <a class="nav-link" href="index.html">Inicio</a>
   <a class="nav-link active" href="generador.html">Generador</a>
-  <a class="nav-link" href="contrato-alquiler.html">Contrato alquiler</a>
+  <a class="nav-link" href="formulario.html?tipo=alquiler&categoria=contratos">Contrato alquiler</a>
   <a class="nav-link" href="planes.html">Plan ilimitado</a>
   <a class="nav-link" href="index.html#afiliados">Afiliados</a>
   <a class="nav-link" href="index.html#about">Acerca de</a>
@@ -114,7 +114,7 @@ nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;d
     </p>
 
     <div class="quick-access">
-      <a href="contrato-alquiler.html" class="btn gold">🏠 Ir directo a contrato de alquiler</a>
+      <a href="formulario.html?tipo=alquiler&categoria=contratos" class="btn gold">🏠 Ir directo a contrato de alquiler</a>
     </div>
   </section>
 
@@ -156,47 +156,84 @@ nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;d
 </main>
 
 <script>
+// Mapeo: tipo → etiqueta legible
+const tiposLabels = {
+  alquiler: "Contrato de Alquiler",
+  comercial: "Contrato Comercial",
+  temporario: "Contrato Temporario",
+  sociedad: "Contrato de Sociedad",
+  vehiculo: "Contrato de Vehículo",
+  inmueble: "Contrato de Inmueble",
+  nda: "NDA - Acuerdo de Confidencialidad",
+  terminos: "Términos y Condiciones",
+  privacidad: "Política de Privacidad",
+  diseno: "Contrato Diseño",
+  dev_web: "Contrato Desarrollo Web",
+  cm: "Contrato Community Manager",
+  general: "Contrato General Freelance",
+  consultoria: "Contrato Consultoría",
+  startup: "Contrato Startup",
+  propuesta: "Propuesta de Servicios",
+  colaboracion: "Acuerdo de Colaboración",
+  reclamo_alquiler: "Reclamo de Alquiler",
+  reclamo_contrato: "Reclamo por Incumplimiento",
+  reclamo_deuda: "Reclamo de Deuda",
+  reclamo_laboral: "Reclamo Laboral",
+  reclamo_garantia: "Reclamo de Garantía",
+  reclamo_entrega: "Reclamo de Entrega",
+  reclamo_servicios: "Reclamo de Servicios",
+  intimacion: "Intimación",
+  viaje_menor: "Autorización Viaje Menor",
+  medico: "Consentimiento Médico",
+  ingresos: "Certificado de Ingresos",
+  renuncia: "Renuncia Laboral",
+  poder: "Poder Notarial",
+  prestamo: "Contrato de Préstamo",
+  cuotas: "Acuerdo de Cuotas",
+  recibo: "Recibo de Pago"
+};
+
 const data = {
   contratos: [
-    ["🏠 Residencial","formulario.html?tipo=alquiler-residencial"],
-    ["🏪 Comercial","formulario.html?tipo=alquiler-comercial"],
-    ["🏖️ Temporario","formulario.html?tipo=alquiler-temporario"],
-    ["🤝 Sociedad","formulario.html?tipo=sociedad"],
-    ["🚗 Vehículo","formulario.html?tipo=vehiculo"],
-    ["🏡 Inmueble","formulario.html?tipo=inmueble"],
-    ["🔒 NDA","formulario.html"],
-    ["📱 T&C web","formulario.html"],
-    ["🛡️ Privacidad","formulario.html"]
+    ["🏠 Residencial","alquiler"],
+    ["🏪 Comercial","comercial"],
+    ["🏖️ Temporario","temporario"],
+    ["🤝 Sociedad","sociedad"],
+    ["🚗 Vehículo","vehiculo"],
+    ["🏡 Inmueble","inmueble"],
+    ["🔒 NDA","nda"],
+    ["📱 T&C web","terminos"],
+    ["🛡️ Privacidad","privacidad"]
   ],
   freelance: [
-    ["🎨 Diseño","formulario.html?tipo=freelance-diseno"],
-    ["💻 Dev web","formulario.html?tipo=freelance-dev"],
-    ["📲 CM","formulario.html?tipo=freelance-cm"],
-    ["💼 General","formulario.html?tipo=freelance-general"],
-    ["📊 Consultoría","formulario.html?tipo=consultoria"],
-    ["🚀 Startup","formulario.html?tipo=startup"],
-    ["📧 Propuesta","formulario.html?tipo=propuesta"],
-    ["🤝 Colaboración","formulario.html?tipo=colaboracion"]
+    ["🎨 Diseño","diseno"],
+    ["💻 Dev web","dev_web"],
+    ["📲 CM","cm"],
+    ["💼 General","general"],
+    ["📊 Consultoría","consultoria"],
+    ["🚀 Startup","startup"],
+    ["📧 Propuesta","propuesta"],
+    ["🤝 Colaboración","colaboracion"]
   ],
   reclamos: [
-    ["🏠 Alquiler","formulario.html"],
-    ["📋 Contrato","formulario.html"],
-    ["💰 Deuda","formulario.html"],
-    ["👔 Laboral","formulario.html"],
-    ["🔧 Garantía","formulario.html"],
-    ["📦 Entrega","formulario.html"],
-    ["💡 Servicios","formulario.html"],
-    ["⚠️ Intimación","formulario.html"]
+    ["🏠 Alquiler","reclamo_alquiler"],
+    ["📋 Contrato","reclamo_contrato"],
+    ["💰 Deuda","reclamo_deuda"],
+    ["👔 Laboral","reclamo_laboral"],
+    ["🔧 Garantía","reclamo_garantia"],
+    ["📦 Entrega","reclamo_entrega"],
+    ["💡 Servicios","reclamo_servicios"],
+    ["⚠️ Intimación","intimacion"]
   ],
   personales: [
-    ["✈️ Viaje menor","formulario.html"],
-    ["🏥 Médico","formulario.html"],
-    ["📜 Ingresos","formulario.html"],
-    ["📄 Renuncia","formulario.html"],
-    ["🔑 Poder","formulario.html"],
-    ["🤝 Préstamo","formulario.html"],
-    ["💳 Cuotas","formulario.html"],
-    ["🧾 Recibo","formulario.html"]
+    ["✈️ Viaje menor","viaje_menor"],
+    ["🏥 Médico","medico"],
+    ["📜 Ingresos","ingresos"],
+    ["📄 Renuncia","renuncia"],
+    ["🔑 Poder","poder"],
+    ["🤝 Préstamo","prestamo"],
+    ["💳 Cuotas","cuotas"],
+    ["🧾 Recibo","recibo"]
   ]
 };
 
@@ -208,7 +245,7 @@ function render(cat){
   data[cat].forEach(item => {
     const a = document.createElement("a");
     a.className = "sub-btn";
-    a.href = item[1];
+    a.href = `formulario.html?tipo=${item[1]}&categoria=${cat}`;
     a.innerHTML = item[0];
     subtypes.appendChild(a);
   });
