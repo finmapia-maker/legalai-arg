@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="system">
-
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Contrato de alquiler | LegalAI Arg</title>
 
@@ -12,15 +11,139 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="legalai-theme.css">
-<link rel="stylesheet" href="components.css">
-
 <style>
 
-.page-shell{
-  max-width:1400px;
+:root{
+  --ink:#0f1117;
+  --paper:#f7f3ec;
+  --surface:#ffffff;
+  --cream:#ede8dc;
+  --gold:#c8a84b;
+  --gold-dim:rgba(200,168,75,.12);
+  --mist:#6b7580;
+  --line:rgba(15,17,23,.08);
+  --hdr-bg:#0f1117;
+  --shadow:0 2px 16px rgba(15,17,23,.06);
+}
+
+[data-theme="dark"]{
+  --ink:#eceef2;
+  --paper:#0b0d12;
+  --surface:#171b27;
+  --cream:#121520;
+  --gold:#d4a847;
+  --gold-dim:rgba(212,168,71,.12);
+  --mist:#7c8596;
+  --line:rgba(255,255,255,.06);
+  --hdr-bg:#07090d;
+  --shadow:0 8px 30px rgba(0,0,0,.3);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  transition:.25s;
+}
+
+header{
+  height:62px;
+  background:var(--hdr-bg);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  border-bottom:1px solid rgba(200,168,75,.12);
+}
+
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;
+  color:var(--gold);
+  text-decoration:none;
+  letter-spacing:.04em;
+}
+
+.logo span{
+  opacity:.4;
+}
+
+.right-top{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.mini-top{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  color:rgba(255,255,255,.35);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.theme-switch{
+  display:flex;
+  gap:4px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:3px;
+}
+
+.theme-btn{
+  border:none;
+  background:transparent;
+  color:rgba(255,255,255,.45);
+  padding:5px 10px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:.68rem;
+  font-family:'DM Mono',monospace;
+}
+
+.theme-btn.active{
+  background:rgba(212,168,71,.18);
+  color:var(--gold);
+}
+
+nav{
+  background:var(--cream);
+  border-bottom:1px solid var(--line);
+  padding:0 40px;
+  display:flex;
+  overflow-x:auto;
+}
+
+.nav-link{
+  padding:15px 22px;
+  text-decoration:none;
+  color:var(--mist);
+  font-size:.88rem;
+  border-bottom:2px solid transparent;
+  transition:.2s;
+  white-space:nowrap;
+}
+
+.nav-link:hover{
+  color:var(--ink);
+}
+
+.nav-link.active{
+  color:var(--ink);
+  border-bottom-color:var(--gold);
+}
+
+.wrap{
+  max-width:1380px;
   margin:auto;
-  padding:48px 32px 80px;
+  padding:54px 34px 80px;
 }
 
 .hero{
@@ -30,38 +153,42 @@
 
 .kicker{
   font-family:'DM Mono',monospace;
-  font-size:.72rem;
+  font-size:.74rem;
+  color:var(--gold);
   letter-spacing:.16em;
   text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 
 .hero h1{
   font-family:'Playfair Display',serif;
-  font-size:clamp(2.5rem,5vw,5rem);
+  font-size:clamp(2.5rem,6vw,5rem);
   line-height:1;
-  margin-bottom:20px;
-  color:var(--ink);
+  margin-bottom:18px;
+  font-weight:900;
+}
+
+.hero h1 span{
+  color:var(--gold);
+  font-style:italic;
 }
 
 .hero p{
+  color:var(--mist);
   max-width:760px;
   margin:auto;
-  color:var(--mist);
   line-height:1.7;
-  font-size:1.02rem;
+  font-size:1.03rem;
 }
 
-.quick-benefits{
-  margin-top:34px;
-
+.quick-grid{
+  margin-top:32px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:14px;
 }
 
-.benefit{
+.quick-card{
   background:var(--surface);
   border:1px solid var(--line);
   border-radius:16px;
@@ -70,51 +197,40 @@
   box-shadow:var(--shadow);
 }
 
-.benefit strong{
+.quick-card strong{
   display:block;
-  font-size:.92rem;
-  margin-top:8px;
-  color:var(--ink);
+  margin-bottom:8px;
+  font-size:.95rem;
 }
 
-.benefit span{
-  display:block;
-  margin-top:6px;
+.quick-card span{
+  font-size:.9rem;
   color:var(--mist);
-  font-size:.84rem;
-  line-height:1.5;
 }
 
 .main-grid{
   margin-top:34px;
-
   display:grid;
-  grid-template-columns:1.1fr .9fr;
+  grid-template-columns:1.05fr .95fr;
   gap:24px;
-
   align-items:start;
 }
 
-.form-card,
-.preview-card{
+.card{
   background:var(--surface);
   border:1px solid var(--line);
-  border-radius:24px;
-  padding:28px;
+  border-radius:22px;
+  padding:26px;
   box-shadow:var(--shadow);
 }
 
 .section-title{
-  font-family:'Playfair Display',serif;
-  font-size:2rem;
-  margin-bottom:10px;
-  color:var(--ink);
-}
-
-.section-sub{
-  color:var(--mist);
-  margin-bottom:24px;
-  line-height:1.6;
+  font-family:'DM Mono',monospace;
+  font-size:.72rem;
+  color:var(--gold);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:22px;
 }
 
 .form-grid{
@@ -132,87 +248,78 @@
   grid-column:1/-1;
 }
 
-.field label{
+label{
   font-size:.82rem;
-  font-weight:600;
   margin-bottom:8px;
   color:var(--mist);
 }
 
-.field input,
-.field textarea,
-.field select{
+input,
+textarea,
+select{
   background:var(--paper);
   border:1px solid var(--line);
   border-radius:12px;
-  padding:14px;
+  padding:13px 14px;
   color:var(--ink);
-  font-size:.95rem;
   font-family:'DM Sans',sans-serif;
+  font-size:.95rem;
 }
 
-.field textarea{
+textarea{
   min-height:110px;
   resize:vertical;
 }
 
-.preview-card{
+.preview{
   position:sticky;
-  top:92px;
-}
-
-.preview-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:18px;
-}
-
-.preview-header h3{
-  font-family:'Playfair Display',serif;
-  font-size:1.6rem;
+  top:24px;
 }
 
 .preview-box{
   background:var(--paper);
   border:1px solid var(--line);
   border-radius:16px;
-  padding:22px;
-  min-height:640px;
-
+  padding:24px;
+  min-height:600px;
   overflow:auto;
+}
 
-  line-height:1.8;
-  color:var(--ink);
-  font-size:.96rem;
+.preview-box h2{
+  font-family:'Playfair Display',serif;
+  margin-bottom:20px;
 }
 
 .cta-row{
-  margin-top:22px;
   display:flex;
   gap:14px;
+  margin-top:24px;
   flex-wrap:wrap;
 }
 
-.btn-main{
-  background:var(--gold);
-  color:#111;
+.btn{
+  padding:14px 20px;
   border:none;
   border-radius:12px;
-  padding:15px 22px;
-  font-weight:700;
   cursor:pointer;
-  font-size:.95rem;
+  font-size:.94rem;
+  font-weight:600;
+  transition:.2s;
 }
 
-.btn-secondary{
-  background:transparent;
-  border:1px solid var(--line);
+.btn.primary{
+  background:var(--gold);
+  color:#111;
+}
+
+.btn.secondary{
+  background:var(--cream);
   color:var(--ink);
-  border-radius:12px;
-  padding:15px 22px;
-  cursor:pointer;
-  font-size:.95rem;
+  border:1px solid var(--line);
+}
+
+.btn:hover{
+  transform:translateY(-1px);
 }
 
 @media(max-width:1100px){
@@ -221,29 +328,37 @@
     grid-template-columns:1fr;
   }
 
-  .preview-card{
+  .preview{
     position:relative;
-    top:auto;
+    top:0;
   }
 
 }
 
-@media(max-width:768px){
+@media(max-width:780px){
 
-  .page-shell{
-    padding:34px 18px 70px;
+  header{
+    padding:0 16px;
   }
 
-  .quick-benefits{
+  .mini-top{
+    display:none;
+  }
+
+  nav{
+    padding:0 10px;
+  }
+
+  .wrap{
+    padding:38px 16px 60px;
+  }
+
+  .quick-grid{
     grid-template-columns:1fr 1fr;
   }
 
   .form-grid{
     grid-template-columns:1fr;
-  }
-
-  .hero h1{
-    line-height:1.05;
   }
 
 }
@@ -253,36 +368,31 @@
 
 <body>
 
-<header class="topbar">
+<header>
 
-  <div class="topbar-inner">
+  <a href="index.html" class="logo">
+    LegalAI <span>ARG</span>
+  </a>
 
-    <a href="index.html" class="brand">
-      <span class="brand-main">LegalAI</span>
-      <span class="brand-sub">ARG</span>
-    </a>
+  <div class="right-top">
 
-    <div class="topbar-right">
+    <div class="mini-top">
+      DOCUMENTOS LEGALES · IA
+    </div>
 
-      <div class="topbar-mini">
-        DOCUMENTOS LEGALES · IA
-      </div>
+    <div class="theme-switch">
 
-      <div class="theme-switch">
+      <button class="theme-btn" onclick="setTheme('light')" id="lightBtn">
+        ☀ Claro
+      </button>
 
-        <button class="theme-btn" data-theme="light">
-          ☀ Claro
-        </button>
+      <button class="theme-btn" onclick="setTheme('system')" id="systemBtn">
+        ⊙ Auto
+      </button>
 
-        <button class="theme-btn" data-theme="system">
-          ⊙ Auto
-        </button>
-
-        <button class="theme-btn active" data-theme="dark">
-          ◐ Oscuro
-        </button>
-
-      </div>
+      <button class="theme-btn" onclick="setTheme('dark')" id="darkBtn">
+        ◗ Oscuro
+      </button>
 
     </div>
 
@@ -290,39 +400,35 @@
 
 </header>
 
-<nav class="main-nav">
+<nav>
 
-  <div class="main-nav-inner">
+  <a href="index.html" class="nav-link">
+    Inicio
+  </a>
 
-    <a href="index.html" class="nav-link">
-      Inicio
-    </a>
+  <a href="generador.html" class="nav-link">
+    Generador
+  </a>
 
-    <a href="generador.html" class="nav-link">
-      Generador
-    </a>
+  <a href="contrato-alquiler.html" class="nav-link active">
+    Contrato alquiler
+  </a>
 
-    <a href="contrato-alquiler.html" class="nav-link active">
-      Contrato alquiler
-    </a>
+  <a href="planes.html" class="nav-link">
+    Plan ilimitado
+  </a>
 
-    <a href="planes.html" class="nav-link">
-      Plan ilimitado
-    </a>
+  <a href="#" class="nav-link">
+    Afiliados
+  </a>
 
-    <a href="#" class="nav-link">
-      Afiliados
-    </a>
-
-    <a href="#" class="nav-link">
-      Acerca de
-    </a>
-
-  </div>
+  <a href="#" class="nav-link">
+    Acerca de
+  </a>
 
 </nav>
 
-<main class="page-shell">
+<div class="wrap">
 
   <section class="hero">
 
@@ -331,38 +437,33 @@
     </div>
 
     <h1>
-      Tu contrato de alquiler<br>
-      listo en minutos
+      Tu contrato listo
+      <span>en minutos</span>
     </h1>
 
     <p>
-      Completás los datos y visualizás el contrato en tiempo real
-      mientras el sistema genera automáticamente el documento legal.
+      Completás los datos, visualizás el resultado en vivo y descargás el PDF listo para firmar.
     </p>
 
-    <div class="quick-benefits">
+    <div class="quick-grid">
 
-      <div class="benefit">
-        ⚖️
-        <strong>Legal en Argentina</strong>
-        <span>Formato adaptado a uso real.</span>
+      <div class="quick-card">
+        <strong>✔ Legal en Argentina</strong>
+        <span>Formato adaptado al mercado local.</span>
       </div>
 
-      <div class="benefit">
-        ⏱️
-        <strong>5 minutos</strong>
-        <span>Completá y descargá rápido.</span>
+      <div class="quick-card">
+        <strong>⚡ 5 minutos</strong>
+        <span>Proceso rápido y simple.</span>
       </div>
 
-      <div class="benefit">
-        📄
-        <strong>PDF inmediato</strong>
-        <span>Listo para firmar.</span>
+      <div class="quick-card">
+        <strong>📄 PDF inmediato</strong>
+        <span>Descarga automática al finalizar.</span>
       </div>
 
-      <div class="benefit">
-        👁️
-        <strong>Preview live</strong>
+      <div class="quick-card">
+        <strong>👁 Preview live</strong>
         <span>Visualización instantánea.</span>
       </div>
 
@@ -372,40 +473,21 @@
 
   <section class="main-grid">
 
-    <div class="form-card">
+    <div class="card">
 
-      <h2 class="section-title">
+      <div class="section-title">
         Datos del contrato
-      </h2>
-
-      <div class="section-sub">
-        Completá únicamente la información necesaria.
       </div>
 
       <div class="form-grid">
 
         <div class="field">
-          <label>Nombre del propietario</label>
+          <label>Nombre propietario</label>
           <input type="text">
         </div>
 
         <div class="field">
-          <label>Nombre del inquilino</label>
-          <input type="text">
-        </div>
-
-        <div class="field">
-          <label>DNI propietario</label>
-          <input type="text">
-        </div>
-
-        <div class="field">
-          <label>DNI inquilino</label>
-          <input type="text">
-        </div>
-
-        <div class="field full">
-          <label>Dirección del inmueble</label>
+          <label>Nombre inquilino</label>
           <input type="text">
         </div>
 
@@ -417,14 +499,18 @@
         <div class="field">
           <label>Duración</label>
           <select>
-            <option>12 meses</option>
             <option>24 meses</option>
             <option>36 meses</option>
           </select>
         </div>
 
         <div class="field full">
-          <label>Observaciones adicionales</label>
+          <label>Dirección inmueble</label>
+          <input type="text">
+        </div>
+
+        <div class="field full">
+          <label>Observaciones</label>
           <textarea></textarea>
         </div>
 
@@ -432,11 +518,11 @@
 
       <div class="cta-row">
 
-        <button class="btn-main">
-          Descargar PDF
+        <button class="btn primary">
+          Generar PDF
         </button>
 
-        <button class="btn-secondary">
+        <button class="btn secondary">
           Ver ejemplo
         </button>
 
@@ -444,85 +530,78 @@
 
     </div>
 
-    <aside class="preview-card">
+    <div class="preview">
 
-      <div class="preview-header">
+      <div class="card">
 
-        <h3>Vista previa</h3>
+        <div class="section-title">
+          Preview en vivo
+        </div>
+
+        <div class="preview-box">
+
+          <h2>
+            Contrato de Locación
+          </h2>
+
+          <p>
+            Entre el propietario y el inquilino se acuerda el presente contrato...
+          </p>
+
+        </div>
 
       </div>
 
-      <div class="preview-box">
-
-        CONTRATO DE LOCACIÓN
-
-        Entre el Sr./Sra. _____________________
-        en carácter de LOCADOR y
-        _____________________
-        como LOCATARIO...
-
-      </div>
-
-    </aside>
+    </div>
 
   </section>
 
-</main>
+</div>
 
 <script>
 
-const html = document.documentElement;
-const themeButtons = document.querySelectorAll(".theme-btn");
-
 function applyTheme(theme){
 
-  if(theme === "system"){
+  if(theme === 'system'){
 
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      '(prefers-color-scheme: dark)'
     ).matches;
 
-    html.setAttribute(
-      "data-theme",
-      prefersDark ? "dark" : "light"
+    document.documentElement.setAttribute(
+      'data-theme',
+      prefersDark ? 'dark' : 'light'
     );
 
   } else {
 
-    html.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute(
+      'data-theme',
+      theme
+    );
 
   }
 
-  localStorage.setItem("theme", theme);
+  localStorage.setItem('theme', theme);
 
-  themeButtons.forEach(btn => {
+  document.querySelectorAll('.theme-btn')
+    .forEach(btn => btn.classList.remove('active'));
 
-    btn.classList.remove("active");
+  if(theme === 'light')
+    document.getElementById('lightBtn').classList.add('active');
 
-    if(btn.dataset.theme === theme){
+  if(theme === 'dark')
+    document.getElementById('darkBtn').classList.add('active');
 
-      btn.classList.add("active");
-
-    }
-
-  });
+  if(theme === 'system')
+    document.getElementById('systemBtn').classList.add('active');
 
 }
 
 const savedTheme =
-  localStorage.getItem("theme") || "dark";
+  localStorage.getItem('theme') || 'system';
 
 applyTheme(savedTheme);
-
-themeButtons.forEach(btn => {
-
-  btn.addEventListener("click", () => {
-
-    applyTheme(btn.dataset.theme);
-
-  });
-
-});
 
 </script>
 
