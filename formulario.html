@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generá tu contrato de alquiler | LegalAI Arg</title>
-<meta name="description" content="Completá los datos y ves el contrato completo gratis. Pagás solo si te sirve.">
+<title id="titleTag">Generá tu documento | LegalAI Arg</title>
+<meta name="description" content="Completá los datos y ves el documento completo gratis. Pagás solo si te sirve.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -145,10 +145,9 @@ footer a:hover{color:var(--gold)}
 <div class="wrap">
 
   <div class="intro">
-    <div class="intro-tag">// Contrato de alquiler · Argentina 2026</div>
-    <h1>Tu contrato de alquiler<br>listo en <strong style="color:var(--gold)">2 minutos</strong></h1>
+    <div class="intro-tag" id="introTag">// Contrato de alquiler · Argentina 2026</div>
+    <h1 id="introH1">Tu contrato de alquiler<br>listo en <strong style="color:var(--gold)">2 minutos</strong></h1>
     <p class="intro-sub">Completás los datos → pagás → descargás el PDF. Sin esperas, sin abogados.</p>
-    <!-- Precio + trust visible desde el inicio -->
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;">
       <span style="background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);color:var(--gold);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;font-weight:600;"><span id="precioIntro">USD 5.5</span> · Pago único</span>
       <span style="background:var(--sage-dim);border:1px solid rgba(61,90,70,.15);color:var(--sage);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;">🔒 MercadoPago</span>
@@ -164,110 +163,17 @@ footer a:hover{color:var(--gold)}
 
   <!-- CARD 1: FORMULARIO -->
   <div class="card visible" id="card1">
-  <!-- Layout grid: formulario | preview live -->
   <div id="form-layout">
   <div id="form-col">
-    <div class="card-title">Datos del contrato</div>
+    <div class="card-title">Datos del documento</div>
     <div class="card-sub">Completá los campos. Los marcados con <span style="color:var(--gold)">*</span> son obligatorios.</div>
     <div class="alert err" id="alertForm"></div>
 
-    <div class="sec-div"><span>Partes</span></div>
-    <div class="field">
-      <label class="field-label" for="propietario">Propietario <span class="req">*</span></label>
-      <input type="text" id="propietario" placeholder="Nombre y apellido completo">
-    </div>
-    <div class="field">
-      <label class="field-label" for="inquilino">Inquilino <span class="req">*</span></label>
-      <input type="text" id="inquilino" placeholder="Nombre y apellido completo">
-    </div>
-
-    <div class="sec-div"><span>Propiedad</span></div>
-    <div class="field">
-      <label class="field-label" for="direccion">Dirección del inmueble <span class="req">*</span></label>
-      <input type="text" id="direccion" placeholder="Ej: Av. Corrientes 1234, 3° B">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label class="field-label" for="ciudad">Ciudad <span class="req">*</span></label>
-        <input type="text" id="ciudad" placeholder="Ej: Buenos Aires">
-      </div>
-      <div class="field">
-        <label class="field-label" for="provincia">Provincia <span class="req">*</span></label>
-        <input type="text" id="provincia" placeholder="Ej: CABA">
-      </div>
-    </div>
-
-    <div class="sec-div"><span>Condiciones</span></div>
-    <div class="field-row">
-      <div class="field">
-        <label class="field-label" for="monto">Monto mensual ARS <span class="req">*</span></label>
-        <input type="number" id="monto" placeholder="Ej: 150000" min="1">
-      </div>
-      <div class="field">
-        <label class="field-label" for="duracion">Duración (meses) <span class="req">*</span></label>
-        <input type="number" id="duracion" placeholder="Ej: 24" min="1" max="120">
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label" for="fecha_inicio">Fecha de inicio <span class="req">*</span></label>
-      <input type="date" id="fecha_inicio">
-    </div>
-
-    <div class="sec-div"><span>¿Qué incluye?</span></div>
-
-    <!-- Depósito -->
-    <div class="field" style="margin-bottom:10px;">
-      <label class="field-label">Depósito en garantía</label>
-      <div class="toggle-group" id="grupo_deposito">
-        <button type="button" class="toggle-btn active" data-value="si" onclick="toggleOpcion('grupo_deposito',this,'chk_deposito_val')">1 mes de garantía</button>
-        <button type="button" class="toggle-btn" data-value="no" onclick="toggleOpcion('grupo_deposito',this,'chk_deposito_val')">Sin depósito</button>
-      </div>
-      <input type="hidden" id="chk_deposito_val" value="si">
-    </div>
-
-    <!-- Ajuste -->
-    <div class="field" style="margin-bottom:10px;">
-      <label class="field-label">Cláusula de ajuste del alquiler</label>
-      <div class="toggle-group" id="grupo_ajuste">
-        <button type="button" class="toggle-btn active" data-value="icl" onclick="toggleOpcion('grupo_ajuste',this,'chk_ajuste_val')">ICL (índice legal)</button>
-        <button type="button" class="toggle-btn" data-value="ipc" onclick="toggleOpcion('grupo_ajuste',this,'chk_ajuste_val')">IPC</button>
-        <button type="button" class="toggle-btn" data-value="no" onclick="toggleOpcion('grupo_ajuste',this,'chk_ajuste_val')">Sin ajuste</button>
-      </div>
-      <input type="hidden" id="chk_ajuste_val" value="icl">
-    </div>
-
-    <!-- Servicios -->
-    <div class="field" style="margin-bottom:10px;">
-      <label class="field-label">Servicios a cargo del inquilino</label>
-      <div class="toggle-group" id="grupo_servicios">
-        <button type="button" class="toggle-btn active" data-value="luz" onclick="toggleMulti('grupo_servicios',this,'chk_servicios_val')">💡 Luz</button>
-        <button type="button" class="toggle-btn active" data-value="gas" onclick="toggleMulti('grupo_servicios',this,'chk_servicios_val')">🔥 Gas</button>
-        <button type="button" class="toggle-btn active" data-value="agua" onclick="toggleMulti('grupo_servicios',this,'chk_servicios_val')">💧 Agua</button>
-        <button type="button" class="toggle-btn" data-value="expensas_ord" onclick="toggleMulti('grupo_servicios',this,'chk_servicios_val')">🏢 Expensas ord.</button>
-        <button type="button" class="toggle-btn" data-value="expensas_ext" onclick="toggleMulti('grupo_servicios',this,'chk_servicios_val')">🏢 Expensas ext.</button>
-        <button type="button" class="toggle-btn" data-value="internet" onclick="toggleMulti('grupo_servicios',this,'chk_servicios_val')">📶 Internet</button>
-      </div>
-      <input type="hidden" id="chk_servicios_val" value="luz,gas,agua">
-    </div>
-
-    <!-- Uso del inmueble -->
-    <div class="field" style="margin-bottom:10px;">
-      <label class="field-label">Uso del inmueble</label>
-      <div class="toggle-group" id="grupo_uso">
-        <button type="button" class="toggle-btn active" data-value="vivienda" onclick="toggleOpcion('grupo_uso',this,'chk_uso_val')">🏠 Vivienda familiar</button>
-        <button type="button" class="toggle-btn" data-value="comercial" onclick="toggleOpcion('grupo_uso',this,'chk_uso_val')">🏪 Comercial</button>
-        <button type="button" class="toggle-btn" data-value="temporario" onclick="toggleOpcion('grupo_uso',this,'chk_uso_val')">🏖️ Temporario</button>
-      </div>
-      <input type="hidden" id="chk_uso_val" value="vivienda">
-    </div>
-
-    <div class="sec-div"><span>Observaciones opcionales</span></div>
-    <div class="field">
-      <textarea id="observaciones" rows="3" placeholder="Condiciones adicionales que quieras incluir..."></textarea>
-    </div>
+    <!-- CAMPOS DINÁMICOS SE INYECTAN AQUÍ -->
+    <div id="formularioContent"></div>
 
     <button class="btn-main btn-gold" id="btnPagarDirecto" onclick="pagarDirecto()" style="margin-bottom:6px;font-size:1.05rem;font-weight:800;padding:17px;">
-      Pagar y descargar mi contrato →
+      Pagar y descargar mi documento →
     </button>
     <p style="text-align:center;font-size:.72rem;color:var(--mist);margin-bottom:10px;font-family:'DM Mono',monospace;"><span id="precioBoton">USD 5.5</span> · Pago único · Descarga inmediata · Sin suscripción</p>
     <div class="promesa">
@@ -275,41 +181,38 @@ footer a:hover{color:var(--gold)}
       <div class="promesa-item">Pago 100% seguro con MercadoPago</div>
       <div class="promesa-item">Si no te sirve, no pagás nada</div>
     </div>
-  </div><!-- /form-col -->
+  </div>
 
-  <!-- Preview live instantáneo -->
   <div id="preview-live-col">
-    <div class="plv-label">Vista previa del contrato</div>
+    <div class="plv-label">Vista previa del documento</div>
     <div id="preview-live-doc">
       <div id="plv-content"></div>
       <div id="plv-fade"></div>
       <div id="plv-watermark"><span>PREVIEW · NO PAGADO · PREVIEW · NO PAGADO · PREVIEW · NO PAGADO</span></div>
       <div id="plv-cta">
-        <button class="plv-btn" onclick="pagarDirecto()">🔓 Obtener contrato completo →</button>
+        <button class="plv-btn" onclick="pagarDirecto()">🔓 Obtener documento completo →</button>
         <div class="plv-sub">Pago único · PDF listo para firmar</div>
       </div>
     </div>
   </div>
 
-  </div><!-- /form-layout -->
-  </div><!-- /card1 cierre extra por nuevo open -->
+  </div>
+  </div>
 
-  <!-- Sticky CTA mobile -->
   <div id="sticky-cta-f">
     <button class="btn-main btn-gold" onclick="pagarDirecto()" style="margin:0;">Continuar al pago →</button>
   </div>
 
-  <!-- LOADING generación -->
   <div class="loading" id="loadingGen">
     <div class="spinner"></div>
-    <div class="loading-lbl">Generando tu contrato con IA...</div>
+    <div class="loading-lbl">Generando tu documento con IA...</div>
   </div>
 
   <!-- CARD 2: PREVIEW -->
   <div class="card" id="card2">
-    <div class="card-title">Vista previa de tu contrato</div>
+    <div class="card-title">Vista previa de tu documento</div>
     <div class="card-sub">Revisá el documento. Pagás solo si te sirve.</div>
-    <div class="alert grn visible">✔ Contrato generado con tus datos · Listo para pagar y descargar</div>
+    <div class="alert grn visible">✔ Documento generado con tus datos · Listo para pagar y descargar</div>
     <div class="alert err" id="alertForm2" style="margin-bottom:12px;"></div>
     <div class="preview-box">
       <canvas id="previewCanvas"></canvas>
@@ -317,7 +220,7 @@ footer a:hover{color:var(--gold)}
     </div>
     <div class="precio-box">
       <div>
-        <div class="precio-box-lbl">Contrato de alquiler</div>
+        <div class="precio-box-lbl" id="precioCajaLabel">Tu documento</div>
         <div class="precio-box-sub">PDF listo para firmar · pago único</div>
       </div>
       <div>
@@ -326,16 +229,15 @@ footer a:hover{color:var(--gold)}
       </div>
     </div>
     <p style="font-size:.83rem;color:var(--mist);text-align:center;margin-bottom:10px;font-weight:500">Pagás solo si te sirve el documento</p>
-    <button class="btn-main btn-gold" onclick="pagar()" style="font-size:1.05rem;font-weight:800;padding:17px;">Pagar y descargar mi contrato →</button>
+    <button class="btn-main btn-gold" onclick="pagar()" style="font-size:1.05rem;font-weight:800;padding:17px;">Pagar y descargar mi documento →</button>
     <div class="promesa" style="margin-top:12px">
       <div class="promesa-item">Pago seguro con MercadoPago</div>
       <div class="promesa-item">Descarga inmediata tras el pago</div>
-      <div class="promesa-item">Modelo orientativo · no reemplaza abogado</div>
+      <div class="promesa-item">Modelo orientativo · no reemplaza asesoramiento legal</div>
     </div>
     <button class="btn-ghost" onclick="volverForm()">← Editar datos</button>
   </div>
 
-  <!-- LOADING pago / doc -->
   <div class="loading" id="loadingPago">
     <div class="spinner"></div>
     <div class="loading-lbl">Conectando con MercadoPago...</div>
@@ -350,8 +252,8 @@ footer a:hover{color:var(--gold)}
   <div class="card" id="card4">
     <div class="success-box">
       <div class="success-icon">✅</div>
-      <h2>¡Tu contrato está listo!</h2>
-      <p>Hemos generado tu contrato personalizado. Descargalo ahora y está listo para firmar e imprimir.</p>
+      <h2>¡Tu documento está listo!</h2>
+      <p>Hemos generado tu documento personalizado. Descargalo ahora y está listo para firmar e imprimir.</p>
       <button class="btn-main btn-gold" onclick="descargarPDF()" style="font-size:1.05rem;font-weight:800;padding:17px;margin-top:6px;">
         📥 Descargar PDF
       </button>
@@ -360,7 +262,7 @@ footer a:hover{color:var(--gold)}
         <div class="promesa-item">Válido según normativa argentina</div>
         <div class="promesa-item">Listo para firmar e imprimir</div>
       </div>
-      <button class="btn-ghost" onclick="reiniciar()">Crear otro contrato</button>
+      <button class="btn-ghost" onclick="reiniciar()">Crear otro documento</button>
     </div>
   </div>
 
@@ -372,23 +274,187 @@ footer a:hover{color:var(--gold)}
 </footer>
 
 <script>
-// ── Config ─────────────────────────────────────────────────────────
-const PRICE_MULTIPLIER = 0.5;
-const PRECIO_USD = 11 * PRICE_MULTIPLIER;
-const WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
-const DOC_TIPO = 'Contrato de alquiler Argentina 2026';
+// ════════════════════════════════════════════════════════════════════
+// CONFIG Y MAPEO DE TIPOS
+// ════════════════════════════════════════════════════════════════════
+
+const tiposConfig = {
+  alquiler: {
+    titulo: "Contrato de alquiler",
+    subtitulo: "Tu contrato de alquiler listo en 2 minutos",
+    descripcion: "Completá los datos → pagás → descargás el PDF.",
+    precioUSD: 5.5,
+    docTipo: "Contrato de alquiler Argentina 2026",
+    intro: "// Contrato de alquiler · Argentina 2026",
+    etiqueta: "Contrato de alquiler",
+    campos: [
+      {tipo:"sec", label:"Partes"},
+      {id:"propietario", label:"Propietario", requerido:true, placeholder:"Nombre y apellido completo"},
+      {id:"inquilino", label:"Inquilino", requerido:true, placeholder:"Nombre y apellido completo"},
+      {tipo:"sec", label:"Propiedad"},
+      {id:"direccion", label:"Dirección del inmueble", requerido:true, placeholder:"Ej: Av. Corrientes 1234, 3° B"},
+      {tipo:"field-row", campos:[
+        {id:"ciudad", label:"Ciudad", requerido:true, placeholder:"Ej: Buenos Aires"},
+        {id:"provincia", label:"Provincia", requerido:true, placeholder:"Ej: CABA"}
+      ]},
+      {tipo:"sec", label:"Condiciones"},
+      {tipo:"field-row", campos:[
+        {id:"monto", label:"Monto mensual ARS", requerido:true, placeholder:"Ej: 150000", tipo:"number"},
+        {id:"duracion", label:"Duración (meses)", requerido:true, placeholder:"Ej: 24", tipo:"number"}
+      ]},
+      {id:"fecha_inicio", label:"Fecha de inicio", requerido:true, tipo:"date"},
+      {tipo:"sec", label:"¿Qué incluye?"},
+      {tipo:"toggle", id:"grupo_deposito", label:"Depósito en garantía", opciones:[{v:"si", txt:"1 mes de garantía"},{v:"no", txt:"Sin depósito"}], default:"si", hiddenId:"chk_deposito_val"},
+      {tipo:"toggle", id:"grupo_ajuste", label:"Cláusula de ajuste del alquiler", opciones:[{v:"icl", txt:"ICL (índice legal)"},{v:"ipc", txt:"IPC"},{v:"no", txt:"Sin ajuste"}], default:"icl", hiddenId:"chk_ajuste_val"},
+      {tipo:"toggle-multi", id:"grupo_servicios", label:"Servicios a cargo del inquilino", opciones:[{v:"luz", txt:"💡 Luz"},{v:"gas", txt:"🔥 Gas"},{v:"agua", txt:"💧 Agua"},{v:"expensas_ord", txt:"🏢 Expensas ord."},{v:"expensas_ext", txt:"🏢 Expensas ext."},{v:"internet", txt:"📶 Internet"}], default:"luz,gas,agua", hiddenId:"chk_servicios_val"},
+      {tipo:"toggle", id:"grupo_uso", label:"Uso del inmueble", opciones:[{v:"vivienda", txt:"🏠 Vivienda familiar"},{v:"comercial", txt:"🏪 Comercial"},{v:"temporario", txt:"🏖️ Temporario"}], default:"vivienda", hiddenId:"chk_uso_val"},
+      {tipo:"sec", label:"Observaciones opcionales"},
+      {id:"observaciones", label:"Observaciones", tipo:"textarea", placeholder:"Condiciones adicionales que quieras incluir..."}
+    ]
+  }
+};
+
+// COPIAR CONFIGURACIÓN PARA OTROS TIPOS (templates)
+const defTemplate = {
+  titulo: "Mi documento",
+  subtitulo: "Genera tu documento listo en 2 minutos",
+  descripcion: "Completá los datos → pagás → descargás el PDF.",
+  precioUSD: 5.5,
+  docTipo: "Documento Argentina 2026",
+  intro: "// Documento · Argentina 2026",
+  etiqueta: "Documento",
+  campos: []
+};
+
+// ════════════════════════════════════════════════════════════════════
+// CONFIG GLOBAL
+// ════════════════════════════════════════════════════════════════════
+
+const WORKER = 'https://legalai-arg-worker.finmap-ia.workers.dev';
+const PRICE_MULTIPLIER = 1;
+let PRECIO_USD = 5.5;
+let DOC_TIPO = 'Contrato de alquiler Argentina 2026';
+let CONFIG = null;
+
 let G = {previewId:null, paymentId:null, precio_usd:PRECIO_USD, texto:''};
 let cotizacion = {valor:null, fuente:null};
 
-// Mostrar precio inicial
-(function(){
+// ════════════════════════════════════════════════════════════════════
+// INICIALIZACIÓN DESDE PARÁMETROS
+// ════════════════════════════════════════════════════════════════════
+
+function initFromParams() {
+  const params = new URLSearchParams(location.search);
+  const tipo = params.get('tipo') || 'alquiler';
+  const categoria = params.get('categoria') || 'contratos';
+  
+  CONFIG = tiposConfig[tipo] || tiposConfig.alquiler;
+  PRECIO_USD = CONFIG.precioUSD * PRICE_MULTIPLIER;
+  DOC_TIPO = CONFIG.docTipo;
+  G.precio_usd = PRECIO_USD;
+  
+  // Actualizar UI títulos
+  document.getElementById('titleTag').textContent = CONFIG.titulo + ' | LegalAI Arg';
+  document.getElementById('introTag').textContent = CONFIG.intro;
+  document.getElementById('introH1').innerHTML = CONFIG.subtitulo.replace(/2 minutos/,'<strong style="color:var(--gold)">2 minutos</strong>');
+  document.querySelector('.intro-sub').textContent = CONFIG.descripcion;
+  document.getElementById('precioCajaLabel').textContent = CONFIG.titulo;
+  
+  // Mostrar precio
   ['precioIntro','precioBoton'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.textContent='USD '+PRECIO_USD.toFixed(1);
   });
-})();
+  
+  // Renderizar formulario
+  renderForm();
+  
+  // Obtener cotización
+  obtenerCotizacion();
+  
+  // Tema
+  setTheme(localStorage.getItem('theme')||'system');
+}
 
-// Tema
+// ════════════════════════════════════════════════════════════════════
+// RENDERIZAR FORMULARIO DINÁMICO
+// ════════════════════════════════════════════════════════════════════
+
+function renderForm() {
+  const container = document.getElementById('formularioContent');
+  if(!CONFIG || !CONFIG.campos) return;
+  
+  let html = '';
+  for(const campo of CONFIG.campos) {
+    if(campo.tipo === 'sec') {
+      html += `<div class="sec-div"><span>${campo.label}</span></div>`;
+    } else if(campo.tipo === 'field-row') {
+      html += '<div class="field-row">';
+      for(const c of campo.campos) {
+        html += renderFieldHTML(c);
+      }
+      html += '</div>';
+    } else if(campo.tipo === 'toggle') {
+      html += renderToggle(campo);
+    } else if(campo.tipo === 'toggle-multi') {
+      html += renderToggleMulti(campo);
+    } else {
+      html += renderFieldHTML(campo);
+    }
+  }
+  container.innerHTML = html;
+}
+
+function renderFieldHTML(f) {
+  if(!f.id) return '';
+  const req = f.requerido ? '<span class="req">*</span>' : '';
+  const tipo = f.tipo || 'text';
+  if(tipo === 'textarea') {
+    return `
+      <div class="field">
+        <label class="field-label" for="${f.id}">${f.label} ${req}</label>
+        <textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>
+      </div>
+    `;
+  }
+  return `
+    <div class="field">
+      <label class="field-label" for="${f.id}">${f.label} ${req}</label>
+      <input type="${tipo}" id="${f.id}" placeholder="${f.placeholder||''}" ${tipo==='number'?'min="1"':''}/>
+    </div>
+  `;
+}
+
+function renderToggle(f) {
+  const checked = (btn) => btn.v === f.default ? ' active' : '';
+  return `
+    <div class="field" style="margin-bottom:10px;">
+      <label class="field-label">${f.label}</label>
+      <div class="toggle-group" id="${f.id}">
+        ${f.opciones.map(btn => `<button type="button" class="toggle-btn${checked(btn)}" data-value="${btn.v}" onclick="toggleOpcion('${f.id}',this,'${f.hiddenId}')">${btn.txt}</button>`).join('')}
+      </div>
+      <input type="hidden" id="${f.hiddenId}" value="${f.default}">
+    </div>
+  `;
+}
+
+function renderToggleMulti(f) {
+  const checked = (btn) => f.default.includes(btn.v) ? ' active' : '';
+  return `
+    <div class="field" style="margin-bottom:10px;">
+      <label class="field-label">${f.label}</label>
+      <div class="toggle-group" id="${f.id}">
+        ${f.opciones.map(btn => `<button type="button" class="toggle-btn${checked(btn)}" data-value="${btn.v}" onclick="toggleMulti('${f.id}',this,'${f.hiddenId}')">${btn.txt}</button>`).join('')}
+      </div>
+      <input type="hidden" id="${f.hiddenId}" value="${f.default}">
+    </div>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════════════
+// FUNCIONES CORE (del formulario original)
+// ════════════════════════════════════════════════════════════════════
+
 function setTheme(t){
   localStorage.setItem('theme',t);
   const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -399,17 +465,15 @@ function setTheme(t){
     b.classList.toggle('active',x.toLowerCase()===t);
   });
 }
-(function(){const t=localStorage.getItem('theme')||'system';setTheme(t);})();
 
-// Analytics
 const track=(ev,data)=>{try{gtag('event',ev,data);}catch(_){}};
 
-// Cotización
 async function obtenerCotizacion(){
   const fuentes=[['https://api.bluelytics.com.ar/v2/latest',d=>d?.official?.value_sell,'BNA'],['https://dolarapi.com/v1/dolares/oficial',d=>d?.venta,'BNA'],['https://dolarapi.com/v1/dolares/bolsa',d=>d?.venta,'MEP']];
   for(const[url,extract,fuente]of fuentes){try{const r=await fetch(url,{signal:AbortSignal.timeout(5000)});const d=await r.json();const v=extract(d);if(v&&v>0){cotizacion={valor:v,fuente};renderPrecio();return;}}catch(_){}}
   cotizacion={valor:1200,fuente:'ref.'};renderPrecio();
 }
+
 function renderPrecio(){
   if(!cotizacion.valor)return;
   const ars=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
@@ -420,10 +484,8 @@ function renderPrecio(){
   sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
 }
 
-// Progress
 function setProgress(step){[1,3,4].forEach(i=>{const el=document.getElementById('ps'+i);if(!el)return;el.classList.remove('active','done');if(i<step)el.classList.add('done');if(i===step)el.classList.add('active');});}
 
-// Paneles
 function showPanel(id){
   ['card1','card2','card4','loadingGen','loadingPago','loadingDoc'].forEach(x=>{const el=document.getElementById(x);if(el){el.classList.remove('visible');el.style.display='';}});
   const t=document.getElementById(id);if(!t)return;
@@ -431,13 +493,13 @@ function showPanel(id){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// Toggle
 function toggleOpcion(grupoId, btn, hiddenId) {
   document.querySelectorAll('#'+grupoId+' .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(hiddenId).value = btn.dataset.value;
   if(typeof actualizarPreviewFormulario === 'function') actualizarPreviewFormulario();
 }
+
 function toggleMulti(grupoId, btn, hiddenId) {
   btn.classList.toggle('active');
   const activos = Array.from(document.querySelectorAll('#'+grupoId+' .toggle-btn.active'))
@@ -446,374 +508,164 @@ function toggleMulti(grupoId, btn, hiddenId) {
   if(typeof actualizarPreviewFormulario === 'function') actualizarPreviewFormulario();
 }
 
-// Validar
 function validar(){
-  const campos=[{id:'propietario',label:'Nombre del propietario'},{id:'inquilino',label:'Nombre del inquilino'},{id:'direccion',label:'Dirección del inmueble'},{id:'ciudad',label:'Ciudad'},{id:'provincia',label:'Provincia'},{id:'monto',label:'Monto mensual'},{id:'duracion',label:'Duración'},{id:'fecha_inicio',label:'Fecha de inicio'}];
-  for(const c of campos){const el=document.getElementById(c.id);if(!el||!el.value.trim()){showErr('alertForm','El campo "'+c.label+'" es obligatorio.');el&&el.focus();return false;}}
-  hideErr('alertForm');return true;
+  // Buscar campos requeridos dinámicamente
+  if(!CONFIG || !CONFIG.campos) return true;
+  
+  const campos = [];
+  for(const f of CONFIG.campos) {
+    if(f.requerido && f.id) {
+      campos.push({id:f.id, label:f.label});
+    }
+  }
+  
+  for(const c of campos){
+    const el=document.getElementById(c.id);
+    if(!el||!el.value.trim()){
+      showErr('alertForm','El campo "'+c.label+'" es obligatorio.');
+      el&&el.focus();
+      return false;
+    }
+  }
+  hideErr('alertForm');
+  return true;
 }
+
 function showErr(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('visible');}
 function hideErr(id){const el=document.getElementById(id);if(el)el.classList.remove('visible');}
 
-// Generar
 async function generarContrato(){
   if(!validar())return;
-  document.getElementById('btnGenerar').disabled=true;
-  const _dep = document.getElementById('chk_deposito_val')?.value || 'si';
-  const _aj  = document.getElementById('chk_ajuste_val')?.value || 'icl';
-  const _srv = document.getElementById('chk_servicios_val')?.value || 'luz,gas,agua';
-  const _uso = document.getElementById('chk_uso_val')?.value || 'vivienda';
-  const _ajTxt = {icl:'Sí, ajuste según ICL (Índice de Contratos de Locación)',ipc:'Sí, ajuste según IPC',no:'Sin cláusula de ajuste'}[_aj] || _aj;
-  const _srvTxt = _srv ? 'A cargo del inquilino: ' + _srv.split(',').join(', ') : 'A cargo del propietario';
-  const _depTxt = _dep === 'si' ? 'Sí, 1 mes de garantía' : 'Sin depósito en garantía';
-  const datos={tipo:DOC_TIPO+(_uso !== 'vivienda' ? ' (uso '+_uso+')':''),pais:'Argentina',provincia:document.getElementById('provincia').value.trim(),ciudad:document.getElementById('ciudad').value.trim(),propietario:document.getElementById('propietario').value.trim(),inquilino:document.getElementById('inquilino').value.trim(),direccion:document.getElementById('direccion').value.trim(),monto_mensual:document.getElementById('monto').value.trim(),duracion_meses:document.getElementById('duracion').value.trim(),fecha_inicio:document.getElementById('fecha_inicio').value,deposito:_depTxt,ajuste:_ajTxt,servicios:_srvTxt,uso_inmueble:_uso,observaciones:document.getElementById('observaciones').value.trim()||''};
+  document.getElementById('btnPagarDirecto').disabled=true;
+  
+  // Recolectar datos del formulario dinámicamente
+  const datos = {tipo: DOC_TIPO, pais: 'Argentina'};
+  
+  if(!CONFIG || !CONFIG.campos) {
+    document.getElementById('btnPagarDirecto').disabled=false;
+    return;
+  }
+  
+  // Mapear campos
+  for(const f of CONFIG.campos) {
+    if(f.id) {
+      const el = document.getElementById(f.id);
+      if(el) datos[f.id] = el.value || '';
+    }
+  }
+  
   const meta={titulo:DOC_TIPO,categoria:'complejo',precio_usd:G.precio_usd,upgrade_porcentaje:32,requiere_advertencia_legal:false};
   sessionStorage.setItem('legalai_datos',JSON.stringify(datos));
   sessionStorage.setItem('legalai_titulo',DOC_TIPO);
   sessionStorage.setItem('legalai_meta',JSON.stringify(meta));
-  showPanel('loadingGen');setProgress(2);
+  
+  showPanel('loadingGen');
+  setProgress(2);
+  
   fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
   track('generar_preview', { doc_tipo: DOC_TIPO });
+  
   try{
     const res=await fetch(WORKER+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datosDoc:datos,metadata:meta}),signal:AbortSignal.timeout(30000)});
-    if(!res.ok){const errData=await res.json().catch(()=>({}));throw new Error(errData.error||`Error del servidor (${res.status})`);}
+    if(!res.ok){const errData=await res.json().catch(()=>({}));throw new Error(errData.error||`Error del servidor (${res.status})`);};
     const data=await res.json();
     if(data.error)throw new Error(data.error);
-    G.previewId=data.previewId;G.texto=data.texto;
-    sessionStorage.setItem('legalai_previewId',data.previewId);
-    renderizarPreview(data.texto);
-    showPanel('card2');setProgress(2);
+    G.texto=data.texto;
+    G.previewId=data.previewId;
+    renderizarCanvasPreview();
+    showPanel('card2');
+    setProgress(3);
   }catch(err){
-    G.previewId = null;
-    sessionStorage.removeItem('legalai_previewId');
-    track('preview_fallback', { doc_tipo: DOC_TIPO, error: (err.message||'').slice(0,80) });
-    renderizarPreviewFallback();
-    showPanel('card2'); setProgress(2);
-    showErr('alertForm2','⚠️ No pudimos generar la vista previa, pero podés continuar al pago — el contrato se genera correctamente luego del pago.');
+    console.error('Error generando documento:',err);
+    showErr('alertForm2','Error generando el documento. Intenta de nuevo. '+err.message);
+    showPanel('card1');
+    document.getElementById('btnPagarDirecto').disabled=false;
   }
 }
 
-function renderizarPreviewFallback(){
+function renderizarCanvasPreview(){
   const canvas=document.getElementById('previewCanvas');
-  const overlay=document.getElementById('previewWatermarkOverlay');
-  const W=680,H=320;
-  canvas.width=W; canvas.height=H; canvas.style.height='';
+  if(!canvas)return;
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#faf9f6'; ctx.fillRect(0,0,W,H);
-  ctx.font='bold 15px Times New Roman, serif';
-  ctx.fillStyle='#0f1117'; ctx.textAlign='center';
-  ctx.fillText('CONTRATO DE ALQUILER', W/2, 80);
-  ctx.strokeStyle='#c9a84c'; ctx.lineWidth=0.8;
-  ctx.beginPath(); ctx.moveTo(80,96); ctx.lineTo(W-80,96); ctx.stroke();
-  ctx.font='11px Times New Roman, serif';
-  ctx.fillStyle='#888'; ctx.textAlign='center';
-  ctx.fillText('El documento se generará con todos tus datos luego del pago.', W/2, 140);
-  ctx.fillText('Contrato personalizado · Legislación argentina · Listo para firmar', W/2, 165);
-  overlay.innerHTML='';
-}
-
-// Pago directo sin preview
-async function pagarDirecto(){
-  if(!validar())return;
-  const _dep = document.getElementById('chk_deposito_val')?.value || 'si';
-  const _aj  = document.getElementById('chk_ajuste_val')?.value || 'icl';
-  const _srv = document.getElementById('chk_servicios_val')?.value || 'luz,gas,agua';
-  const _uso = document.getElementById('chk_uso_val')?.value || 'vivienda';
-  const _ajTxt = {icl:'Sí, ajuste según ICL (Índice de Contratos de Locación)',ipc:'Sí, ajuste según IPC',no:'Sin cláusula de ajuste'}[_aj] || _aj;
-  const _srvTxt = _srv ? 'A cargo del inquilino: ' + _srv.split(',').join(', ') : 'A cargo del propietario';
-  const _depTxt = _dep === 'si' ? 'Sí, 1 mes de garantía' : 'Sin depósito en garantía';
-  const datos={tipo:DOC_TIPO+(_uso !== 'vivienda' ? ' (uso '+_uso+')':''),pais:'Argentina',provincia:document.getElementById('provincia').value.trim(),ciudad:document.getElementById('ciudad').value.trim(),propietario:document.getElementById('propietario').value.trim(),inquilino:document.getElementById('inquilino').value.trim(),direccion:document.getElementById('direccion').value.trim(),monto_mensual:document.getElementById('monto').value.trim(),duracion_meses:document.getElementById('duracion').value.trim(),fecha_inicio:document.getElementById('fecha_inicio').value,deposito:_depTxt,ajuste:_ajTxt,servicios:_srvTxt,uso_inmueble:_uso,observaciones:document.getElementById('observaciones').value.trim()||''};
-  const meta={titulo:DOC_TIPO,categoria:'complejo',precio_usd:G.precio_usd,upgrade_porcentaje:32,requiere_advertencia_legal:false};
-  sessionStorage.setItem('legalai_datos',JSON.stringify(datos));
-  sessionStorage.setItem('legalai_titulo',DOC_TIPO);
-  sessionStorage.setItem('legalai_meta',JSON.stringify(meta));
-  G.previewId=null; sessionStorage.removeItem('legalai_previewId');
-  track('click_pagar', { doc_tipo: DOC_TIPO });
-  await pagar();
-}
-
-// Preview canvas
-function renderizarPreview(texto){
-  const canvas=document.getElementById('previewCanvas'),overlay=document.getElementById('previewWatermarkOverlay');
-  const W=680,LINE_H=18,FONT=11,ML=36,MR=36,MT=36,CW=W-ML-MR;
-  const ctx=canvas.getContext('2d');
-  canvas.width=W;canvas.height=100;ctx.font=FONT+'px Times New Roman, serif';
-  const lineasAll=[];
-  for(const raw of texto.split('\n')){
-    if(raw.startsWith('# '))lineasAll.push({tipo:'h1',txt:raw.replace(/^# /,'').toUpperCase()});
-    else if(raw.startsWith('## ')||raw.startsWith('### '))lineasAll.push({tipo:'h2',txt:raw.replace(/^#{2,3} /,'')});
-    else if(!raw.trim())lineasAll.push({tipo:'br'});
-    else{const txt=raw.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').trim();ctx.font=FONT+'px Times New Roman, serif';const words=txt.split(' ');let line='';for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width>CW&&line){lineasAll.push({tipo:'p',txt:line});line=w;}else{line=test;}}if(line)lineasAll.push({tipo:'p',txt:line});}
-  }
-  const corte=Math.ceil(lineasAll.length*0.40);
-  const lineas=lineasAll.slice(0,corte);
-  let totalH=MT;
-  for(const l of lineas){if(l.tipo==='h1')totalH+=32;else if(l.tipo==='h2')totalH+=26;else if(l.tipo==='br')totalH+=8;else totalH+=LINE_H;}
-  totalH+=40;canvas.height=totalH;canvas.style.height='';
-  ctx.fillStyle='#faf9f6';ctx.fillRect(0,0,W,totalH);
-  let y=MT;
-  for(const l of lineas){
-    if(l.tipo==='h1'){ctx.font='bold 15px Times New Roman, serif';ctx.fillStyle='#0f1117';ctx.textAlign='center';ctx.fillText(l.txt,W/2,y+12);y+=22;ctx.strokeStyle='#c9a84c';ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(ML+30,y);ctx.lineTo(W-MR-30,y);ctx.stroke();y+=10;}
-    else if(l.tipo==='h2'){ctx.font='bold '+(FONT+1)+'px Times New Roman, serif';ctx.fillStyle='#f0ede6';ctx.fillRect(ML-4,y-1,CW+8,18);ctx.fillStyle='#1a1a2e';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=26;}
-    else if(l.tipo==='br'){y+=8;}
-    else{ctx.font=FONT+'px Times New Roman, serif';ctx.fillStyle='#282828';ctx.textAlign='left';ctx.fillText(l.txt,ML,y+12);y+=LINE_H;}
-  }
-  const fadeStart=totalH*0.65;
-  const grad=ctx.createLinearGradient(0,fadeStart,0,totalH);
-  grad.addColorStop(0,'rgba(250,249,246,0)');
-  grad.addColorStop(1,'rgba(250,249,246,1)');
-  ctx.fillStyle=grad;ctx.fillRect(0,fadeStart,W,totalH-fadeStart);
-  overlay.innerHTML='';
-  const wText='VISTA PREVIA · LEGALAI ARG · ';
-  const repeat=Math.ceil((W*3)/(wText.length*11))+2,rows=Math.ceil(totalH/38)+4;
-  let html='';for(let r=0;r<rows;r++)html+='<div style="white-space:nowrap;height:38px;line-height:38px;">'+wText.repeat(repeat)+'</div>';
-  overlay.style.cssText='position:absolute;inset:0;overflow:hidden;opacity:0.13;pointer-events:none;font-family:\'DM Mono\',monospace;font-size:13px;font-weight:700;color:#c9a84c;transform:rotate(-25deg) translateY(-10%);transform-origin:center center;word-break:break-all;letter-spacing:3px;';
-  overlay.innerHTML=html;
-}
-
-// Pagar
-async function pagar(){
-  if(!cotizacion.valor){alert('Esperá un momento, cargando precio...');return;}
-  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'pagar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
-  track('inicio_pago', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
-  showPanel('loadingPago');setProgress(3);
-  const montoARS=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
-  sessionStorage.setItem('legalai_monto_ars', String(montoARS));
-  const sessionId='sess_'+Date.now();
-  sessionStorage.setItem('legalai_sessionId',sessionId);
-  sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
-  sessionStorage.setItem('legalai_origen','formulario');
-  try{
-    const ref=sessionStorage.getItem('legalai_ref')||null;
-    const res=await fetch(WORKER+'/mp/preferencia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'doc',montoARS,descripcion:DOC_TIPO,externalRef:'doc_'+sessionId,ref,datosPago:{titulo:DOC_TIPO,origen:'formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}})});
-    const data=await res.json();
-    if(!data.init_point)throw new Error(data.error||'Error al crear el pago');
-    window.location.href=data.init_point;
-  }catch(err){showPanel('card2');setProgress(2);alert('Error al conectar con MercadoPago: '+err.message);}
-}
-
-// Generar final
-async function generarFinal(paymentId){
-  showPanel('loadingDoc');setProgress(4);
-  try{
-    const datos=JSON.parse(sessionStorage.getItem('legalai_datos')||'{}');
-    const meta=JSON.parse(sessionStorage.getItem('legalai_meta')||'{}');
-    const previewId=G.previewId||sessionStorage.getItem('legalai_previewId')||null;
-    const res=await fetch(WORKER+'/generar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({paymentId,datosDoc:datos,metadata:meta,previewId}),signal:AbortSignal.timeout(35000)});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-    G.texto=data.texto;G.paymentId=data.paymentId||paymentId;
-    sessionStorage.setItem('legalai_texto',data.texto);
-    sessionStorage.setItem('legalai_paymentId',G.paymentId);
-    sessionStorage.removeItem('legalai_previewId');
-    showPanel('card4');setProgress(4);
-    track('documento_generado', { doc_tipo: DOC_TIPO, precio_usd: parseFloat(sessionStorage.getItem('legalai_precio_usd') || String(PRECIO_USD)) });
-    try{fetch(WORKER+'/evento',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'pago_ok',status:'approved',doc_tipo:DOC_TIPO,amount:parseFloat(sessionStorage.getItem('legalai_precio_usd')||String(PRECIO_USD))||PRECIO_USD,amount_ars:Number(sessionStorage.getItem('legalai_monto_ars')||0),payment_id:G.paymentId,payment_method:'MercadoPago',email:datos.email||''})}).catch(()=>{})}catch(_){}
-    try{gtag('event','conversion',{'send_to':'AW-18073890544','value':parseFloat(sessionStorage.getItem('legalai_precio_usd')||String(PRECIO_USD))||PRECIO_USD,'currency':'USD','transaction_id':G.paymentId});}catch(_){}
-  }catch(err){showPanel('card2');setProgress(2);alert('Error al generar el documento: '+err.message);}
-}
-
-// PDF
-function descargarPDF(){
-  const texto=G.texto||sessionStorage.getItem('legalai_texto');
-  if(!texto){alert('No se encontró el documento.');return;}
-  _generarPDF(texto,'contrato-de-alquiler',true);
-}
-function _generarPDF(texto,nombre,conMarca){
-  const{jsPDF}=window.jspdf;const doc=new jsPDF({format:'a4',unit:'mm'});
-  const PW=210,PH=297,ML=25,MR=25,MT=conMarca?28:20,MB=20,CW=PW-ML-MR,YBOTTOM=PH-MB-14;
-  let y=MT;
-  function enc(){if(!conMarca)return;doc.setFillColor(248,247,244);doc.rect(0,0,PW,16,'F');doc.setDrawColor(200,168,75);doc.setLineWidth(.3);doc.line(ML,16,PW-MR,16);doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(120,110,90);doc.text('LegalAI Arg  ·  Documento Orientativo',ML,11);doc.text(new Date().toLocaleDateString('es-AR'),PW-MR,11,{align:'right'});}
-  function pie(){doc.setDrawColor(180,160,100);doc.setLineWidth(.25);doc.line(ML,PH-MB,PW-MR,PH-MB);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Modelo orientativo · No reemplaza asesoramiento legal profesional',PW/2,PH-MB+5,{align:'center'});}
-  function np(){pie();doc.addPage();y=MT;enc();}
-  function ck(h){if(y+h>YBOTTOM)np();}
-  function lmp(t){return t.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/\[[^\]]{0,40}\]/g,'______________________________').trim();}
-  enc();
-  for(const raw of texto.split('\n')){
-    const l=lmp(raw);
-    if(raw.startsWith('# ')){ck(20);y+=4;doc.setFontSize(13);doc.setFont('times','bold');doc.setTextColor(15,17,23);const w=doc.splitTextToSize(l.replace(/^# /,'').toUpperCase(),CW);for(const p of w){ck(8);doc.text(p,PW/2,y,{align:'center'});y+=7;}y+=3;doc.setDrawColor(200,168,75);doc.setLineWidth(.5);doc.line(ML+20,y,PW-MR-20,y);y+=6;continue;}
-    if(raw.startsWith('## ')||raw.startsWith('### ')){y+=5;ck(12);doc.setFontSize(10.5);doc.setFont('times','bold');doc.setTextColor(20,20,20);const txt=l.replace(/^#{2,3} /,'');const w=doc.splitTextToSize(txt,CW);doc.setFillColor(245,243,238);doc.rect(ML-3,y-5,CW+6,w.length*6+6,'F');for(const p of w){doc.text(p,ML,y);y+=6;}y+=3;continue;}
-    if(!l){y+=3;continue;}
-    doc.setFontSize(10);doc.setFont('times','normal');doc.setTextColor(40,40,40);const w=doc.splitTextToSize(l,CW);ck(w.length*5.5+2);for(const p of w){doc.text(p,ML,y);y+=5.5;}y+=1;
-  }
-  pie();
-  const tot=doc.internal.getNumberOfPages();for(let i=1;i<=tot;i++){doc.setPage(i);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,140,120);doc.text('Pág '+i+' / '+tot,PW-MR,PH-MB+5,{align:'right'});}
-  doc.save(nombre+'.pdf');
-}
-
-function volverForm(){showPanel('card1');setProgress(1);}
-function reiniciar(){G={previewId:null,paymentId:null,precio_usd:PRECIO_USD,texto:''};['propietario','inquilino','direccion','ciudad','provincia','monto','duracion','observaciones'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('fecha_inicio').value='';document.getElementById('chk_deposito').checked=true;document.getElementById('chk_ajuste').checked=true;document.getElementById('chk_servicios').checked=false;showPanel('card1');setProgress(1);}
-
-// ── PREVIEW LIVE LOCAL ──────────────────────────────────────────────
-document.addEventListener('contextmenu', e => { if(document.getElementById('preview-live-doc')?.contains(e.target)) e.preventDefault(); });
-document.addEventListener('keydown', e => {
-  if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P'))e.preventDefault();
-});
-
-function actualizarPreviewFormulario() {
-  const el = id => (document.getElementById(id)||{}).value || '';
-  const v  = (val, fb) => val.trim() ? `<strong>${val}</strong>` : `<span style="color:var(--mist)">${fb||'_______________'}</span>`;
-
-  const propietario  = el('propietario');
-  const inquilino    = el('inquilino');
-  const direccion    = el('direccion');
-  const ciudad       = el('ciudad');
-  const provincia    = el('provincia');
-  const monto        = el('monto');
-  const duracion     = el('duracion');
-  const fecha_inicio = el('fecha_inicio');
-  const garante      = el('garante');
-  const deposito_v   = (document.getElementById('chk_deposito_val')||{}).value || 'si';
-  const ajuste_v     = (document.getElementById('chk_ajuste_val')||{}).value || 'icl';
-  const servicios_v  = (document.getElementById('chk_servicios_val')||{}).value || '';
-  const uso_v        = (document.getElementById('chk_uso_val')||{}).value || 'vivienda';
-  const hoy = new Date().toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'});
-
-  const html = `
-    <h1>CONTRATO DE ALQUILER DE VIVIENDA</h1>
-    <p style="text-align:center;font-size:10px;color:var(--mist);margin-bottom:10px">${hoy} · ${ciudad||'___'}, ${provincia||'___'}</p>
-    <h2>PARTES INTERVINIENTES</h2>
-    <p><strong>Propietario:</strong> ${v(propietario)}</p>
-    <p><strong>Inquilino:</strong> ${v(inquilino)}</p>
-    ${garante ? `<p><strong>Garante:</strong> ${v(garante)}</p>` : ''}
-    <h2>INMUEBLE OBJETO DEL CONTRATO</h2>
-    <p><strong>Dirección:</strong> ${v(direccion)} — ${v(ciudad)}, ${v(provincia)}</p>
-    <h2>CONDICIONES ECONÓMICAS</h2>
-    <p><strong>Monto mensual:</strong> ${monto ? `<strong>$ ${monto}</strong>` : '<span style="color:var(--mist)">_______________</span>'}</p>
-    <p><strong>Depósito:</strong> ${deposito_v === 'si' ? '✓ 1 mes de garantía' : '—'} &nbsp;|&nbsp; <strong>Ajuste:</strong> ${ajuste_v.toUpperCase()}</p>
-    ${servicios_v ? `<p><strong>Servicios inquilino:</strong> ${servicios_v.split(',').join(', ')}</p>` : ''} 
-    <h2>PLAZO DEL CONTRATO</h2>
-    <p><strong>Duración:</strong> ${v(duracion,'___ meses')}</p>
-    ${fecha_inicio ? `<p><strong>Inicio:</strong> ${v(fecha_inicio)}</p>` : ''}
-    <h2>CLÁUSULA SIGUIENTE BLOQUEADA ▼</h2>
-    <p style="color:var(--mist);font-style:italic;font-size:10px">Cláusulas de rescisión, obligaciones, servicios y firmas disponibles luego del pago.</p>
-  `;
-
-  const content = document.getElementById('plv-content');
-  if(content) content.innerHTML = html;
-}
-
-function initPreviewFormulario() {
-  const campos = ['propietario','inquilino','garante','direccion','ciudad','provincia',
-                  'monto','duracion','fecha_inicio','observaciones'];
-  campos.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) {
-      el.addEventListener('input', actualizarPreviewFormulario);
-      el.addEventListener('change', actualizarPreviewFormulario);
+  const w=canvas.offsetWidth;canvas.width=w;
+  const lh=16;const pad=20;const maxW=w-pad*2;
+  const lines=G.texto.split('\n');
+  let y=pad;
+  ctx.fillStyle='#0f1117';ctx.font='11px Times New Roman';
+  for(const line of lines){
+    const wrapped=wrapText(ctx,line,maxW);
+    for(const txt of wrapped){
+      ctx.fillText(txt,pad,y);
+      y+=lh;
     }
-  });
-  document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', actualizarPreviewFormulario);
-  });
-  actualizarPreviewFormulario();
+    y+=4;
+  }
+  canvas.height=y+pad;
+  // Re-render con altura correcta
+  ctx.fillStyle='#0f1117';ctx.font='11px Times New Roman';
+  y=pad;
+  for(const line of lines){
+    const wrapped=wrapText(ctx,line,maxW);
+    for(const txt of wrapped){
+      ctx.fillText(txt,pad,y);
+      y+=lh;
+    }
+    y+=4;
+  }
+  // Watermark
+  const overlay=document.getElementById('previewWatermarkOverlay');
+  if(overlay){
+    const svg='<svg viewBox="0 0 '+w+' '+canvas.height+'" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="water" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><text x="100" y="100" text-anchor="middle" transform="rotate(-30 100 100)" font-size="14" font-weight="bold" fill="rgba(200,168,75,0.15)" font-family="monospace">PREVIEW</text></pattern></defs><rect width="100%" height="100%" fill="url(#water)"/></svg>';
+    overlay.innerHTML=svg;
+  }
 }
 
-window.addEventListener('load', () => {
-  setTimeout(initPreviewFormulario, 100);
-});
-
-// Init
-window.addEventListener('load',async()=>{
-  obtenerCotizacion();
-  const d=new Date();d.setDate(d.getDate()+7);document.getElementById('fecha_inicio').value=d.toISOString().split('T')[0];
-  const p=new URLSearchParams(window.location.search);
-  const stat=p.get('status');
-  if(stat==='approved'&&(p.get('tipo')||'doc')==='doc'){
-    window.history.replaceState({},'',window.location.pathname);
-    const pid=p.get('payment_id')||p.get('collection_id');
-    if(pid){G.previewId=sessionStorage.getItem('legalai_previewId')||null;await generarFinal(pid);}
-  }else if(stat==='failure'){showPanel('card2');setProgress(2);}
-});
-</script>
-
-
-<script>
-const FORM_CONFIG = {
-  "alquiler-residencial":{
-    titulo:"Contrato de alquiler residencial",
-    subtitulo:"Completás los datos → pagás → descargás el PDF listo para firmar.",
-    tag:"// Alquiler residencial · Argentina 2026",
-    campos:["propietario","inquilino","direccion","ciudad","provincia","monto","duracion","fecha_inicio"]
-  },
-  "alquiler-comercial":{
-    titulo:"Contrato de alquiler comercial",
-    subtitulo:"Contrato comercial adaptado para locales y oficinas.",
-    tag:"// Alquiler comercial · Argentina 2026"
-  },
-  "alquiler-temporario":{
-    titulo:"Contrato de alquiler temporario",
-    subtitulo:"Ideal para alquileres por tiempo limitado o turísticos.",
-    tag:"// Alquiler temporario · Argentina 2026"
-  },
-  "sociedad":{
-    titulo:"Acuerdo de sociedad",
-    subtitulo:"Definí participación, roles y condiciones.",
-    tag:"// Sociedad · Argentina 2026"
-  },
-  "vehiculo":{
-    titulo:"Contrato de compra / venta de vehículo",
-    subtitulo:"Documento listo para completar y firmar.",
-    tag:"// Vehículo · Argentina 2026"
-  },
-  "freelance-dev":{
-    titulo:"Contrato freelance · Desarrollo web",
-    subtitulo:"Servicios, entregas y condiciones profesionales.",
-    tag:"// Freelance Dev · Argentina 2026"
-  },
-  "freelance-cm":{
-    titulo:"Contrato freelance · Community Manager",
-    subtitulo:"Servicios mensuales y entregables digitales.",
-    tag:"// Freelance CM · Argentina 2026"
-  },
-  "freelance-diseno":{
-    titulo:"Contrato freelance · Diseño",
-    subtitulo:"Protegé entregas, pagos y revisiones.",
-    tag:"// Freelance Diseño · Argentina 2026"
+function wrapText(ctx,text,maxWidth){
+  const words=text.split(' ');
+  const lines=[];let currentLine='';
+  for(const word of words){
+    const testLine=currentLine?(currentLine+' '+word):word;
+    const metrics=ctx.measureText(testLine);
+    if(metrics.width>maxWidth&&currentLine){lines.push(currentLine);currentLine=word;}else{currentLine=testLine;}
   }
-};
+  if(currentLine)lines.push(currentLine);
+  return lines;
+}
 
-window.addEventListener('load', ()=>{
- const tipo = new URLSearchParams(window.location.search).get('tipo') || 'alquiler-residencial';
- const cfg = FORM_CONFIG[tipo];
- if(!cfg) return;
+function pagarDirecto(){
+  generarContrato();
+}
 
- const h1 = document.querySelector('.intro h1');
- const sub = document.querySelector('.intro-sub');
- const tag = document.querySelector('.intro-tag');
+function pagar(){
+  if(!G.previewId){
+    showErr('alertForm2','ID de preview no disponible. Intenta de nuevo.');
+    return;
+  }
+  showPanel('loadingPago');
+  sessionStorage.setItem('legalai_previewId',G.previewId);
+  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_pago',doc_tipo:DOC_TIPO})}).catch(()=>{});
+  track('click_pagar', {doc_tipo: DOC_TIPO, preview_id: G.previewId });
+  setTimeout(()=>{
+    window.location.href=WORKER+'/pago?tipo=generar_formulario&previewId='+encodeURIComponent(G.previewId);
+  },500);
+}
 
- if(h1) h1.innerHTML = cfg.titulo;
- if(sub) sub.innerHTML = cfg.subtitulo;
- if(tag) tag.innerHTML = cfg.tag;
+function volverForm(){
+  showPanel('card1');
+  setProgress(1);
+}
 
- document.title = cfg.titulo + ' | LegalAI Arg';
+function descargarPDF(){
+  window.location.href=WORKER+'/descargar/'+G.previewId;
+  track('descargar_pdf', {doc_tipo: DOC_TIPO });
+}
 
- const sec = document.querySelector('.sec-div span');
- if(sec && tipo.includes('freelance')){
-   sec.innerHTML = 'Cliente y profesional';
- }
+function reiniciar(){
+  location.reload();
+}
 
- if(tipo.includes('freelance')){
-   const monto = document.querySelector('label[for="monto"]');
-   if(monto) monto.innerHTML='Honorarios <span class="req">*</span>';
- }
-
- if(tipo === 'sociedad'){
-   const propietario = document.getElementById('propietario');
-   const inquilino = document.getElementById('inquilino');
-
-   if(propietario){
-      propietario.placeholder = 'Socio 1';
-      propietario.previousElementSibling.innerHTML='Socio 1 <span class="req">*</span>';
-   }
-
-   if(inquilino){
-      inquilino.placeholder = 'Socio 2';
-      inquilino.previousElementSibling.innerHTML='Socio 2 <span class="req">*</span>';
-   }
- }
-
-});
+// Load on document ready
+window.addEventListener('load', initFromParams);
 </script>
 
 </body>
