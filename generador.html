@@ -1,314 +1,444 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="system">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generador de documentos | LegalAI Arg</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="legalai-theme.css">
+  <title>Generador | LegalAI Arg</title>
 
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{
-font-family:'DM Sans',sans-serif;
-background:var(--paper);
-color:var(--ink);
-min-height:100vh;
-}
+  <!-- FUENTES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-header{
-background:var(--hdr-bg);
-padding:0 32px;
-height:60px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-border-bottom:1px solid rgba(200,168,75,.15);
-position:sticky;
-top:0;
-z-index:100;
-}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
 
-.logo{
-font-family:'Playfair Display',serif;
-font-size:1.1rem;
-color:var(--gold);
-text-decoration:none;
-}
+  <!-- CSS GLOBAL DEL SITIO -->
+  <link rel="stylesheet" href="legalai-theme.css" />
+  <link rel="stylesheet" href="components.css" />
 
-.logo span{color:rgba(200,168,75,.4)}
+  <style>
+    .generator-shell{
+      max-width:1200px;
+      margin:auto;
+      padding:48px 24px 80px;
+    }
 
-nav{
-display:flex;
-gap:18px;
-align-items:center;
-flex-wrap:wrap;
-}
+    .generator-hero{
+      text-align:center;
+      margin-bottom:42px;
+    }
 
-nav a{
-color:rgba(255,255,255,.6);
-text-decoration:none;
-font-size:.85rem;
-transition:.2s;
-}
+    .generator-kicker{
+      font-family:'DM Mono',monospace;
+      font-size:.74rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--gold);
+      margin-bottom:14px;
+    }
 
-nav a:hover{color:var(--gold)}
+    .generator-hero h1{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2.2rem,5vw,4rem);
+      line-height:1.02;
+      margin-bottom:18px;
+      color:var(--ink);
+    }
 
-.wrap{
-max-width:1200px;
-margin:auto;
-padding:48px 24px 80px;
-}
+    .generator-hero p{
+      max-width:760px;
+      margin:auto;
+      color:var(--mist);
+      line-height:1.7;
+      font-size:1.02rem;
+    }
 
-.hero{
-text-align:center;
-margin-bottom:42px;
-}
+    .quick-access{
+      margin-top:28px;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:14px;
+    }
 
-.hero-tag{
-font-family:'DM Mono',monospace;
-font-size:.7rem;
-letter-spacing:.14em;
-text-transform:uppercase;
-color:var(--gold);
-margin-bottom:12px;
-}
+    .quick-access a{
+      text-decoration:none;
+    }
 
-.hero h1{
-font-family:'Playfair Display',serif;
-font-size:clamp(2rem,5vw,3.4rem);
-margin-bottom:14px;
-line-height:1.05;
-}
+    .generator-block{
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:28px;
+      margin-bottom:28px;
+      box-shadow:var(--shadow);
+    }
 
-.hero p{
-max-width:720px;
-margin:auto;
-color:var(--mist);
-line-height:1.7;
-}
+    .block-title{
+      font-family:'DM Mono',monospace;
+      font-size:.74rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--gold);
+      margin-bottom:18px;
+    }
 
-.section-box{
-background:var(--surface);
-border:1px solid var(--line);
-border-radius:18px;
-padding:26px;
-margin-bottom:28px;
-box-shadow:var(--shadow);
-}
+    .category-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+    }
 
-.section-title{
-font-family:'DM Mono',monospace;
-font-size:.75rem;
-letter-spacing:.12em;
-text-transform:uppercase;
-color:var(--gold);
-margin-bottom:18px;
-}
+    .category-btn{
+      border:1px solid rgba(200,168,75,.18);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(200,168,75,.12),
+          rgba(200,168,75,.03)
+        );
+      border-radius:18px;
+      padding:22px;
+      cursor:pointer;
+      transition:.25s ease;
+      color:var(--ink);
+      text-align:left;
+    }
 
-.category-grid,
-.subtype-grid{
-display:grid;
-gap:14px;
-}
+    .category-btn:hover{
+      transform:translateY(-2px);
+      border-color:rgba(200,168,75,.5);
+    }
 
-.category-grid{
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-}
+    .category-btn.active{
+      border-color:var(--gold);
+      box-shadow:0 0 0 1px rgba(200,168,75,.2);
+    }
 
-.subtype-grid{
-grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-}
+    .category-title{
+      font-size:1rem;
+      font-weight:700;
+      margin-bottom:8px;
+    }
 
-.cat-btn{
-background:linear-gradient(135deg,var(--gold-dim),transparent);
-border:1px solid rgba(200,168,75,.3);
-border-radius:16px;
-padding:20px;
-cursor:pointer;
-font-size:1rem;
-font-weight:600;
-color:var(--ink);
-transition:.2s;
-}
+    .category-desc{
+      font-size:.92rem;
+      color:var(--mist);
+      line-height:1.5;
+    }
 
-.cat-btn:hover,
-.cat-btn.active{
-transform:translateY(-2px);
-border-color:var(--gold);
-box-shadow:0 10px 24px rgba(0,0,0,.08);
-}
+    .subtypes-wrapper{
+      margin-top:10px;
+    }
 
-.sub-btn{
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-min-height:74px;
-padding:14px;
-border-radius:14px;
-border:1px solid var(--line);
-background:var(--paper);
-text-decoration:none;
-color:var(--ink);
-font-weight:500;
-transition:.2s;
-}
+    .subtypes-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:14px;
+    }
 
-.sub-btn:hover{
-border-color:var(--gold);
-transform:translateY(-2px);
-}
+    .sub-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      min-height:78px;
 
-.note{
-margin-top:14px;
-font-size:.9rem;
-color:var(--mist);
-}
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:16px;
 
-.direct{
-margin-top:24px;
-display:flex;
-justify-content:center;
-}
+      text-decoration:none;
+      color:var(--ink);
 
-.direct a{
-background:var(--btn-bg);
-color:var(--btn-txt);
-padding:14px 22px;
-border-radius:12px;
-text-decoration:none;
-font-weight:600;
-}
+      font-weight:500;
 
-@media(max-width:768px){
-header{
-height:auto;
-padding:16px;
-flex-direction:column;
-gap:12px;
-align-items:flex-start;
-}
-}
-</style>
+      transition:.2s ease;
+      padding:14px;
+    }
+
+    .sub-btn:hover{
+      transform:translateY(-2px);
+      border-color:rgba(200,168,75,.5);
+      background:rgba(200,168,75,.05);
+    }
+
+    .helper-text{
+      margin-top:14px;
+      color:var(--mist);
+      font-size:.92rem;
+      line-height:1.6;
+    }
+
+    @media(max-width:768px){
+
+      .generator-shell{
+        padding:34px 18px 70px;
+      }
+
+      .generator-block{
+        padding:22px;
+      }
+
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-<a class="logo" href="index.html">LegalAI <span>Arg</span></a>
+  <!-- HEADER IGUAL AL RESTO -->
+  <header class="site-header">
+    <div class="container header-inner">
 
-<nav>
-<a href="index.html">Inicio</a>
-<a href="generador.html">Generador</a>
-<a href="contrato-alquiler.html">Contrato alquiler</a>
-<a href="planes.html">Plan ilimitado</a>
-<a href="#">Afiliados</a>
-<a href="#">Acerca de</a>
-</nav>
-</header>
+      <a href="index.html" class="brand">
+        <span class="brand-main">LegalAI</span>
+        <span class="brand-sub">Arg</span>
+      </a>
 
-<div class="wrap">
+      <nav class="main-nav">
+        <a href="index.html">Inicio</a>
+        <a href="generador.html" class="active">Generador</a>
+        <a href="contrato-alquiler.html">Contrato alquiler</a>
+        <a href="planes.html">Plan ilimitado</a>
+        <a href="#">Afiliados</a>
+        <a href="#">Acerca de</a>
+      </nav>
 
-<div class="hero">
-<div class="hero-tag">Generador inteligente</div>
-<h1>Elegí qué documento querés generar</h1>
-<p>
-Seleccioná una categoría principal y luego el tipo de documento.
-El formulario conservará el sistema actual de carga y previsualización en vivo.
-</p>
+      <!-- TOGGLE DEL TEMA -->
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        aria-label="Cambiar tema"
+      >
+        ☀️
+      </button>
 
-<div class="direct">
-<a href="contrato-alquiler.html">
-🏠 Ir directo a contrato de alquiler
-</a>
-</div>
-</div>
+    </div>
+  </header>
 
-<div class="section-box">
-<div class="section-title">Categorías principales</div>
+  <main class="generator-shell">
 
-<div class="category-grid">
-<button class="cat-btn active" data-cat="contratos">📋 Contratos</button>
-<button class="cat-btn" data-cat="freelance">💼 Freelance</button>
-<button class="cat-btn" data-cat="reclamos">⚠️ Reclamos</button>
-<button class="cat-btn" data-cat="personales">👤 Personales</button>
-</div>
+    <section class="generator-hero">
 
-<div class="note">
-Primero elegís una categoría. Luego abajo aparecen los formularios disponibles para esa categoría.
-</div>
-</div>
+      <div class="generator-kicker">
+        Generador inteligente
+      </div>
 
-<div class="section-box">
-<div class="section-title">Formularios disponibles</div>
+      <h1>
+        Elegí el documento que querés crear
+      </h1>
 
-<div class="subtype-grid" id="subtypes"></div>
-</div>
+      <p>
+        Seleccioná una categoría principal y luego el tipo de formulario.
+        El sistema seguirá usando el flujo actual con previsualización live.
+      </p>
 
-</div>
+      <div class="quick-access">
 
-<script>
-const data = {
-contratos: [
-["🏠 Residencial","formulario.html"],
-["🏪 Comercial","formulario.html"],
-["🏖️ Temporario","formulario.html"],
-["🤝 Sociedad","formulario.html"],
-["🚗 Vehículo","formulario.html"],
-["🏡 Inmueble","formulario.html"]
-],
+        <a href="contrato-alquiler.html" class="btn-primary">
+          🏠 Ir directo a contrato de alquiler
+        </a>
 
-freelance: [
-["🎨 Diseño","formulario.html"],
-["💻 Dev web","formulario.html"],
-["📲 CM","formulario.html"],
-["💼 General","formulario.html"],
-["📊 Consultoría","formulario.html"],
-["🚀 Startup","formulario.html"],
-["📧 Propuesta","formulario.html"],
-["🤝 Colaboración","formulario.html"]
-],
+      </div>
 
-reclamos: [
-["⚠️ Defensa consumidor","formulario.html"],
-["📦 Incumplimiento","formulario.html"],
-["💸 Deuda","formulario.html"]
-],
+    </section>
 
-personales: [
-["🔒 NDA","formulario.html"],
-["📱 T&C web","formulario.html"],
-["🛡️ Privacidad","formulario.html"]
-]
-};
+    <!-- CATEGORÍAS -->
+    <section class="generator-block">
 
-const subtypes = document.getElementById("subtypes");
-const buttons = document.querySelectorAll(".cat-btn");
+      <div class="block-title">
+        Categorías principales
+      </div>
 
-function render(cat){
-subtypes.innerHTML = "";
+      <div class="category-grid">
 
-data[cat].forEach(item => {
-const a = document.createElement("a");
-a.className = "sub-btn";
-a.href = item[1];
-a.innerHTML = item[0];
-subtypes.appendChild(a);
-});
-}
+        <button class="category-btn active" data-cat="contratos">
+          <div class="category-title">
+            📋 Contratos
+          </div>
 
-buttons.forEach(btn => {
-btn.addEventListener("click", () => {
-buttons.forEach(b => b.classList.remove("active"));
-btn.classList.add("active");
-render(btn.dataset.cat);
-});
-});
+          <div class="category-desc">
+            Alquileres, acuerdos, sociedades y documentos legales generales.
+          </div>
+        </button>
 
-render("contratos");
-</script>
+        <button class="category-btn" data-cat="freelance">
+          <div class="category-title">
+            💼 Freelance
+          </div>
+
+          <div class="category-desc">
+            Servicios digitales, propuestas, colaboración y trabajo remoto.
+          </div>
+        </button>
+
+        <button class="category-btn" data-cat="reclamos">
+          <div class="category-title">
+            ⚠️ Reclamos
+          </div>
+
+          <div class="category-desc">
+            Defensa al consumidor, incumplimientos y notificaciones.
+          </div>
+        </button>
+
+        <button class="category-btn" data-cat="personales">
+          <div class="category-title">
+            👤 Personales
+          </div>
+
+          <div class="category-desc">
+            NDA, privacidad, términos y documentos personales.
+          </div>
+        </button>
+
+      </div>
+
+      <div class="helper-text">
+        Primero elegís una categoría principal. Luego aparecen automáticamente
+        los formularios relacionados.
+      </div>
+
+    </section>
+
+    <!-- SUBTIPOS -->
+    <section class="generator-block subtypes-wrapper">
+
+      <div class="block-title">
+        Formularios disponibles
+      </div>
+
+      <div class="subtypes-grid" id="subtypes"></div>
+
+    </section>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+
+    const data = {
+
+      contratos: [
+        ["🏠 Residencial","formulario.html"],
+        ["🏪 Comercial","formulario.html"],
+        ["🏖️ Temporario","formulario.html"],
+        ["🤝 Sociedad","formulario.html"],
+        ["🚗 Vehículo","formulario.html"],
+        ["🏡 Inmueble","formulario.html"]
+      ],
+
+      freelance: [
+        ["🎨 Diseño","formulario.html"],
+        ["💻 Dev web","formulario.html"],
+        ["📲 CM","formulario.html"],
+        ["💼 General","formulario.html"],
+        ["📊 Consultoría","formulario.html"],
+        ["🚀 Startup","formulario.html"],
+        ["📧 Propuesta","formulario.html"],
+        ["🤝 Colaboración","formulario.html"]
+      ],
+
+      reclamos: [
+        ["⚠️ Defensa consumidor","formulario.html"],
+        ["📦 Incumplimiento","formulario.html"],
+        ["💸 Deuda","formulario.html"]
+      ],
+
+      personales: [
+        ["🔒 NDA","formulario.html"],
+        ["📱 T&C web","formulario.html"],
+        ["🛡️ Privacidad","formulario.html"]
+      ]
+
+    };
+
+    const subtypes = document.getElementById("subtypes");
+    const buttons = document.querySelectorAll(".category-btn");
+
+    function render(cat){
+
+      subtypes.innerHTML = "";
+
+      data[cat].forEach(item => {
+
+        const a = document.createElement("a");
+
+        a.className = "sub-btn";
+        a.href = item[1];
+        a.innerHTML = item[0];
+
+        subtypes.appendChild(a);
+
+      });
+
+    }
+
+    buttons.forEach(btn => {
+
+      btn.addEventListener("click", () => {
+
+        buttons.forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        render(btn.dataset.cat);
+
+      });
+
+    });
+
+    render("contratos");
+
+  </script>
+
+  <!-- SCRIPT DEL TEMA -->
+  <script>
+    const html = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+
+    function setTheme(theme){
+      html.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+
+      toggle.innerHTML =
+        theme === "dark"
+        ? "🌙"
+        : "☀️";
+    }
+
+    const savedTheme =
+      localStorage.getItem("theme") || "system";
+
+    if(savedTheme === "system"){
+
+      const prefersDark =
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      setTheme(prefersDark ? "dark" : "light");
+
+    }else{
+
+      setTheme(savedTheme);
+
+    }
+
+    toggle.addEventListener("click", () => {
+
+      const current =
+        html.getAttribute("data-theme");
+
+      setTheme(
+        current === "dark"
+        ? "light"
+        : "dark"
+      );
+
+    });
+  </script>
 
 </body>
 </html>
