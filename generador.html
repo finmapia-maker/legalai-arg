@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de documentos | LegalAI Arg</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legalai-theme.css">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:'DM Sans',sans-serif;
+background:var(--paper);
+color:var(--ink);
+min-height:100vh;
+}
+
+header{
+background:var(--hdr-bg);
+padding:0 32px;
+height:60px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-bottom:1px solid rgba(200,168,75,.15);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.logo{
+font-family:'Playfair Display',serif;
+font-size:1.1rem;
+color:var(--gold);
+text-decoration:none;
+}
+
+.logo span{color:rgba(200,168,75,.4)}
+
+nav{
+display:flex;
+gap:18px;
+align-items:center;
+flex-wrap:wrap;
+}
+
+nav a{
+color:rgba(255,255,255,.6);
+text-decoration:none;
+font-size:.85rem;
+transition:.2s;
+}
+
+nav a:hover{color:var(--gold)}
+
+.wrap{
+max-width:1200px;
+margin:auto;
+padding:48px 24px 80px;
+}
+
+.hero{
+text-align:center;
+margin-bottom:42px;
+}
+
+.hero-tag{
+font-family:'DM Mono',monospace;
+font-size:.7rem;
+letter-spacing:.14em;
+text-transform:uppercase;
+color:var(--gold);
+margin-bottom:12px;
+}
+
+.hero h1{
+font-family:'Playfair Display',serif;
+font-size:clamp(2rem,5vw,3.4rem);
+margin-bottom:14px;
+line-height:1.05;
+}
+
+.hero p{
+max-width:720px;
+margin:auto;
+color:var(--mist);
+line-height:1.7;
+}
+
+.section-box{
+background:var(--surface);
+border:1px solid var(--line);
+border-radius:18px;
+padding:26px;
+margin-bottom:28px;
+box-shadow:var(--shadow);
+}
+
+.section-title{
+font-family:'DM Mono',monospace;
+font-size:.75rem;
+letter-spacing:.12em;
+text-transform:uppercase;
+color:var(--gold);
+margin-bottom:18px;
+}
+
+.category-grid,
+.subtype-grid{
+display:grid;
+gap:14px;
+}
+
+.category-grid{
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+}
+
+.subtype-grid{
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+}
+
+.cat-btn{
+background:linear-gradient(135deg,var(--gold-dim),transparent);
+border:1px solid rgba(200,168,75,.3);
+border-radius:16px;
+padding:20px;
+cursor:pointer;
+font-size:1rem;
+font-weight:600;
+color:var(--ink);
+transition:.2s;
+}
+
+.cat-btn:hover,
+.cat-btn.active{
+transform:translateY(-2px);
+border-color:var(--gold);
+box-shadow:0 10px 24px rgba(0,0,0,.08);
+}
+
+.sub-btn{
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+min-height:74px;
+padding:14px;
+border-radius:14px;
+border:1px solid var(--line);
+background:var(--paper);
+text-decoration:none;
+color:var(--ink);
+font-weight:500;
+transition:.2s;
+}
+
+.sub-btn:hover{
+border-color:var(--gold);
+transform:translateY(-2px);
+}
+
+.note{
+margin-top:14px;
+font-size:.9rem;
+color:var(--mist);
+}
+
+.direct{
+margin-top:24px;
+display:flex;
+justify-content:center;
+}
+
+.direct a{
+background:var(--btn-bg);
+color:var(--btn-txt);
+padding:14px 22px;
+border-radius:12px;
+text-decoration:none;
+font-weight:600;
+}
+
+@media(max-width:768px){
+header{
+height:auto;
+padding:16px;
+flex-direction:column;
+gap:12px;
+align-items:flex-start;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<a class="logo" href="index.html">LegalAI <span>Arg</span></a>
+
+<nav>
+<a href="index.html">Inicio</a>
+<a href="generador.html">Generador</a>
+<a href="contrato-alquiler.html">Contrato alquiler</a>
+<a href="planes.html">Plan ilimitado</a>
+<a href="#">Afiliados</a>
+<a href="#">Acerca de</a>
+</nav>
+</header>
+
+<div class="wrap">
+
+<div class="hero">
+<div class="hero-tag">Generador inteligente</div>
+<h1>Elegí qué documento querés generar</h1>
+<p>
+Seleccioná una categoría principal y luego el tipo de documento.
+El formulario conservará el sistema actual de carga y previsualización en vivo.
+</p>
+
+<div class="direct">
+<a href="contrato-alquiler.html">
+🏠 Ir directo a contrato de alquiler
+</a>
+</div>
+</div>
+
+<div class="section-box">
+<div class="section-title">Categorías principales</div>
+
+<div class="category-grid">
+<button class="cat-btn active" data-cat="contratos">📋 Contratos</button>
+<button class="cat-btn" data-cat="freelance">💼 Freelance</button>
+<button class="cat-btn" data-cat="reclamos">⚠️ Reclamos</button>
+<button class="cat-btn" data-cat="personales">👤 Personales</button>
+</div>
+
+<div class="note">
+Primero elegís una categoría. Luego abajo aparecen los formularios disponibles para esa categoría.
+</div>
+</div>
+
+<div class="section-box">
+<div class="section-title">Formularios disponibles</div>
+
+<div class="subtype-grid" id="subtypes"></div>
+</div>
+
+</div>
+
+<script>
+const data = {
+contratos: [
+["🏠 Residencial","formulario.html"],
+["🏪 Comercial","formulario.html"],
+["🏖️ Temporario","formulario.html"],
+["🤝 Sociedad","formulario.html"],
+["🚗 Vehículo","formulario.html"],
+["🏡 Inmueble","formulario.html"]
+],
+
+freelance: [
+["🎨 Diseño","formulario.html"],
+["💻 Dev web","formulario.html"],
+["📲 CM","formulario.html"],
+["💼 General","formulario.html"],
+["📊 Consultoría","formulario.html"],
+["🚀 Startup","formulario.html"],
+["📧 Propuesta","formulario.html"],
+["🤝 Colaboración","formulario.html"]
+],
+
+reclamos: [
+["⚠️ Defensa consumidor","formulario.html"],
+["📦 Incumplimiento","formulario.html"],
+["💸 Deuda","formulario.html"]
+],
+
+personales: [
+["🔒 NDA","formulario.html"],
+["📱 T&C web","formulario.html"],
+["🛡️ Privacidad","formulario.html"]
+]
+};
+
+const subtypes = document.getElementById("subtypes");
+const buttons = document.querySelectorAll(".cat-btn");
+
+function render(cat){
+subtypes.innerHTML = "";
+
+data[cat].forEach(item => {
+const a = document.createElement("a");
+a.className = "sub-btn";
+a.href = item[1];
+a.innerHTML = item[0];
+subtypes.appendChild(a);
+});
+}
+
+buttons.forEach(btn => {
+btn.addEventListener("click", () => {
+buttons.forEach(b => b.classList.remove("active"));
+btn.classList.add("active");
+render(btn.dataset.cat);
+});
+});
+
+render("contratos");
+</script>
+
+</body>
+</html>
