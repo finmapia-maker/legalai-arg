@@ -54,12 +54,24 @@
       "resultado_pendiente": false,
       "conv_final": 0,
       "delta": 0
+    },
+    {
+      "descripcion": "Verificar que el CTA principal dispara correctamente la apertura del formulario: revisar event listeners, posibles errores JS que bloquean el form, o que el formulario no sea visible en mobile. Si el form está oculto o falla silenciosamente, reemplazar con link directo al checkout en vez de modal/form intermedio.",
+      "fecha": "2026-05-29T14:10:08.632Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-05-28T14:39:00.344Z",
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-05-29T14:10:08.632Z",
   "ultima_prioridad": "alta",
-  "ultimo_embudo": null,
-  "cambio_activo": null,
-  "cambio_activo_desde": null
+  "ultimo_embudo": "Inicio formulario",
+  "cambio_activo": {
+    "descripcion": "Verificar que el CTA principal dispara correctamente la apertura del formulario: revisar event listeners, posibles errores JS que bloquean el form, o que el formulario no sea visible en mobile. Si el form está oculto o falla silenciosamente, reemplazar con link directo al checkout en vez de modal/form intermedio.",
+    "archivo": "index.html",
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el formulario se abre correctamente sin fricción técnica → el 48% de clics útiles se convierte en inicios de pago y las 2 ventas actuales escalan a 4-6 en próximas 48h",
+    "conv_base": 2,
+    "clics_base": 11
+  },
+  "cambio_activo_desde": "2026-05-29T14:10:08.632Z"
 }

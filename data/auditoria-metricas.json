@@ -1,15 +1,1151 @@
 {
-  "fecha": "2026-05-28T14:39:00.344Z",
-  "periodo_48h": null,
-  "periodo_7d": null,
-  "embudo_eventos": {},
-  "total_eventos": 0,
-  "funnel_doc": [],
-  "funnel_plan": [],
-  "cuello_botella": null,
+  "fecha": "2026-05-29T14:10:08.633Z",
+  "periodo_48h": {
+    "visitas": 21,
+    "clics": 11,
+    "ventas": 2,
+    "tasa_conv": "18.2%",
+    "total_ars": 23800,
+    "total_eventos": 46,
+    "por_fuente": {
+      "directo": {
+        "visitas": 0,
+        "clics": 10,
+        "ventas": 2,
+        "total_ars": 23800
+      },
+      "DIRECTO": {
+        "visitas": 21,
+        "clics": 1,
+        "ventas": 0,
+        "total_ars": 0
+      }
+    },
+    "top_documentos": [
+      {
+        "documento": "Contrato de alquiler Argentina 2026",
+        "eventos": 4,
+        "ventas": 1,
+        "total_ars": 7900
+      },
+      {
+        "documento": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+        "eventos": 1,
+        "ventas": 1,
+        "total_ars": 15900
+      },
+      {
+        "documento": "index",
+        "eventos": 23,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 6,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "hero_landing",
+        "eventos": 3,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "nav_generador",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "formulario",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "pagar_formulario",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Documento legal: ",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      }
+    ],
+    "ultimas_conversiones": [
+      {
+        "id": "MP-156969216118",
+        "date": "2026-05-29T12:53:08.304Z",
+        "type": "venta",
+        "product": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+        "category": "mercadopago",
+        "amount": 15900,
+        "currency": "ARS",
+        "amount_ars": 15900,
+        "payment_method": "MercadoPago",
+        "payment_id": "156969216118",
+        "order_id": "doc_sess_1777489429974",
+        "status": "approved",
+        "customer": "soniaestrada963@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "MP-156969216118",
+          "payment_id": "156969216118",
+          "order_id": "doc_sess_1777489429974",
+          "type": "venta",
+          "product": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+          "category": "mercadopago",
+          "amount": 15900,
+          "amount_ars": 15900,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "soniaestrada963@gmail.com",
+          "affiliate": "",
+          "raw": {
+            "source": "mp_sync",
+            "paymentId": "156969216118",
+            "externalRef": "doc_sess_1777489429974",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "ip_address": "186.143.162.121",
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+                    "unit_price": "15900"
+                  }
+                ],
+                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": null,
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.154.0-rc-2",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {},
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 286.2,
+                    "refunded": 0
+                  },
+                  "base_amount": 15900,
+                  "client_id": 0,
+                  "date_created": "2026-04-29T15:04:21.000-04:00",
+                  "external_charge_id": "01KQDA1GG53S2JN282H9QYASAG",
+                  "id": "156969216118-001",
+                  "last_updated": "2026-04-29T15:04:21.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-04-29T15:04:21.781-04:00",
+                  "execution_id": "01KQDA1GFDS2SGAXWYNXXJKW8W"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-04-29T15:04:22.000-04:00",
+              "date_created": "2026-04-29T15:04:21.000-04:00",
+              "date_last_updated": "2026-04-29T15:04:33.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1777489429974",
+              "fee_details": [
+                {
+                  "amount": 286.2,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 156969216118,
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "2005",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "device": "Mobile",
+                "dolar_rate": 1438.1,
+                "gclid": "Cj0KCQjw2MbPBhCSARIsAP3jP9zbR4Me5613xtXwTUaZh3JSdMYPe_G6XsulwxfW9EXdxmOLxzkDcNEaApd4EALw_wcB",
+                "origen": "index",
+                "tipo": "doc",
+                "titulo": "Contrato de Alquiler de Vivienda Residencial",
+                "utm_cmp": "",
+                "utm_cnt": "",
+                "utm_med": "",
+                "utm_src": ""
+              },
+              "money_release_date": "2026-06-03T15:04:22.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": null,
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "40382683365",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "soniaestrada963@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "2595497111",
+                "identification": {
+                  "number": "27965128455",
+                  "type": "CUIL"
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "id": "account_money",
+                "issuer_id": "2005",
+                "type": "account_money"
+              },
+              "payment_method_id": "account_money",
+              "payment_type_id": "account_money",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": "checkout-off",
+                  "operating_system": null,
+                  "version": "v2"
+                },
+                "business_info": {
+                  "branch": "Merchant Services",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Collector",
+                  "state_id": "NN"
+                },
+                "transaction_data": {
+                  "e2e_id": null
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": null,
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": null,
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 15900,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 0,
+                "net_received_amount": 15613.8,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": null,
+                "total_paid_amount": 15900
+              },
+              "shipping_cost": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "MP-160627949381",
+        "date": "2026-05-29T12:53:05.814Z",
+        "type": "venta",
+        "product": "Contrato de alquiler Argentina 2026",
+        "category": "mercadopago",
+        "amount": 7900,
+        "currency": "ARS",
+        "amount_ars": 7900,
+        "payment_method": "MercadoPago",
+        "payment_id": "160627949381",
+        "order_id": "doc_sess_1779999864757",
+        "status": "approved",
+        "customer": "franpalacio1994@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "MP-160627949381",
+          "payment_id": "160627949381",
+          "order_id": "doc_sess_1779999864757",
+          "type": "venta",
+          "product": "Contrato de alquiler Argentina 2026",
+          "category": "mercadopago",
+          "amount": 7900,
+          "amount_ars": 7900,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "franpalacio1994@gmail.com",
+          "affiliate": "",
+          "raw": {
+            "source": "mp_sync",
+            "paymentId": "160627949381",
+            "externalRef": "doc_sess_1779999864757",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Contrato de alquiler Argentina 2026",
+                    "unit_price": "7900.0"
+                  }
+                ],
+                "tracking_id": "platform:v1-whitelabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": null,
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.158.0-rc-1",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {},
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 142.2,
+                    "refunded": 0
+                  },
+                  "base_amount": 7900,
+                  "client_id": 0,
+                  "date_created": "2026-05-28T16:24:42.000-04:00",
+                  "external_charge_id": "01KSR45F4F04PNWJJ6SRG77AH5",
+                  "id": "160627949381-001",
+                  "last_updated": "2026-05-28T16:24:42.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-05-28T16:24:42.398-04:00",
+                  "execution_id": "01KSR45F3QHNGXPWBGJGHVH148"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-05-28T16:24:42.000-04:00",
+              "date_created": "2026-05-28T16:24:42.000-04:00",
+              "date_last_updated": "2026-05-28T16:25:05.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Contrato de alquiler Argentina 2026",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1779999864757",
+              "fee_details": [
+                {
+                  "amount": 142.2,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 160627949381,
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "2005",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "device": "Mobile",
+                "gclid": "Cj0KCQjwz9_QBhD_ARIsADnSCfAeSBBjtffqmwzT1mGQHXdYwJl0xufuK5pub70B2m-hu7xJdRjMO0IaAjTeEALw_wcB",
+                "legalai_external_ref": "doc_sess_1779999864757",
+                "legalai_ref": "",
+                "legalai_tipo": "doc",
+                "origen": "formulario",
+                "titulo": "Contrato de alquiler Argentina 2026",
+                "utm_cmp": "",
+                "utm_med": "",
+                "utm_src": ""
+              },
+              "money_release_date": "2026-07-02T16:24:42.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": null,
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "41297163377",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "franpalacio1994@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "770055110",
+                "identification": {
+                  "number": "20376403670",
+                  "type": "CUIL"
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "id": "account_money",
+                "issuer_id": "2005",
+                "type": "account_money"
+              },
+              "payment_method_id": "account_money",
+              "payment_type_id": "account_money",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": null,
+                  "operating_system": null,
+                  "version": null
+                },
+                "business_info": {
+                  "branch": "PX",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Collector",
+                  "state_id": "AR-B"
+                },
+                "transaction_data": {
+                  "e2e_id": null
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": null,
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": null,
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 7900,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 0,
+                "net_received_amount": 7757.8,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": null,
+                "total_paid_amount": 7900
+              },
+              "shipping_cost": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  "periodo_7d": {
+    "visitas": 117,
+    "clics": 45,
+    "ventas": 2,
+    "tasa_conv": "4.4%",
+    "total_ars": 23800,
+    "total_eventos": 223,
+    "por_fuente": {
+      "directo": {
+        "visitas": 0,
+        "clics": 23,
+        "ventas": 2,
+        "total_ars": 23800
+      },
+      "DIRECTO": {
+        "visitas": 117,
+        "clics": 22,
+        "ventas": 0,
+        "total_ars": 0
+      }
+    },
+    "top_documentos": [
+      {
+        "documento": "Contrato de alquiler Argentina 2026",
+        "eventos": 4,
+        "ventas": 1,
+        "total_ars": 7900
+      },
+      {
+        "documento": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+        "eventos": 1,
+        "ventas": 1,
+        "total_ars": 15900
+      },
+      {
+        "documento": "index",
+        "eventos": 115,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "formulario",
+        "eventos": 60,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de vivienda",
+        "eventos": 12,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 8,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "nav_generador",
+        "eventos": 5,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "hero_landing",
+        "eventos": 4,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "hero_alquiler",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      }
+    ],
+    "ultimas_conversiones": [
+      {
+        "id": "MP-156969216118",
+        "date": "2026-05-29T12:53:08.304Z",
+        "type": "venta",
+        "product": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+        "category": "mercadopago",
+        "amount": 15900,
+        "currency": "ARS",
+        "amount_ars": 15900,
+        "payment_method": "MercadoPago",
+        "payment_id": "156969216118",
+        "order_id": "doc_sess_1777489429974",
+        "status": "approved",
+        "customer": "soniaestrada963@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "MP-156969216118",
+          "payment_id": "156969216118",
+          "order_id": "doc_sess_1777489429974",
+          "type": "venta",
+          "product": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+          "category": "mercadopago",
+          "amount": 15900,
+          "amount_ars": 15900,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "soniaestrada963@gmail.com",
+          "affiliate": "",
+          "raw": {
+            "source": "mp_sync",
+            "paymentId": "156969216118",
+            "externalRef": "doc_sess_1777489429974",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "ip_address": "186.143.162.121",
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+                    "unit_price": "15900"
+                  }
+                ],
+                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": null,
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.154.0-rc-2",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {},
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 286.2,
+                    "refunded": 0
+                  },
+                  "base_amount": 15900,
+                  "client_id": 0,
+                  "date_created": "2026-04-29T15:04:21.000-04:00",
+                  "external_charge_id": "01KQDA1GG53S2JN282H9QYASAG",
+                  "id": "156969216118-001",
+                  "last_updated": "2026-04-29T15:04:21.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-04-29T15:04:21.781-04:00",
+                  "execution_id": "01KQDA1GFDS2SGAXWYNXXJKW8W"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-04-29T15:04:22.000-04:00",
+              "date_created": "2026-04-29T15:04:21.000-04:00",
+              "date_last_updated": "2026-04-29T15:04:33.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Documento legal: Contrato de Alquiler de Vivienda Residencial",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1777489429974",
+              "fee_details": [
+                {
+                  "amount": 286.2,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 156969216118,
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "2005",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "device": "Mobile",
+                "dolar_rate": 1438.1,
+                "gclid": "Cj0KCQjw2MbPBhCSARIsAP3jP9zbR4Me5613xtXwTUaZh3JSdMYPe_G6XsulwxfW9EXdxmOLxzkDcNEaApd4EALw_wcB",
+                "origen": "index",
+                "tipo": "doc",
+                "titulo": "Contrato de Alquiler de Vivienda Residencial",
+                "utm_cmp": "",
+                "utm_cnt": "",
+                "utm_med": "",
+                "utm_src": ""
+              },
+              "money_release_date": "2026-06-03T15:04:22.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": null,
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "40382683365",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "soniaestrada963@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "2595497111",
+                "identification": {
+                  "number": "27965128455",
+                  "type": "CUIL"
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "id": "account_money",
+                "issuer_id": "2005",
+                "type": "account_money"
+              },
+              "payment_method_id": "account_money",
+              "payment_type_id": "account_money",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": "checkout-off",
+                  "operating_system": null,
+                  "version": "v2"
+                },
+                "business_info": {
+                  "branch": "Merchant Services",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Collector",
+                  "state_id": "NN"
+                },
+                "transaction_data": {
+                  "e2e_id": null
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": null,
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": null,
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 15900,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 0,
+                "net_received_amount": 15613.8,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": null,
+                "total_paid_amount": 15900
+              },
+              "shipping_cost": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "MP-160627949381",
+        "date": "2026-05-29T12:53:05.814Z",
+        "type": "venta",
+        "product": "Contrato de alquiler Argentina 2026",
+        "category": "mercadopago",
+        "amount": 7900,
+        "currency": "ARS",
+        "amount_ars": 7900,
+        "payment_method": "MercadoPago",
+        "payment_id": "160627949381",
+        "order_id": "doc_sess_1779999864757",
+        "status": "approved",
+        "customer": "franpalacio1994@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "MP-160627949381",
+          "payment_id": "160627949381",
+          "order_id": "doc_sess_1779999864757",
+          "type": "venta",
+          "product": "Contrato de alquiler Argentina 2026",
+          "category": "mercadopago",
+          "amount": 7900,
+          "amount_ars": 7900,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "franpalacio1994@gmail.com",
+          "affiliate": "",
+          "raw": {
+            "source": "mp_sync",
+            "paymentId": "160627949381",
+            "externalRef": "doc_sess_1779999864757",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Contrato de alquiler Argentina 2026",
+                    "unit_price": "7900.0"
+                  }
+                ],
+                "tracking_id": "platform:v1-whitelabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": null,
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.158.0-rc-1",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {},
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 142.2,
+                    "refunded": 0
+                  },
+                  "base_amount": 7900,
+                  "client_id": 0,
+                  "date_created": "2026-05-28T16:24:42.000-04:00",
+                  "external_charge_id": "01KSR45F4F04PNWJJ6SRG77AH5",
+                  "id": "160627949381-001",
+                  "last_updated": "2026-05-28T16:24:42.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-05-28T16:24:42.398-04:00",
+                  "execution_id": "01KSR45F3QHNGXPWBGJGHVH148"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-05-28T16:24:42.000-04:00",
+              "date_created": "2026-05-28T16:24:42.000-04:00",
+              "date_last_updated": "2026-05-28T16:25:05.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Contrato de alquiler Argentina 2026",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1779999864757",
+              "fee_details": [
+                {
+                  "amount": 142.2,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 160627949381,
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "2005",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "device": "Mobile",
+                "gclid": "Cj0KCQjwz9_QBhD_ARIsADnSCfAeSBBjtffqmwzT1mGQHXdYwJl0xufuK5pub70B2m-hu7xJdRjMO0IaAjTeEALw_wcB",
+                "legalai_external_ref": "doc_sess_1779999864757",
+                "legalai_ref": "",
+                "legalai_tipo": "doc",
+                "origen": "formulario",
+                "titulo": "Contrato de alquiler Argentina 2026",
+                "utm_cmp": "",
+                "utm_med": "",
+                "utm_src": ""
+              },
+              "money_release_date": "2026-07-02T16:24:42.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": null,
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "41297163377",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "franpalacio1994@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "770055110",
+                "identification": {
+                  "number": "20376403670",
+                  "type": "CUIL"
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "id": "account_money",
+                "issuer_id": "2005",
+                "type": "account_money"
+              },
+              "payment_method_id": "account_money",
+              "payment_type_id": "account_money",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": null,
+                  "operating_system": null,
+                  "version": null
+                },
+                "business_info": {
+                  "branch": "PX",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Collector",
+                  "state_id": "AR-B"
+                },
+                "transaction_data": {
+                  "e2e_id": null
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": null,
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": null,
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 7900,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 0,
+                "net_received_amount": 7757.8,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": null,
+                "total_paid_amount": 7900
+              },
+              "shipping_cost": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  "embudo_eventos": {
+    "error": 1,
+    "checkout_start": 3,
+    "interaccion": 7,
+    "page_view": 21,
+    "scroll_25pct": 3,
+    "venta": 2,
+    "payment_update": 2,
+    "cta_generador": 1,
+    "scroll_75pct": 2,
+    "scroll_50pct": 3,
+    "scroll_form_50pct": 1
+  },
+  "total_eventos": 46,
+  "funnel_doc": [
+    {
+      "label": "Visitas",
+      "count": 21,
+      "drop_pct": 0
+    },
+    {
+      "label": "Interacciones/CTA",
+      "count": 11,
+      "drop_pct": 48
+    },
+    {
+      "label": "Inicio formulario",
+      "count": 0,
+      "drop_pct": 100
+    },
+    {
+      "label": "Pago iniciado",
+      "count": 3,
+      "drop_pct": 0
+    },
+    {
+      "label": "Venta confirmada",
+      "count": 2,
+      "drop_pct": 33
+    }
+  ],
+  "funnel_plan": [
+    {
+      "label": "Visitas planes",
+      "count": 6,
+      "drop_pct": 0
+    },
+    {
+      "label": "Click plan",
+      "count": 6,
+      "drop_pct": 0
+    },
+    {
+      "label": "Pago plan iniciado",
+      "count": 0,
+      "drop_pct": 100
+    },
+    {
+      "label": "Plan activo",
+      "count": 0,
+      "drop_pct": 0
+    }
+  ],
+  "cuello_botella": {
+    "funnel": "doc",
+    "etapa": "Inicio formulario",
+    "drop_pct": 100,
+    "count": 0
+  },
   "diagnostico": {
     "problemas": [],
-    "oportunidades": [],
-    "estado": "OK"
+    "oportunidades": [
+      "2 venta(s) confirmada(s) en 48h → analizar fuente/documento y escalar lo que convirtió.",
+      "Tasa alta (18.2%) con 11 clics → escalar presupuesto de ads",
+      "Fuente más rentable: \"directo\" (2 ventas)"
+    ],
+    "estado": "OPORTUNIDAD"
   }
 }
