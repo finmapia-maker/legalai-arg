@@ -14,352 +14,399 @@
 <style>
 
 :root{
-  --ink:#0f1117;
-  --paper:#f7f3ec;
-  --surface:#ffffff;
-  --cream:#ede8dc;
-  --gold:#c8a84b;
-  --gold-dim:rgba(200,168,75,.12);
-  --mist:#6b7580;
-  --line:rgba(15,17,23,.08);
-  --hdr-bg:#0f1117;
-  --shadow:0 2px 16px rgba(15,17,23,.06);
+--ink:#0f1117;
+--paper:#f7f3ec;
+--surface:#ffffff;
+--cream:#ede8dc;
+--gold:#c8a84b;
+--gold-dim:rgba(200,168,75,.12);
+--mist:#69707d;
+--line:rgba(15,17,23,.08);
+--hdr-bg:#0f1117;
+--shadow:0 10px 30px rgba(15,17,23,.06);
 }
 
 [data-theme="dark"]{
-  --ink:#eceef2;
-  --paper:#0b0d12;
-  --surface:#171b27;
-  --cream:#121520;
-  --gold:#d4a847;
-  --gold-dim:rgba(212,168,71,.12);
-  --mist:#7c8596;
-  --line:rgba(255,255,255,.06);
-  --hdr-bg:#07090d;
-  --shadow:0 8px 30px rgba(0,0,0,.3);
+--ink:#eceef2;
+--paper:#0b0d11;
+--surface:#171b26;
+--cream:#10141c;
+--gold:#d4a847;
+--gold-dim:rgba(212,168,71,.12);
+--mist:#7c8592;
+--line:rgba(255,255,255,.06);
+--hdr-bg:#08090d;
+--shadow:0 10px 40px rgba(0,0,0,.32);
 }
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--paper);
-  color:var(--ink);
-  transition:.25s;
+font-family:'DM Sans',sans-serif;
+background:var(--paper);
+color:var(--ink);
+transition:.25s;
 }
 
 header{
-  height:62px;
-  background:var(--hdr-bg);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
-  border-bottom:1px solid rgba(200,168,75,.12);
+height:62px;
+background:var(--hdr-bg);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 38px;
+border-bottom:1px solid rgba(200,168,75,.14);
+position:sticky;
+top:0;
+z-index:200;
 }
 
 .logo{
-  font-family:'Playfair Display',serif;
-  font-size:1.15rem;
-  color:var(--gold);
-  text-decoration:none;
-  letter-spacing:.04em;
+font-family:'Playfair Display',serif;
+font-size:1.2rem;
+text-decoration:none;
+color:var(--gold);
 }
 
 .logo span{
-  opacity:.4;
+opacity:.45;
 }
 
-.right-top{
-  display:flex;
-  align-items:center;
-  gap:18px;
+.hdr-right{
+display:flex;
+align-items:center;
+gap:18px;
 }
 
-.mini-top{
-  font-family:'DM Mono',monospace;
-  font-size:.65rem;
-  color:rgba(255,255,255,.35);
-  letter-spacing:.12em;
-  text-transform:uppercase;
+.hdr-mini{
+font-family:'DM Mono',monospace;
+font-size:.64rem;
+letter-spacing:.12em;
+text-transform:uppercase;
+color:rgba(255,255,255,.28);
 }
 
-.theme-switch{
-  display:flex;
-  gap:4px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:18px;
-  padding:3px;
+.theme-toggle{
+display:flex;
+padding:3px;
+border-radius:20px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+gap:3px;
 }
 
 .theme-btn{
-  border:none;
-  background:transparent;
-  color:rgba(255,255,255,.45);
-  padding:5px 10px;
-  border-radius:14px;
-  cursor:pointer;
-  font-size:.68rem;
-  font-family:'DM Mono',monospace;
+border:none;
+background:transparent;
+padding:5px 10px;
+border-radius:14px;
+cursor:pointer;
+font-size:.68rem;
+font-family:'DM Mono',monospace;
+color:rgba(255,255,255,.4);
+transition:.2s;
 }
 
 .theme-btn.active{
-  background:rgba(212,168,71,.18);
-  color:var(--gold);
+background:rgba(200,168,75,.16);
+color:var(--gold);
 }
 
 nav{
-  background:var(--cream);
-  border-bottom:1px solid var(--line);
-  padding:0 40px;
-  display:flex;
-  overflow-x:auto;
+height:54px;
+display:flex;
+align-items:center;
+padding:0 36px;
+background:var(--cream);
+border-bottom:1px solid var(--line);
+overflow-x:auto;
 }
 
-.nav-link{
-  padding:15px 22px;
-  text-decoration:none;
-  color:var(--mist);
-  font-size:.88rem;
-  border-bottom:2px solid transparent;
-  transition:.2s;
-  white-space:nowrap;
+nav a{
+height:100%;
+display:flex;
+align-items:center;
+padding:0 20px;
+text-decoration:none;
+font-size:.88rem;
+font-weight:500;
+color:var(--mist);
+border-bottom:2px solid transparent;
+transition:.2s;
+white-space:nowrap;
 }
 
-.nav-link:hover{
-  color:var(--ink);
+nav a:hover{
+color:var(--ink);
 }
 
-.nav-link.active{
-  color:var(--ink);
-  border-bottom-color:var(--gold);
+nav a.active{
+color:var(--ink);
+border-bottom-color:var(--gold);
 }
 
-.wrap{
-  max-width:1380px;
-  margin:auto;
-  padding:54px 34px 80px;
+.container{
+max-width:1380px;
+margin:auto;
+padding:54px 36px 70px;
 }
 
 .hero{
-  text-align:center;
-  margin-bottom:34px;
+text-align:center;
+margin-bottom:34px;
 }
 
-.kicker{
-  font-family:'DM Mono',monospace;
-  font-size:.74rem;
-  color:var(--gold);
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  margin-bottom:16px;
+.hero-tag{
+font-family:'DM Mono',monospace;
+font-size:.74rem;
+letter-spacing:.18em;
+text-transform:uppercase;
+color:var(--gold);
+margin-bottom:16px;
 }
 
 .hero h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.5rem,6vw,5rem);
-  line-height:1;
-  margin-bottom:18px;
-  font-weight:900;
-}
-
-.hero h1 span{
-  color:var(--gold);
-  font-style:italic;
+font-family:'Playfair Display',serif;
+font-size:clamp(2.3rem,5vw,4.8rem);
+line-height:1;
+margin-bottom:18px;
+font-weight:900;
+letter-spacing:-.03em;
 }
 
 .hero p{
-  color:var(--mist);
-  max-width:760px;
-  margin:auto;
-  line-height:1.7;
-  font-size:1.03rem;
+max-width:760px;
+margin:auto;
+color:var(--mist);
+line-height:1.7;
+font-size:1.02rem;
 }
 
-.quick-grid{
-  margin-top:32px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
+.quick-info{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+margin:38px auto 18px;
+max-width:1100px;
 }
 
-.quick-card{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:18px;
-  text-align:center;
-  box-shadow:var(--shadow);
+.q-card{
+background:var(--surface);
+border:1px solid var(--line);
+border-radius:18px;
+padding:18px;
+box-shadow:var(--shadow);
 }
 
-.quick-card strong{
-  display:block;
-  margin-bottom:8px;
-  font-size:.95rem;
+.q-title{
+font-size:.92rem;
+font-weight:700;
+margin-bottom:8px;
 }
 
-.quick-card span{
-  font-size:.9rem;
-  color:var(--mist);
+.q-desc{
+font-size:.88rem;
+line-height:1.5;
+color:var(--mist);
 }
 
 .main-grid{
-  margin-top:34px;
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:24px;
-  align-items:start;
+display:grid;
+grid-template-columns:1.1fr .9fr;
+gap:24px;
+align-items:start;
 }
 
-.card{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:26px;
-  box-shadow:var(--shadow);
+.form-card,
+.preview-card{
+background:var(--surface);
+border:1px solid var(--line);
+border-radius:22px;
+padding:28px;
+box-shadow:var(--shadow);
 }
 
 .section-title{
-  font-family:'DM Mono',monospace;
-  font-size:.72rem;
-  color:var(--gold);
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  margin-bottom:22px;
+font-family:'DM Mono',monospace;
+font-size:.72rem;
+letter-spacing:.16em;
+text-transform:uppercase;
+color:var(--gold);
+margin-bottom:22px;
 }
 
 .form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
 }
 
 .field{
-  display:flex;
-  flex-direction:column;
+display:flex;
+flex-direction:column;
+gap:7px;
 }
 
 .field.full{
-  grid-column:1/-1;
+grid-column:1/-1;
 }
 
 label{
-  font-size:.82rem;
-  margin-bottom:8px;
-  color:var(--mist);
+font-size:.82rem;
+font-weight:600;
 }
 
 input,
-textarea,
-select{
-  background:var(--paper);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:13px 14px;
-  color:var(--ink);
-  font-family:'DM Sans',sans-serif;
-  font-size:.95rem;
+select,
+textarea{
+width:100%;
+background:var(--paper);
+border:1px solid var(--line);
+border-radius:12px;
+padding:13px 14px;
+font-size:.94rem;
+font-family:'DM Sans',sans-serif;
+color:var(--ink);
+transition:.2s;
 }
 
 textarea{
-  min-height:110px;
-  resize:vertical;
+min-height:110px;
+resize:vertical;
 }
 
-.preview{
-  position:sticky;
-  top:24px;
+input:focus,
+select:focus,
+textarea:focus{
+outline:none;
+border-color:var(--gold);
 }
 
-.preview-box{
-  background:var(--paper);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:24px;
-  min-height:600px;
-  overflow:auto;
-}
-
-.preview-box h2{
-  font-family:'Playfair Display',serif;
-  margin-bottom:20px;
-}
-
-.cta-row{
-  display:flex;
-  gap:14px;
-  margin-top:24px;
-  flex-wrap:wrap;
+.cta{
+margin-top:22px;
+display:flex;
+gap:12px;
+flex-wrap:wrap;
 }
 
 .btn{
-  padding:14px 20px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-size:.94rem;
-  font-weight:600;
-  transition:.2s;
+padding:14px 20px;
+border:none;
+border-radius:12px;
+font-size:.94rem;
+font-weight:700;
+cursor:pointer;
+transition:.2s;
+font-family:'DM Sans',sans-serif;
 }
 
 .btn.primary{
-  background:var(--gold);
-  color:#111;
+background:var(--gold);
+color:#0f1117;
 }
 
 .btn.secondary{
-  background:var(--cream);
-  color:var(--ink);
-  border:1px solid var(--line);
+background:var(--paper);
+border:1px solid var(--line);
+color:var(--ink);
 }
 
 .btn:hover{
-  transform:translateY(-1px);
+transform:translateY(-1px);
+}
+
+.preview-card{
+position:sticky;
+top:136px;
+overflow:hidden;
+}
+
+.preview-blur{
+position:absolute;
+inset:0;
+backdrop-filter:blur(7px);
+-webkit-backdrop-filter:blur(7px);
+pointer-events:none;
+opacity:.42;
+}
+
+.preview-content{
+position:relative;
+z-index:2;
+}
+
+.preview-doc{
+background:var(--paper);
+border-radius:14px;
+padding:22px;
+border:1px solid var(--line);
+min-height:520px;
+font-size:.92rem;
+line-height:1.7;
+color:var(--ink);
+overflow:hidden;
+}
+
+.preview-doc h3{
+margin-bottom:18px;
+font-family:'Playfair Display',serif;
+font-size:1.5rem;
+}
+
+.preview-doc p{
+margin-bottom:14px;
 }
 
 @media(max-width:1100px){
 
-  .main-grid{
-    grid-template-columns:1fr;
-  }
+.main-grid{
+grid-template-columns:1fr;
+}
 
-  .preview{
-    position:relative;
-    top:0;
-  }
+.preview-card{
+position:relative;
+top:auto;
+}
+
+.quick-info{
+grid-template-columns:1fr 1fr;
+}
 
 }
 
-@media(max-width:780px){
+@media(max-width:700px){
 
-  header{
-    padding:0 16px;
-  }
+header{
+padding:0 16px;
+}
 
-  .mini-top{
-    display:none;
-  }
+.hdr-mini{
+display:none;
+}
 
-  nav{
-    padding:0 10px;
-  }
+nav{
+padding:0 10px;
+}
 
-  .wrap{
-    padding:38px 16px 60px;
-  }
+.container{
+padding:40px 16px 60px;
+}
 
-  .quick-grid{
-    grid-template-columns:1fr 1fr;
-  }
+.quick-info{
+grid-template-columns:1fr 1fr;
+}
 
-  .form-grid{
-    grid-template-columns:1fr;
-  }
+.form-grid{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+line-height:1.05;
+}
 
 }
 
@@ -370,191 +417,229 @@ textarea{
 
 <header>
 
-  <a href="index.html" class="logo">
-    LegalAI <span>ARG</span>
-  </a>
+<a href="index.html" class="logo">
+LegalAI <span>ARG</span>
+</a>
 
-  <div class="right-top">
+<div class="hdr-right">
 
-    <div class="mini-top">
-      DOCUMENTOS LEGALES · IA
-    </div>
+<div class="hdr-mini">
+DOCUMENTOS LEGALES · IA
+</div>
 
-    <div class="theme-switch">
+<div class="theme-toggle">
+<button class="theme-btn" id="btnLight">☀ Claro</button>
+<button class="theme-btn" id="btnSystem">⊙ Auto</button>
+<button class="theme-btn" id="btnDark">◐ Oscuro</button>
+</div>
 
-      <button class="theme-btn" onclick="setTheme('light')" id="lightBtn">
-        ☀ Claro
-      </button>
-
-      <button class="theme-btn" onclick="setTheme('system')" id="systemBtn">
-        ⊙ Auto
-      </button>
-
-      <button class="theme-btn" onclick="setTheme('dark')" id="darkBtn">
-        ◗ Oscuro
-      </button>
-
-    </div>
-
-  </div>
+</div>
 
 </header>
 
 <nav>
-
-  <a href="index.html" class="nav-link">
-    Inicio
-  </a>
-
-  <a href="generador.html" class="nav-link">
-    Generador
-  </a>
-
-  <a href="contrato-alquiler.html" class="nav-link active">
-    Contrato alquiler
-  </a>
-
-  <a href="planes.html" class="nav-link">
-    Plan ilimitado
-  </a>
-
-  <a href="#" class="nav-link">
-    Afiliados
-  </a>
-
-  <a href="#" class="nav-link">
-    Acerca de
-  </a>
-
+<a href="index.html">Inicio</a>
+<a href="generador.html">Generador</a>
+<a href="contrato-alquiler.html" class="active">Contrato alquiler</a>
+<a href="planes.html">Plan ilimitado</a>
+<a href="#">Afiliados</a>
+<a href="#">Acerca de</a>
 </nav>
 
-<div class="wrap">
+<div class="container">
 
-  <section class="hero">
+<section class="hero">
 
-    <div class="kicker">
-      ARGENTINA 2026 · DOCUMENTO LEGAL
-    </div>
+<div class="hero-tag">
+ARGENTINA 2026 · CONTRATO AUTOMÁTICO
+</div>
 
-    <h1>
-      Tu contrato listo
-      <span>en minutos</span>
-    </h1>
+<h1>
+Tu contrato de alquiler<br>
+listo en minutos
+</h1>
 
-    <p>
-      Completás los datos, visualizás el resultado en vivo y descargás el PDF listo para firmar.
-    </p>
+<p>
+Completás los datos, visualizás el documento en tiempo real y descargás el PDF listo para firmar.
+</p>
 
-    <div class="quick-grid">
+<div class="quick-info">
 
-      <div class="quick-card">
-        <strong>✔ Legal en Argentina</strong>
-        <span>Formato adaptado al mercado local.</span>
-      </div>
+<div class="q-card">
+<div class="q-title">
+⚖️ Legal en Argentina
+</div>
+<div class="q-desc">
+Formato adaptado para uso residencial y comercial.
+</div>
+</div>
 
-      <div class="quick-card">
-        <strong>⚡ 5 minutos</strong>
-        <span>Proceso rápido y simple.</span>
-      </div>
+<div class="q-card">
+<div class="q-title">
+⚡ Listo rápidamente
+</div>
+<div class="q-desc">
+Completás los datos y obtenés el documento al instante.
+</div>
+</div>
 
-      <div class="quick-card">
-        <strong>📄 PDF inmediato</strong>
-        <span>Descarga automática al finalizar.</span>
-      </div>
+<div class="q-card">
+<div class="q-title">
+📄 PDF descargable
+</div>
+<div class="q-desc">
+Documento preparado para imprimir o firmar.
+</div>
+</div>
 
-      <div class="quick-card">
-        <strong>👁 Preview live</strong>
-        <span>Visualización instantánea.</span>
-      </div>
+<div class="q-card">
+<div class="q-title">
+👁️ Preview live
+</div>
+<div class="q-desc">
+Visualización automática mientras completás.
+</div>
+</div>
 
-    </div>
+</div>
 
-  </section>
+</section>
 
-  <section class="main-grid">
+<div class="main-grid">
 
-    <div class="card">
+<div class="form-card">
 
-      <div class="section-title">
-        Datos del contrato
-      </div>
+<div class="section-title">
+DATOS DEL CONTRATO
+</div>
 
-      <div class="form-grid">
+<div class="form-grid">
 
-        <div class="field">
-          <label>Nombre propietario</label>
-          <input type="text">
-        </div>
+<div class="field">
+<label>Locador</label>
+<input type="text" placeholder="Nombre del propietario">
+</div>
 
-        <div class="field">
-          <label>Nombre inquilino</label>
-          <input type="text">
-        </div>
+<div class="field">
+<label>Locatario</label>
+<input type="text" placeholder="Nombre del inquilino">
+</div>
 
-        <div class="field">
-          <label>Monto mensual</label>
-          <input type="text">
-        </div>
+<div class="field">
+<label>DNI locador</label>
+<input type="text" placeholder="00.000.000">
+</div>
 
-        <div class="field">
-          <label>Duración</label>
-          <select>
-            <option>24 meses</option>
-            <option>36 meses</option>
-          </select>
-        </div>
+<div class="field">
+<label>DNI locatario</label>
+<input type="text" placeholder="00.000.000">
+</div>
 
-        <div class="field full">
-          <label>Dirección inmueble</label>
-          <input type="text">
-        </div>
+<div class="field full">
+<label>Dirección del inmueble</label>
+<input type="text" placeholder="Dirección completa">
+</div>
 
-        <div class="field full">
-          <label>Observaciones</label>
-          <textarea></textarea>
-        </div>
+<div class="field">
+<label>Tipo</label>
+<select>
+<option>Residencial</option>
+<option>Comercial</option>
+<option>Temporario</option>
+</select>
+</div>
 
-      </div>
+<div class="field">
+<label>Duración</label>
+<select>
+<option>24 meses</option>
+<option>36 meses</option>
+<option>48 meses</option>
+</select>
+</div>
 
-      <div class="cta-row">
+<div class="field">
+<label>Monto mensual</label>
+<input type="text" placeholder="$">
+</div>
 
-        <button class="btn primary">
-          Generar PDF
-        </button>
+<div class="field">
+<label>Depósito</label>
+<input type="text" placeholder="$">
+</div>
 
-        <button class="btn secondary">
-          Ver ejemplo
-        </button>
+<div class="field full">
+<label>Observaciones</label>
+<textarea placeholder="Cláusulas adicionales..."></textarea>
+</div>
 
-      </div>
+</div>
 
-    </div>
+<div class="cta">
+<button class="btn primary">
+Descargar PDF
+</button>
 
-    <div class="preview">
+<button class="btn secondary">
+Vista previa completa
+</button>
+</div>
 
-      <div class="card">
+</div>
 
-        <div class="section-title">
-          Preview en vivo
-        </div>
+<div class="preview-card">
 
-        <div class="preview-box">
+<div class="preview-blur"></div>
 
-          <h2>
-            Contrato de Locación
-          </h2>
+<div class="preview-content">
 
-          <p>
-            Entre el propietario y el inquilino se acuerda el presente contrato...
-          </p>
+<div class="section-title">
+PREVIEW EN VIVO
+</div>
 
-        </div>
+<div class="preview-doc">
 
-      </div>
+<h3>
+Contrato de Locación
+</h3>
 
-    </div>
+<p>
+Entre el Sr/a. <strong>[Locador]</strong> y el Sr/a.
+<strong>[Locatario]</strong> se celebra el presente contrato de locación sobre el inmueble ubicado en <strong>[Dirección]</strong>.
+</p>
 
-  </section>
+<p>
+El contrato tendrá una duración de <strong>[Duración]</strong> comenzando desde la fecha pactada entre las partes.
+</p>
+
+<p>
+El canon locativo mensual será de
+<strong>[Monto]</strong>, pagadero del modo acordado entre las partes.
+</p>
+
+<p>
+Las partes aceptan las cláusulas aquí descriptas y se comprometen al cumplimiento de las obligaciones correspondientes.
+</p>
+
+<p style="margin-top:42px">
+_________________________
+<br>
+Firma Locador
+</p>
+
+<p style="margin-top:34px">
+_________________________
+<br>
+Firma Locatario
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -562,46 +647,53 @@ textarea{
 
 function applyTheme(theme){
 
-  if(theme === 'system'){
+const root = document.documentElement;
 
-    const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches;
+if(theme === "system"){
 
-    document.documentElement.setAttribute(
-      'data-theme',
-      prefersDark ? 'dark' : 'light'
-    );
+const dark = window.matchMedia(
+"(prefers-color-scheme: dark)"
+).matches;
 
-  } else {
+root.setAttribute(
+"data-theme",
+dark ? "dark" : "light"
+);
 
-    document.documentElement.setAttribute(
-      'data-theme',
-      theme
-    );
+}else{
 
-  }
-
-  localStorage.setItem('theme', theme);
-
-  document.querySelectorAll('.theme-btn')
-    .forEach(btn => btn.classList.remove('active'));
-
-  if(theme === 'light')
-    document.getElementById('lightBtn').classList.add('active');
-
-  if(theme === 'dark')
-    document.getElementById('darkBtn').classList.add('active');
-
-  if(theme === 'system')
-    document.getElementById('systemBtn').classList.add('active');
+root.setAttribute("data-theme", theme);
 
 }
 
-const savedTheme =
-  localStorage.getItem('theme') || 'system';
+localStorage.setItem("theme", theme);
 
-applyTheme(savedTheme);
+document.querySelectorAll(".theme-btn")
+.forEach(btn => btn.classList.remove("active"));
+
+if(theme === "light")
+document.getElementById("btnLight").classList.add("active");
+
+if(theme === "dark")
+document.getElementById("btnDark").classList.add("active");
+
+if(theme === "system")
+document.getElementById("btnSystem").classList.add("active");
+
+}
+
+document.getElementById("btnLight")
+.onclick = () => applyTheme("light");
+
+document.getElementById("btnDark")
+.onclick = () => applyTheme("dark");
+
+document.getElementById("btnSystem")
+.onclick = () => applyTheme("system");
+
+applyTheme(
+localStorage.getItem("theme") || "system"
+);
 
 </script>
 
