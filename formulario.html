@@ -727,5 +727,94 @@ window.addEventListener('load',async()=>{
 });
 </script>
 
+
+<script>
+const FORM_CONFIG = {
+  "alquiler-residencial":{
+    titulo:"Contrato de alquiler residencial",
+    subtitulo:"Completás los datos → pagás → descargás el PDF listo para firmar.",
+    tag:"// Alquiler residencial · Argentina 2026",
+    campos:["propietario","inquilino","direccion","ciudad","provincia","monto","duracion","fecha_inicio"]
+  },
+  "alquiler-comercial":{
+    titulo:"Contrato de alquiler comercial",
+    subtitulo:"Contrato comercial adaptado para locales y oficinas.",
+    tag:"// Alquiler comercial · Argentina 2026"
+  },
+  "alquiler-temporario":{
+    titulo:"Contrato de alquiler temporario",
+    subtitulo:"Ideal para alquileres por tiempo limitado o turísticos.",
+    tag:"// Alquiler temporario · Argentina 2026"
+  },
+  "sociedad":{
+    titulo:"Acuerdo de sociedad",
+    subtitulo:"Definí participación, roles y condiciones.",
+    tag:"// Sociedad · Argentina 2026"
+  },
+  "vehiculo":{
+    titulo:"Contrato de compra / venta de vehículo",
+    subtitulo:"Documento listo para completar y firmar.",
+    tag:"// Vehículo · Argentina 2026"
+  },
+  "freelance-dev":{
+    titulo:"Contrato freelance · Desarrollo web",
+    subtitulo:"Servicios, entregas y condiciones profesionales.",
+    tag:"// Freelance Dev · Argentina 2026"
+  },
+  "freelance-cm":{
+    titulo:"Contrato freelance · Community Manager",
+    subtitulo:"Servicios mensuales y entregables digitales.",
+    tag:"// Freelance CM · Argentina 2026"
+  },
+  "freelance-diseno":{
+    titulo:"Contrato freelance · Diseño",
+    subtitulo:"Protegé entregas, pagos y revisiones.",
+    tag:"// Freelance Diseño · Argentina 2026"
+  }
+};
+
+window.addEventListener('load', ()=>{
+ const tipo = new URLSearchParams(window.location.search).get('tipo') || 'alquiler-residencial';
+ const cfg = FORM_CONFIG[tipo];
+ if(!cfg) return;
+
+ const h1 = document.querySelector('.intro h1');
+ const sub = document.querySelector('.intro-sub');
+ const tag = document.querySelector('.intro-tag');
+
+ if(h1) h1.innerHTML = cfg.titulo;
+ if(sub) sub.innerHTML = cfg.subtitulo;
+ if(tag) tag.innerHTML = cfg.tag;
+
+ document.title = cfg.titulo + ' | LegalAI Arg';
+
+ const sec = document.querySelector('.sec-div span');
+ if(sec && tipo.includes('freelance')){
+   sec.innerHTML = 'Cliente y profesional';
+ }
+
+ if(tipo.includes('freelance')){
+   const monto = document.querySelector('label[for="monto"]');
+   if(monto) monto.innerHTML='Honorarios <span class="req">*</span>';
+ }
+
+ if(tipo === 'sociedad'){
+   const propietario = document.getElementById('propietario');
+   const inquilino = document.getElementById('inquilino');
+
+   if(propietario){
+      propietario.placeholder = 'Socio 1';
+      propietario.previousElementSibling.innerHTML='Socio 1 <span class="req">*</span>';
+   }
+
+   if(inquilino){
+      inquilino.placeholder = 'Socio 2';
+      inquilino.previousElementSibling.innerHTML='Socio 2 <span class="req">*</span>';
+   }
+ }
+
+});
+</script>
+
 </body>
 </html>
