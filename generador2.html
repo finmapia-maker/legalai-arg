@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Generador de documentos | LegalAI Arg</title>
+  <title>Generador | LegalAI Arg</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,8 +13,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="components.css">
   <link rel="stylesheet" href="legalai-theme.css">
+  <link rel="stylesheet" href="components.css">
 
   <style>
     body{
@@ -25,18 +25,19 @@
     }
 
     .topbar{
+      width:100%;
       position:sticky;
       top:0;
       z-index:999;
       backdrop-filter:blur(14px);
-      background:rgba(255,255,255,.92);
+      background:rgba(255,255,255,.72);
       border-bottom:1px solid var(--line);
     }
 
     .topbar-inner{
       max-width:1200px;
       margin:0 auto;
-      padding:14px 22px;
+      padding:16px 24px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -44,285 +45,233 @@
 
     .logo{
       font-family:'Playfair Display',serif;
-      font-size:1.25rem;
-      font-weight:900;
+      font-size:1.4rem;
+      font-weight:700;
       color:var(--ink);
       text-decoration:none;
     }
 
-    .top-actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    .top-btn{
-      padding:10px 16px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:var(--surface);
-      color:var(--ink);
-      cursor:pointer;
+    .back-btn{
+      text-decoration:none;
       font-size:.9rem;
-      text-decoration:none;
+      color:var(--mist);
+      font-family:'DM Mono',monospace;
     }
 
-    .page-wrap{
-      padding:30px 18px 80px;
+    .section{
+      padding:48px 24px 90px;
+    }
+
+    .app-wrap{
+      max-width:1100px;
+      margin:0 auto;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <div class="topbar-inner">
+<header class="topbar">
+  <div class="topbar-inner">
 
-      <a href="index.html" class="logo">
-        LegalAI Arg
-      </a>
+    <a href="index.html" class="logo">
+      LegalAI Arg
+    </a>
 
-      <div class="top-actions">
+    <a href="index.html" class="back-btn">
+      ← Volver al inicio
+    </a>
 
-        <a href="index.html" class="top-btn">
-          ← Inicio
-        </a>
+  </div>
+</header>
 
-        <button class="top-btn" onclick="toggleThemeColor()">
-          Cambiar fondo
+<main>
+
+<!-- GENERADOR -->
+<div class="section" id="sec-generador">
+
+  <div style="max-width:720px;margin:0 auto;padding:20px 24px 0;text-align:center;">
+
+    <div class="hero-tag">
+      // Generador de documentos
+    </div>
+
+    <h2 style="
+      font-family:'Playfair Display',serif;
+      font-size:1.9rem;
+      font-weight:700;
+      color:var(--ink);
+      margin-bottom:32px;
+    ">
+      ¿Qué documento necesitás?
+    </h2>
+
+  </div>
+
+  <div class="app-wrap">
+
+    <div class="steps-bar">
+      <div class="step-bar active" id="step1">1 · Tipo</div>
+      <div class="step-bar" id="step2">2 · Datos</div>
+      <div class="step-bar" id="step25" style="display:none;"></div>
+      <div class="step-bar" id="step3">3 · Pago</div>
+      <div class="step-bar" id="step4">4 · Descarga</div>
+    </div>
+
+    <!-- CARD 1 -->
+    <div class="card visible" id="card1">
+
+      <div style="
+        display:flex;
+        gap:12px;
+        flex-wrap:wrap;
+        margin-bottom:16px;
+        padding-bottom:16px;
+        border-bottom:1px solid var(--line);
+      ">
+
+        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">
+          🔒 Pago seguro MP
+        </span>
+
+        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">
+          ⚡ Descarga inmediata
+        </span>
+
+        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">
+          📄 PDF listo para firmar
+        </span>
+
+      </div>
+
+      <div class="card-title">
+        ¿Qué documento necesitás?
+      </div>
+
+      <div class="card-sub">
+        Escribí o elegí el tipo de documento.
+      </div>
+
+      <input
+        class="doc-big"
+        type="text"
+        id="docInput"
+        placeholder="Ej: contrato de alquiler..."
+      >
+
+      <div class="suggest-lbl">
+        Elegí una categoría:
+      </div>
+
+      <div class="cat-tabs" id="catTabs">
+
+        <button class="cat-tab active"
+          onclick="setCat(this,'contratos')">
+          📋 Contratos
+        </button>
+
+        <button class="cat-tab"
+          onclick="setCat(this,'freelance')">
+          💼 Freelance
+        </button>
+
+        <button class="cat-tab"
+          onclick="setCat(this,'reclamos')">
+          ⚠️ Reclamos
+        </button>
+
+        <button class="cat-tab"
+          onclick="setCat(this,'personales')">
+          👤 Personales
         </button>
 
       </div>
 
-    </div>
-  </header>
+      <div class="suggestions" id="suggestBox"></div>
 
-  <main class="page-wrap">
-
-    <!-- GENERADOR -->
-    <div class="section" id="sec-generador">
-
-      <div style="max-width:720px;margin:0 auto;padding:40px 24px 0;text-align:center;">
-        <div class="hero-tag">// Generador de documentos</div>
-
-        <h2 style="font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--ink);margin-bottom:32px;">
-          ¿Qué documento necesitás?
-        </h2>
+      <div class="suggest-lbl">
+        País y provincia:
       </div>
 
-      <div class="app-wrap">
+      <div class="row2">
 
-        <div class="steps-bar">
-          <div class="step-bar active" id="step1">1 · Tipo</div>
-          <div class="step-bar" id="step2">2 · Datos</div>
-          <div class="step-bar" id="step25" style="display:none;"></div>
-          <div class="step-bar" id="step3">3 · Pago</div>
-          <div class="step-bar" id="step4">4 · Descarga</div>
+        <div>
+          <select id="paisSelect">
+
+            <option value="Argentina">🇦🇷 Argentina</option>
+            <option value="Uruguay">🇺🇾 Uruguay</option>
+            <option value="Chile">🇨🇱 Chile</option>
+
+          </select>
         </div>
 
-        <!-- CARD 1 -->
-        <div class="card visible" id="card1">
-
-          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line);">
-            <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">🔒 Pago seguro MP</span>
-            <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">⚡ Descarga inmediata</span>
-            <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">📄 PDF listo para firmar</span>
-            <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">✓ Desde <span id="card1-precio-desde">$ —</span> ARS</span>
-          </div>
-
-          <div class="card-title">
-            ¿Qué documento necesitás?
-          </div>
-
-          <div class="card-sub">
-            Escribí o elegí el tipo de documento. El formulario se arma en segundos.
-          </div>
-
+        <div>
           <input
-            class="doc-big"
             type="text"
-            id="docInput"
-            placeholder="Ej: contrato de alquiler de local comercial, NDA para startup, carta de renuncia..."
+            id="provinciaInput"
+            placeholder="Provincia / Estado"
           >
-
-          <div class="suggest-lbl">
-            Elegí una categoría o escribí directamente arriba:
-          </div>
-
-          <div class="cat-tabs" id="catTabs">
-
-            <button class="cat-tab active" onclick="setCat(this,'contratos')">
-              📋 Contratos
-            </button>
-
-            <button class="cat-tab" onclick="setCat(this,'freelance')">
-              💼 Freelance
-            </button>
-
-            <button class="cat-tab" onclick="setCat(this,'reclamos')">
-              ⚠️ Reclamos
-            </button>
-
-            <button class="cat-tab" onclick="setCat(this,'personales')">
-              👤 Personales
-            </button>
-
-          </div>
-
-          <div class="suggestions" id="suggestBox"></div>
-
-          <div class="suggest-lbl">
-            País y provincia (para adaptar la legislación):
-          </div>
-
-          <div class="row2">
-
-            <div>
-              <select id="paisSelect">
-                <option value="Argentina">🇦🇷 Argentina</option>
-                <option value="Uruguay">🇺🇾 Uruguay</option>
-                <option value="Chile">🇨🇱 Chile</option>
-                <option value="Colombia">🇨🇴 Colombia</option>
-                <option value="México">🇲🇽 México</option>
-                <option value="España">🇪🇸 España</option>
-                <option value="Otro">🌎 Otro</option>
-              </select>
-            </div>
-
-            <div>
-              <input type="text" id="provinciaInput" placeholder="Provincia / Estado (opcional)">
-            </div>
-
-          </div>
-
-          <div class="alert err" id="alert1"></div>
-
-          <button
-            class="btn gold"
-            style="font-weight:800;font-size:1rem;"
-            onclick="track('click_generar');generarFormulario()"
-          >
-            Generar formulario ahora →
-          </button>
-
         </div>
 
       </div>
 
+      <div class="alert err" id="alert1"></div>
+
+      <button
+        class="btn gold"
+        style="font-weight:800;font-size:1rem;"
+        onclick="generarFormulario()"
+      >
+        Generar formulario ahora →
+      </button>
+
     </div>
 
-  </main>
+  </div>
+</div>
 
-  <!-- CONFIG -->
-  <script>
-    const CONFIG = {
-      WORKER_URL: "https://TU-WORKER.workers.dev"
-    };
-  </script>
+</main>
 
-  <!-- FUNCIONES -->
-  <script>
+<!-- CONFIG -->
+<script>
+const CONFIG = {
+  WORKER_URL: "https://TU-WORKER.workers.dev"
+};
+</script>
 
-    function track(evento){
-      console.log("track:", evento);
-    }
+<!-- JS -->
+<script>
 
-    function toggleThemeColor(){
+function setCat(el,cat){
 
-      document.body.classList.toggle("dark-theme");
+  document.querySelectorAll('.cat-tab')
+    .forEach(btn=>btn.classList.remove('active'));
 
-    }
+  el.classList.add('active');
 
-    function setCat(el,cat){
+}
 
-      document.querySelectorAll('.cat-tab').forEach(btn=>{
-        btn.classList.remove('active');
-      });
+function generarFormulario(){
 
-      el.classList.add('active');
+  const doc =
+    document.getElementById('docInput').value;
 
-      const suggestBox = document.getElementById('suggestBox');
+  if(!doc){
 
-      const docs = {
-        contratos:[
-          "Contrato de alquiler",
-          "Contrato laboral",
-          "Contrato de servicios"
-        ],
-        freelance:[
-          "Contrato freelance",
-          "NDA",
-          "Acuerdo de confidencialidad"
-        ],
-        reclamos:[
-          "Carta documento",
-          "Reclamo laboral",
-          "Intimación de pago"
-        ],
-        personales:[
-          "Carta de renuncia",
-          "Autorización",
-          "Declaración jurada"
-        ]
-      };
+    document.getElementById('alert1')
+      .innerHTML = "Indicá qué documento necesitás";
 
-      suggestBox.innerHTML = '';
+    document.getElementById('alert1')
+      .classList.add('alert-show');
 
-      docs[cat].forEach(item=>{
+    return;
+  }
 
-        const btn = document.createElement('button');
+  alert("Acá continúa el flujo del formulario");
 
-        btn.className = 'suggest-btn';
+}
 
-        btn.innerText = item;
-
-        btn.onclick = ()=>{
-
-          document.getElementById('docInput').value = item;
-
-        };
-
-        suggestBox.appendChild(btn);
-
-      });
-
-    }
-
-    function generarFormulario(){
-
-      const valor = document.getElementById('docInput').value.trim();
-
-      if(!valor){
-
-        document.getElementById('alert1').innerHTML = 'Ingresá un documento';
-
-        document.getElementById('alert1').classList.add('alert-show');
-
-        return;
-
-      }
-
-      localStorage.setItem('tipo_documento',valor);
-
-      window.location.href = 'formulario.html';
-
-    }
-
-    // carga inicial
-    window.addEventListener('load',()=>{
-
-      const firstTab = document.querySelector('.cat-tab.active');
-
-      if(firstTab){
-
-        setCat(firstTab,'contratos');
-
-      }
-
-    });
-
-  </script>
+</script>
 
 </body>
 </html>
