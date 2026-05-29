@@ -63,65 +63,292 @@ function readRecentLogs() {
 
 // ── Fetch datos reales del Worker ─────────────────────────────────────────
 async function fetchStats(adminKey) {
-  const desde48h = new Date(Date.now() - 48 * 3600 * 1000).toISOString().slice(0, 10);
-  const desde7d  = new Date(Date.now() - 7  * 86400 * 1000).toISOString().slice(0, 10);
-  const desde48hTs = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
-  const desde7dTs  = new Date(Date.now() - 7  * 86400 * 1000).toISOString();
+  const cutoff48h = new Date(Date.now() - 48 * 3600 * 1000);
+  const cutoff7d  = new Date(Date.now() - 7  * 86400 * 1000);
+  const desde7d   = cutoff7d.toISOString().slice(0, 10);
 
-  const [r48, r7d, rEv48, rEv7d] = await Promise.all([
-    fetch(`${WORKER_URL}/stats?desde=${desde48h}`,       { headers: { "x-admin-key": adminKey } }),
-    fetch(`${WORKER_URL}/stats?desde=${desde7d}`,        { headers: { "x-admin-key": adminKey } }),
-    fetch(`${WORKER_URL}/eventos?desde=${desde48hTs}`),
-    fetch(`${WORKER_URL}/eventos?desde=${desde7dTs}`),
+  // Fuente principal actual: /owner/all. Antes este script consultaba /stats y /eventos,
+  // endpoints que pueden no existir o quedar desactualizados. /owner/all es la fuente real del panel.
+  const rOwner = await fetch(`${WORKER_URL}/owner/all?desde=${desde7d}`, {
+    headers: { "x-admin-key": adminKey }
+  });
+
+  const fetch_errors = [];
+  if (!rOwner.ok) {
+    const txt = await rOwner.text().catch(() => "");
+    fetch_errors.push(`/owner/all HTTP ${rOwner.status}: ${txt.slice(0, 250)}`);
+    return { stats48: null, stats7d: null, eventosRaw: null, eventosRaw7d: null, fetch_errors };
+  }
+
+  const ownerPayload = await rOwner.json().catch(() => null);
+  if (!ownerPayload?.ok) {
+    fetch_errors.push(`/owner/all sin ok=true: ${JSON.stringify(ownerPayload || {}).slice(0, 250)}`);
+    return { stats48: null, stats7d: null, eventosRaw: null, eventosRaw7d: null, fetch_errors };
+  }
+
+  const operaciones = Array.isArray(ownerPayload.operaciones)
+    ? ownerPayload.operaciones
+    : Array.isArray(ownerPayload.ops)
+      ? ownerPayload.ops
+      : [];
+
+  const ev48 = filterEventsSince(operaciones, cutoff48h);
+  const ev7d = filterEventsSince(operaciones, cutoff7d);
+
+  return {
+    stats48: buildStatsFromEvents(ev48),
+    stats7d: buildStatsFromEvents(ev7d),
+    eventosRaw: buildEventosFromEvents(ev48),
+    eventosRaw7d: buildEventosFromEvents(ev7d),
+    ownerPayload,
+    fetch_errors
+  };
+}
+
+function filterEventsSince(events, cutoff) {
+  return (events || []).filter(ev => {
+    const d = new Date(ev.date || ev.fecha || ev.created_at || 0);
+    return !Number.isNaN(d.getTime()) && d >= cutoff;
+  });
+}
+
+function eventType(ev) {
+  return String(ev?.type || ev?.tipo || ev?.event || ev?.raw?.tipo || ev?.raw?.event || "").toLowerCase();
+}
+
+function eventStatus(ev) {
+  return String(ev?.status || ev?.estado || ev?.payment_status || "").toLowerCase();
+}
+
+function eventProduct(ev) {
+  return String(ev?.product || ev?.producto || ev?.doc_tipo || ev?.raw?.doc_tipo || ev?.raw?.pagina || ev?.raw?.page_group || "LegalAI");
+}
+
+function eventSource(ev) {
+  return String(ev?.affiliate_source || ev?.raw?.utm_src || ev?.raw?.utm_source || ev?.affiliate || ev?.raw?.ref || "directo") || "directo";
+}
+
+function isMeaningfulClick(ev) {
+  const t = eventType(ev);
+  return Boolean(
+    t.includes("click") ||
+    t.startsWith("cta_") ||
+    t.startsWith("nav_") ||
+    ["interaccion", "form_start", "inicio_formulario", "inicio_pago", "checkout_start", "preview_action", "cta_generar", "cta_formulario", "cta_planes", "cta_contrato_alquiler"].includes(t)
+  );
+}
+
+function isVisit(ev) {
+  const t = eventType(ev);
+  return t === "page_view" || t === "form_page_view" || t.endsWith("page_view");
+}
+
+function isConfirmedSale(ev) {
+  const t = eventType(ev);
+  const s = eventStatus(ev);
+  const saleTypes = new Set(["venta", "sale", "payment_approved", "pago_ok", "document_generated", "plan_activated", "pack_created"]);
+  return saleTypes.has(t) && ["approved", "active", "paid", "success", "ok"].includes(s);
+}
+
+function saleKeys(ev) {
+  const raw = ev.raw || {};
+  const inner = raw.raw || {};
+  return [
+    ev.order_id, ev.payment_id, ev.id,
+    String(ev.id || "").replace(/^MP-/, ""),
+    raw.order_id, raw.payment_id, raw.paymentId, raw.externalRef, raw.external_reference,
+    inner.order_id, inner.payment_id, inner.paymentId, inner.externalRef, inner.external_reference
+  ].filter(Boolean).map(String);
+}
+
+function dedupeSales(events) {
+  const seen = new Set();
+  const out = [];
+  for (const ev of events.filter(isConfirmedSale)) {
+    const keys = saleKeys(ev);
+    if (keys.some(k => seen.has(k))) continue;
+    out.push(ev);
+    for (const k of keys) seen.add(k);
+  }
+  return out;
+}
+
+function amountARS(ev, checkoutById = new Map()) {
+  const direct = Number(ev?.amount_ars || 0);
+  if (direct > 0) return direct;
+  const currency = String(ev?.currency || "").toUpperCase();
+  const amount = Number(ev?.amount || 0);
+  if (currency === "ARS" && amount > 0) return amount;
+
+  for (const key of saleKeys(ev)) {
+    const related = checkoutById.get(key);
+    if (related) {
+      const relatedDirect = Number(related.amount_ars || 0);
+      if (relatedDirect > 0) return relatedDirect;
+      const relatedCurrency = String(related.currency || "").toUpperCase();
+      const relatedAmount = Number(related.amount || 0);
+      if (relatedCurrency === "ARS" && relatedAmount > 0) return relatedAmount;
+    }
+  }
+  return 0;
+}
+
+function buildCheckoutMap(events) {
+  const map = new Map();
+  for (const ev of events || []) {
+    if (eventType(ev) !== "checkout_start") continue;
+    for (const key of saleKeys(ev)) map.set(key, ev);
+  }
+  return map;
+}
+
+function buildStatsFromEvents(events) {
+  const checkoutById = buildCheckoutMap(events);
+  const ventas = dedupeSales(events);
+  const total_clics = events.filter(isMeaningfulClick).length;
+  const total_visitas = events.filter(isVisit).length;
+  const total_ventas = ventas.length;
+  const total_ars = ventas.reduce((sum, ev) => sum + amountARS(ev, checkoutById), 0);
+  const por_fuente = {};
+  const docs = new Map();
+
+  for (const ev of events) {
+    const fuente = eventSource(ev);
+    if (!por_fuente[fuente]) por_fuente[fuente] = { visitas: 0, clics: 0, ventas: 0, total_ars: 0 };
+    if (isVisit(ev)) por_fuente[fuente].visitas += 1;
+    if (isMeaningfulClick(ev)) por_fuente[fuente].clics += 1;
+
+    const prod = eventProduct(ev);
+    if (!docs.has(prod)) docs.set(prod, { documento: prod, eventos: 0, ventas: 0, total_ars: 0 });
+    docs.get(prod).eventos += 1;
+  }
+
+  for (const ev of ventas) {
+    const fuente = eventSource(ev);
+    if (!por_fuente[fuente]) por_fuente[fuente] = { visitas: 0, clics: 0, ventas: 0, total_ars: 0 };
+    por_fuente[fuente].ventas += 1;
+    por_fuente[fuente].total_ars += amountARS(ev, checkoutById);
+
+    const prod = eventProduct(ev);
+    if (!docs.has(prod)) docs.set(prod, { documento: prod, eventos: 0, ventas: 0, total_ars: 0 });
+    docs.get(prod).ventas += 1;
+    docs.get(prod).total_ars += amountARS(ev, checkoutById);
+  }
+
+  return {
+    ok: true,
+    resumen: { total_clics, total_visitas, total_ventas, total_ars, total_eventos: events.length },
+    por_fuente,
+    top_documentos: Array.from(docs.values()).sort((a, b) => b.ventas - a.ventas || b.eventos - a.eventos).slice(0, 10),
+    ultimas_conversiones: ventas.slice(0, 5)
+  };
+}
+
+function countWhere(events, predicate) {
+  return events.reduce((n, ev) => n + (predicate(ev) ? 1 : 0), 0);
+}
+
+function dropPct(prev, current) {
+  if (!prev || current >= prev) return 0;
+  return Math.round(((prev - current) / prev) * 100);
+}
+
+function buildFunnel(steps) {
+  let prev = null;
+  return steps.map(step => {
+    const out = { label: step.label, count: step.count, drop_pct: prev === null ? 0 : dropPct(prev, step.count) };
+    prev = step.count;
+    return out;
+  });
+}
+
+function detectBottleneck(funnels) {
+  let worst = null;
+  for (const [name, funnel] of Object.entries(funnels)) {
+    for (const step of funnel) {
+      if (step.drop_pct > 50 && (!worst || step.drop_pct > worst.drop_pct)) {
+        worst = { funnel: name, etapa: step.label, drop_pct: step.drop_pct, count: step.count };
+      }
+    }
+  }
+  return worst;
+}
+
+function buildEventosFromEvents(events) {
+  const por_tipo = {};
+  for (const ev of events) por_tipo[eventType(ev) || "sin_tipo"] = (por_tipo[eventType(ev) || "sin_tipo"] || 0) + 1;
+
+  const funnel_doc = buildFunnel([
+    { label: "Visitas", count: countWhere(events, isVisit) },
+    { label: "Interacciones/CTA", count: countWhere(events, isMeaningfulClick) },
+    { label: "Inicio formulario", count: countWhere(events, ev => ["form_start", "inicio_formulario", "click_generar", "cta_generar", "form_fields_generated"].includes(eventType(ev))) },
+    { label: "Pago iniciado", count: countWhere(events, ev => ["click_pagar", "inicio_pago", "checkout_start"].includes(eventType(ev))) },
+    { label: "Venta confirmada", count: dedupeSales(events).length }
   ]);
 
-  const [stats48, stats7d, eventosRaw48, eventosRaw7d] = await Promise.all([
-    r48.ok   ? r48.json()   : null,
-    r7d.ok   ? r7d.json()   : null,
-    rEv48.ok ? rEv48.json() : null,
-    rEv7d.ok ? rEv7d.json() : null,
+  const funnel_plan = buildFunnel([
+    { label: "Visitas planes", count: countWhere(events, ev => eventProduct(ev).toLowerCase().includes("planes") || ev.raw?.pagina === "planes" || ev.raw?.page_group === "planes") },
+    { label: "Click plan", count: countWhere(events, ev => eventType(ev).includes("plan") || eventProduct(ev).toLowerCase().includes("plan")) },
+    { label: "Pago plan iniciado", count: countWhere(events, ev => eventType(ev) === "checkout_start" && eventProduct(ev).toLowerCase().includes("plan")) },
+    { label: "Plan activo", count: countWhere(events, ev => ["plan_activated", "pack_created"].includes(eventType(ev)) && ["approved", "active"].includes(eventStatus(ev))) }
   ]);
 
-  return { stats48, stats7d, eventosRaw: eventosRaw48, eventosRaw7d };
+  return {
+    ok: true,
+    total: events.length,
+    por_tipo,
+    funnel_doc,
+    funnel_plan,
+    cuello_botella: detectBottleneck({ doc: funnel_doc, planes: funnel_plan })
+  };
 }
 
 // ── Calcular métricas procesadas ──────────────────────────────────────────
-function calcularMetricas({ stats48, stats7d, eventosRaw }) {
+function calcularMetricas({ stats48, stats7d, eventosRaw, fetch_errors = [] }) {
   const metricasPeriodo = (stats) => {
     if (!stats?.ok) return null;
-    const r = stats.resumen;
+    const r = stats.resumen || {};
     return {
-      clics:              r.total_clics,
-      ventas:             r.total_ventas,
+      visitas:            r.total_visitas || 0,
+      clics:              r.total_clics || 0,
+      ventas:             r.total_ventas || 0,
       tasa_conv:          r.total_clics > 0 ? ((r.total_ventas / r.total_clics) * 100).toFixed(1) + "%" : "0.0%",
-      total_ars:          r.total_ars,
+      total_ars:          r.total_ars || 0,
+      total_eventos:      r.total_eventos || 0,
       por_fuente:         stats.por_fuente         || {},
       top_documentos:     stats.top_documentos     || [],
       ultimas_conversiones: (stats.ultimas_conversiones || []).slice(0, 5),
     };
   };
 
-  // Funnel calculado por el worker
   const funnel_doc  = eventosRaw?.funnel_doc  || [];
   const funnel_plan = eventosRaw?.funnel_plan || [];
   const cuello      = eventosRaw?.cuello_botella || null;
-
-  // Embudo simple por tipo (compatibilidad)
   const embudoEventos = eventosRaw?.por_tipo || {};
 
   const m48 = metricasPeriodo(stats48);
   const problemas     = [];
   const oportunidades = [];
 
-  if (m48) {
-    if (m48.clics > 20 && m48.ventas === 0) {
-      problemas.push("Alto tráfico sin conversiones → problema en checkout o precio");
+  for (const e of fetch_errors) problemas.push(`Error al leer métricas reales: ${e}`);
+
+  if (!m48) {
+    problemas.push("No se pudieron leer métricas desde /owner/all; revisar ADMIN_KEY o Worker.");
+  } else {
+    if (m48.total_eventos === 0) {
+      problemas.push("Sin eventos registrados en 48h → revisar tracker, Worker o tráfico real.");
+    } else if (m48.visitas > 0 && m48.clics === 0) {
+      problemas.push(`Hay ${m48.visitas} visitas registradas pero 0 clics útiles → revisar visibilidad de CTAs o tracking de clicks.`);
     }
-    if (m48.clics === 0) {
-      problemas.push("Sin clics en 48h → problema en ads, copy o segmentación");
+
+    if (m48.clics > 20 && m48.ventas === 0) {
+      problemas.push("Muchos clics sin ventas → problema probable en precio, checkout o confianza.");
     }
     if (m48.clics > 5 && parseFloat(m48.tasa_conv) < 1) {
       problemas.push(`Tasa de conv muy baja (${m48.tasa_conv}) → revisar copy, precio o flujo de pago`);
+    }
+    if (m48.ventas > 0) {
+      oportunidades.push(`${m48.ventas} venta(s) confirmada(s) en 48h → analizar fuente/documento y escalar lo que convirtió.`);
     }
     if (m48.clics > 5 && parseFloat(m48.tasa_conv) > 10) {
       oportunidades.push(`Tasa alta (${m48.tasa_conv}) con ${m48.clics} clics → escalar presupuesto de ads`);
@@ -202,7 +429,8 @@ FORMATO:
 }
 
 REGLAS:
-- < 5 visitas → NO_CAMBIAR
+- Si no hay datos por error de lectura → PROPONER_CAMBIO técnico, no decir que no hay tráfico.
+- < 5 visitas reales → NO_CAMBIAR
 - Cuello de botella claro (>50% drop) → PROPONER_CAMBIO
 - Señal débil → OBSERVAR
 - No repetir cambios ya probados
@@ -218,10 +446,12 @@ CUELLO DE BOTELLA DETECTADO:
 ${JSON.stringify(metricas.cuello_botella)}
 
 MÉTRICAS 48H:
-  Clics: ${metricas.periodo_48h?.clics ?? 'N/A'}
+  Visitas: ${metricas.periodo_48h?.visitas ?? 'N/A'}
+  Clics útiles: ${metricas.periodo_48h?.clics ?? 'N/A'}
   Ventas: ${metricas.periodo_48h?.ventas ?? 'N/A'}
   Conv%: ${metricas.periodo_48h?.tasa_conv ?? 'N/A'}
   ARS: ${metricas.periodo_48h?.total_ars ?? 'N/A'}
+  Eventos totales: ${metricas.periodo_48h?.total_eventos ?? metricas.total_eventos ?? 'N/A'}
 
 DIAGNÓSTICO:
   Estado: ${metricas.diagnostico.estado}
@@ -320,6 +550,7 @@ function saveLog(decision, state, metricas) {
     fecha: new Date().toISOString(),
     decision,
     snapshot_metricas: {
+      visitas_48h: m?.visitas || 0,
       clics_48h:  m?.clics    || 0,
       ventas_48h: m?.ventas   || 0,
       tasa_conv:  m?.tasa_conv || "—",
@@ -358,10 +589,12 @@ Embudo:    ${decision.embudo || "—"}
 Hora ARG:  ${hora}
 
 ── MÉTRICAS 48H ────────────────────
+Visitas:    ${m?.visitas   ?? "—"}
 Clics:      ${m?.clics     ?? "—"}
 Ventas:     ${m?.ventas    ?? "—"}
 Conv Rate:  ${m?.tasa_conv ?? "—"}
 Total ARS:  $${m?.total_ars ?? "—"}
+Eventos:    ${m?.total_eventos ?? metricas.total_eventos ?? "—"}
 
 ── DIAGNÓSTICO ─────────────────────
 Estado:     ${diag.estado}
@@ -402,7 +635,7 @@ ${decision.cambio_sugerido ? JSON.stringify(decision.cambio_sugerido, null, 2) :
     const logs     = readRecentLogs();
     const cambioEval = evaluarCambioActivo(state, metricas);
 
-    console.log(`Diag: ${metricas.diagnostico.estado} | Clics 48h: ${metricas.periodo_48h?.clics ?? "N/A"} | Ventas: ${metricas.periodo_48h?.ventas ?? "N/A"}`);
+    console.log(`Diag: ${metricas.diagnostico.estado} | Visitas 48h: ${metricas.periodo_48h?.visitas ?? "N/A"} | Clics 48h: ${metricas.periodo_48h?.clics ?? "N/A"} | Ventas: ${metricas.periodo_48h?.ventas ?? "N/A"}`);
 
     let decision;
 
