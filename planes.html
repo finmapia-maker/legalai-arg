@@ -69,6 +69,11 @@ header{background:var(--hdr-bg);padding:0 40px;height:62px;display:flex;align-it
 .theme-btn{padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);transition:all .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
 .theme-btn.active{background:rgba(200,168,75,.2);color:var(--gold)}
 
+.site-nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;display:flex;gap:0;overflow-x:auto;transition:background .3s}
+.site-nav .nav-link{padding:14px 20px;font-size:.82rem;font-weight:500;color:var(--mist);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;text-decoration:none}
+.site-nav .nav-link:hover{color:var(--ink)}
+.site-nav .nav-link.active{color:var(--ink);border-bottom-color:var(--gold)}
+
 /* ── HERO ── */
 .hero{text-align:center;padding:72px 40px 56px;max-width:720px;margin:0 auto}
 .hero-tag{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:18px}
@@ -169,6 +174,8 @@ footer a:hover{color:var(--gold)}
 @media(max-width:900px){.planes-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){
   header{padding:0 16px}
+  .site-nav{padding:0 16px}
+  .site-nav .nav-link{padding:12px 14px}
   .hero{padding:52px 20px 40px}
   .planes-grid{grid-template-columns:1fr 1fr}
   .plan-card.pro{transform:none}
@@ -191,6 +198,14 @@ footer a:hover{color:var(--gold)}
     </div>
   </div>
 </header>
+<nav class="site-nav" aria-label="Navegación principal">
+  <a class="nav-link" href="index.html#inicio">Inicio</a>
+  <a class="nav-link" href="index.html#generador">Generador</a>
+  <a class="nav-link" href="contrato-alquiler.html">Contrato alquiler</a>
+  <a class="nav-link active" href="planes.html">Plan ilimitado</a>
+  <a class="nav-link" href="index.html#afiliados">Afiliados</a>
+  <a class="nav-link" href="index.html#about">Acerca de</a>
+</nav>
 
 <!-- HERO -->
 <div class="hero">

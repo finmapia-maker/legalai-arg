@@ -313,6 +313,38 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',func
   } catch(_) {}
 })();
 
+
+// ── Registro interno de venta confirmada para Owner Panel ─────────────
+(function() {
+  var p = new URLSearchParams(window.location.search);
+  var paymentId = p.get('payment_id') || p.get('collection_id') || '';
+  var status = (p.get('status') || '').toLowerCase();
+  if (!paymentId || status !== 'approved') return;
+  try {
+    var WORKER = 'https://legalai-worker.finmap-ia.workers.dev';
+    var tipo = p.get('tipo') || 'doc';
+    var titulo = sessionStorage.getItem('legalai_titulo') || (tipo === 'plan' ? 'Plan ilimitado LegalAI' : 'Documento legal');
+    var precioUSD = parseFloat(sessionStorage.getItem('legalai_precio_usd') || sessionStorage.getItem('legalai_plan_precio_usd') || '0') || 0;
+    var montoARS = Number(sessionStorage.getItem('legalai_monto_ars') || '0') || 0;
+    fetch(WORKER + '/evento', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        tipo: 'venta',
+        status: 'approved',
+        payment_id: paymentId,
+        doc_tipo: titulo,
+        amount: precioUSD,
+        amount_ars: montoARS,
+        currency: montoARS ? 'ARS' : 'USD',
+        payment_method: 'MercadoPago',
+        ref: sessionStorage.getItem('legalai_ref') || '',
+        origen: sessionStorage.getItem('legalai_origen') || 'gracias'
+      })
+    }).catch(function(){});
+  } catch(_) {}
+})();
+
 // ── Sugerir doc: pre-cargar en sessionStorage para el index ───────
 function sugerirDoc(nombre) {
   try { sessionStorage.setItem('legalai_sugerencia', nombre); } catch(_) {}

@@ -578,6 +578,7 @@ async function pagar(){
   track('inicio_pago', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
   showPanel('loadingPago');setProgress(3);
   const montoARS=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
+  sessionStorage.setItem('legalai_monto_ars', String(montoARS));
   const sessionId='sess_'+Date.now();
   sessionStorage.setItem('legalai_sessionId',sessionId);
   sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
@@ -607,6 +608,7 @@ async function generarFinal(paymentId){
     sessionStorage.removeItem('legalai_previewId');
     showPanel('card4');setProgress(4);
     track('documento_generado', { doc_tipo: DOC_TIPO, precio_usd: parseFloat(sessionStorage.getItem('legalai_precio_usd') || String(PRECIO_USD)) });
+    try{fetch(WORKER+'/evento',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'pago_ok',status:'approved',doc_tipo:DOC_TIPO,amount:parseFloat(sessionStorage.getItem('legalai_precio_usd')||String(PRECIO_USD))||PRECIO_USD,amount_ars:Number(sessionStorage.getItem('legalai_monto_ars')||0),payment_id:G.paymentId,payment_method:'MercadoPago',email:datos.email||''})}).catch(()=>{})}catch(_){}
     try{gtag('event','conversion',{'send_to':'AW-18073890544','value':parseFloat(sessionStorage.getItem('legalai_precio_usd')||String(PRECIO_USD))||PRECIO_USD,'currency':'USD','transaction_id':G.paymentId});}catch(_){}
   }catch(err){showPanel('card2');setProgress(2);alert('Error al generar el documento: '+err.message);}
 }

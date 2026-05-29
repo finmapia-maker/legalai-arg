@@ -134,6 +134,10 @@ async function handleProductRoutes(request, env) {
     return json(request, { ok: true, previewId, texto });
   }
 
+  if (["GET", "POST"].includes(request.method) && url.pathname === "/mp/webhook") {
+    return await handleMercadoPagoWebhook(request, env);
+  }
+
   if (request.method === "POST" && url.pathname === "/mp/preferencia") {
     const body = await readRequestBody(request);
 
@@ -179,6 +183,7 @@ async function handleProductRoutes(request, env) {
         legalai_tipo: body.tipo || "doc",
         ...safeMetadata(datosPago)
       },
+      notification_url: `https://legalai-worker.finmap-ia.workers.dev/mp/webhook`,
       back_urls: {
         success: `${origin}/gracias.html?payment_id=${encodeURIComponent(externalRef)}&status=approved`,
         pending: `${origin}/gracias.html?payment_id=${encodeURIComponent(externalRef)}&status=pending`,
@@ -290,15 +295,16 @@ async function handleProductRoutes(request, env) {
     const tipo = body.tipo || body.event || (url.pathname === "/interaccion" ? "interaccion" : "evento");
 
     const saved = await safeAppendOwnerEvent(env, {
+      id: body.id || body.event_id || body.payment_id || body.paymentId || body.externalRef || body.external_reference,
       type: tipo,
       product: body.doc_tipo || body.product || body.boton || body.pagina || "Web LegalAI",
       category: url.pathname.replace("/", ""),
       amount: Number(body.precio_usd || body.amount || 0),
-      amount_ars: Number(body.amount_ars || 0),
-      currency: body.precio_usd ? "USD" : "ARS",
-      payment_method: "",
+      amount_ars: Number(body.amount_ars || body.monto_ars || 0),
+      currency: body.currency || body.moneda || (body.precio_usd ? "USD" : "ARS"),
+      payment_method: body.payment_method || body.metodo_pago || "",
       status: body.status || "pending",
-      customer: body.email || "",
+      customer: body.email || body.customer || "",
       affiliate: body.ref || body.affiliate || "",
       affiliate_source: body.utm_src || "",
       raw: body
@@ -362,6 +368,103 @@ async function handleProductRoutes(request, env) {
   }
 
   return null;
+}
+
+
+async function handleMercadoPagoWebhook(request, env) {
+  const url = new URL(request.url);
+  const body = request.method === "POST" ? await readRequestBody(request) : {};
+  const topic = url.searchParams.get("topic") || url.searchParams.get("type") || body.type || body.topic || "";
+  const paymentId = url.searchParams.get("id") || url.searchParams.get("data.id") || body?.data?.id || body.id || body.payment_id || "";
+
+  if (!paymentId) {
+    await safeAppendOwnerEvent(env, {
+      type: "error",
+      category: "webhook",
+      product: "MercadoPago webhook sin payment_id",
+      status: "failed",
+      error_flag: true,
+      error_tipo: "mp_webhook_missing_payment_id",
+      error_detalle: JSON.stringify({ query: Object.fromEntries(url.searchParams), body }).slice(0, 600)
+    });
+    return json(request, { ok: true, ignored: "missing_payment_id" });
+  }
+
+  if (!env.MERCADOPAGO_ACCESS_TOKEN) {
+    await safeAppendOwnerEvent(env, {
+      id: `MP-WH-${paymentId}`,
+      type: "error",
+      category: "webhook",
+      product: "MercadoPago webhook sin token",
+      status: "failed",
+      error_flag: true,
+      error_tipo: "missing_mp_token",
+      error_detalle: "No se pudo verificar el pago porque falta MERCADOPAGO_ACCESS_TOKEN.",
+      raw: { topic, paymentId, body }
+    });
+    return json(request, { ok: true, warning: "missing_mp_token" });
+  }
+
+  try {
+    const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
+      headers: { "Authorization": `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` }
+    });
+    const mp = await mpRes.json().catch(() => ({}));
+
+    if (!mpRes.ok) {
+      await safeAppendOwnerEvent(env, {
+        id: `MP-WH-${paymentId}`,
+        type: "error",
+        category: "webhook",
+        product: "Error al verificar pago MercadoPago",
+        status: "failed",
+        error_flag: true,
+        error_tipo: "mp_payment_lookup_error",
+        error_detalle: JSON.stringify(mp).slice(0, 600),
+        raw: { topic, paymentId, mp }
+      });
+      return json(request, { ok: true, warning: "mp_lookup_error" });
+    }
+
+    const approved = String(mp.status || "").toLowerCase() === "approved";
+    const externalRef = mp.external_reference || mp.metadata?.legalai_external_ref || paymentId;
+    const amountARS = Number(mp.transaction_amount || mp.metadata?.amount_ars || 0);
+    const product = mp.description || mp.metadata?.legalai_tipo || "Documento LegalAI";
+    const customer = mp.payer?.email || mp.metadata?.email || "";
+    const affiliate = mp.metadata?.legalai_ref || mp.metadata?.ref || "";
+
+    await safeAppendOwnerEvent(env, {
+      id: `MP-${paymentId}`,
+      payment_id: String(paymentId),
+      order_id: externalRef,
+      type: approved ? "venta" : "payment_update",
+      product,
+      category: "mercadopago",
+      amount: amountARS,
+      amount_ars: amountARS,
+      currency: "ARS",
+      payment_method: "MercadoPago",
+      status: approved ? "approved" : (mp.status || "pending"),
+      customer,
+      affiliate,
+      raw: { topic, paymentId, externalRef, mp }
+    });
+
+    return json(request, { ok: true, saved: true, status: mp.status || "" });
+  } catch (err) {
+    await safeAppendOwnerEvent(env, {
+      id: `MP-WH-${paymentId}`,
+      type: "error",
+      category: "webhook",
+      product: "Excepción verificando webhook MercadoPago",
+      status: "failed",
+      error_flag: true,
+      error_tipo: "mp_webhook_exception",
+      error_detalle: err?.message || String(err),
+      raw: { topic, paymentId, body }
+    });
+    return json(request, { ok: true, warning: "webhook_exception" });
+  }
 }
 
 /* =========================================================
@@ -792,6 +895,10 @@ async function handleOwnerRoutes(request, env) {
     });
   }
 
+  if (url.pathname === "/owner/mp-sync") {
+    return json(request, await syncMercadoPagoPayments(request, env));
+  }
+
   const allEvents = await readOwnerEvents(env);
   const filteredEvents = filterOwnerEventsByDate(allEvents, url);
   const payload = await buildOwnerPayload(env, filteredEvents, Boolean(env.OWNER_EVENTS_KV));
@@ -805,6 +912,85 @@ async function handleOwnerRoutes(request, env) {
   if (url.pathname === "/owner/auditoria") return json(request, payload.auditoria);
 
   return json(request, { ok: false, error: "owner_route_not_found", path: url.pathname }, 404);
+}
+
+
+async function syncMercadoPagoPayments(request, env) {
+  const url = new URL(request.url);
+  if (!env.MERCADOPAGO_ACCESS_TOKEN) {
+    await safeAppendOwnerEvent(env, {
+      type: "error", category: "mercadopago", product: "Sincronización MercadoPago",
+      status: "failed", error_flag: true, error_tipo: "missing_mp_token",
+      error_detalle: "No se puede sincronizar MercadoPago porque falta MERCADOPAGO_ACCESS_TOKEN."
+    });
+    return { ok: false, error: "missing_mp_token" };
+  }
+
+  const days = Math.min(90, Math.max(1, Number(url.searchParams.get("days") || 45)));
+  const end = new Date();
+  const begin = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  const params = new URLSearchParams({
+    sort: "date_created",
+    criteria: "desc",
+    range: "date_created",
+    begin_date: begin.toISOString(),
+    end_date: end.toISOString(),
+    limit: "50"
+  });
+
+  const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/search?${params.toString()}`, {
+    headers: { "Authorization": `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` }
+  });
+  const data = await mpRes.json().catch(() => ({}));
+
+  if (!mpRes.ok) {
+    await safeAppendOwnerEvent(env, {
+      type: "error", category: "mercadopago", product: "Error sincronizando MercadoPago",
+      status: "failed", error_flag: true, error_tipo: "mp_sync_error",
+      error_detalle: JSON.stringify(data).slice(0, 600), raw: data
+    });
+    return { ok: false, error: "mp_sync_error", detail: data };
+  }
+
+  const results = Array.isArray(data.results) ? data.results : [];
+  let imported = 0;
+  let skipped = 0;
+
+  for (const mp of results) {
+    if (!isLegalAiPayment(mp)) { skipped++; continue; }
+    const paymentId = String(mp.id || "");
+    if (!paymentId) { skipped++; continue; }
+    const approved = String(mp.status || "").toLowerCase() === "approved";
+    const externalRef = mp.external_reference || mp.metadata?.legalai_external_ref || "";
+    const amountARS = Number(mp.transaction_amount || 0);
+    await safeAppendOwnerEvent(env, {
+      id: `MP-${paymentId}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: approved ? "venta" : "payment_update",
+      product: mp.description || mp.metadata?.legalai_tipo || "Documento LegalAI",
+      category: "mercadopago",
+      amount: amountARS,
+      amount_ars: String(mp.currency_id || "ARS").toUpperCase() === "ARS" ? amountARS : 0,
+      currency: mp.currency_id || "ARS",
+      payment_method: "MercadoPago",
+      status: approved ? "approved" : (mp.status || "pending"),
+      customer: mp.payer?.email || mp.metadata?.email || "",
+      affiliate: mp.metadata?.legalai_ref || mp.metadata?.ref || "",
+      raw: { source: "mp_sync", paymentId, externalRef, mp }
+    });
+    imported++;
+  }
+
+  return { ok: true, days, found: results.length, imported, skipped };
+}
+
+function isLegalAiPayment(mp = {}) {
+  const metadata = mp.metadata || {};
+  const hayMetadata = Boolean(metadata.legalai_external_ref || metadata.legalai_tipo || metadata.legalai_ref);
+  const ref = String(mp.external_reference || metadata.legalai_external_ref || "").toLowerCase();
+  const desc = String(mp.description || "").toLowerCase();
+  return hayMetadata || ref.startsWith("doc_sess_") || ref.startsWith("legalai_") || desc.includes("legalai") || desc.includes("contrato") || desc.includes("documento legal");
 }
 
 /* =========================================================
@@ -948,6 +1134,14 @@ async function writeJsonKV(env, key, value) {
 
 async function buildOwnerPayload(env, events, hasKv) {
   const operaciones = events;
+  const checkoutById = new Map();
+  for (const ev of operaciones) {
+    if (String(ev.type || "").toLowerCase() === "checkout_start") {
+      checkoutById.set(String(ev.id), ev);
+      const externalRef = ev.raw?.externalRef || ev.raw?.raw?.externalRef;
+      if (externalRef) checkoutById.set(String(externalRef), ev);
+    }
+  }
   const afiliadosMap = new Map();
   const comisiones = [];
   const logs = [];
@@ -1019,13 +1213,14 @@ async function buildOwnerPayload(env, events, hasKv) {
       });
     }
 
-    if (event.error_flag || event.status === "failed") {
+    if (isErrorOwnerEvent(event)) {
       logs.push({
         id: `ERR-${event.id}`,
         fecha: event.date,
         tipo: event.error_tipo || event.type || "error",
-        detalle: event.error_detalle || event.product || "Evento con error",
-        resuelto: false
+        detalle: event.error_detalle || event.raw?.reclamo_motivo || event.raw?.raw?.reclamo_motivo || event.product || "Evento con error",
+        resuelto: false,
+        raw: event.raw || event
       });
     }
 
@@ -1038,9 +1233,9 @@ async function buildOwnerPayload(env, events, hasKv) {
     }
   }
 
-  const confirmed = operaciones.filter(event => ["approved", "active"].includes(event.status) && event.type !== "test");
-  const facturacion_ars = confirmed.reduce((sum, event) => sum + Number(event.amount_ars || 0), 0);
-  const ventas_confirmadas = confirmed.filter(e => ["venta", "document_generated", "payment_approved"].includes(e.type)).length || confirmed.length;
+  const confirmedSales = dedupeConfirmedSalesOwnerEvents(operaciones.filter(isConfirmedSaleOwnerEvent));
+  const facturacion_ars = confirmedSales.reduce((sum, event) => sum + getOwnerEventAmountARS(event, checkoutById), 0);
+  const ventas_confirmadas = confirmedSales.length;
 
   return {
     ok: true,
@@ -1091,6 +1286,8 @@ function normalizeOwnerEvent(input = {}) {
     currency: input.currency || input.moneda || "ARS",
     amount_ars: Number(input.amount_ars ?? input.monto_ars ?? input.amountARS ?? input.montoARS ?? input.monto ?? input.total ?? 0),
     payment_method: input.payment_method || input.metodo_pago || input.gateway || input.provider || "",
+    payment_id: input.payment_id || input.paymentId || input.mp_payment_id || input.mercadopago_payment_id || "",
+    order_id: input.order_id || input.external_reference || input.externalRef || "",
     status,
     customer: input.customer || input.email || input.customer_email || input.cliente || "",
     affiliate: normalizeRef(input.affiliate || input.afiliado || input.ref || input.affiliate_ref || input.afiliado_ref || ""),
@@ -1105,6 +1302,85 @@ function normalizeOwnerEvent(input = {}) {
     error_detalle: input.error_detalle || input.error_detail || input.message || "",
     raw: input.raw && Object.keys(input).length < 5 ? input.raw : input
   };
+}
+
+
+
+function getOwnerSaleKeys(event = {}) {
+  const raw = event.raw || {};
+  const inner = raw.raw || {};
+  return [
+    event.order_id, event.payment_id, event.id,
+    String(event.id || "").replace(/^MP-/, ""),
+    raw.order_id, raw.payment_id, raw.paymentId, raw.externalRef, raw.external_reference,
+    inner.order_id, inner.payment_id, inner.paymentId, inner.externalRef, inner.external_reference
+  ].filter(Boolean).map(String);
+}
+
+function dedupeConfirmedSalesOwnerEvents(events = []) {
+  const seen = new Set();
+  const out = [];
+  for (const event of events) {
+    const keys = getOwnerSaleKeys(event);
+    if (keys.some(k => seen.has(k))) continue;
+    out.push(event);
+    for (const key of keys) seen.add(key);
+  }
+  return out;
+}
+
+function isConfirmedSaleOwnerEvent(event = {}) {
+  const type = String(event.type || "").toLowerCase();
+  const status = String(event.status || "").toLowerCase();
+  const saleTypes = new Set(["venta", "sale", "payment_approved", "pago_ok", "document_generated", "plan_activated", "pack_created"]);
+  return saleTypes.has(type) && ["approved", "active", "paid", "success", "ok"].includes(status);
+}
+
+function getOwnerEventAmountARS(event = {}, checkoutById = new Map()) {
+  const direct = Number(event.amount_ars || 0);
+  if (direct > 0) return direct;
+  const currency = String(event.currency || "").toUpperCase();
+  const amount = Number(event.amount || 0);
+  if (currency === "ARS" && amount > 0) return amount;
+
+  const possibleKeys = [
+    event.id,
+    event.payment_id,
+    event.order_id,
+    event.raw?.payment_id,
+    event.raw?.paymentId,
+    event.raw?.externalRef,
+    event.raw?.external_reference,
+    event.raw?.externalRef,
+    event.raw?.raw?.payment_id,
+    event.raw?.raw?.externalRef,
+    event.raw?.raw?.external_reference,
+    event.raw?.raw?.externalRef
+  ].filter(Boolean).map(String);
+
+  for (const key of possibleKeys) {
+    const related = checkoutById.get(key);
+    if (related) {
+      return Number(related.amount_ars || (String(related.currency || "").toUpperCase() === "ARS" ? related.amount : 0) || 0);
+    }
+  }
+
+  return 0;
+}
+
+function isErrorOwnerEvent(event = {}) {
+  const type = String(event.type || "").toLowerCase();
+  const status = String(event.status || "").toLowerCase();
+  return Boolean(
+    event.error_flag ||
+    ["failed", "error", "rejected"].includes(status) ||
+    type === "error" ||
+    type.includes("error") ||
+    event.raw?.error ||
+    event.raw?.raw?.error ||
+    event.raw?.reclamo ||
+    event.raw?.raw?.reclamo
+  );
 }
 
 function filterOwnerEventsByDate(events, url) {

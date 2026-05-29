@@ -18,15 +18,56 @@
 
 <style>
 /* ESPECÍFICO CONTRATO-ALQUILER */
-nav {position:sticky;top:0;height:56px;background:var(--hdr-bg);display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid rgba(200,168,75,.15);z-index:100}
-nav .logo {font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.05em;text-decoration:none}
-nav .logo span {color:rgba(200,168,75,.4)}
-.hdr-right {display:flex;align-items:center;gap:14px}
+:root {
+  --ink:#0f1117;
+  --paper:#f7f3ec;
+  --cream:#ede8dc;
+  --surface:#ffffff;
+  --gold:#c8a84b;
+  --gold-dim:rgba(200,168,75,0.12);
+  --sage:#3d5a46;
+  --sage-dim:rgba(61,90,70,0.09);
+  --mist:#6b7580;
+  --line:rgba(15,17,23,0.1);
+  --hdr-bg:#0f1117;
+  --hdr-txt:rgba(255,255,255,0.28);
+  --shadow:0 2px 16px rgba(15,17,23,0.07);
+  --btn-bg:#0f1117;
+  --btn-txt:#c8a84b;
+  --btn-hover:#1e2230;
+}
+[data-theme="dark"] {
+  --ink:#eceef2;
+  --paper:#0c0e12;
+  --cream:#141720;
+  --surface:#1c2030;
+  --gold:#d4a847;
+  --gold-dim:rgba(212,168,71,0.13);
+  --sage:#6abf8a;
+  --sage-dim:rgba(106,191,138,0.1);
+  --mist:#7a8494;
+  --line:rgba(255,255,255,0.07);
+  --hdr-bg:#080a0e;
+  --hdr-txt:rgba(255,255,255,0.22);
+  --shadow:0 2px 20px rgba(0,0,0,0.4);
+  --btn-bg:#d4a847;
+  --btn-txt:#0c0e12;
+  --btn-hover:#e0b84e;
+}
+header {position:sticky;top:0;height:62px;background:var(--hdr-bg);display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid rgba(200,168,75,.15);z-index:200}
+.logo {font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);letter-spacing:.05em;text-decoration:none}
+.logo span {color:rgba(200,168,75,.4)}
+.hdr-right {display:flex;align-items:center;gap:16px}
+.hdr-tag{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--hdr-txt);text-transform:uppercase;letter-spacing:.1em}
 .hdr-back {font-size:.75rem;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
 .hdr-back:hover {color:var(--gold)}
+.site-nav{background:var(--cream);border-bottom:1px solid var(--line);padding:0 40px;display:flex;gap:0;overflow-x:auto;transition:background .3s}
+.site-nav .nav-link{padding:14px 20px;font-size:.82rem;font-weight:500;color:var(--mist);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;text-decoration:none}
+.site-nav .nav-link:hover{color:var(--ink)}
+.site-nav .nav-link.active{color:var(--ink);border-bottom-color:var(--gold)}
 .btn-cta {display:inline-block;background:var(--btn-bg);color:var(--btn-txt);font-family:'DM Sans',sans-serif;font-weight:800;font-size:1rem;padding:12px 24px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;transition:all .15s;box-shadow:0 4px 12px rgba(200,168,75,.2)}
 .btn-cta:hover {background:var(--btn-hover);transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,168,75,.3)}
-.hero {background:var(--surface);padding:52px 24px 44px;text-align:center;border-bottom:1px solid var(--line)}
+.hero {background:var(--paper);padding:52px 24px 44px;text-align:center;border-bottom:1px solid var(--line)}
 .hero h1 {font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;color:var(--ink);max-width:640px;margin:0 auto 16px}
 .hero h1 mark {background:none;color:var(--gold)}
 .hero-sub {font-size:1.05rem;color:var(--mist);max-width:480px;margin:0 auto 32px;font-weight:400}
@@ -41,7 +82,7 @@ nav .logo span {color:rgba(200,168,75,.4)}
 .precio-det {font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mist);margin-top:4px}
 .precio-nota-pill {font-size:.75rem;color:var(--gold);font-weight:600;margin-top:4px}
 .trust-line {margin-top:14px;font-size:.8rem;color:var(--mist);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.pasos {background:var(--surface);padding:48px 24px;border-bottom:1px solid var(--line)}
+.pasos {background:var(--paper);padding:48px 24px;border-bottom:1px solid var(--line)}
 .sec-title {text-align:center;font-size:1.5rem;font-weight:800;margin-bottom:32px;color:var(--ink)}
 .pasos-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:760px;margin:0 auto}
 .paso {text-align:center;padding:24px 16px}
@@ -54,7 +95,7 @@ nav .logo span {color:rgba(200,168,75,.4)}
 .bene-icon {font-size:1.3rem;flex-shrink:0;margin-top:1px}
 .bene-txt strong {display:block;font-size:.93rem;font-weight:700;margin-bottom:2px}
 .bene-txt span {font-size:.82rem;color:var(--mist)}
-.precio-sec {background:var(--surface);padding:48px 24px;border-bottom:1px solid var(--line);text-align:center}
+.precio-sec {background:var(--paper);padding:48px 24px;border-bottom:1px solid var(--line);text-align:center}
 .precio-card {display:inline-block;border:2px solid var(--btn-bg);border-radius:16px;padding:36px 48px;max-width:400px;width:100%}
 .precio-card .monto {font-size:3rem;font-weight:800;color:var(--ink);line-height:1;min-height:3.2rem}
 .precio-card .det {font-family:'DM Mono',monospace;font-size:.72rem;color:var(--mist);margin-top:6px;margin-bottom:24px}
@@ -79,25 +120,29 @@ footer span {font-size:.75rem;color:rgba(255,255,255,.35)}
 .sticky-price strong {display:block;font-size:1.1rem;font-weight:800;color:var(--ink)}
 .sticky-btn {background:var(--btn-bg);color:var(--btn-txt);font-family:'DM Sans',sans-serif;font-weight:800;font-size:.92rem;padding:13px 22px;border-radius:9px;text-decoration:none;white-space:nowrap;box-shadow:0 3px 12px rgba(200,168,75,.3);flex-shrink:0;transition:background .15s;border:none;cursor:pointer;display:inline-block}
 .sticky-btn:hover {background:var(--btn-hover)}
-@media(max-width:600px) {.pasos-grid{grid-template-columns:1fr}.bene-grid{grid-template-columns:1fr}.precio-card{padding:28px 24px}.btn-cta{padding:14px 28px;font-size:.95rem;width:100%;max-width:360px;display:block;margin:0 auto}footer{justify-content:center;text-align:center}.sticky-cta{display:block}body{padding-bottom:80px}}
+@media(max-width:600px) {header{padding:0 16px}.site-nav{padding:0 16px}.site-nav .nav-link{padding:12px 14px}.hdr-tag{display:none}.pasos-grid{grid-template-columns:1fr}.bene-grid{grid-template-columns:1fr}.precio-card{padding:28px 24px}.btn-cta{padding:14px 28px;font-size:.95rem;width:100%;max-width:360px;display:block;margin:0 auto}footer{justify-content:center;text-align:center}.sticky-cta{display:block}body{padding-bottom:80px}}
 </style>
 </head>
 <body>
 
-<nav>
-  <div style="display:flex;align-items:center;gap:16px;">
-    <a class="logo" href="https://legalai-arg.com">LegalAI <span>ARG</span></a>
-    <a class="hdr-back" href="https://legalai-arg.com">← Inicio</a>
-    <a class="hdr-back" href="https://legalai-arg.com#sec-generador">Otros documentos</a>
-  </div>
+<header>
+  <a class="logo" href="index.html">LegalAI <span>ARG</span></a>
   <div class="hdr-right">
+    <div class="hdr-tag">Documentos legales · IA</div>
     <div style="display:flex;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px">
       <button onclick="setTheme('light')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">☀ Claro</button>
       <button onclick="setTheme('system')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">⊙ Auto</button>
       <button onclick="setTheme('dark')" style="padding:4px 10px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-size:.68rem;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">◗ Oscuro</button>
     </div>
-    <a class="btn-cta" href="formulario.html">Crear contrato ahora →</a>
   </div>
+</header>
+<nav class="site-nav" aria-label="Navegación principal">
+  <a class="nav-link" href="index.html#inicio">Inicio</a>
+  <a class="nav-link" href="index.html#generador">Generador</a>
+  <a class="nav-link active" href="contrato-alquiler.html">Contrato alquiler</a>
+  <a class="nav-link" href="planes.html">Plan ilimitado</a>
+  <a class="nav-link" href="index.html#afiliados">Afiliados</a>
+  <a class="nav-link" href="index.html#about">Acerca de</a>
 </nav>
 
 <section class="hero">
@@ -166,16 +211,16 @@ footer span {font-size:.75rem;color:rgba(255,255,255,.35)}
   </div>
 </section>
 
-<section style="background:var(--surface);padding:48px 24px;border-bottom:1px solid var(--line);">
+<section style="background:var(--paper);padding:48px 24px;border-bottom:1px solid var(--line);">
   <div style="max-width:680px;margin:0 auto;">
     <h2 class="sec-title">¿Qué incluye el contrato?</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:24px;">
-      <div style="padding:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">📋</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Datos de las partes</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Propietario, inquilino y garante con DNI y domicilio completo.</div></div>
-      <div style="padding:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">💰</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Condiciones económicas</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Monto del alquiler, depósito en garantía y cláusula de ajuste.</div></div>
-      <div style="padding:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">⚖️</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Cláusulas legales</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Rescisión, incumplimiento, mantenimiento y obligaciones de cada parte.</div></div>
-      <div style="padding:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">🏠</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Descripción del inmueble</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Dirección, ambientes y uso permitido del inmueble.</div></div>
-      <div style="padding:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">📅</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Plazo y renovación</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Duración del contrato, vencimiento y condiciones de renovación.</div></div>
-      <div style="padding:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">✍️</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Firmas y fecha</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Espacios para propietario, inquilino y garante. Listo para imprimir.</div></div>
+      <div style="padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">📋</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Datos de las partes</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Propietario, inquilino y garante con DNI y domicilio completo.</div></div>
+      <div style="padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">💰</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Condiciones económicas</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Monto del alquiler, depósito en garantía y cláusula de ajuste.</div></div>
+      <div style="padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">⚖️</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Cláusulas legales</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Rescisión, incumplimiento, mantenimiento y obligaciones de cada parte.</div></div>
+      <div style="padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">🏠</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Descripción del inmueble</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Dirección, ambientes y uso permitido del inmueble.</div></div>
+      <div style="padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">📅</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Plazo y renovación</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Duración del contrato, vencimiento y condiciones de renovación.</div></div>
+      <div style="padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;"><div style="font-size:1rem;margin-bottom:6px;">✍️</div><div style="font-weight:700;font-size:.85rem;color:var(--ink);margin-bottom:3px;">Firmas y fecha</div><div style="font-size:.76rem;color:var(--mist);line-height:1.5;">Espacios para propietario, inquilino y garante. Listo para imprimir.</div></div>
     </div>
     <div style="background:#edf7ed;border:1px solid #a8d5a8;border-radius:9px;padding:12px 16px;font-size:.82rem;color:#2a5e2a;line-height:1.6;margin-bottom:10px;">✓ Adaptado a la <strong>Ley 27.551</strong> de Alquileres y la legislación de tu provincia.</div>
   </div>

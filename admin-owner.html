@@ -64,6 +64,7 @@ body{min-height:100vh;background:var(--bg);overflow:hidden}button,input,select,t
     <div id="topbar">
       <div class="tb-title" id="tbt">Dashboard</div>
       <div class="tb-r">
+        <button class="btn-exp" onclick="syncMP()">⤓ Sincronizar MP</button>
         <button class="btn-exp" onclick="loadAllData(true)">↻ Actualizar</button>
         <div class="live warn" id="liveState">Sin cargar</div>
         <div class="tb-date" id="tbd"></div>
@@ -178,7 +179,7 @@ const CONFIG = {
   ENDPOINTS: {
     all: ['/owner/all','/owner/dashboard-full','/owner/dashboard'],
     operaciones: ['/owner/operaciones','/owner/ops','/owner/events','/owner/dashboard'],
-    afiliados: ['/owner/afiliados','/owner/affiliates'],
+    afiliados: ['/admin/afiliado/lista','/owner/afiliados','/owner/affiliates'],
     comisiones: ['/owner/comisiones','/owner/commissions'],
     logs: ['/owner/logs','/owner/errors'],
     emails: ['/owner/emails','/owner/email-events'],
@@ -189,6 +190,7 @@ const CONFIG = {
 const state = {
   adminKey: '',
   raw: {},
+  metrics: {},
   errors: [],
   ops: [],
   afiliados: [],
@@ -285,6 +287,19 @@ function applyPreset(){
   document.getElementById('dd').value = toDateInputValue(start); document.getElementById('dh').value = toDateInputValue(end);
 }
 
+
+async function syncMP(){
+  setLive('Sincronizando MercadoPago', 'warn');
+  try{
+    const res = await apiGet('/owner/mp-sync', {days: 45});
+    toast('MercadoPago sincronizado: ' + (res.data.imported || 0) + ' operación(es)', 'success');
+    await loadAllData(true);
+  }catch(err){
+    toast('No se pudo sincronizar MercadoPago: ' + err.message, 'error');
+    setLive('Error MP', 'bad');
+  }
+}
+
 async function loadAllData(manual){
   setLive('Cargando', 'warn');
   state.errors = [];
@@ -301,10 +316,10 @@ async function loadAllData(manual){
       if(ops) source.ops = normalizeAnyArray(ops.data).map(normalizeOp);
       if(ops) state.raw.operaciones = ops;
     }
-    if(!source.afiliados.length){
-      const af = await tryFetchAny(CONFIG.ENDPOINTS.afiliados, {}, true);
-      if(af) source.afiliados = normalizeAnyArray(af.data).map(normalizeAffiliate);
-      if(af) state.raw.afiliados = af;
+    const af = await tryFetchAny(CONFIG.ENDPOINTS.afiliados, {}, true);
+    if(af) {
+      source.afiliados = mergeAffiliates(source.afiliados, normalizeAnyArray(af.data).map(normalizeAffiliate));
+      state.raw.afiliados = af;
     }
     if(!source.comisiones.length){
       const co = await tryFetchAny(CONFIG.ENDPOINTS.comisiones, {desde: from, hasta: to}, true);
@@ -327,6 +342,7 @@ async function loadAllData(manual){
       if(au) state.raw.auditoria = au;
     }
 
+    state.metrics = source.metrics || all.data?.metrics || {};
     state.ops = source.ops.sort((a,b)=>new Date(b.fechaISO)-new Date(a.fechaISO));
     state.afiliados = source.afiliados.length ? source.afiliados : inferAffiliates(state.ops);
     state.comisiones = source.comisiones.length ? source.comisiones : inferCommissions(state.ops);
@@ -411,9 +427,10 @@ async function apiPost(path, body={}){
 }
 
 function normalizePayload(data){
-  const out = {ops:[], afiliados:[], comisiones:[], logs:[], emails:[], auditoria:[]};
+  const out = {ops:[], afiliados:[], comisiones:[], logs:[], emails:[], auditoria:[], metrics:{}};
   if(Array.isArray(data)){ out.ops = data.map(normalizeOp); return out; }
   if(!data || typeof data !== 'object') return out;
+  out.metrics = data.metrics || {};
   const aliases = {
     ops:['ops','operaciones','operations','events','ventas','sales','data','items','rows'],
     afiliados:['afiliados','affiliates','referidos'],
@@ -440,21 +457,36 @@ function normalizeAnyArray(data){
   return [];
 }
 
+
+function mergeAffiliates(primary, secondary){
+  const map = new Map();
+  [...(primary||[]), ...(secondary||[])].forEach(a => {
+    const key = String(a.codigo || a.email || '').toUpperCase();
+    if(!key) return;
+    const prev = map.get(key) || {};
+    map.set(key, {...prev, ...a, clientes_referidos: Math.max(num(prev.clientes_referidos), num(a.clientes_referidos)), total_ars: Math.max(num(prev.total_ars), num(a.total_ars)), total_usdt: Math.max(num(prev.total_usdt), num(a.total_usdt)), pendiente_ars: Math.max(num(prev.pendiente_ars), num(a.pendiente_ars))});
+  });
+  return Array.from(map.values());
+}
+
 function normalizeOp(r){
   const raw = r || {};
-  const fecha = raw.fecha || raw.date || raw.created_at || raw.createdAt || raw.updated_at || raw.timestamp || raw.time || new Date().toISOString();
-  const statusRaw = raw.estado || raw.status || raw.payment_status || raw.commission_status || '';
-  const currency = String(raw.moneda || raw.currency || raw.currency_id || 'ARS').toUpperCase();
-  const amount = num(raw.monto ?? raw.amount ?? raw.total ?? raw.price ?? raw.transaction_amount ?? raw.amount_ars ?? 0);
-  const amountARS = num(raw.amount_ars ?? raw.monto_ars ?? (currency === 'ARS' ? amount : 0));
+  const inner = raw.raw && typeof raw.raw === 'object' ? raw.raw : {};
+  const inner2 = inner.raw && typeof inner.raw === 'object' ? inner.raw : {};
+  const inner3 = inner2.raw && typeof inner2.raw === 'object' ? inner2.raw : {};
+  const fecha = raw.fecha || raw.date || raw.created_at || raw.createdAt || raw.updated_at || raw.timestamp || raw.time || inner.date || inner.fecha || new Date().toISOString();
+  const statusRaw = raw.estado || raw.status || raw.payment_status || raw.commission_status || inner.estado || inner.status || inner.estado_mp || inner2.estado || inner2.status || inner2.estado_mp || inner3.estado || inner3.status || inner3.estado_mp || '';
+  const currency = String(raw.moneda || raw.currency || raw.currency_id || inner.currency || 'ARS').toUpperCase();
+  const amount = num(raw.monto ?? raw.amount ?? raw.total ?? raw.price ?? raw.transaction_amount ?? raw.amount_ars ?? inner.importe_bruto ?? inner.transaction_amount ?? inner.amount ?? inner2.importe_bruto ?? inner2.transaction_amount ?? inner2.amount ?? inner3.importe_bruto ?? inner3.transaction_amount ?? inner3.amount ?? 0);
+  const amountARS = num(raw.amount_ars ?? raw.monto_ars ?? inner.amount_ars ?? inner.importe_bruto ?? inner2.amount_ars ?? inner2.importe_bruto ?? inner3.amount_ars ?? inner3.importe_bruto ?? (currency === 'ARS' ? amount : 0));
   return {
     id: str(raw.id || raw.event_id || raw.operation_id || raw.order_id || raw.payment_id || raw.preference_id || raw.invoice_id || cryptoId()),
     fecha: formatDateTime(fecha), fechaISO: toISO(fecha),
     tipo: str(raw.tipo || raw.type || raw.event_type || raw.kind || inferType(raw)),
     subtipo: str(raw.subtipo || raw.subtype || raw.category || raw.form_category || raw.plan || ''),
     estado: normalizeStatus(statusRaw), estadoRaw: str(statusRaw),
-    email: str(raw.email || raw.customer || raw.customer_email || raw.payer_email || raw.user_email || raw.cliente || ''),
-    nombre: str(raw.nombre || raw.name || raw.customer_name || raw.payer_name || ''),
+    email: str(raw.email || raw.customer || raw.customer_email || raw.payer_email || raw.user_email || raw.cliente || inner.comprador_email || inner2.comprador_email || inner3.comprador_email || ''),
+    nombre: str(raw.nombre || raw.name || raw.customer_name || raw.payer_name || inner.comprador || inner2.comprador || inner3.comprador || ''),
     producto: str(raw.producto || raw.product || raw.product_name || raw.form_type || raw.document_type || raw.plan_name || raw.title || '—'),
     plan: str(raw.plan || raw.plan_name || ''), monto: amount, moneda: currency, amount_ars: amountARS,
     metodo_pago: str(raw.metodo_pago || raw.payment_method || raw.payment_provider || raw.provider || raw.gateway || ''),
@@ -463,15 +495,15 @@ function normalizeOp(r){
     comision_monto: num(raw.comision_monto ?? raw.commission_amount ?? 0),
     comision_moneda: str(raw.comision_moneda || raw.commission_currency || currency || ''),
     comision_estado: normalizeCommissionStatus(raw.comision_estado || raw.commission_status || ''),
-    payment_id: str(raw.payment_id || raw.mp_payment_id || raw.mercadopago_payment_id || ''),
-    order_id: str(raw.order_id || raw.external_reference || raw.preference_id || ''),
+    payment_id: str(raw.payment_id || raw.mp_payment_id || raw.mercadopago_payment_id || raw.paymentId || inner.mercado_pago_operation_id || inner.payment_id || inner2.mercado_pago_operation_id || inner2.payment_id || inner3.mercado_pago_operation_id || inner3.payment_id || ''),
+    order_id: str(raw.order_id || raw.external_reference || raw.preference_id || raw.order_id || inner.referencia_adicional || inner.externalRef || inner2.referencia_adicional || inner2.externalRef || inner3.referencia_adicional || inner3.externalRef || ''),
     invoice_id: str(raw.invoice_id || raw.nowpayments_invoice_id || ''),
     codigo: str(raw.codigo || raw.code || raw.activation_code || raw.preview_id || ''),
     documento_generado: bool(raw.documento_generado ?? raw.document_generated ?? raw.generated ?? raw.preview_ok),
     upgrade: bool(raw.upgrade || String(raw.tipo || raw.type || '').toLowerCase().includes('upgrade')),
-    error_flag: bool(raw.error_flag || raw.error || raw.is_error) || normalizeStatus(statusRaw) === 'Error',
-    error_tipo: str(raw.error_tipo || raw.error_type || raw.error_code || ''),
-    error_detalle: str(raw.error_detalle || raw.error_detail || raw.error_message || raw.message || ''),
+    error_flag: bool(raw.error_flag || raw.error || raw.is_error || inner.error || inner.reclamo || inner2.error || inner2.reclamo || inner3.error || inner3.reclamo) || normalizeStatus(statusRaw) === 'Error',
+    error_tipo: str(raw.error_tipo || raw.error_type || raw.error_code || (inner.reclamo || inner2.reclamo || inner3.reclamo ? 'reclamo_mp' : '') || ''),
+    error_detalle: str(raw.error_detalle || raw.error_detail || raw.error_message || raw.message || inner.reclamo_motivo || inner.observacion || inner2.reclamo_motivo || inner2.observacion || inner3.reclamo_motivo || inner3.observacion || inner2.error || inner3.error || ''),
     observaciones: str(raw.observaciones || raw.notes || raw.note || ''),
     updated_at: formatDateTime(raw.updated_at || raw.updatedAt || fecha),
     raw
@@ -510,7 +542,7 @@ function inferAffiliates(ops){
 }
 function inferCommissions(ops){ return ops.filter(o=>o.afiliado_ref && o.comision_monto).map(o=>({id:'COM-'+o.id, fecha:formatDate(o.fechaISO), fechaISO:o.fechaISO, afil_n:'', afil_e:o.afiliado_email, afil_c:o.afiliado_ref, venta:o.id, cli:o.email, producto:o.producto, monto_v:o.monto, mon_v:o.moneda, pct:0, monto_c:o.comision_monto, mon_c:o.comision_moneda || o.moneda, estado:o.comision_estado || 'Pendiente', renovacion:false, raw:o.raw})); }
 function mergeLogs(logs, ops){
-  const inferred = ops.filter(o=>o.error_flag).map(o=>({id:'ERR-'+o.id, fecha:o.fecha, fechaISO:o.fechaISO, tipo:o.error_tipo || o.tipo || 'error', detalle:o.error_detalle || o.observaciones || ('Operación con estado ' + o.estado), resuelto:false, raw:o.raw}));
+  const inferred = ops.filter(o=>o.error_flag || o.estado === 'Error').map(o=>({id:'ERR-'+o.id, fecha:o.fecha, fechaISO:o.fechaISO, tipo:o.error_tipo || o.tipo || 'error', detalle:o.error_detalle || o.observaciones || ('Operación con estado ' + o.estado), resuelto:false, raw:o.raw}));
   const all = [...logs, ...inferred];
   const seen = new Set();
   return all.filter(l => { const k = l.id + '|' + l.detalle; if(seen.has(k)) return false; seen.add(k); return true; }).sort((a,b)=>new Date(b.fechaISO)-new Date(a.fechaISO));
@@ -522,7 +554,7 @@ function renderSystemFlow(){
   if(!flowCards) return;
 
   const ops = state.ops || [];
-  const confirmedSales = ops.filter(isConfirmedSale);
+  const confirmedSales = dedupeConfirmedSales(ops.filter(isConfirmedSale));
   const errors = (state.logs || []).length + ops.filter(o=>o.error_flag || o.estado === 'Error').length;
 
   const steps = [
@@ -617,7 +649,7 @@ function renderAll(){ renderTopDate(); renderDash(); renderSystemFlow(); renderO
 function renderTopDate(){ document.getElementById('tbd').textContent = new Date().toLocaleString('es-AR',{dateStyle:'medium',timeStyle:'short'}); }
 function renderDash(){
   const ops = state.ops;
-  const ventas = ops.filter(isConfirmedSale);
+  const ventas = dedupeConfirmedSales(ops.filter(isConfirmedSale));
   const totalARS = ventas.reduce((s,o)=>s + (o.amount_ars || (o.moneda === 'ARS' ? o.monto : 0)), 0);
   const totalUSDT = ventas.filter(o=>o.moneda === 'USDT' || o.moneda === 'USD').reduce((s,o)=>s + o.monto, 0);
   const avgARS = ventas.length ? Math.round(totalARS / ventas.length) : 0;
@@ -726,7 +758,30 @@ function moneyARS(v){ return new Intl.NumberFormat('es-AR',{style:'currency',cur
 function fmtNum(v){ return new Intl.NumberFormat('es-AR',{maximumFractionDigits:4}).format(num(v)); }
 function groupSum(rows, keyFn, valFn){ return rows.reduce((acc,r)=>{ const k = keyFn(r) || '—'; acc[k] = (acc[k] || 0) + num(valFn(r)); return acc; },{}); }
 function groupCount(rows, keyFn){ return rows.reduce((acc,r)=>{ const k = keyFn(r) || '—'; acc[k] = (acc[k] || 0) + 1; return acc; },{}); }
-function isConfirmedSale(o){ return ['venta','plan','documento','pack','upgrade','sale'].includes(String(o.tipo).toLowerCase()) && o.estado === 'Confirmada'; }
+function confirmedSaleKeys(o){
+  const raw = o.raw || {};
+  const inner = raw.raw || {};
+  const inner2 = inner.raw || {};
+  return [
+    o.order_id, o.payment_id, o.id,
+    String(o.id || '').replace(/^MP-/, ''),
+    raw.order_id, raw.payment_id, raw.paymentId, raw.externalRef, raw.external_reference,
+    inner.order_id, inner.payment_id, inner.paymentId, inner.externalRef, inner.external_reference,
+    inner2.order_id, inner2.payment_id, inner2.paymentId, inner2.externalRef, inner2.external_reference
+  ].filter(Boolean).map(String);
+}
+function dedupeConfirmedSales(rows){
+  const seen = new Set();
+  const out = [];
+  rows.forEach(o=>{
+    const keys = confirmedSaleKeys(o);
+    if(keys.some(k=>seen.has(k))) return;
+    out.push(o);
+    keys.forEach(k=>seen.add(k));
+  });
+  return out;
+}
+function isConfirmedSale(o){ return ['venta','sale','payment_approved','pago_ok','document_generated','plan_activated','pack_created','pack'].includes(String(o.tipo).toLowerCase()) && o.estado === 'Confirmada'; }
 function unique(arr){ return [...new Set(arr.filter(Boolean).map(String))].sort((a,b)=>a.localeCompare(b,'es')); }
 function val(id){ return document.getElementById(id)?.value || ''; }
 function str(v){ return v === undefined || v === null ? '' : String(v); } function num(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; } function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || v === 'yes' || v === 'si'; }
