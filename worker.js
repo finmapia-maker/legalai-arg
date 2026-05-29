@@ -29,6 +29,9 @@ export default {
       const trackResponse = await handleTrackingRoutes(request, env);
       if (trackResponse) return trackResponse;
 
+      const metricsCompatResponse = await handleMetricsCompatibilityRoutes(request, env);
+      if (metricsCompatResponse) return metricsCompatResponse;
+
       const ownerResponse = await handleOwnerRoutes(request, env);
       if (ownerResponse) return ownerResponse;
 
@@ -717,6 +720,24 @@ async function handleTrackingRoutes(request, env) {
 }
 
 /* =========================================================
+   COMPATIBILIDAD AUDITORÍA DIARIA (/stats y /eventos)
+   ========================================================= */
+
+async function handleMetricsCompatibilityRoutes(request, env) {
+  const url = new URL(request.url);
+  if (!['/stats', '/eventos'].includes(url.pathname)) return null;
+
+  if (!isOwnerAuthorized(request, env)) {
+    return json(request, { ok: false, error: 'unauthorized', message: 'ADMIN_KEY ausente o incorrecta.' }, 401);
+  }
+
+  const events = filterOwnerEventsByDate(await readOwnerEvents(env), url);
+  if (url.pathname === '/stats') return json(request, buildLegacyStatsPayload(events));
+  if (url.pathname === '/eventos') return json(request, buildLegacyEventosPayload(events));
+  return null;
+}
+
+/* =========================================================
    ADMIN AFILIADOS
    ========================================================= */
 
@@ -1258,6 +1279,131 @@ async function buildOwnerPayload(env, events, hasKv) {
     emails,
     auditoria
   };
+}
+
+function buildLegacyStatsPayload(events = []) {
+  const checkoutById = new Map();
+  for (const ev of events) {
+    if (String(ev.type || '').toLowerCase() === 'checkout_start') {
+      for (const key of getOwnerSaleKeys(ev)) checkoutById.set(String(key), ev);
+    }
+  }
+
+  const ventas = dedupeConfirmedSalesOwnerEvents(events.filter(isConfirmedSaleOwnerEvent));
+  const total_clics = events.filter(isMeaningfulOwnerClickEvent).length;
+  const total_visitas = events.filter(isOwnerVisitEvent).length;
+  const total_ventas = ventas.length;
+  const total_ars = ventas.reduce((sum, ev) => sum + getOwnerEventAmountARS(ev, checkoutById), 0);
+  const por_fuente = {};
+  const docs = new Map();
+
+  for (const ev of events) {
+    const fuente = getOwnerEventSource(ev);
+    if (!por_fuente[fuente]) por_fuente[fuente] = { visitas: 0, clics: 0, ventas: 0, total_ars: 0 };
+    if (isOwnerVisitEvent(ev)) por_fuente[fuente].visitas += 1;
+    if (isMeaningfulOwnerClickEvent(ev)) por_fuente[fuente].clics += 1;
+
+    const doc = ev.product || ev.raw?.doc_tipo || ev.raw?.pagina || 'LegalAI';
+    if (!docs.has(doc)) docs.set(doc, { documento: doc, eventos: 0, ventas: 0, total_ars: 0 });
+    docs.get(doc).eventos += 1;
+  }
+
+  for (const ev of ventas) {
+    const fuente = getOwnerEventSource(ev);
+    if (!por_fuente[fuente]) por_fuente[fuente] = { visitas: 0, clics: 0, ventas: 0, total_ars: 0 };
+    por_fuente[fuente].ventas += 1;
+    por_fuente[fuente].total_ars += getOwnerEventAmountARS(ev, checkoutById);
+
+    const doc = ev.product || ev.raw?.doc_tipo || ev.raw?.pagina || 'LegalAI';
+    if (!docs.has(doc)) docs.set(doc, { documento: doc, eventos: 0, ventas: 0, total_ars: 0 });
+    docs.get(doc).ventas += 1;
+    docs.get(doc).total_ars += getOwnerEventAmountARS(ev, checkoutById);
+  }
+
+  return {
+    ok: true,
+    source: 'OWNER_EVENTS_KV_COMPAT',
+    generated_at: new Date().toISOString(),
+    resumen: { total_clics, total_visitas, total_ventas, total_ars, total_eventos: events.length },
+    por_fuente,
+    top_documentos: Array.from(docs.values()).sort((a, b) => b.ventas - a.ventas || b.eventos - a.eventos).slice(0, 10),
+    ultimas_conversiones: ventas.slice(0, 5)
+  };
+}
+
+function buildLegacyEventosPayload(events = []) {
+  const por_tipo = {};
+  for (const ev of events) {
+    const t = String(ev.type || ev.tipo || ev.raw?.tipo || ev.raw?.event || 'sin_tipo').toLowerCase();
+    por_tipo[t] = (por_tipo[t] || 0) + 1;
+  }
+
+  const ventas = dedupeConfirmedSalesOwnerEvents(events.filter(isConfirmedSaleOwnerEvent)).length;
+  const funnel_doc = buildLegacyFunnel([
+    { label: 'Visitas', count: events.filter(isOwnerVisitEvent).length },
+    { label: 'Interacciones/CTA', count: events.filter(isMeaningfulOwnerClickEvent).length },
+    { label: 'Inicio formulario', count: events.filter(ev => ['form_start', 'inicio_formulario', 'click_generar', 'cta_generar', 'form_fields_generated'].includes(String(ev.type || '').toLowerCase())).length },
+    { label: 'Pago iniciado', count: events.filter(ev => ['click_pagar', 'inicio_pago', 'checkout_start'].includes(String(ev.type || '').toLowerCase())).length },
+    { label: 'Venta confirmada', count: ventas }
+  ]);
+
+  const funnel_plan = buildLegacyFunnel([
+    { label: 'Visitas planes', count: events.filter(ev => String(ev.product || '').toLowerCase().includes('planes') || ev.raw?.pagina === 'planes').length },
+    { label: 'Click plan', count: events.filter(ev => String(ev.type || '').toLowerCase().includes('plan') || String(ev.product || '').toLowerCase().includes('plan')).length },
+    { label: 'Pago plan iniciado', count: events.filter(ev => String(ev.type || '').toLowerCase() === 'checkout_start' && String(ev.product || '').toLowerCase().includes('plan')).length },
+    { label: 'Plan activo', count: events.filter(ev => ['plan_activated', 'pack_created'].includes(String(ev.type || '').toLowerCase()) && ['approved', 'active'].includes(String(ev.status || '').toLowerCase())).length }
+  ]);
+
+  return {
+    ok: true,
+    source: 'OWNER_EVENTS_KV_COMPAT',
+    generated_at: new Date().toISOString(),
+    total: events.length,
+    por_tipo,
+    funnel_doc,
+    funnel_plan,
+    cuello_botella: detectLegacyBottleneck({ doc: funnel_doc, planes: funnel_plan })
+  };
+}
+
+function getOwnerEventSource(ev = {}) {
+  return String(ev.affiliate_source || ev.raw?.utm_src || ev.raw?.utm_source || ev.affiliate || ev.raw?.ref || 'directo') || 'directo';
+}
+
+function isOwnerVisitEvent(ev = {}) {
+  const t = String(ev.type || ev.tipo || ev.raw?.tipo || ev.raw?.event || '').toLowerCase();
+  return t === 'page_view' || t === 'form_page_view' || t.endsWith('page_view');
+}
+
+function isMeaningfulOwnerClickEvent(ev = {}) {
+  const t = String(ev.type || ev.tipo || ev.raw?.tipo || ev.raw?.event || '').toLowerCase();
+  return Boolean(
+    t.includes('click') ||
+    t.startsWith('cta_') ||
+    t.startsWith('nav_') ||
+    ['interaccion', 'form_start', 'inicio_formulario', 'inicio_pago', 'checkout_start', 'preview_action', 'cta_generar', 'cta_formulario', 'cta_planes', 'cta_contrato_alquiler'].includes(t)
+  );
+}
+
+function buildLegacyFunnel(steps) {
+  let prev = null;
+  return steps.map(step => {
+    const drop_pct = prev === null || !prev || step.count >= prev ? 0 : Math.round(((prev - step.count) / prev) * 100);
+    prev = step.count;
+    return { ...step, drop_pct };
+  });
+}
+
+function detectLegacyBottleneck(funnels = {}) {
+  let worst = null;
+  for (const [name, funnel] of Object.entries(funnels)) {
+    for (const step of funnel || []) {
+      if (step.drop_pct > 50 && (!worst || step.drop_pct > worst.drop_pct)) {
+        worst = { funnel: name, etapa: step.label, drop_pct: step.drop_pct, count: step.count };
+      }
+    }
+  }
+  return worst;
 }
 
 /* =========================================================
