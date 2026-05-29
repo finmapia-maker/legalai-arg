@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="titleTag">Generá tu documento | LegalAI Arg</title>
-<meta name="description" content="Completá los datos y ves el documento completo gratis. Pagás solo si te sirve.">
+<title>Generar documento | LegalAI Arg</title>
+<meta name="description" content="Completá los datos y ves el documento listo. Pagás solo si te sirve.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18073890544"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -59,36 +59,24 @@ header{background:var(--hdr-bg);padding:0 32px;height:56px;display:flex;align-it
 input,select,textarea{width:100%;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:.9rem;background:var(--paper);border:1.5px solid var(--line);border-radius:9px;color:var(--ink);outline:none;transition:border-color .2s,background .3s;appearance:none}
 input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 textarea{resize:vertical;min-height:68px}
-.checks-group{display:flex;flex-direction:column;gap:8px}
-.check-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;background:var(--cream);border:1px solid var(--line);border-radius:9px;cursor:pointer;transition:border-color .2s}
-.check-item:hover{border-color:var(--gold)}
-.check-item input[type=checkbox]{width:16px;height:16px;margin-top:1px;accent-color:var(--gold);flex-shrink:0;cursor:pointer}
-.check-txt strong{display:block;font-size:.87rem;color:var(--ink);cursor:pointer}
-.check-txt span{font-size:.75rem;color:var(--mist);line-height:1.3}
 .toggle-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
 .toggle-btn{padding:9px 14px;border:1.5px solid var(--line);border-radius:20px;background:var(--cream);color:var(--mist);font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;transition:all .15s;user-select:none;font-weight:500}
 .toggle-btn:hover{border-color:var(--gold);color:var(--ink)}
 .toggle-btn.active{border-color:var(--gold);background:var(--gold-dim);color:var(--ink);font-weight:700}
 .toggle-btn.active::before{content:'✓ ';color:var(--gold)}
 .btn-main{width:100%;padding:15px;background:var(--btn-bg);color:var(--btn-txt);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
-.btn-main:hover:not(:disabled){background:var(--btn-hover)}
+.btn-main:hover:not(:disabled){background:var(--btn-hover-bg)}
 .btn-main:disabled{opacity:.5;cursor:not-allowed}
 .btn-gold{background:var(--gold);color:#0f1117}
 .btn-gold:hover:not(:disabled){opacity:.88}
-.btn-ghost{width:100%;padding:11px;background:transparent;border:1.5px solid var(--line);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--mist);cursor:pointer;transition:all .2s;margin-top:8px}
-.btn-ghost:hover{color:var(--ink);border-color:var(--gold)}
-.promesa{display:flex;flex-direction:column;gap:5px;margin-top:12px}
-.promesa-item{display:flex;align-items:center;gap:7px;font-size:.79rem;color:var(--mist)}
-.promesa-item::before{content:'✔';color:var(--sage);font-size:.73rem;flex-shrink:0}
 .alert{padding:10px 13px;border-radius:9px;font-size:.82rem;margin-bottom:12px;line-height:1.5;display:none}
 .alert.visible{display:block}
 .alert.err{background:rgba(220,53,69,.07);border:1px solid rgba(220,53,69,.15);color:#c0392b}
-.alert.grn{background:var(--sage-dim);border:1px solid rgba(61,90,70,.15);color:var(--sage)}
 .loading{display:none;text-align:center;padding:48px 24px}
 .spinner{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-lbl{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mist);text-transform:uppercase;letter-spacing:.1em}
-.preview-box{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--cream);max-height:460px;overflow-y:auto;position:relative;margin:14px 0;user-select:none;-webkit-user-select:none}
+.preview-box{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--cream);max-height:460px;overflow-y:auto;position:relative;margin:14px 0;user-select:none}
 #previewCanvas{display:block;width:100%;cursor:default}
 #form-layout{display:block}
 @media(min-width:720px){
@@ -97,7 +85,7 @@ textarea{resize:vertical;min-height:68px}
 }
 #preview-live-col{margin-top:20px}
 #preview-live-col .plv-label{font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:8px}
-#preview-live-doc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 16px;font-family:'Times New Roman',serif;font-size:11px;line-height:1.7;color:var(--ink);position:relative;overflow:hidden;max-height:460px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#preview-live-doc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 16px;font-family:'Times New Roman',serif;font-size:11px;line-height:1.7;color:var(--ink);position:relative;overflow:hidden;max-height:460px;user-select:none}
 #preview-live-doc h1{font-size:12px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px;border-bottom:1px solid var(--gold);padding-bottom:5px}
 #preview-live-doc h2{font-size:11px;font-weight:700;margin:10px 0 4px;background:rgba(200,168,75,.08);padding:3px 6px;border-radius:4px}
 #preview-live-doc p{margin:0 0 5px}
@@ -113,9 +101,7 @@ textarea{resize:vertical;min-height:68px}
 #previewWatermarkOverlay{position:absolute;inset:0;overflow:hidden;opacity:.11;pointer-events:none}
 .precio-box{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .precio-box-lbl{font-size:.84rem;font-weight:600;color:var(--ink)}
-.precio-box-sub{font-size:.74rem;color:var(--mist);margin-top:2px}
 .precio-box-amt{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--ink);text-align:right}
-.precio-box-det{font-family:'DM Mono',monospace;font-size:.63rem;color:var(--mist);text-align:right}
 .success-box{text-align:center;padding:28px 16px}
 .success-icon{font-size:2.6rem;margin-bottom:12px}
 .success-box h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:8px}
@@ -145,9 +131,9 @@ footer a:hover{color:var(--gold)}
 <div class="wrap">
 
   <div class="intro">
-    <div class="intro-tag" id="introTag">// Contrato de alquiler · Argentina 2026</div>
-    <h1 id="introH1">Tu contrato de alquiler<br>listo en <strong style="color:var(--gold)">2 minutos</strong></h1>
-    <p class="intro-sub">Completás los datos → pagás → descargás el PDF. Sin esperas, sin abogados.</p>
+    <div class="intro-tag" id="introTag">// Contrato</div>
+    <h1 id="introTitle">Tu documento<br>listo en <strong style="color:var(--gold)">2 minutos</strong></h1>
+    <p class="intro-sub" id="introSub">Completás los datos → pagás → descargás el PDF.</p>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;">
       <span style="background:var(--gold-dim);border:1px solid rgba(200,168,75,.2);color:var(--gold);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;font-weight:600;"><span id="precioIntro">USD 5.5</span> · Pago único</span>
       <span style="background:var(--sage-dim);border:1px solid rgba(61,90,70,.15);color:var(--sage);font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;">🔒 MercadoPago</span>
@@ -168,504 +154,579 @@ footer a:hover{color:var(--gold)}
     <div class="card-title">Datos del documento</div>
     <div class="card-sub">Completá los campos. Los marcados con <span style="color:var(--gold)">*</span> son obligatorios.</div>
     <div class="alert err" id="alertForm"></div>
-
-    <!-- CAMPOS DINÁMICOS SE INYECTAN AQUÍ -->
-    <div id="formularioContent"></div>
-
-    <button class="btn-main btn-gold" id="btnPagarDirecto" onclick="pagarDirecto()" style="margin-bottom:6px;font-size:1.05rem;font-weight:800;padding:17px;">
-      Pagar y descargar mi documento →
-    </button>
-    <p style="text-align:center;font-size:.72rem;color:var(--mist);margin-bottom:10px;font-family:'DM Mono',monospace;"><span id="precioBoton">USD 5.5</span> · Pago único · Descarga inmediata · Sin suscripción</p>
-    <div class="promesa">
-      <div class="promesa-item">PDF listo para firmar e imprimir</div>
-      <div class="promesa-item">Pago 100% seguro con MercadoPago</div>
-      <div class="promesa-item">Si no te sirve, no pagás nada</div>
-    </div>
+    <div id="form-fields"></div>
+    <button class="btn-main btn-gold" onclick="previsualizarPago()">Ver previsualización y pagar →</button>
   </div>
 
   <div id="preview-live-col">
     <div class="plv-label">Vista previa del documento</div>
-    <div id="preview-live-doc">
-      <div id="plv-content"></div>
-      <div id="plv-fade"></div>
-      <div id="plv-watermark"><span>PREVIEW · NO PAGADO · PREVIEW · NO PAGADO · PREVIEW · NO PAGADO</span></div>
-      <div id="plv-cta">
-        <button class="plv-btn" onclick="pagarDirecto()">🔓 Obtener documento completo →</button>
-        <div class="plv-sub">Pago único · PDF listo para firmar</div>
-      </div>
-    </div>
+    <div id="preview-live-doc"><div id="plv-content"></div><div id="plv-fade"></div></div>
+    <div id="plv-cta"><button class="plv-btn" onclick="previsualizarPago()">Ver completo y pagar →</button><div class="plv-sub">Desbloqueado luego del pago</div></div>
   </div>
-
   </div>
   </div>
 
-  <div id="sticky-cta-f">
-    <button class="btn-main btn-gold" onclick="pagarDirecto()" style="margin:0;">Continuar al pago →</button>
-  </div>
-
-  <div class="loading" id="loadingGen">
-    <div class="spinner"></div>
-    <div class="loading-lbl">Generando tu documento con IA...</div>
-  </div>
-
-  <!-- CARD 2: PREVIEW -->
+  <!-- CARD 2: PREVIEW FULL -->
   <div class="card" id="card2">
-    <div class="card-title">Vista previa de tu documento</div>
-    <div class="card-sub">Revisá el documento. Pagás solo si te sirve.</div>
-    <div class="alert grn visible">✔ Documento generado con tus datos · Listo para pagar y descargar</div>
-    <div class="alert err" id="alertForm2" style="margin-bottom:12px;"></div>
-    <div class="preview-box">
-      <canvas id="previewCanvas"></canvas>
-      <div id="previewWatermarkOverlay"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="card-title">Vista previa</div>
+      <button class="btn-main" style="width:auto;padding:10px 16px;margin-top:0" onclick="volverForm()">← Volver al formulario</button>
     </div>
+    <div class="preview-box"><canvas id="previewCanvas"></canvas><div id="previewWatermarkOverlay"></div></div>
     <div class="precio-box">
-      <div>
-        <div class="precio-box-lbl" id="precioCajaLabel">Tu documento</div>
-        <div class="precio-box-sub">PDF listo para firmar · pago único</div>
-      </div>
-      <div>
-        <div class="precio-box-amt" id="precioAmt">$ —</div>
-        <div class="precio-box-det" id="precioDet">cargando…</div>
-      </div>
+      <div><div class="precio-box-lbl" id="precioLbl">Contrato de alquiler</div><div class="precio-box-sub">Acceso para 7 días</div></div>
+      <div><div class="precio-box-amt" id="precioAmt">USD 5.5</div><div class="precio-box-det">Pago único</div></div>
     </div>
-    <p style="font-size:.83rem;color:var(--mist);text-align:center;margin-bottom:10px;font-weight:500">Pagás solo si te sirve el documento</p>
-    <button class="btn-main btn-gold" onclick="pagar()" style="font-size:1.05rem;font-weight:800;padding:17px;">Pagar y descargar mi documento →</button>
-    <div class="promesa" style="margin-top:12px">
-      <div class="promesa-item">Pago seguro con MercadoPago</div>
-      <div class="promesa-item">Descarga inmediata tras el pago</div>
-      <div class="promesa-item">Modelo orientativo · no reemplaza asesoramiento legal</div>
-    </div>
-    <button class="btn-ghost" onclick="volverForm()">← Editar datos</button>
+    <button class="btn-main btn-gold" onclick="pagar()">Pagar ahora con MercadoPago →</button>
+    <button class="btn-ghost" onclick="volverForm()">Volver al formulario</button>
   </div>
 
-  <div class="loading" id="loadingPago">
-    <div class="spinner"></div>
-    <div class="loading-lbl">Conectando con MercadoPago...</div>
+  <!-- CARD 3: LOADING PAGO -->
+  <div class="card" id="card3">
+    <div class="loading"><div class="spinner"></div><div class="loading-lbl">Redirigiendo a MercadoPago...</div></div>
   </div>
 
-  <div class="loading" id="loadingDoc">
-    <div class="spinner"></div>
-    <div class="loading-lbl">Generando tu documento final...</div>
-  </div>
-
-  <!-- CARD 4: SUCCESS -->
+  <!-- CARD 4: LOADING DOC -->
   <div class="card" id="card4">
+    <div class="loading"><div class="spinner"></div><div class="loading-lbl">Generando documento...</div></div>
+  </div>
+
+  <!-- CARD 5: SUCCESS -->
+  <div class="card" id="card5">
     <div class="success-box">
-      <div class="success-icon">✅</div>
-      <h2>¡Tu documento está listo!</h2>
-      <p>Hemos generado tu documento personalizado. Descargalo ahora y está listo para firmar e imprimir.</p>
-      <button class="btn-main btn-gold" onclick="descargarPDF()" style="font-size:1.05rem;font-weight:800;padding:17px;margin-top:6px;">
-        📥 Descargar PDF
-      </button>
-      <div class="promesa" style="margin-top:12px">
-        <div class="promesa-item">Documento personalizado con tus datos</div>
-        <div class="promesa-item">Válido según normativa argentina</div>
-        <div class="promesa-item">Listo para firmar e imprimir</div>
-      </div>
-      <button class="btn-ghost" onclick="reiniciar()">Crear otro documento</button>
+      <div class="success-icon">✓</div>
+      <h2>¡Documento listo!</h2>
+      <p>Tu documento ha sido generado exitosamente.<br>Hacé clic abajo para descargarlo en PDF.</p>
+      <button class="btn-main btn-gold" onclick="descargarPDF()">📥 Descargar PDF</button>
+      <button class="btn-ghost" onclick="reiniciar()">Generar otro documento</button>
     </div>
   </div>
 
 </div>
 
 <footer>
-  <p>© LegalAI Arg · <a href="https://legalai-arg.com#faq">Preguntas</a> · <a href="https://legalai-arg.com">Inicio</a> · <a href="https://legalai-arg.com">Contacto</a></p>
-  <p style="margin-top:8px;">Modelo orientativo · No reemplaza asesoramiento legal profesional</p>
+  <p>Documento orientativo · No reemplaza asesoramiento legal profesional &nbsp;|&nbsp; <a href="#">Términos</a> · <a href="#">Privacidad</a></p>
 </footer>
 
 <script>
-// ════════════════════════════════════════════════════════════════════
-// CONFIG Y MAPEO DE TIPOS
-// ════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════════════
+// CONFIG TIPOS DE DOCUMENTOS
+// ═════════════════════════════════════════════════════════════════════════════
 
-const tiposConfig = {
-  alquiler: {
-    titulo: "Contrato de alquiler",
-    subtitulo: "Tu contrato de alquiler listo en 2 minutos",
-    descripcion: "Completá los datos → pagás → descargás el PDF.",
-    precioUSD: 5.5,
-    docTipo: "Contrato de alquiler Argentina 2026",
-    intro: "// Contrato de alquiler · Argentina 2026",
-    etiqueta: "Contrato de alquiler",
-    campos: [
-      {tipo:"sec", label:"Partes"},
-      {id:"propietario", label:"Propietario", requerido:true, placeholder:"Nombre y apellido completo"},
-      {id:"inquilino", label:"Inquilino", requerido:true, placeholder:"Nombre y apellido completo"},
-      {tipo:"sec", label:"Propiedad"},
-      {id:"direccion", label:"Dirección del inmueble", requerido:true, placeholder:"Ej: Av. Corrientes 1234, 3° B"},
-      {tipo:"field-row", campos:[
-        {id:"ciudad", label:"Ciudad", requerido:true, placeholder:"Ej: Buenos Aires"},
-        {id:"provincia", label:"Provincia", requerido:true, placeholder:"Ej: CABA"}
-      ]},
-      {tipo:"sec", label:"Condiciones"},
-      {tipo:"field-row", campos:[
-        {id:"monto", label:"Monto mensual ARS", requerido:true, placeholder:"Ej: 150000", tipo:"number"},
-        {id:"duracion", label:"Duración (meses)", requerido:true, placeholder:"Ej: 24", tipo:"number"}
-      ]},
-      {id:"fecha_inicio", label:"Fecha de inicio", requerido:true, tipo:"date"},
-      {tipo:"sec", label:"¿Qué incluye?"},
-      {tipo:"toggle", id:"grupo_deposito", label:"Depósito en garantía", opciones:[{v:"si", txt:"1 mes de garantía"},{v:"no", txt:"Sin depósito"}], default:"si", hiddenId:"chk_deposito_val"},
-      {tipo:"toggle", id:"grupo_ajuste", label:"Cláusula de ajuste del alquiler", opciones:[{v:"icl", txt:"ICL (índice legal)"},{v:"ipc", txt:"IPC"},{v:"no", txt:"Sin ajuste"}], default:"icl", hiddenId:"chk_ajuste_val"},
-      {tipo:"toggle-multi", id:"grupo_servicios", label:"Servicios a cargo del inquilino", opciones:[{v:"luz", txt:"💡 Luz"},{v:"gas", txt:"🔥 Gas"},{v:"agua", txt:"💧 Agua"},{v:"expensas_ord", txt:"🏢 Expensas ord."},{v:"expensas_ext", txt:"🏢 Expensas ext."},{v:"internet", txt:"📶 Internet"}], default:"luz,gas,agua", hiddenId:"chk_servicios_val"},
-      {tipo:"toggle", id:"grupo_uso", label:"Uso del inmueble", opciones:[{v:"vivienda", txt:"🏠 Vivienda familiar"},{v:"comercial", txt:"🏪 Comercial"},{v:"temporario", txt:"🏖️ Temporario"}], default:"vivienda", hiddenId:"chk_uso_val"},
-      {tipo:"sec", label:"Observaciones opcionales"},
-      {id:"observaciones", label:"Observaciones", tipo:"textarea", placeholder:"Condiciones adicionales que quieras incluir..."}
-    ]
+const TIPO_CONFIGS = {
+  "alquiler-residencial": {
+    titulo: "Contrato de Alquiler Residencial",
+    subtitulo: "Vivienda para uso permanente",
+    precio: 5.5,
+    campos: {
+      "partes": ["propietario","inquilino","garante"],
+      "propiedad": ["direccion","ciudad","provincia"],
+      "condiciones": ["monto","duracion","fecha_inicio"],
+      "servicios": ["deposito","ajuste","servicios","uso"]
+    },
+    fieldDefs: {
+      propietario: { label: "Propietario", type: "text", req: true },
+      inquilino: { label: "Inquilino", type: "text", req: true },
+      garante: { label: "Garante (opcional)", type: "text", req: false },
+      direccion: { label: "Dirección del inmueble", type: "text", req: true, placeholder: "Av. Corrientes 1234, 3° B" },
+      ciudad: { label: "Ciudad", type: "text", req: true, placeholder: "Buenos Aires" },
+      provincia: { label: "Provincia", type: "text", req: true, placeholder: "CABA" },
+      monto: { label: "Monto mensual ARS", type: "number", req: true, placeholder: "150000" },
+      duracion: { label: "Duración (meses)", type: "number", req: true, placeholder: "24" },
+      fecha_inicio: { label: "Fecha de inicio", type: "date", req: true },
+      deposito: { label: "Depósito en garantía", type: "toggle", options: ["1 mes de garantía","Sin depósito"] },
+      ajuste: { label: "Cláusula de ajuste", type: "toggle", options: ["ICL (índice legal)","IPC","Sin ajuste"] },
+      servicios: { label: "Servicios a cargo inquilino", type: "multi-toggle", options: ["Luz","Gas","Agua","Expensas ord.","Expensas ext.","Internet"] },
+      uso: { label: "Uso del inmueble", type: "toggle", options: ["Vivienda","Comercio","Mixto"] }
+    }
+  },
+
+  "alquiler-comercial": {
+    titulo: "Contrato de Alquiler Comercial",
+    subtitulo: "Local/oficina para actividad comercial",
+    precio: 7.5,
+    campos: {
+      "partes": ["propietario","inquilino"],
+      "comercial": ["rubro","uso_comercial"],
+      "propiedad": ["direccion","ciudad","provincia"],
+      "condiciones": ["monto","duracion","fecha_inicio"],
+      "servicios": ["deposito","ajuste","servicios"]
+    },
+    fieldDefs: {
+      propietario: { label: "Propietario", type: "text", req: true },
+      inquilino: { label: "Inquilino/Empresa", type: "text", req: true },
+      rubro: { label: "Rubro/Actividad", type: "text", req: true, placeholder: "Ej: Comercio, Consultoría" },
+      uso_comercial: { label: "Tipo de uso", type: "toggle", options: ["Local comercial","Oficina","Depósito","Mixto"] },
+      direccion: { label: "Dirección del inmueble", type: "text", req: true },
+      ciudad: { label: "Ciudad", type: "text", req: true },
+      provincia: { label: "Provincia", type: "text", req: true },
+      monto: { label: "Monto mensual ARS", type: "number", req: true },
+      duracion: { label: "Duración (meses)", type: "number", req: true },
+      fecha_inicio: { label: "Fecha de inicio", type: "date", req: true },
+      deposito: { label: "Depósito", type: "toggle", options: ["2 meses","1 mes","Sin depósito"] },
+      ajuste: { label: "Ajuste del alquiler", type: "toggle", options: ["ICL","IPC","Manual","Sin ajuste"] },
+      servicios: { label: "Servicios", type: "multi-toggle", options: ["Luz","Gas","Agua","Mantenimiento"] }
+    }
+  },
+
+  "alquiler-temporario": {
+    titulo: "Contrato de Alquiler Temporario",
+    subtitulo: "Vivienda para temporada o corto plazo",
+    precio: 4.5,
+    campos: {
+      "partes": ["propietario","inquilino"],
+      "propiedad": ["direccion","ciudad","provincia"],
+      "condiciones": ["monto","fecha_inicio","fecha_fin"],
+      "servicios": ["deposito","servicios"]
+    },
+    fieldDefs: {
+      propietario: { label: "Propietario", type: "text", req: true },
+      inquilino: { label: "Inquilino", type: "text", req: true },
+      direccion: { label: "Dirección", type: "text", req: true },
+      ciudad: { label: "Ciudad", type: "text", req: true },
+      provincia: { label: "Provincia", type: "text", req: true },
+      monto: { label: "Monto por temporada ARS", type: "number", req: true },
+      fecha_inicio: { label: "Fecha de inicio", type: "date", req: true },
+      fecha_fin: { label: "Fecha de fin", type: "date", req: true },
+      deposito: { label: "Depósito en garantía", type: "toggle", options: ["Sí","No"] },
+      servicios: { label: "Servicios incluidos", type: "multi-toggle", options: ["Luz","Gas","Agua","Internet"] }
+    }
+  },
+
+  "nda": {
+    titulo: "Acuerdo de Confidencialidad (NDA)",
+    subtitulo: "Protección de información confidencial",
+    precio: 4.0,
+    campos: {
+      "partes": ["parte1","parte2"],
+      "datos": ["objeto","plazo_vigencia"]
+    },
+    fieldDefs: {
+      parte1: { label: "Parte 1 (Reveladora)", type: "text", req: true },
+      parte2: { label: "Parte 2 (Receptora)", type: "text", req: true },
+      objeto: { label: "Objeto de confidencialidad", type: "textarea", req: true, placeholder: "Descripción del tipo de información" },
+      plazo_vigencia: { label: "Plazo de vigencia (años)", type: "number", req: true, placeholder: "2" }
+    }
   }
 };
 
-// COPIAR CONFIGURACIÓN PARA OTROS TIPOS (templates)
-const defTemplate = {
-  titulo: "Mi documento",
-  subtitulo: "Genera tu documento listo en 2 minutos",
-  descripcion: "Completá los datos → pagás → descargás el PDF.",
-  precioUSD: 5.5,
-  docTipo: "Documento Argentina 2026",
-  intro: "// Documento · Argentina 2026",
-  etiqueta: "Documento",
-  campos: []
-};
+// ═════════════════════════════════════════════════════════════════════════════
+// VARIABLES GLOBALES
+// ═════════════════════════════════════════════════════════════════════════════
 
-// ════════════════════════════════════════════════════════════════════
-// CONFIG GLOBAL
-// ════════════════════════════════════════════════════════════════════
-
-const WORKER = 'https://legalai-arg-worker.finmap-ia.workers.dev';
-const PRICE_MULTIPLIER = 1;
+let DOC_TIPO = "alquiler-residencial";
+let CONFIG = {};
 let PRECIO_USD = 5.5;
-let DOC_TIPO = 'Contrato de alquiler Argentina 2026';
-let CONFIG = null;
+const WORKER = "https://legalai-arg-worker.finmap-ia.workers.dev";
 
-let G = {previewId:null, paymentId:null, precio_usd:PRECIO_USD, texto:''};
-let cotizacion = {valor:null, fuente:null};
+let G = {
+  previewId: null,
+  paymentId: null,
+  precio_usd: PRECIO_USD,
+  texto: ""
+};
 
-// ════════════════════════════════════════════════════════════════════
-// INICIALIZACIÓN DESDE PARÁMETROS
-// ════════════════════════════════════════════════════════════════════
+const cotizacion = { valor: null };
 
-function initFromParams() {
-  const params = new URLSearchParams(location.search);
-  const tipo = params.get('tipo') || 'alquiler';
-  const categoria = params.get('categoria') || 'contratos';
-  
-  CONFIG = tiposConfig[tipo] || tiposConfig.alquiler;
-  PRECIO_USD = CONFIG.precioUSD * PRICE_MULTIPLIER;
-  DOC_TIPO = CONFIG.docTipo;
+// ═════════════════════════════════════════════════════════════════════════════
+// INICIALIZACIÓN
+// ═════════════════════════════════════════════════════════════════════════════
+
+function inicializar() {
+  const tipo = new URLSearchParams(window.location.search).get("tipo") || "alquiler-residencial";
+  DOC_TIPO = tipo;
+  CONFIG = TIPO_CONFIGS[tipo] || TIPO_CONFIGS["alquiler-residencial"];
+  PRECIO_USD = CONFIG.precio;
   G.precio_usd = PRECIO_USD;
-  
-  // Actualizar UI títulos
-  document.getElementById('titleTag').textContent = CONFIG.titulo + ' | LegalAI Arg';
-  document.getElementById('introTag').textContent = CONFIG.intro;
-  document.getElementById('introH1').innerHTML = CONFIG.subtitulo.replace(/2 minutos/,'<strong style="color:var(--gold)">2 minutos</strong>');
-  document.querySelector('.intro-sub').textContent = CONFIG.descripcion;
-  document.getElementById('precioCajaLabel').textContent = CONFIG.titulo;
-  
-  // Mostrar precio
-  ['precioIntro','precioBoton'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.textContent='USD '+PRECIO_USD.toFixed(1);
-  });
-  
-  // Renderizar formulario
-  renderForm();
-  
-  // Obtener cotización
+
+  // Actualizar UI
+  document.getElementById("introTag").textContent = "// " + CONFIG.titulo;
+  document.getElementById("introTitle").innerHTML = CONFIG.titulo + "<br>listo en <strong style=\"color:var(--gold)\">2 minutos</strong>";
+  document.getElementById("introSub").textContent = CONFIG.subtitulo;
+  document.getElementById("precioIntro").textContent = "USD " + PRECIO_USD;
+  document.getElementById("precioLbl").textContent = CONFIG.titulo;
+  document.getElementById("precioAmt").textContent = "USD " + PRECIO_USD;
+
+  // Generar formulario
+  renderizarFormulario();
   obtenerCotizacion();
-  
-  // Tema
-  setTheme(localStorage.getItem('theme')||'system');
 }
 
-// ════════════════════════════════════════════════════════════════════
-// RENDERIZAR FORMULARIO DINÁMICO
-// ════════════════════════════════════════════════════════════════════
+function renderizarFormulario() {
+  const container = document.getElementById("form-fields");
+  container.innerHTML = "";
 
-function renderForm() {
-  const container = document.getElementById('formularioContent');
-  if(!CONFIG || !CONFIG.campos) return;
-  
-  let html = '';
-  for(const campo of CONFIG.campos) {
-    if(campo.tipo === 'sec') {
-      html += `<div class="sec-div"><span>${campo.label}</span></div>`;
-    } else if(campo.tipo === 'field-row') {
-      html += '<div class="field-row">';
-      for(const c of campo.campos) {
-        html += renderFieldHTML(c);
+  for (const [seccion, campos] of Object.entries(CONFIG.campos)) {
+    const secDiv = document.createElement("div");
+    secDiv.className = "sec-div";
+    secDiv.innerHTML = `<span>${seccion.toUpperCase().replace(/_/g, " ")}</span>`;
+    container.appendChild(secDiv);
+
+    campos.forEach(fieldId => {
+      const def = CONFIG.fieldDefs[fieldId];
+      if (!def) return;
+
+      const fieldDiv = document.createElement("div");
+      fieldDiv.className = "field";
+
+      if (def.type === "toggle") {
+        const label = document.createElement("label");
+        label.className = "field-label";
+        label.textContent = def.label;
+        fieldDiv.appendChild(label);
+
+        const toggleGroup = document.createElement("div");
+        toggleGroup.className = "toggle-group";
+        toggleGroup.id = `grupo_${fieldId}`;
+
+        def.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "toggle-btn" + (idx === 0 ? " active" : "");
+          btn.textContent = opt;
+          btn.dataset.value = opt;
+          btn.onclick = () => selectToggle(fieldId, opt);
+          toggleGroup.appendChild(btn);
+        });
+
+        fieldDiv.appendChild(toggleGroup);
+        const hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.id = fieldId;
+        hidden.value = def.options[0];
+        fieldDiv.appendChild(hidden);
+      } else if (def.type === "multi-toggle") {
+        const label = document.createElement("label");
+        label.className = "field-label";
+        label.textContent = def.label;
+        fieldDiv.appendChild(label);
+
+        const toggleGroup = document.createElement("div");
+        toggleGroup.className = "toggle-group";
+        toggleGroup.id = `grupo_${fieldId}`;
+
+        def.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "toggle-btn active";
+          btn.textContent = opt;
+          btn.dataset.value = opt;
+          btn.onclick = () => toggleMultiToggle(fieldId, opt, btn);
+          toggleGroup.appendChild(btn);
+        });
+
+        fieldDiv.appendChild(toggleGroup);
+        const hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.id = fieldId;
+        hidden.value = def.options.slice(0, 2).join(",");
+        fieldDiv.appendChild(hidden);
+      } else {
+        const label = document.createElement("label");
+        label.className = "field-label";
+        label.innerHTML = def.label + (def.req ? '<span class="req">*</span>' : '');
+        fieldDiv.appendChild(label);
+
+        const input = document.createElement(def.type === "textarea" ? "textarea" : "input");
+        input.type = def.type;
+        input.id = fieldId;
+        input.placeholder = def.placeholder || "";
+        if (def.type === "number" && def.placeholder) input.placeholder = def.placeholder;
+        input.addEventListener("input", actualizarPreview);
+        input.addEventListener("change", actualizarPreview);
+        fieldDiv.appendChild(input);
       }
-      html += '</div>';
-    } else if(campo.tipo === 'toggle') {
-      html += renderToggle(campo);
-    } else if(campo.tipo === 'toggle-multi') {
-      html += renderToggleMulti(campo);
-    } else {
-      html += renderFieldHTML(campo);
-    }
+
+      container.appendChild(fieldDiv);
+    });
   }
-  container.innerHTML = html;
 }
 
-function renderFieldHTML(f) {
-  if(!f.id) return '';
-  const req = f.requerido ? '<span class="req">*</span>' : '';
-  const tipo = f.tipo || 'text';
-  if(tipo === 'textarea') {
-    return `
-      <div class="field">
-        <label class="field-label" for="${f.id}">${f.label} ${req}</label>
-        <textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>
-      </div>
-    `;
+function selectToggle(fieldId, value) {
+  document.getElementById(fieldId).value = value;
+  document.querySelectorAll(`#grupo_${fieldId} .toggle-btn`).forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.value === value);
+  });
+  actualizarPreview();
+}
+
+function toggleMultiToggle(fieldId, value, btn) {
+  btn.classList.toggle("active");
+  const values = Array.from(document.querySelectorAll(`#grupo_${fieldId} .toggle-btn.active`))
+    .map(b => b.dataset.value)
+    .join(",");
+  document.getElementById(fieldId).value = values;
+  actualizarPreview();
+}
+
+function actualizarPreview() {
+  const el = (id) => (document.getElementById(id) || {}).value || '';
+  const v = (val, fb) => val.trim() ? `<strong>${val}</strong>` : `<span style="color:var(--mist)">${fb || '_______________'}</span>`;
+
+  const hoy = new Date().toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
+  
+  let html = `<h1>${CONFIG.titulo.toUpperCase()}</h1>`;
+  html += `<p style="text-align:center;font-size:10px;color:var(--mist);margin-bottom:10px">${hoy}</p>`;
+
+  // Render dinámico según tipo
+  if (DOC_TIPO.includes("alquiler")) {
+    const propietario = el("propietario");
+    const inquilino = el("inquilino");
+    const garante = el("garante");
+    const direccion = el("direccion");
+    const ciudad = el("ciudad");
+    const provincia = el("provincia");
+    const monto = el("monto");
+
+    html += `<h2>PARTES INTERVINIENTES</h2>`;
+    html += `<p><strong>Propietario:</strong> ${v(propietario)}</p>`;
+    html += `<p><strong>Inquilino:</strong> ${v(inquilino)}</p>`;
+    if (garante) html += `<p><strong>Garante:</strong> ${v(garante)}</p>`;
+    
+    html += `<h2>INMUEBLE OBJETO DEL CONTRATO</h2>`;
+    html += `<p><strong>Dirección:</strong> ${v(direccion)} — ${v(ciudad)}, ${v(provincia)}</p>`;
+    
+    html += `<h2>CONDICIONES ECONÓMICAS</h2>`;
+    html += `<p><strong>Monto mensual:</strong> ${monto ? `<strong>$ ${monto}</strong>` : '<span style="color:var(--mist)">_______________</span>'}</p>`;
+    
+    html += `<h2>CLÁUSULA SIGUIENTE BLOQUEADA ▼</h2>`;
+    html += `<p style="color:var(--mist);font-style:italic;font-size:10px">Cláusulas adicionales disponibles luego del pago.</p>`;
   }
-  return `
-    <div class="field">
-      <label class="field-label" for="${f.id}">${f.label} ${req}</label>
-      <input type="${tipo}" id="${f.id}" placeholder="${f.placeholder||''}" ${tipo==='number'?'min="1"':''}/>
-    </div>
-  `;
+
+  const content = document.getElementById("plv-content");
+  if (content) content.innerHTML = html;
 }
 
-function renderToggle(f) {
-  const checked = (btn) => btn.v === f.default ? ' active' : '';
-  return `
-    <div class="field" style="margin-bottom:10px;">
-      <label class="field-label">${f.label}</label>
-      <div class="toggle-group" id="${f.id}">
-        ${f.opciones.map(btn => `<button type="button" class="toggle-btn${checked(btn)}" data-value="${btn.v}" onclick="toggleOpcion('${f.id}',this,'${f.hiddenId}')">${btn.txt}</button>`).join('')}
-      </div>
-      <input type="hidden" id="${f.hiddenId}" value="${f.default}">
-    </div>
-  `;
+// ═════════════════════════════════════════════════════════════════════════════
+// FLUJO DE PAGO
+// ═════════════════════════════════════════════════════════════════════════════
+
+function showPanel(id) {
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("visible"));
+  const card = document.getElementById(id);
+  if (card) {
+    card.classList.add("visible");
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }, 50);
+  }
 }
 
-function renderToggleMulti(f) {
-  const checked = (btn) => f.default.includes(btn.v) ? ' active' : '';
-  return `
-    <div class="field" style="margin-bottom:10px;">
-      <label class="field-label">${f.label}</label>
-      <div class="toggle-group" id="${f.id}">
-        ${f.opciones.map(btn => `<button type="button" class="toggle-btn${checked(btn)}" data-value="${btn.v}" onclick="toggleMulti('${f.id}',this,'${f.hiddenId}')">${btn.txt}</button>`).join('')}
-      </div>
-      <input type="hidden" id="${f.hiddenId}" value="${f.default}">
-    </div>
-  `;
-}
-
-// ════════════════════════════════════════════════════════════════════
-// FUNCIONES CORE (del formulario original)
-// ════════════════════════════════════════════════════════════════════
-
-function setTheme(t){
-  localStorage.setItem('theme',t);
-  const dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-  ['Light','System','Dark'].forEach(x=>{
-    const b=document.getElementById('btn'+x);
-    if(!b)return;
-    b.classList.toggle('active',x.toLowerCase()===t);
+function setProgress(step) {
+  ["ps1","ps3","ps4"].forEach((id,i) => {
+    const el = document.getElementById(id);
+    if (i < step - 1) el.classList.add("done");
+    el.classList.toggle("active", i === step - 1);
   });
 }
 
-const track=(ev,data)=>{try{gtag('event',ev,data);}catch(_){}};
-
-async function obtenerCotizacion(){
-  const fuentes=[['https://api.bluelytics.com.ar/v2/latest',d=>d?.official?.value_sell,'BNA'],['https://dolarapi.com/v1/dolares/oficial',d=>d?.venta,'BNA'],['https://dolarapi.com/v1/dolares/bolsa',d=>d?.venta,'MEP']];
-  for(const[url,extract,fuente]of fuentes){try{const r=await fetch(url,{signal:AbortSignal.timeout(5000)});const d=await r.json();const v=extract(d);if(v&&v>0){cotizacion={valor:v,fuente};renderPrecio();return;}}catch(_){}}
-  cotizacion={valor:1200,fuente:'ref.'};renderPrecio();
-}
-
-function renderPrecio(){
-  if(!cotizacion.valor)return;
-  const ars=Math.ceil(G.precio_usd*cotizacion.valor/100)*100;
-  const monto='$ '+ars.toLocaleString('es-AR');
-  const det=cotizacion.fuente==='ref.'?'Precio en pesos · pago único':'USD '+G.precio_usd.toFixed(1)+' · dólar '+cotizacion.fuente+' $'+Math.round(cotizacion.valor)+' · ARS '+ars.toLocaleString('es-AR');
-  document.getElementById('precioAmt').textContent=monto;
-  document.getElementById('precioDet').textContent=det;
-  sessionStorage.setItem('legalai_precio_usd',String(G.precio_usd));
-}
-
-function setProgress(step){[1,3,4].forEach(i=>{const el=document.getElementById('ps'+i);if(!el)return;el.classList.remove('active','done');if(i<step)el.classList.add('done');if(i===step)el.classList.add('active');});}
-
-function showPanel(id){
-  ['card1','card2','card4','loadingGen','loadingPago','loadingDoc'].forEach(x=>{const el=document.getElementById(x);if(el){el.classList.remove('visible');el.style.display='';}});
-  const t=document.getElementById(id);if(!t)return;
-  if(id.startsWith('loading'))t.style.display='block';else t.classList.add('visible');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function toggleOpcion(grupoId, btn, hiddenId) {
-  document.querySelectorAll('#'+grupoId+' .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(hiddenId).value = btn.dataset.value;
-  if(typeof actualizarPreviewFormulario === 'function') actualizarPreviewFormulario();
-}
-
-function toggleMulti(grupoId, btn, hiddenId) {
-  btn.classList.toggle('active');
-  const activos = Array.from(document.querySelectorAll('#'+grupoId+' .toggle-btn.active'))
-    .map(b => b.dataset.value);
-  document.getElementById(hiddenId).value = activos.join(',');
-  if(typeof actualizarPreviewFormulario === 'function') actualizarPreviewFormulario();
-}
-
-function validar(){
-  // Buscar campos requeridos dinámicamente
-  if(!CONFIG || !CONFIG.campos) return true;
-  
-  const campos = [];
-  for(const f of CONFIG.campos) {
-    if(f.requerido && f.id) {
-      campos.push({id:f.id, label:f.label});
-    }
-  }
-  
-  for(const c of campos){
-    const el=document.getElementById(c.id);
-    if(!el||!el.value.trim()){
-      showErr('alertForm','El campo "'+c.label+'" es obligatorio.');
-      el&&el.focus();
-      return false;
-    }
-  }
-  hideErr('alertForm');
-  return true;
-}
-
-function showErr(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('visible');}
-function hideErr(id){const el=document.getElementById(id);if(el)el.classList.remove('visible');}
-
-async function generarContrato(){
-  if(!validar())return;
-  document.getElementById('btnPagarDirecto').disabled=true;
-  
-  // Recolectar datos del formulario dinámicamente
-  const datos = {tipo: DOC_TIPO, pais: 'Argentina'};
-  
-  if(!CONFIG || !CONFIG.campos) {
-    document.getElementById('btnPagarDirecto').disabled=false;
-    return;
-  }
-  
-  // Mapear campos
-  for(const f of CONFIG.campos) {
-    if(f.id) {
-      const el = document.getElementById(f.id);
-      if(el) datos[f.id] = el.value || '';
-    }
-  }
-  
-  const meta={titulo:DOC_TIPO,categoria:'complejo',precio_usd:G.precio_usd,upgrade_porcentaje:32,requiere_advertencia_legal:false};
-  sessionStorage.setItem('legalai_datos',JSON.stringify(datos));
-  sessionStorage.setItem('legalai_titulo',DOC_TIPO);
-  sessionStorage.setItem('legalai_meta',JSON.stringify(meta));
-  
-  showPanel('loadingGen');
+function previsualizarPago() {
+  showPanel("card2");
   setProgress(2);
-  
-  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_formulario',utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||''})}).catch(()=>{});
-  track('generar_preview', { doc_tipo: DOC_TIPO });
-  
-  try{
-    const res=await fetch(WORKER+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datosDoc:datos,metadata:meta}),signal:AbortSignal.timeout(30000)});
-    if(!res.ok){const errData=await res.json().catch(()=>({}));throw new Error(errData.error||`Error del servidor (${res.status})`);};
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-    G.texto=data.texto;
-    G.previewId=data.previewId;
-    renderizarCanvasPreview();
-    showPanel('card2');
-    setProgress(3);
-  }catch(err){
-    console.error('Error generando documento:',err);
-    showErr('alertForm2','Error generando el documento. Intenta de nuevo. '+err.message);
-    showPanel('card1');
-    document.getElementById('btnPagarDirecto').disabled=false;
-  }
 }
 
-function renderizarCanvasPreview(){
-  const canvas=document.getElementById('previewCanvas');
-  if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  const w=canvas.offsetWidth;canvas.width=w;
-  const lh=16;const pad=20;const maxW=w-pad*2;
-  const lines=G.texto.split('\n');
-  let y=pad;
-  ctx.fillStyle='#0f1117';ctx.font='11px Times New Roman';
-  for(const line of lines){
-    const wrapped=wrapText(ctx,line,maxW);
-    for(const txt of wrapped){
-      ctx.fillText(txt,pad,y);
-      y+=lh;
-    }
-    y+=4;
-  }
-  canvas.height=y+pad;
-  // Re-render con altura correcta
-  ctx.fillStyle='#0f1117';ctx.font='11px Times New Roman';
-  y=pad;
-  for(const line of lines){
-    const wrapped=wrapText(ctx,line,maxW);
-    for(const txt of wrapped){
-      ctx.fillText(txt,pad,y);
-      y+=lh;
-    }
-    y+=4;
-  }
-  // Watermark
-  const overlay=document.getElementById('previewWatermarkOverlay');
-  if(overlay){
-    const svg='<svg viewBox="0 0 '+w+' '+canvas.height+'" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="water" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><text x="100" y="100" text-anchor="middle" transform="rotate(-30 100 100)" font-size="14" font-weight="bold" fill="rgba(200,168,75,0.15)" font-family="monospace">PREVIEW</text></pattern></defs><rect width="100%" height="100%" fill="url(#water)"/></svg>';
-    overlay.innerHTML=svg;
-  }
-}
-
-function wrapText(ctx,text,maxWidth){
-  const words=text.split(' ');
-  const lines=[];let currentLine='';
-  for(const word of words){
-    const testLine=currentLine?(currentLine+' '+word):word;
-    const metrics=ctx.measureText(testLine);
-    if(metrics.width>maxWidth&&currentLine){lines.push(currentLine);currentLine=word;}else{currentLine=testLine;}
-  }
-  if(currentLine)lines.push(currentLine);
-  return lines;
-}
-
-function pagarDirecto(){
-  generarContrato();
-}
-
-function pagar(){
-  if(!G.previewId){
-    showErr('alertForm2','ID de preview no disponible. Intenta de nuevo.');
-    return;
-  }
-  showPanel('loadingPago');
-  sessionStorage.setItem('legalai_previewId',G.previewId);
-  fetch(WORKER+'/interaccion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({boton:'generar_pago',doc_tipo:DOC_TIPO})}).catch(()=>{});
-  track('click_pagar', {doc_tipo: DOC_TIPO, preview_id: G.previewId });
-  setTimeout(()=>{
-    window.location.href=WORKER+'/pago?tipo=generar_formulario&previewId='+encodeURIComponent(G.previewId);
-  },500);
-}
-
-function volverForm(){
-  showPanel('card1');
+function volverForm() {
+  showPanel("card1");
   setProgress(1);
 }
 
-function descargarPDF(){
-  window.location.href=WORKER+'/descargar/'+G.previewId;
-  track('descargar_pdf', {doc_tipo: DOC_TIPO });
+async function obtenerCotizacion() {
+  try {
+    const res = await fetch(WORKER + "/cotizacion");
+    const data = await res.json();
+    cotizacion.valor = data.valor;
+  } catch (err) {
+    console.error("Error cotización:", err);
+  }
 }
 
-function reiniciar(){
+async function pagar() {
+  if (!cotizacion.valor) { alert("Esperá un momento, cargando precio..."); return; }
+  
+  track('inicio_pago', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
+  showPanel("card3");
+  setProgress(3);
+  
+  const montoARS = Math.ceil(G.precio_usd * cotizacion.valor / 100) * 100;
+  sessionStorage.setItem('legalai_monto_ars', String(montoARS));
+  
+  const sessionId = 'sess_' + Date.now();
+  sessionStorage.setItem('legalai_sessionId', sessionId);
+  sessionStorage.setItem('legalai_precio_usd', String(G.precio_usd));
+  sessionStorage.setItem('legalai_origen', 'formulario');
+  
+  try {
+    const ref = sessionStorage.getItem('legalai_ref') || null;
+    const res = await fetch(WORKER + '/mp/preferencia', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo: 'doc',
+        montoARS,
+        descripcion: CONFIG.titulo,
+        externalRef: 'doc_' + sessionId,
+        ref,
+        datosPago: {
+          titulo: CONFIG.titulo,
+          origen: 'formulario',
+          utm_src: sessionStorage.getItem('legalai_utm_source') || '',
+          utm_cmp: sessionStorage.getItem('legalai_utm_campaign') || ''
+        }
+      })
+    });
+    const data = await res.json();
+    if (!data.init_point) throw new Error(data.error || 'Error al crear el pago');
+    window.location.href = data.init_point;
+  } catch (err) {
+    showPanel("card1");
+    setProgress(1);
+    alert('Error: ' + err.message);
+  }
+}
+
+async function generarFinal(paymentId) {
+  showPanel("card4");
+  setProgress(4);
+  try {
+    const res = await fetch(WORKER + '/generar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        paymentId,
+        datosDoc: obtenerDatosFormulario(),
+        metadata: { tipo: DOC_TIPO }
+      }),
+      signal: AbortSignal.timeout(35000)
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    
+    G.texto = data.texto;
+    G.paymentId = paymentId;
+    sessionStorage.setItem('legalai_texto', data.texto);
+    sessionStorage.setItem('legalai_paymentId', G.paymentId);
+    
+    showPanel("card5");
+    setProgress(4);
+    track('documento_generado', { doc_tipo: DOC_TIPO, precio_usd: G.precio_usd });
+  } catch (err) {
+    showPanel("card1");
+    setProgress(1);
+    alert('Error: ' + err.message);
+  }
+}
+
+function descargarPDF() {
+  const texto = G.texto || sessionStorage.getItem('legalai_texto');
+  if (!texto) { alert('No se encontró el documento.'); return; }
+  _generarPDF(texto, CONFIG.titulo.replace(/\s+/g, "-").toLowerCase(), true);
+}
+
+function _generarPDF(texto, nombre, conMarca) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ format: 'a4', unit: 'mm' });
+  const PW = 210, PH = 297, ML = 25, MR = 25, MT = 28, MB = 20, CW = PW - ML - MR;
+  let y = MT;
+
+  doc.setFillColor(248, 247, 244);
+  doc.rect(0, 0, PW, 16, 'F');
+  doc.setDrawColor(200, 168, 75);
+  doc.setLineWidth(.3);
+  doc.line(ML, 16, PW - MR, 16);
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(120, 110, 90);
+  doc.text('LegalAI Arg · ' + CONFIG.titulo, ML, 11);
+  doc.text(new Date().toLocaleDateString('es-AR'), PW - MR, 11, { align: 'right' });
+
+  for (const raw of texto.split('\n')) {
+    const l = raw.replace(/\*\*(.*?)\*\*/g, '$1').trim();
+    if (!l) { y += 3; continue; }
+    
+    if (raw.startsWith('# ')) {
+      y += 4;
+      doc.setFontSize(13);
+      doc.setFont('times', 'bold');
+      doc.setTextColor(15, 17, 23);
+      const w = doc.splitTextToSize(l.replace(/^# /, '').toUpperCase(), CW);
+      for (const p of w) {
+        if (y + 8 > PH - MB) { doc.addPage(); y = MT; }
+        doc.text(p, PW / 2, y, { align: 'center' });
+        y += 7;
+      }
+      y += 3;
+    } else {
+      doc.setFontSize(10);
+      doc.setFont('times', 'normal');
+      doc.setTextColor(40, 40, 40);
+      const w = doc.splitTextToSize(l, CW);
+      for (const p of w) {
+        if (y + 6 > PH - MB) { doc.addPage(); y = MT; }
+        doc.text(p, ML, y);
+        y += 5.5;
+      }
+      y += 1;
+    }
+  }
+
+  doc.save(nombre + '.pdf');
+}
+
+function obtenerDatosFormulario() {
+  const datos = {};
+  CONFIG.campos && Object.values(CONFIG.campos).forEach(campos => {
+    campos.forEach(fieldId => {
+      const el = document.getElementById(fieldId);
+      if (el) datos[fieldId] = el.value;
+    });
+  });
+  return datos;
+}
+
+function reiniciar() {
   location.reload();
 }
 
-// Load on document ready
-window.addEventListener('load', initFromParams);
+function track(event, data) {
+  try { gtag('event', event, data); } catch (e) {}
+}
+
+function setTheme(t) {
+  localStorage.setItem("theme", t);
+  applyTheme(t);
+  ["Light","System","Dark"].forEach(x => {
+    const el = document.getElementById("btn" + x);
+    if (el) el.classList.toggle("active", x.toLowerCase() === t);
+  });
+}
+
+function applyTheme(t) {
+  const dark = t === "dark" || (t === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+}
+
+window.addEventListener('load', async () => {
+  const t = localStorage.getItem("theme") || "system";
+  applyTheme(t);
+  ["Light","System","Dark"].forEach(x => {
+    const el = document.getElementById("btn" + x);
+    if (el) el.classList.toggle("active", x.toLowerCase() === t);
+  });
+
+  inicializar();
+
+  const p = new URLSearchParams(window.location.search);
+  const stat = p.get('status');
+  if (stat === 'approved' && (p.get('tipo') || 'doc') === 'doc') {
+    window.history.replaceState({}, '', window.location.pathname + '?tipo=' + DOC_TIPO);
+    const pid = p.get('payment_id') || p.get('collection_id');
+    if (pid) await generarFinal(pid);
+  }
+});
 </script>
 
 </body>
