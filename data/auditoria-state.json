@@ -61,10 +61,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-05-29T14:10:08.632Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Inicio formulario",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-05-30T12:05:27.600Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar que el CTA principal dispara correctamente la apertura del formulario: revisar event listeners, posibles errores JS que bloquean el form, o que el formulario no sea visible en mobile. Si el form está oculto o falla silenciosamente, reemplazar con link directo al checkout en vez de modal/form intermedio.",
     "archivo": "index.html",
