@@ -1,22 +1,22 @@
 {
-  "fecha": "2026-05-30T12:05:27.600Z",
+  "fecha": "2026-05-31T12:12:43.605Z",
   "periodo_48h": {
-    "visitas": 69,
-    "clics": 76,
+    "visitas": 58,
+    "clics": 70,
     "ventas": 2,
-    "tasa_conv": "2.6%",
+    "tasa_conv": "2.9%",
     "total_ars": 23800,
-    "total_eventos": 186,
+    "total_eventos": 162,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 69,
+        "visitas": 58,
         "clics": 51,
         "ventas": 0,
         "total_ars": 0
       },
       "directo": {
         "visitas": 0,
-        "clics": 25,
+        "clics": 19,
         "ventas": 2,
         "total_ars": 23800
       }
@@ -24,7 +24,7 @@
     "top_documentos": [
       {
         "documento": "Contrato de alquiler Argentina 2026",
-        "eventos": 5,
+        "eventos": 3,
         "ventas": 1,
         "total_ars": 7900
       },
@@ -36,19 +36,13 @@
       },
       {
         "documento": "index",
-        "eventos": 137,
+        "eventos": 124,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "hero_alquiler",
-        "eventos": 12,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "planes",
-        "eventos": 8,
+        "eventos": 11,
         "ventas": 0,
         "total_ars": 0
       },
@@ -59,14 +53,14 @@
         "total_ars": 0
       },
       {
-        "documento": "nav_generador",
-        "eventos": 4,
+        "documento": "planes",
+        "eventos": 5,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "hero_landing",
-        "eventos": 4,
+        "documento": "nav_generador",
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
@@ -77,8 +71,14 @@
         "total_ars": 0
       },
       {
-        "documento": "formulario",
+        "documento": "hero_landing",
         "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "pagar_formulario",
+        "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       }
@@ -536,15 +536,15 @@
     ]
   },
   "periodo_7d": {
-    "visitas": 131,
+    "visitas": 114,
     "clics": 94,
     "ventas": 2,
     "tasa_conv": "2.1%",
     "total_ars": 23800,
-    "total_eventos": 293,
+    "total_eventos": 271,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 131,
+        "visitas": 114,
         "clics": 60,
         "ventas": 0,
         "total_ars": 0
@@ -571,13 +571,13 @@
       },
       {
         "documento": "index",
-        "eventos": 193,
+        "eventos": 177,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "formulario",
-        "eventos": 37,
+        "eventos": 31,
         "ventas": 0,
         "total_ars": 0
       },
@@ -1071,58 +1071,57 @@
     ]
   },
   "embudo_eventos": {
-    "page_view": 69,
+    "page_view": 58,
     "cta_generador": 42,
-    "scroll_75pct": 12,
-    "scroll_50pct": 11,
-    "scroll_25pct": 7,
+    "scroll_75pct": 11,
+    "scroll_50pct": 8,
+    "scroll_25pct": 5,
     "error": 2,
-    "checkout_start": 4,
+    "checkout_start": 2,
     "inicio_formulario": 4,
     "form_fields_generated": 4,
     "click_generar": 5,
-    "interaccion": 21,
+    "interaccion": 17,
     "venta": 2,
-    "payment_update": 2,
-    "scroll_form_50pct": 1
+    "payment_update": 2
   },
-  "total_eventos": 186,
+  "total_eventos": 162,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 69,
+      "count": 58,
       "drop_pct": 0
     },
     {
       "label": "Interacciones/CTA",
-      "count": 76,
+      "count": 70,
       "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
       "count": 13,
-      "drop_pct": 83
+      "drop_pct": 81
     },
     {
       "label": "Pago iniciado",
-      "count": 4,
-      "drop_pct": 69
+      "count": 2,
+      "drop_pct": 85
     },
     {
       "label": "Venta confirmada",
       "count": 2,
-      "drop_pct": 50
+      "drop_pct": 0
     }
   ],
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 8,
+      "count": 5,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 8,
+      "count": 5,
       "drop_pct": 0
     },
     {
