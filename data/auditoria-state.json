@@ -59,19 +59,24 @@
       "descripcion": "Verificar que el CTA principal dispara correctamente la apertura del formulario: revisar event listeners, posibles errores JS que bloquean el form, o que el formulario no sea visible en mobile. Si el form está oculto o falla silenciosamente, reemplazar con link directo al checkout en vez de modal/form intermedio.",
       "fecha": "2026-05-29T14:10:08.632Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar CTA con modal/form intermedio por link directo a checkout. Eliminar cualquier JS que intermedie entre el botón y el pago. El botón debe navegar directamente a la URL de pago sin depender de event listeners ni modales.",
+      "fecha": "2026-06-01T16:40:03.483Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-05-31T12:12:43.605Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-01T16:40:03.482Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Interacciones/CTA",
   "cambio_activo": {
-    "descripcion": "Verificar que el CTA principal dispara correctamente la apertura del formulario: revisar event listeners, posibles errores JS que bloquean el form, o que el formulario no sea visible en mobile. Si el form está oculto o falla silenciosamente, reemplazar con link directo al checkout en vez de modal/form intermedio.",
+    "descripcion": "Reemplazar CTA con modal/form intermedio por link directo a checkout. Eliminar cualquier JS que intermedie entre el botón y el pago. El botón debe navegar directamente a la URL de pago sin depender de event listeners ni modales.",
     "archivo": "index.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el formulario se abre correctamente sin fricción técnica → el 48% de clics útiles se convierte en inicios de pago y las 2 ventas actuales escalan a 4-6 en próximas 48h",
-    "conv_base": 2,
-    "clics_base": 11
+    "hipotesis": "Si el CTA navega directamente al checkout sin JS intermedio → los clics se recuperan y las conversiones vuelven a niveles previos (2+)",
+    "conv_base": 0,
+    "clics_base": 0
   },
-  "cambio_activo_desde": "2026-05-29T14:10:08.632Z"
+  "cambio_activo_desde": "2026-06-01T16:40:03.483Z"
 }
