@@ -1,16 +1,16 @@
 {
-  "fecha": "2026-06-01T16:40:03.483Z",
+  "fecha": "2026-06-02T14:56:53.722Z",
   "periodo_48h": {
-    "visitas": 1,
-    "clics": 0,
+    "visitas": 4,
+    "clics": 1,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 1,
+    "total_eventos": 11,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 1,
-        "clics": 0,
+        "visitas": 4,
+        "clics": 1,
         "ventas": 0,
         "total_ars": 0
       }
@@ -18,7 +18,7 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 1,
+        "eventos": 11,
         "ventas": 0,
         "total_ars": 0
       }
@@ -26,16 +26,16 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 106,
-    "clics": 85,
+    "visitas": 105,
+    "clics": 86,
     "ventas": 2,
-    "tasa_conv": "2.4%",
+    "tasa_conv": "2.3%",
     "total_ars": 23800,
-    "total_eventos": 244,
+    "total_eventos": 248,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 106,
-        "clics": 56,
+        "visitas": 105,
+        "clics": 57,
         "ventas": 0,
         "total_ars": 0
       },
@@ -61,13 +61,7 @@
       },
       {
         "documento": "index",
-        "eventos": 175,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "formulario",
-        "eventos": 14,
+        "eventos": 185,
         "ventas": 0,
         "total_ars": 0
       },
@@ -86,6 +80,12 @@
       {
         "documento": "planes",
         "eventos": 9,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "formulario",
+        "eventos": 8,
         "ventas": 0,
         "total_ars": 0
       },
@@ -561,24 +561,28 @@
     ]
   },
   "embudo_eventos": {
-    "page_view": 1
+    "scroll_75pct": 2,
+    "scroll_50pct": 2,
+    "scroll_25pct": 2,
+    "page_view": 4,
+    "cta_generador": 1
   },
-  "total_eventos": 1,
+  "total_eventos": 11,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 1,
+      "count": 4,
       "drop_pct": 0
     },
     {
       "label": "Interacciones/CTA",
-      "count": 0,
-      "drop_pct": 100
+      "count": 1,
+      "drop_pct": 75
     },
     {
       "label": "Inicio formulario",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "label": "Pago iniciado",
@@ -615,15 +619,13 @@
   ],
   "cuello_botella": {
     "funnel": "doc",
-    "etapa": "Interacciones/CTA",
+    "etapa": "Inicio formulario",
     "drop_pct": 100,
     "count": 0
   },
   "diagnostico": {
-    "problemas": [
-      "Hay 1 visitas registradas pero 0 clics útiles → revisar visibilidad de CTAs o tracking de clicks."
-    ],
+    "problemas": [],
     "oportunidades": [],
-    "estado": "PROBLEMA"
+    "estado": "OK"
   }
 }

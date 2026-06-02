@@ -66,10 +66,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-01T16:40:03.482Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Interacciones/CTA",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-02T14:56:53.722Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar CTA con modal/form intermedio por link directo a checkout. Eliminar cualquier JS que intermedie entre el botón y el pago. El botón debe navegar directamente a la URL de pago sin depender de event listeners ni modales.",
     "archivo": "index.html",
