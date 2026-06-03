@@ -1,12 +1,12 @@
 {
-  "fecha": "2026-06-02T14:56:53.722Z",
+  "fecha": "2026-06-03T15:28:09.726Z",
   "periodo_48h": {
     "visitas": 4,
     "clics": 1,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 11,
+    "total_eventos": 14,
     "por_fuente": {
       "DIRECTO": {
         "visitas": 4,
@@ -18,7 +18,7 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 11,
+        "eventos": 14,
         "ventas": 0,
         "total_ars": 0
       }
@@ -26,22 +26,22 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 105,
-    "clics": 86,
+    "visitas": 76,
+    "clics": 77,
     "ventas": 2,
-    "tasa_conv": "2.3%",
+    "tasa_conv": "2.6%",
     "total_ars": 23800,
-    "total_eventos": 248,
+    "total_eventos": 203,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 105,
-        "clics": 57,
+        "visitas": 76,
+        "clics": 52,
         "ventas": 0,
         "total_ars": 0
       },
       "directo": {
         "visitas": 0,
-        "clics": 29,
+        "clics": 25,
         "ventas": 2,
         "total_ars": 23800
       }
@@ -61,7 +61,7 @@
       },
       {
         "documento": "index",
-        "eventos": 185,
+        "eventos": 154,
         "ventas": 0,
         "total_ars": 0
       },
@@ -72,37 +72,37 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 10,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
         "documento": "planes",
-        "eventos": 9,
+        "eventos": 8,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "formulario",
+        "documento": "Contrato de alquiler de local comercial",
         "eventos": 8,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "nav_generador",
-        "eventos": 6,
+        "eventos": 4,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "hero_landing",
-        "eventos": 5,
+        "eventos": 4,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Error al verificar pago MercadoPago",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "formulario",
         "eventos": 2,
         "ventas": 0,
         "total_ars": 0
@@ -561,13 +561,13 @@
     ]
   },
   "embudo_eventos": {
-    "scroll_75pct": 2,
-    "scroll_50pct": 2,
-    "scroll_25pct": 2,
     "page_view": 4,
+    "scroll_50pct": 3,
+    "scroll_25pct": 3,
+    "scroll_75pct": 3,
     "cta_generador": 1
   },
-  "total_eventos": 11,
+  "total_eventos": 14,
   "funnel_doc": [
     {
       "label": "Visitas",
