@@ -64,19 +64,24 @@
       "descripcion": "Reemplazar CTA con modal/form intermedio por link directo a checkout. Eliminar cualquier JS que intermedie entre el botón y el pago. El botón debe navegar directamente a la URL de pago sin depender de event listeners ni modales.",
       "fecha": "2026-06-01T16:40:03.483Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar que la URL de checkout en el botón CTA sea válida y accesible. Testear manualmente el flujo completo: hacer clic en el botón y confirmar que redirige a una página de pago funcional. Si la URL está rota o devuelve error, reemplazarla con la URL correcta del procesador de pagos. Agregar console.log o evento de analítica en el click para confirmar que el evento se dispara.",
+      "fecha": "2026-06-04T14:05:28.746Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-03T15:28:09.725Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-04T14:05:28.746Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Inicio formulario",
   "cambio_activo": {
-    "descripcion": "Reemplazar CTA con modal/form intermedio por link directo a checkout. Eliminar cualquier JS que intermedie entre el botón y el pago. El botón debe navegar directamente a la URL de pago sin depender de event listeners ni modales.",
+    "descripcion": "Verificar que la URL de checkout en el botón CTA sea válida y accesible. Testear manualmente el flujo completo: hacer clic en el botón y confirmar que redirige a una página de pago funcional. Si la URL está rota o devuelve error, reemplazarla con la URL correcta del procesador de pagos. Agregar console.log o evento de analítica en el click para confirmar que el evento se dispara.",
     "archivo": "index.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el CTA navega directamente al checkout sin JS intermedio → los clics se recuperan y las conversiones vuelven a niveles previos (2+)",
+    "hipotesis": "Si la URL de checkout es inválida o el botón no dispara la navegación → corregir URL restaura el flujo y recupera inicios de formulario/pago",
     "conv_base": 0,
-    "clics_base": 0
+    "clics_base": 4
   },
-  "cambio_activo_desde": "2026-06-01T16:40:03.483Z"
+  "cambio_activo_desde": "2026-06-04T14:05:28.746Z"
 }

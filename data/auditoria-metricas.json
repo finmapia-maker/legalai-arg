@@ -1,16 +1,16 @@
 {
-  "fecha": "2026-06-03T15:28:09.726Z",
+  "fecha": "2026-06-04T14:05:28.746Z",
   "periodo_48h": {
-    "visitas": 4,
-    "clics": 1,
+    "visitas": 7,
+    "clics": 4,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 14,
+    "total_eventos": 18,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 4,
-        "clics": 1,
+        "visitas": 7,
+        "clics": 4,
         "ventas": 0,
         "total_ars": 0
       }
@@ -18,7 +18,13 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 14,
+        "eventos": 16,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       }
@@ -26,16 +32,16 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 76,
-    "clics": 77,
+    "visitas": 81,
+    "clics": 81,
     "ventas": 2,
-    "tasa_conv": "2.6%",
+    "tasa_conv": "2.5%",
     "total_ars": 23800,
-    "total_eventos": 203,
+    "total_eventos": 216,
     "por_fuente": {
       "DIRECTO": {
-        "visitas": 76,
-        "clics": 52,
+        "visitas": 81,
+        "clics": 56,
         "ventas": 0,
         "total_ars": 0
       },
@@ -61,7 +67,7 @@
       },
       {
         "documento": "index",
-        "eventos": 154,
+        "eventos": 165,
         "ventas": 0,
         "total_ars": 0
       },
@@ -73,7 +79,7 @@
       },
       {
         "documento": "planes",
-        "eventos": 8,
+        "eventos": 10,
         "ventas": 0,
         "total_ars": 0
       },
@@ -561,23 +567,23 @@
     ]
   },
   "embudo_eventos": {
-    "page_view": 4,
-    "scroll_50pct": 3,
-    "scroll_25pct": 3,
-    "scroll_75pct": 3,
-    "cta_generador": 1
+    "page_view": 7,
+    "cta_generador": 4,
+    "scroll_75pct": 4,
+    "scroll_25pct": 2,
+    "scroll_50pct": 1
   },
-  "total_eventos": 14,
+  "total_eventos": 18,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 4,
+      "count": 7,
       "drop_pct": 0
     },
     {
       "label": "Interacciones/CTA",
-      "count": 1,
-      "drop_pct": 75
+      "count": 4,
+      "drop_pct": 43
     },
     {
       "label": "Inicio formulario",
@@ -598,18 +604,18 @@
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 0,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 0,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Pago plan iniciado",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "label": "Plan activo",
