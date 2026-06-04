@@ -531,7 +531,7 @@ footer a:hover{color:var(--gold);}
 <nav>
   <div class="nav-link active" data-sec="inicio"    onclick="showSec('inicio')">Inicio</div>
   <div class="nav-link"        data-sec="generador" onclick="trackCTA('nav_generador');showSec('generador');">Generador</div>
-  <div class="nav-link"        data-sec=""          onclick="window.location.href='contrato-alquiler.html'">Contrato alquiler</div>
+  <div class="nav-link"        data-sec=""          onclick="window.location.href='contrato-alquiler-residencial.html'">Contrato alquiler</div>
   <div class="nav-link"        data-sec=""          onclick="window.location.href='planes.html'">Plan ilimitado</div>
   <div class="nav-link"        data-sec="afiliados" onclick="showSec('afiliados')">Afiliados</div>
   <div class="nav-link"        data-sec="about"     onclick="showSec('about')">Acerca de</div>
@@ -632,65 +632,166 @@ footer a:hover{color:var(--gold);}
       <div class="step-bar" id="step4">4 · Descarga</div>
     </div>
 
-    <!-- CARD 1 -->
+        <!-- CARD 1 - Selector directo por hojas HTML -->
     <div class="card visible" id="card1">
-      <!-- Trust bar arriba del fold del generador -->
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line);">
         <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">🔒 Pago seguro MP</span>
         <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">⚡ Descarga inmediata</span>
         <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">📄 PDF listo para firmar</span>
-        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">✓ Desde <span id="card1-precio-desde">$ —</span> ARS</span>
+        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">✓ Cada botón abre una hoja propia</span>
       </div>
+    
       <div class="card-title">¿Qué documento necesitás?</div>
-      <div class="card-sub">Escribí o elegí el tipo de documento. El formulario se arma en segundos.</div>
-
-      <input class="doc-big" type="text" id="docInput"
-        placeholder="Ej: contrato de alquiler de local comercial, NDA para startup, carta de renuncia...">
-
-      <div class="suggest-lbl">Elegí una categoría o escribí directamente arriba:</div>
-      <div class="cat-tabs" id="catTabs">
-        <button class="cat-tab active" onclick="setCat(this,'contratos')">📋 Contratos</button>
-        <button class="cat-tab" onclick="setCat(this,'freelance')">💼 Freelance</button>
-        <button class="cat-tab" onclick="setCat(this,'reclamos')">⚠️ Reclamos</button>
-        <button class="cat-tab" onclick="setCat(this,'personales')">👤 Personales</button>
+      <div class="card-sub">Elegí una opción. Cada botón abre un archivo HTML distinto, sin depender de <b>contrato-alquiler.html</b> ni de parámetros <b>?tipo=</b>.</div>
+    
+    <div class="suggest-lbl" style="margin-top:18px;">📋 Contratos</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
+    <a href="contrato-alquiler-residencial.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de alquiler de vivienda', destino:'contrato-alquiler-residencial.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏠 Residencial</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de alquiler de vivienda</div>
+    </a>
+    <a href="contrato-alquiler-comercial.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de alquiler de local comercial', destino:'contrato-alquiler-comercial.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏪 Comercial</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de alquiler de local comercial</div>
+    </a>
+    <a href="contrato-alquiler-temporario.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de alquiler temporario turístico', destino:'contrato-alquiler-temporario.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏖️ Temporario</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de alquiler temporario turístico</div>
+    </a>
+    <a href="contrato-sociedad.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de sociedad simple entre socios', destino:'contrato-sociedad.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🤝 Sociedad</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de sociedad simple entre socios</div>
+    </a>
+    <a href="contrato-compraventa-vehiculo.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de compraventa de vehículo automotor', destino:'contrato-compraventa-vehiculo.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🚗 Vehículo</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de compraventa de vehículo automotor</div>
+    </a>
+    <a href="contrato-compraventa-inmueble.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de compraventa de inmueble', destino:'contrato-compraventa-inmueble.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏡 Inmueble</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de compraventa de inmueble</div>
+    </a>
+    <a href="acuerdo-confidencialidad-nda.html" onclick="track('cta_doc_directo',{doc_tipo:'Acuerdo de confidencialidad NDA bilateral', destino:'acuerdo-confidencialidad-nda.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🔒 NDA</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Acuerdo de confidencialidad NDA bilateral</div>
+    </a>
+    <a href="terminos-condiciones-web.html" onclick="track('cta_doc_directo',{doc_tipo:'Términos y condiciones para sitio web o app', destino:'terminos-condiciones-web.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📱 T&amp;C web</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Términos y condiciones para sitio web o app</div>
+    </a>
+    <a href="politica-privacidad-web.html" onclick="track('cta_doc_directo',{doc_tipo:'Política de privacidad para sitio web', destino:'politica-privacidad-web.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🛡️ Privacidad</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Política de privacidad para sitio web</div>
+    </a>
+    </div>
+    <div class="suggest-lbl" style="margin-top:18px;">💼 Freelance</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
+    <a href="contrato-freelance-diseno.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato freelance para diseñador gráfico', destino:'contrato-freelance-diseno.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🎨 Diseño</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato freelance para diseñador gráfico</div>
+    </a>
+    <a href="contrato-freelance-dev-web.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato freelance para desarrollador web', destino:'contrato-freelance-dev-web.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💻 Dev web</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato freelance para desarrollador web</div>
+    </a>
+    <a href="contrato-community-manager.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato para community manager freelance', destino:'contrato-community-manager.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📲 CM</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato para community manager freelance</div>
+    </a>
+    <a href="contrato-freelance-servicios.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato freelance de servicios profesionales', destino:'contrato-freelance-servicios.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💼 General</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato freelance de servicios profesionales</div>
+    </a>
+    <a href="contrato-consultoria.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de locación de servicios de consultoría', destino:'contrato-consultoria.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📊 Consultoría</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de locación de servicios de consultoría</div>
+    </a>
+    <a href="nda-startup.html" onclick="track('cta_doc_directo',{doc_tipo:'NDA para emprendedores y startups', destino:'nda-startup.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🚀 Startup</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">NDA para emprendedores y startups</div>
+    </a>
+    <a href="propuesta-comercial.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta de propuesta comercial para cliente', destino:'propuesta-comercial.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📧 Propuesta</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta de propuesta comercial para cliente</div>
+    </a>
+    <a href="acuerdo-colaboracion-profesionales.html" onclick="track('cta_doc_directo',{doc_tipo:'Acuerdo de colaboración entre profesionales', destino:'acuerdo-colaboracion-profesionales.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🤝 Colaboración</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Acuerdo de colaboración entre profesionales</div>
+    </a>
+    </div>
+    <div class="suggest-lbl" style="margin-top:18px;">⚠️ Reclamos</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
+    <a href="carta-documento-falta-pago-alquiler.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por falta de pago de alquiler', destino:'carta-documento-falta-pago-alquiler.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏠 Alquiler</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por falta de pago de alquiler</div>
+    </a>
+    <a href="carta-documento-incumplimiento-contrato.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por incumplimiento de contrato', destino:'carta-documento-incumplimiento-contrato.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📋 Contrato</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por incumplimiento de contrato</div>
+    </a>
+    <a href="carta-documento-deuda-impaga.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por deuda impaga', destino:'carta-documento-deuda-impaga.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💰 Deuda</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por deuda impaga</div>
+    </a>
+    <a href="carta-documento-despido.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por despido injustificado', destino:'carta-documento-despido.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">👔 Laboral</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por despido injustificado</div>
+    </a>
+    <a href="reclamo-producto-garantia.html" onclick="track('cta_doc_directo',{doc_tipo:'Reclamo por producto defectuoso o garantía', destino:'reclamo-producto-garantia.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🔧 Garantía</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Reclamo por producto defectuoso o garantía</div>
+    </a>
+    <a href="reclamo-demora-entrega.html" onclick="track('cta_doc_directo',{doc_tipo:'Reclamo por demora o incumplimiento en entrega', destino:'reclamo-demora-entrega.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📦 Entrega</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Reclamo por demora o incumplimiento en entrega</div>
+    </a>
+    <a href="reclamo-servicios-publicos.html" onclick="track('cta_doc_directo',{doc_tipo:'Reclamo a empresa de servicios públicos', destino:'reclamo-servicios-publicos.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💡 Servicios</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Reclamo a empresa de servicios públicos</div>
+    </a>
+    <a href="intimacion-pago-formal.html" onclick="track('cta_doc_directo',{doc_tipo:'Intimación de pago formal', destino:'intimacion-pago-formal.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">⚠️ Intimación</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Intimación de pago formal</div>
+    </a>
+    </div>
+    <div class="suggest-lbl" style="margin-top:18px;">👤 Personales</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
+    <a href="autorizacion-viaje-menor.html" onclick="track('cta_doc_directo',{doc_tipo:'Autorización de viaje para menor de edad', destino:'autorizacion-viaje-menor.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">✈️ Viaje menor</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Autorización de viaje para menor de edad</div>
+    </a>
+    <a href="autorizacion-medica-menor.html" onclick="track('cta_doc_directo',{doc_tipo:'Autorización para acto médico de menor', destino:'autorizacion-medica-menor.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏥 Médico</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Autorización para acto médico de menor</div>
+    </a>
+    <a href="declaracion-jurada-ingresos.html" onclick="track('cta_doc_directo',{doc_tipo:'Declaración jurada de ingresos', destino:'declaracion-jurada-ingresos.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📜 Ingresos</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Declaración jurada de ingresos</div>
+    </a>
+    <a href="carta-renuncia-laboral.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta de renuncia laboral voluntaria', destino:'carta-renuncia-laboral.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📄 Renuncia</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta de renuncia laboral voluntaria</div>
+    </a>
+    <a href="poder-simple-tramites.html" onclick="track('cta_doc_directo',{doc_tipo:'Poder notarial simple para trámites', destino:'poder-simple-tramites.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🔑 Poder</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Poder notarial simple para trámites</div>
+    </a>
+    <a href="acuerdo-prestamo-particulares.html" onclick="track('cta_doc_directo',{doc_tipo:'Acuerdo de préstamo entre particulares', destino:'acuerdo-prestamo-particulares.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🤝 Préstamo</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Acuerdo de préstamo entre particulares</div>
+    </a>
+    <a href="convenio-pago-cuotas.html" onclick="track('cta_doc_directo',{doc_tipo:'Convenio de pago en cuotas', destino:'convenio-pago-cuotas.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💳 Cuotas</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Convenio de pago en cuotas</div>
+    </a>
+    <a href="constancia-recibo-dinero.html" onclick="track('cta_doc_directo',{doc_tipo:'Constancia de recibo de dinero', destino:'constancia-recibo-dinero.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
+      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🧾 Recibo</div>
+      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Constancia de recibo de dinero</div>
+    </a>
+    </div>
+    
+      <div class="alert info visible" style="display:block;margin-top:18px;">
+        Si necesitás un documento que no está listado, conviene crear una hoja nueva copiando cualquiera de estas páginas y cambiando solo <b>window.LEGALAI_DOC_CONFIG</b>.
       </div>
-      <div class="suggestions" id="suggestBox"></div>
-
-      <div class="suggest-lbl">País y provincia (para adaptar la legislación):</div>
-      <div class="row2">
-        <div>
-          <select id="paisSelect">
-            <option value="Argentina">🇦🇷 Argentina</option>
-            <option value="Uruguay">🇺🇾 Uruguay</option>
-            <option value="Chile">🇨🇱 Chile</option>
-            <option value="Colombia">🇨🇴 Colombia</option>
-            <option value="México">🇲🇽 México</option>
-            <option value="España">🇪🇸 España</option>
-            <option value="Otro">🌎 Otro</option>
-          </select>
-        </div>
-        <div>
-          <input type="text" id="provinciaInput" placeholder="Provincia / Estado (opcional)">
-        </div>
-      </div>
-
-      <div id="packCodeSection" style="margin-top:4px;">
-        <button type="button" onclick="togglePackCode()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:.05em;padding:0;">
-          ▸ ¿Tenés un código de pack? Ingresalo acá
-        </button>
-        <div id="packCodeBox" style="display:none;margin-top:10px;padding:14px;background:var(--cream);border:1px solid var(--line);border-radius:10px;">
-          <label style="font-size:.8rem;font-weight:500;color:var(--ink);display:block;margin-bottom:6px;">Código de pack</label>
-          <div style="display:flex;gap:8px;">
-            <input type="text" id="packCodeInput" placeholder="PACK-XXXX-XXXX"
-              style="flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Mono',monospace;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;">
-            <button class="btn" style="width:auto;padding:10px 18px;" onclick="consultarPack()">Verificar</button>
-          </div>
-          <div id="packCodeStatus" style="margin-top:8px;font-size:.82rem;display:none;"></div>
-        </div>
-      </div>
-
-      <div class="alert err" id="alert1"></div>
-      <button class="btn gold" style="font-weight:800;font-size:1rem;" onclick="track('click_generar');generarFormulario()">Generar formulario ahora →</button>
     </div>
 
     <!-- LOADING FORM -->
