@@ -3,11 +3,9 @@ const fs = require("fs");
 // ── Config ────────────────────────────────────────────────────────────────
 const ARCHIVOS = [
   "index.html",
-  "formulario.html",
   "planes.html",
   "gracias.html",
-  "contrato-alquiler.html",
-  "acerca_de_legal_ai_layout_dinamico.html"
+  "contrato-alquiler.html"
 ];
 
 const WORKER_URL   = "https://legalai-worker.finmap-ia.workers.dev";

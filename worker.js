@@ -190,7 +190,7 @@ async function handleProductRoutes(request, env) {
       back_urls: {
         success: `${origin}/gracias.html?payment_id=${encodeURIComponent(externalRef)}&status=approved`,
         pending: `${origin}/gracias.html?payment_id=${encodeURIComponent(externalRef)}&status=pending`,
-        failure: `${origin}/formulario.html?payment_error=1`
+        failure: `${origin}/index.html?payment_error=1#generador`
       },
       auto_return: "approved",
       statement_descriptor: "LEGALAI",
