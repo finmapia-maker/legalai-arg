@@ -24,6 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Control técnico web
+        run: node scripts/control-web.js
+
       - name: Ejecutar auditoría
         run: node scripts/auditoria.js
 
