@@ -1,95 +1,58 @@
-/* ===== BOTONES ===== */
-.btn-primary {
-  background:var(--btn-bg);
-  color:var(--btn-txt);
-  padding:12px 18px;
-  border-radius:8px;
-  font-weight:500;
-  border:none;
-  cursor:pointer;
-}
+/* =========================
+   LEGALAI ARG — COMPONENTS
+   Componentes reutilizables para nuevas pantallas
+   ========================= */
 
-.btn-secondary {
-  background:transparent;
-  border:1px solid var(--line);
-  color:var(--ink);
-}
+.container{max-width:1120px;margin:0 auto;padding:24px}
+.app-wrap{max-width:1040px;margin:0 auto;padding:0 24px 72px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 
-/* ===== CARDS ===== */
-.card-basic {
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:20px;
-  box-shadow:var(--shadow);
-}
+.card-basic{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+.card-hover{transition:.18s}
+.card-hover:hover{transform:translateY(-2px);border-color:var(--gold)}
+.card-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:900;color:var(--ink);margin-bottom:8px}
+.card-sub{font-size:.9rem;color:var(--mist);line-height:1.6}
 
-.card-hover:hover {
-  transform:translateY(-3px);
-  transition:.2s;
-}
+.btn-primary{background:var(--gold);color:#0f1117;padding:12px 18px;border-radius:8px;font-weight:800;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-secondary{background:transparent;border:1px solid var(--line);color:var(--ink);padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-wide{width:100%}
 
-/* ===== PLANES ===== */
-.plan-card {
-  padding:24px;
-  border-radius:14px;
-  border:1px solid var(--line);
-}
+.doc-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.doc-choice-card{display:block;width:100%;text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif}
+.doc-choice-card:hover,.doc-choice-card.active{border-color:var(--gold);box-shadow:0 0 0 1px rgba(200,168,75,.25);transform:translateY(-1px)}
+.doc-choice-title{font-weight:800;font-size:.92rem;line-height:1.25}
+.doc-choice-desc{font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px}
 
-.plan-price {
-  font-family:'Playfair Display';
-  font-size:2rem;
-  color:var(--gold);
-}
+.field-group{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field-full{grid-column:1/-1}
+.field-label{font-size:.78rem;font-weight:700;color:var(--ink)}
+.req{color:var(--gold);margin-left:4px}
+.input,.select,.textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif}
+.textarea{min-height:110px;resize:vertical}
 
-/* ===== FORMULARIOS ===== */
-.input {
-  width:100%;
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:6px;
-  background:var(--surface);
-  color:var(--ink);
-}
+.inline-toggle-group{display:flex;gap:8px;flex-wrap:wrap}
+.inline-toggle-btn{border:1px solid var(--line);background:var(--surface);color:var(--mist);border-radius:999px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;cursor:pointer;transition:.15s}
+.inline-toggle-btn.active,.inline-toggle-btn:hover{border-color:var(--gold);color:var(--ink);background:var(--gold-dim)}
+.inline-help{font-size:.74rem;color:var(--mist);line-height:1.45}
 
-.label {
-  font-size:.8rem;
-  color:var(--mist);
-}
+.steps-bar{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:24px}
+.step-bar{font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;text-align:center;padding:12px;color:var(--mist);background:var(--cream);border-right:1px solid var(--line)}
+.step-bar:last-child{border-right:none}
+.step-bar.active{background:var(--gold);color:#0f1117}
 
-/* ===== BADGES ===== */
-.badge-gold {
-  font-family:'DM Mono';
-  color:var(--gold);
-  font-size:.7rem;
-}
+.alert{padding:12px 14px;border-radius:8px;font-size:.88rem;line-height:1.5;margin:12px 0}
+.alert-success{background:rgba(46,204,113,.10);color:#2ecc71;border:1px solid rgba(46,204,113,.22)}
+.alert-error{background:rgba(192,57,43,.08);color:#c0392b;border:1px solid rgba(192,57,43,.20)}
+.alert-warning{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.24)}
 
-/* ===== LAYOUT ===== */
-.container {
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
+.metric-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+.metric-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);margin-bottom:8px}
+.metric-value{font-family:'DM Mono',monospace;font-size:1.7rem;font-weight:700;color:var(--ink)}
 
-.grid-3 {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
-
-/* ===== ALERTAS ===== */
-.alert {
-  padding:12px;
-  border-radius:6px;
-  font-size:.9rem;
-}
-
-.alert-success {
-  background:rgba(50,200,120,.1);
-  color:#2ecc71;
-}
-
-.alert-error {
-  background:rgba(255,80,80,.1);
-  color:#e74c3c;
+@media(max-width:760px){
+  .container,.app-wrap{padding-left:16px;padding-right:16px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .steps-bar{grid-template-columns:1fr 1fr}
 }

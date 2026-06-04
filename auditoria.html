@@ -205,7 +205,7 @@ function renderFuentes(porFuente) {
           <td>${d.clics || 0}<div class="conv-bar"><div class="conv-fill" style="width:${pct}%"></div></div></td>
           <td class="val-green">${d.ventas || 0}</td>
           <td>${d.tasa_conv || "—"}</td>
-          <td>${fmtARS(d.monto_ars)}</td>
+          <td>${fmtARS(d.total_ars ?? d.monto_ars)}</td>
         </tr>`;
     }).join("");
   return `
@@ -381,11 +381,13 @@ async function init() {
     <div class="section-title">Funnel de conversión (48h)</div>
     ${renderFunnel(metricasExtra?.funnel_doc, 'Documentos: index → pago')}
     ${renderFunnel(metricasExtra?.funnel_plan, 'Planes: planes.html → pago')}
+    ${renderFunnel(metricasExtra?.funnel_ads, 'Google Ads / tráfico pago → venta')}
 
     ${metricasExtra?.cuello_botella ? `
     <div style="background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:10px;padding:14px;margin-bottom:28px">
       <div style="font-size:11px;color:#e74c3c;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">🔴 Cuello de botella detectado</div>
-      <div style="font-size:14px;color:#e5e5e5">Caída en: <strong>${metricasExtra.cuello_botella.en}</strong> (${metricasExtra.cuello_botella.drop} drop)</div>
+      <div style="font-size:14px;color:#e5e5e5">Caída en: <strong>${metricasExtra.cuello_botella.etapa || metricasExtra.cuello_botella.en || '—'}</strong> (${metricasExtra.cuello_botella.drop_pct || metricasExtra.cuello_botella.drop || 0}% drop)</div>
+      <div style="font-size:12px;color:#888;margin-top:4px;font-family:'DM Mono',monospace">Funnel: ${metricasExtra.cuello_botella.funnel || '—'} · Eventos en etapa: ${metricasExtra.cuello_botella.count ?? '—'}</div>
     </div>` : ''}
 
     <!-- Embudo simple -->

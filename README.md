@@ -1,240 +1,264 @@
-# ⚖️ LegalAI Arg
+# LegalAI Arg
 
-Sistema automatizado de generación de documentos legales para Argentina.
+Plataforma web para generar documentos legales orientativos en Argentina con formularios simples, vista previa en vivo, pago online y descarga del documento final.
 
----
-
-# Qué es LegalAI
-
-LegalAI Arg permite generar documentos legales en minutos mediante formularios dinámicos, automatización e inteligencia artificial.
-
-El usuario:
-
-1. Ingresa a la web
-2. Selecciona el tipo de documento
-3. Completa un formulario guiado
-4. Visualiza una vista previa
-5. Decide si pagar
-6. Descarga el documento final
-
-El objetivo principal es reducir fricción:
-
-* sin abogados para tareas repetitivas
-* sin registros obligatorios
-* sin esperas
-* sin procesos complejos
+El objetivo actual es reducir al mínimo la fricción de compra: el usuario entra, elige el documento, completa los datos, ve una vista previa en la misma pantalla, paga y descarga.
 
 ---
 
-# Estado actual del proyecto
+## Estado actual
 
-El sistema ya se encuentra funcionando online.
+El flujo fue simplificado. Ya no se recomienda usar una página universal separada ni múltiples HTML individuales por documento.
 
-Actualmente incluye:
+La estructura vigente es:
 
-* generación automática de documentos
-* formularios dinámicos
-* integración con MercadoPago
-* panel administrativo
-* sistema de afiliados
-* tracking de eventos
-* panel visual de métricas
-* backend serverless sobre Cloudflare Workers
-* almacenamiento persistente mediante KV
+```txt
+index.html
+  Landing principal + generador unificado + afiliados + acerca de
+
+contrato-alquiler.html
+  Landing comercial para Google Ads
+  Redirige al flujo actual del index mediante botones por tipo de alquiler
+
+planes.html
+  Plan ilimitado
+
+gracias.html
+  Retorno post pago / documento listo / upsells
+
+worker.js
+  Backend Cloudflare Worker
+```
+
+Páginas administrativas o internas que se conservan:
+
+```txt
+admin-owner.html
+admin-afiliados.html
+owner-dashboard.html
+auditoria.html
+mail-panel.html
+afiliado.html
+comprar-mejor.html
+```
 
 ---
 
-# Arquitectura general
+## Flujo comercial actual
+
+### Entrada orgánica
+
+```txt
+Usuario entra a index.html
+↓
+Clic en Crear mi contrato / Crear mi documento
+↓
+Se abre el generador dentro del mismo index
+↓
+Elige documento
+↓
+Completa formulario
+↓
+Ve preview live al costado
+↓
+Paga con MercadoPago
+↓
+Vuelve a gracias.html o al flujo del index según estado
+```
+
+### Entrada desde Google Ads
+
+La campaña puede seguir apuntando a:
+
+```txt
+https://legalai-arg.com/contrato-alquiler.html
+```
+
+Esa URL se mantiene porque es clara, útil para anuncios y evita perder historial o enlaces compartidos.
+
+Desde esa landing, los botones llevan al flujo nuevo:
+
+```txt
+Residencial  → index.html?doc=alquiler_residencial#generador
+Comercial    → index.html?doc=alquiler_comercial#generador
+Temporario   → index.html?doc=alquiler_temporario#generador
+```
+
+Recomendación técnica: mantener esta URL como destino de Ads y usar el `index` como motor real del formulario.
+
+---
+
+## Navegación pública actual
+
+La barra principal debe mantenerse simple:
+
+```txt
+Inicio / Plan ilimitado / Afiliados / Acerca de
+```
+
+No se recomienda volver a incluir en la barra:
+
+```txt
+Generador
+Contrato alquiler
+```
+
+El generador vive dentro del `index.html` y `contrato-alquiler.html` funciona como landing comercial específica.
+
+---
 
 ## Frontend
 
-La interfaz está desarrollada principalmente con:
+Tecnologías:
 
-* HTML
-* CSS
-* JavaScript vanilla
+```txt
+HTML
+CSS
+JavaScript vanilla
+```
 
 Archivos principales:
 
-* `index.html`
-* `formulario.html`
-* `contrato-alquiler.html`
-* `gracias.html`
-* `admin-owner.html`
-* `admin-afiliados.html`
+```txt
+index.html
+contrato-alquiler.html
+planes.html
+gracias.html
+```
+
+Archivos de soporte visual:
+
+```txt
+legalai-theme.css
+components.css
+```
+
+Actualmente las páginas principales tienen mucho estilo embebido para evitar dependencias rotas. Los CSS externos quedan como base de diseño común para auditoría, futuras páginas y mantenimiento visual.
 
 ---
 
 ## Backend
 
-El backend corre sobre Cloudflare Workers.
+El backend corre en Cloudflare Workers.
 
-Archivo principal:
+Archivo:
 
-* `worker.js`
+```txt
+worker.js
+```
 
 Funciones principales:
 
-* generación de formularios
-* generación de previews
-* creación de pagos MercadoPago
-* generación de documentos
-* tracking de eventos
-* administración de afiliados
-* APIs del panel owner
-
----
-
-## Persistencia
-
-El sistema utiliza Cloudflare KV.
-
-Namespaces utilizados:
-
-* `OWNER_EVENTS_KV`
-* `PAGOS_KV`
-* `LEGALAI_TELEGRAM_KV`
-
-Se utilizan para almacenar:
-
-* operaciones
-* pagos
-* logs
-* afiliados
-* conversiones
-* eventos de tracking
-* auditoría
-
----
-
-# Sistema de tracking
-
-LegalAI incluye tracking interno propio.
-
-Eventos registrados:
-
-* page_view
-* form_start
-* preview_generado
-* checkout_start
-* pago_pendiente
-* pago_aprobado
-* documento_generado
-* descarga_documento
-* errores
-
-Esto permite visualizar:
-
-* embudo de conversión
-* puntos de abandono
-* errores de integración
-* rendimiento de campañas
-* comportamiento de usuarios
-
----
-
-# Panel Owner
-
-URL:
-
 ```txt
-/admin-owner.html
+/campos              Generación de campos dinámicos
+/preview             Generación de preview IA
+/mp/preferencia      Creación de preferencia MercadoPago
+/mp/webhook          Webhook MercadoPago
+/generar             Generación del documento final
+/evento              Tracking de eventos
+/interaccion         Tracking de clics simples
+/owner/all           Métricas completas para panel y auditoría
+/admin/afiliado/*    Administración de afiliados
 ```
 
-Incluye:
-
-* métricas generales
-* operaciones
-* reclamos
-* afiliados
-* comisiones
-* auditoría
-* estado del sistema
-* embudo visual
-* eventos en tiempo real
-* debug API
-
----
-
-# Sistema de afiliados
-
-URL:
+La URL de error de MercadoPago debe volver al flujo actual:
 
 ```txt
-/admin-afiliados.html
+index.html?payment_error=1#generador
 ```
 
-Permite:
-
-* crear afiliados
-* generar links únicos
-* calcular comisiones
-* registrar conversiones
-* marcar pagos
-* visualizar ganancias
-
----
-
-# Integraciones
-
-## MercadoPago
-
-Variables utilizadas:
+No debe volver a:
 
 ```txt
-MERCADOPAGO_ACCESS_TOKEN
-MERCADOPAGO_PUBLIC_KEY
+formulario.html?payment_error=1
 ```
-
-El sistema crea preferencias automáticamente y habilita la descarga luego del pago.
 
 ---
 
-## OpenAI
+## Tracking y métricas
 
-Variable:
+El sistema registra eventos propios en el Worker.
+
+Eventos importantes:
 
 ```txt
-OPENAI_API_KEY
+page_view
+cta_generador
+cta_doc_inline
+inicio_formulario
+preview_ok
+preview_fallback
+click_pagar
+inicio_pago
+checkout_start
+venta
+document_generated
+conversion_plan
+affiliate_request
 ```
 
-Se utiliza para generación y asistencia IA.
-
----
-
-## Claude
-
-Variable:
+Datos de atribución relevantes:
 
 ```txt
-CLAUDE_API_KEY
+utm_source
+utm_medium
+utm_campaign
+utm_content
+utm_term
+gclid
+ref
+device
+session_id
 ```
 
-Utilizado como proveedor alternativo o complementario.
+Esto permite cruzar datos propios con Google Ads sin depender únicamente del panel de Google.
 
 ---
 
-## Resend
+## Auditoría automática
 
-Variables:
+La auditoría se ejecuta desde GitHub Actions usando:
 
 ```txt
-RESEND_API_KEY
-EMAIL_TO
+.github/workflows/main.yml
+scripts/auditoria.js
 ```
 
-Utilizado para:
+El script consulta:
 
-* envío de emails
-* reportes
-* notificaciones
-* auditoría
+```txt
+/owner/all
+```
+
+Y genera o actualiza:
+
+```txt
+data/auditoria-log.jsonl
+data/auditoria-state.json
+data/auditoria-metricas.json
+```
+
+La auditoría debe controlar:
+
+```txt
+visitas
+clics útiles
+inicio de formulario
+preview generado
+inicio de pago
+ventas confirmadas
+fuentes / campañas
+tráfico con gclid
+links viejos a formulario.html o generador.html
+coherencia de landing de Ads
+estado de cambio activo mínimo 48h
+```
 
 ---
 
-# Variables importantes de Cloudflare
+## Variables y secrets
 
-Secrets principales:
+Cloudflare / GitHub Actions:
 
 ```txt
 ADMIN_KEY
@@ -246,86 +270,102 @@ RESEND_API_KEY
 EMAIL_TO
 ```
 
----
-
-# Wrangler
-
-Archivo:
+Cloudflare KV:
 
 ```txt
-wrangler.toml
-```
-
-Bindings actuales:
-
-```toml
-[[kv_namespaces]]
-binding = "OWNER_EVENTS_KV"
-
-[[kv_namespaces]]
-binding = "PAGOS_KV"
-
-[[kv_namespaces]]
-binding = "LEGALAI_TELEGRAM_KV"
+OWNER_EVENTS_KV
+PAGOS_KV
+LEGALAI_TELEGRAM_KV
 ```
 
 ---
 
-# Flujo simplificado del sistema
+## Google Ads
+
+Destino recomendado actual:
 
 ```txt
-Usuario entra
-↓
-Selecciona documento
-↓
-Completa formulario
-↓
-Se genera preview
-↓
-Se crea preferencia MercadoPago
-↓
-Usuario paga
-↓
-Worker valida estado
-↓
-Se genera documento final
-↓
-Se habilita descarga
-↓
-Se registran eventos y métricas
+https://legalai-arg.com/contrato-alquiler.html
+```
+
+Motivo:
+
+```txt
+URL clara para intención de búsqueda
+No rompe historial de campaña
+Permite landing específica
+Deriva al flujo nuevo del index
+```
+
+Controles mínimos posteriores a cada deploy:
+
+```txt
+Abrir contrato-alquiler.html en incógnito
+Clic en Residencial
+Confirmar llegada al generador actual
+Completar campos de prueba
+Ver preview live
+Avanzar a MercadoPago
+Volver desde MercadoPago
+Confirmar que no aparece formulario.html
+Verificar evento en owner/auditoría
 ```
 
 ---
 
-# Objetivos del proyecto
+## Limpieza de archivos
 
-* automatizar procesos legales repetitivos
-* reducir costos operativos
-* minimizar fricción de compra
-* escalar sin estructura tradicional
-* centralizar métricas y eventos
-* integrar APIs y automatizaciones
-* crear un ecosistema legal automatizado
+El proyecto puede conservar solo los HTML actuales. Los HTML individuales de documentos viejos no deberían volver a usarse salvo decisión expresa.
 
----
+No borrar:
 
-# Roadmap
-
-Próximos objetivos:
-
-* más tipos de documentos
-* API pública
-* integración empresas
-* dashboard avanzado
-* IA contextual por documento
-* automatización de reclamos
-* recuperación automática de pagos
-* analítica avanzada
-* sistema de packs dinámicos
-* generación multilenguaje
+```txt
+index.html
+contrato-alquiler.html
+planes.html
+gracias.html
+afiliado.html
+admin-owner.html
+admin-afiliados.html
+owner-dashboard.html
+auditoria.html
+mail-panel.html
+comprar-mejor.html
+```
 
 ---
 
-# LegalAI Arg
+## Roadmap recomendado
 
-Acceso legal simple, automatizado y escalable.
+Prioridad alta:
+
+```txt
+1. Que index.html lea ?doc=... y abra automáticamente el formulario correcto.
+2. Mejorar tracking de gclid/UTM en todo el embudo.
+3. Agregar control automático post deploy.
+4. Auditar links rotos y referencias viejas en cada Action.
+```
+
+Prioridad media:
+
+```txt
+1. Separar estilo común en legalai-theme.css y components.css.
+2. Reducir CSS embebido cuando el flujo esté estable.
+3. Agregar dashboard simple de campañas: Google Ads vs eventos propios.
+4. Crear tests de humo para index, contrato-alquiler, planes y gracias.
+```
+
+---
+
+## Regla operativa
+
+Antes de cambiar estructura o crear nuevas páginas, priorizar:
+
+```txt
+menos HTML
+menos redirecciones
+menos pasos
+más tracking
+más consistencia visual
+```
+
