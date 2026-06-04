@@ -1426,7 +1426,10 @@ function getUTM() {
     utm_src: p.get('utm_source') || sessionStorage.getItem('legalai_utm_source') || '',
     utm_cmp: p.get('utm_campaign') || sessionStorage.getItem('legalai_utm_campaign') || '',
     utm_med: p.get('utm_medium') || sessionStorage.getItem('legalai_utm_medium') || '',
-    ref: sessionStorage.getItem('legalai_ref') || 'directo',
+    utm_cnt: p.get('utm_content') || sessionStorage.getItem('legalai_utm_content') || '',
+    utm_term: p.get('utm_term') || sessionStorage.getItem('legalai_utm_term') || '',
+    gclid: p.get('gclid') || sessionStorage.getItem('legalai_gclid') || '',
+    ref: sessionStorage.getItem('legalai_ref') || localStorage.getItem('legalai_ref') || 'directo',
   };
 }
 // ── Session ID persistente por visita ────────────────────────────
@@ -1435,6 +1438,27 @@ const _SESSION_ID = sessionStorage.getItem('legalai_sid') || (() => {
   sessionStorage.setItem('legalai_sid', sid);
   return sid;
 })();
+
+const LEGALAI_TRACK_STATE = {
+  form_first_input: false,
+  preview_live_ok: false,
+  preview_live_error: false,
+  payment_return_failed: false,
+};
+
+function getCurrentDocTracking() {
+  return {
+    doc_tipo: G?.form?.titulo || G?.tipo || sessionStorage.getItem('legalai_titulo') || '',
+    doc_id: sessionStorage.getItem('legalai_inline_doc_id') || sessionStorage.getItem('legalai_autostart_doc') || '',
+    origen: sessionStorage.getItem('legalai_origen') || 'index',
+  };
+}
+
+function trackOnce(flag, tipo, extra) {
+  if (LEGALAI_TRACK_STATE[flag]) return;
+  LEGALAI_TRACK_STATE[flag] = true;
+  track(tipo, extra);
+}
 
 // ══════════════════════════════════════════════════════════════════
 //  PREVIEW LIVE LOCAL — instantáneo, sin IA, sin endpoints
@@ -1540,26 +1564,38 @@ function actualizarPreviewLive() {
   const content = document.getElementById('preview-live-content');
   if (!wrap || !content || !G.campos?.length) return;
 
-  // Recopilar datos actuales del formulario
-  const datos = {};
-  (G.campos || []).forEach(c => {
-    const el = document.getElementById(c.id);
-    if (el) datos[c.id] = el.value;
-  });
+  try {
+    // Recopilar datos actuales del formulario
+    const datos = {};
+    (G.campos || []).forEach(c => {
+      const el = document.getElementById(c.id);
+      if (el) datos[c.id] = el.value;
+    });
 
-  // Render del template local
-  content.innerHTML = getPreviewTemplate(G.form?.titulo || G.tipo, G.campos, datos);
+    // Render del template local
+    content.innerHTML = getPreviewTemplate(G.form?.titulo || G.tipo, G.campos, datos);
 
-  // Mostrar el wrap si está oculto
-  wrap.classList.add('visible');
+    // Mostrar el wrap si está oculto
+    wrap.classList.add('visible');
+    trackOnce('preview_live_ok', 'preview_live_ok', getCurrentDocTracking());
+  } catch (err) {
+    track('preview_live_error', { ...getCurrentDocTracking(), error: String(err?.message || err).slice(0, 180) });
+  }
 }
 
 // Enganchar listeners en todos los campos del formulario
 function engacharPreviewListeners() {
+  LEGALAI_TRACK_STATE.form_first_input = false;
+  LEGALAI_TRACK_STATE.preview_live_ok = false;
+  LEGALAI_TRACK_STATE.preview_live_error = false;
+
   (G.campos || []).forEach(c => {
     const el = document.getElementById(c.id);
     if (!el) return;
-    el.addEventListener('input', actualizarPreviewLive);
+    el.addEventListener('input', function(ev) {
+      trackOnce('form_first_input', 'form_first_input', { ...getCurrentDocTracking(), field_id: ev.target?.id || '', field_name: ev.target?.name || '' });
+      actualizarPreviewLive();
+    });
     el.addEventListener('change', actualizarPreviewLive);
   });
   // Render inicial inmediato
@@ -1598,14 +1634,37 @@ function trackCTA(boton) {
 
 function track(tipo, extra) {
   try {
+    const payload = {
+      tipo,
+      event: tipo,
+      pagina: 'index',
+      page_group: window.location.hash === '#generador' ? 'generador_unificado' : 'index',
+      session_id: _SESSION_ID,
+      path: window.location.pathname,
+      url: window.location.href,
+      device: /mobile|android|iphone|ipad/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+      ...getUTM(),
+      ...(extra || {})
+    };
+    if (window.legalaiTrack && typeof window.legalaiTrack === 'function') {
+      window.legalaiTrack(tipo, payload);
+      return;
+    }
     fetch(CONFIG.WORKER_URL + '/evento', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, pagina: 'index', session_id: _SESSION_ID, ...getUTM(), ...(extra || {}) })
+      body: JSON.stringify(payload),
+      keepalive: true
     });
   } catch(_) {}
 }
 track('page_view');
+window.addEventListener('error', function(ev) {
+  track('frontend_error', { error: String(ev.message || 'error').slice(0, 220), source: ev.filename || '', line: ev.lineno || 0, col: ev.colno || 0 });
+});
+window.addEventListener('unhandledrejection', function(ev) {
+  track('frontend_error', { error: String(ev.reason?.message || ev.reason || 'unhandledrejection').slice(0, 220), source: 'promise' });
+});
 
 // Tracking granular de scroll
 (function(){
@@ -2067,7 +2126,7 @@ async function irAPreview() {
     const el = document.getElementById(c.id);
     if (el && !el.value.trim()) { showErr('alert2', `El campo "${c.label}" es obligatorio.`); el.focus(); return; }
   }
-  track('generar_preview', { doc_tipo: G.form?.titulo || G.tipo });
+  track('generar_preview', getCurrentDocTracking());
   // Recopilar datos
   const datos = { tipo: G.tipo, pais: G.pais, provincia: G.provincia };
   G.campos.forEach(c => { const el = document.getElementById(c.id); if (el) datos[c.id] = el.value; });
@@ -2110,13 +2169,14 @@ async function irAPreview() {
     document.getElementById('loadingPreview').classList.remove('visible');
     showCard('25');
     document.getElementById('previewContainer').scrollTop = 0;
-    track('preview_ok', { doc_tipo: G.form?.titulo || G.tipo });
+    track('preview_ok', getCurrentDocTracking());
   } catch(err) {
     // FALLBACK: preview falló → avanzar al pago sin bloquear
     document.getElementById('loadingPreview').classList.remove('visible');
     G.previewId = null;
     sessionStorage.removeItem('legalai_previewId');
-    track('preview_fallback', { doc_tipo: G.form?.titulo || G.tipo, error: err.message?.slice(0,80) });
+    track('preview_fallback', { ...getCurrentDocTracking(), error: err.message?.slice(0,80) });
+    track('preview_live_error', { ...getCurrentDocTracking(), error: err.message?.slice(0,80), origen_error: 'preview_ia' });
     showCard('2');
     showErr('alert2', '⚠️ No pudimos generar la vista previa. Podés continuar al pago — tu documento se genera correctamente.');
     setTimeout(() => { hideErr('alert2'); irAlPago(); }, 4000);
@@ -2149,7 +2209,7 @@ function irAlPagoDirecto() {
   sessionStorage.setItem('legalai_meta',   JSON.stringify(meta));
   G.previewId = null;
   sessionStorage.removeItem('legalai_previewId');
-  track('click_pagar', { doc_tipo: G.form?.titulo || G.tipo });
+  track('click_pagar', getCurrentDocTracking());
   ocultarStickyMobile();
   irAlPago();
 }
@@ -2300,7 +2360,8 @@ async function procesarPago() {
   sessionStorage.setItem('legalai_monto_ars', String(montoARS));
   sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo || 'Documento legal');
   sessionStorage.setItem('legalai_origen', 'index');
-  track('inicio_pago', { doc_tipo: G.form?.titulo || G.tipo, precio_usd: G.precio_usd || 5 });
+  track('click_pagar', { ...getCurrentDocTracking(), precio_usd: G.precio_usd || 5, monto_ars: montoARS });
+  track('inicio_pago', { ...getCurrentDocTracking(), precio_usd: G.precio_usd || 5, monto_ars: montoARS });
   await iniciarPagoMP({
     tipo: 'doc', montoARS,
     descripcion: `Documento legal: ${G.form?.titulo || G.tipo}`,
@@ -2759,6 +2820,20 @@ window.addEventListener('load', () => {
   const p    = new URLSearchParams(window.location.search);
   const stat = p.get('status');
   const tipo = p.get('tipo') || '';
+  const statLower = String(stat || '').toLowerCase();
+  const cameBackFromMP = p.has('payment_error') || p.has('preference_id') || p.has('collection_status') || p.has('merchant_order_id');
+  const failedReturn = cameBackFromMP && !['approved', 'pending'].includes(statLower);
+  if (failedReturn) {
+    trackOnce('payment_return_failed', 'payment_return_failed', {
+      ...getCurrentDocTracking(),
+      status: stat || '',
+      payment_error: p.get('payment_error') || '',
+      preference_id: p.get('preference_id') || '',
+      external_reference: p.get('external_reference') || '',
+      collection_status: p.get('collection_status') || '',
+      payment_id: p.get('payment_id') || p.get('collection_id') || ''
+    });
+  }
 
   // Capturar ref de afiliado si viene en la URL (puede venir en cualquier página)
   const refParam = p.get('ref');
@@ -2828,6 +2903,7 @@ window.addEventListener('load', () => {
       if (paymentIdPack && cotStr) crearPackTrasRetornoMP(paymentIdPack, JSON.parse(cotStr));
     }
   } else if (stat === 'failure') {
+    trackOnce('payment_return_failed', 'payment_return_failed', { ...getCurrentDocTracking(), status: 'failure', payment_id: p.get('payment_id') || p.get('collection_id') || '' });
     showSec('generador'); irAlPago(); // irAlPago restaura datos + muestra card3
     showErr('alert3', 'El pago fue rechazado. Intentá de nuevo o usá otro medio de pago.');
   } else if (stat === 'pending') {
@@ -3004,7 +3080,11 @@ function selectDocInline(docId){
   document.getElementById('docInput').value = cfg.titulo;
   document.getElementById('provinciaInput').value = cfg.provinciaDefault || '';
   sessionStorage.setItem('legalai_inline_doc_id', docId);
-  track('cta_doc_inline',{doc_tipo:cfg.titulo, origen:'index_inline'});
+  LEGALAI_TRACK_STATE.form_first_input = false;
+  LEGALAI_TRACK_STATE.preview_live_ok = false;
+  LEGALAI_TRACK_STATE.preview_live_error = false;
+  track('doc_selected',{doc_id:docId, doc_tipo:cfg.titulo, origen:'index_inline'});
+  track('cta_doc_inline',{doc_id:docId, doc_tipo:cfg.titulo, origen:'index_inline'});
   generarFormulario();
 }
 
@@ -3067,7 +3147,7 @@ function legalAiToggleOption(group, hiddenId, value, btn){
     if(container){ container.innerHTML=''; cfg.fields.forEach(function(c){ container.appendChild(renderLegalAiField(c)); }); }
     showCard(2);
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ engacharPreviewListeners(); const c2=document.getElementById('card2'); if(c2)c2.scrollIntoView({behavior:'smooth',block:'start'}); }); });
-    track('inicio_formulario',{doc_tipo:cfg.titulo, origen:'index_inline'});
+    track('inicio_formulario',{doc_id:docId, doc_tipo:cfg.titulo, origen:'index_inline'});
   };
 
   window.showCard = function(n){

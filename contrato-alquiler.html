@@ -281,11 +281,57 @@ function copyTrackingParams(targetUrl) {
   return url.pathname.replace(/^\//,'') + url.search + url.hash;
 }
 
+function trackContrato(tipo, extra) {
+  const p = new URLSearchParams(window.location.search);
+  const payload = {
+    tipo,
+    event: tipo,
+    pagina: 'contrato-alquiler',
+    page_group: 'contrato_alquiler_landing',
+    path: window.location.pathname,
+    url: window.location.href,
+    ref: sessionStorage.getItem('legalai_ref') || localStorage.getItem('legalai_ref') || p.get('ref') || 'directo',
+    utm_src: p.get('utm_source') || sessionStorage.getItem('legalai_utm_source') || '',
+    utm_cmp: p.get('utm_campaign') || sessionStorage.getItem('legalai_utm_campaign') || '',
+    utm_med: p.get('utm_medium') || sessionStorage.getItem('legalai_utm_medium') || '',
+    utm_cnt: p.get('utm_content') || sessionStorage.getItem('legalai_utm_content') || '',
+    utm_term: p.get('utm_term') || sessionStorage.getItem('legalai_utm_term') || '',
+    gclid: p.get('gclid') || sessionStorage.getItem('legalai_gclid') || '',
+    device: /mobile|android|iphone|ipad/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+    ...(extra || {})
+  };
+  try {
+    fetch('https://legalai-worker.finmap-ia.workers.dev/evento', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function(){});
+  } catch(_) {}
+}
+
+window.addEventListener('error', function(ev) {
+  trackContrato('frontend_error', { error: String(ev.message || 'error').slice(0, 220), source: ev.filename || '', line: ev.lineno || 0, col: ev.colno || 0 });
+});
+window.addEventListener('unhandledrejection', function(ev) {
+  trackContrato('frontend_error', { error: String(ev.reason?.message || ev.reason || 'unhandledrejection').slice(0, 220), source: 'promise' });
+});
+
+trackContrato('ads_landing_view', { origen: 'contrato_alquiler_ads' });
+
 function goDoc(docId) {
   try {
     sessionStorage.setItem('legalai_inline_doc_id', docId);
     sessionStorage.setItem('legalai_autostart_doc', docId);
   } catch(_) {}
+
+  const clickMap = {
+    alquiler_residencial: 'click_residencial',
+    alquiler_comercial: 'click_comercial',
+    alquiler_temporario: 'click_temporario'
+  };
+  const eventName = clickMap[docId] || 'click_doc_alquiler';
+  trackContrato(eventName, { doc_id: docId, origen: 'contrato_alquiler_landing' });
 
   try {
     if (typeof gtag === 'function') {
