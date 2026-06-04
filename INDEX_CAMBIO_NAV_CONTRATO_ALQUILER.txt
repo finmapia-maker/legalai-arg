@@ -1,7 +1,0 @@
-En index.html cambiá esta línea del menú superior:
-
-<div class="nav-link"        data-sec=""          onclick="window.location.href='contrato-alquiler.html'">Contrato alquiler</div>
-
-por esta:
-
-<div class="nav-link"        data-sec=""          onclick="window.location.href='contrato-alquiler-residencial.html'">Contrato alquiler</div>
