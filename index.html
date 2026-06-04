@@ -530,8 +530,6 @@ footer a:hover{color:var(--gold);}
 <!-- NAV -->
 <nav>
   <div class="nav-link active" data-sec="inicio"    onclick="showSec('inicio')">Inicio</div>
-  <div class="nav-link"        data-sec="generador" onclick="trackCTA('nav_generador');showSec('generador');">Generador</div>
-  <div class="nav-link"        data-sec=""          onclick="window.location.href='contrato-alquiler-residencial.html'">Contrato alquiler</div>
   <div class="nav-link"        data-sec=""          onclick="window.location.href='planes.html'">Plan ilimitado</div>
   <div class="nav-link"        data-sec="afiliados" onclick="showSec('afiliados')">Afiliados</div>
   <div class="nav-link"        data-sec="about"     onclick="showSec('about')">Acerca de</div>
@@ -543,7 +541,7 @@ footer a:hover{color:var(--gold);}
 
   <!-- STICKY CTA MOBILE — visible siempre en la hero -->
   <div id="hero-sticky-mobile" style="display:none;position:fixed;bottom:0;left:0;right:0;padding:10px 16px 20px;background:linear-gradient(to top,var(--paper) 80%,transparent);z-index:200;">
-    <a href="generador.html" class="btn gold" style="display:block;text-align:center;text-decoration:none;font-size:.95rem;font-weight:800;padding:15px;" onclick="trackCTA('sticky_hero');">
+    <a href="#generador" class="btn gold" style="display:block;text-align:center;text-decoration:none;font-size:.95rem;font-weight:800;padding:15px;" onclick="trackCTA('sticky_hero');abrirGeneradorDesdeCTA();return false;">
       Crear contrato de alquiler ahora →
     </a>
   </div>
@@ -555,7 +553,7 @@ footer a:hover{color:var(--gold);}
 
     <!-- CTA PRINCIPAL — enorme, dominante -->
     <div style="margin:28px auto 16px;max-width:440px;">
-      <a href="generador.html" class="btn gold" style="display:block;text-align:center;text-decoration:none;font-size:1.1rem;font-weight:800;padding:18px 24px;border-radius:10px;box-shadow:0 6px 24px rgba(200,168,75,.35);" onclick="trackCTA('hero_alquiler');">
+      <a href="#generador" class="btn gold" style="display:block;text-align:center;text-decoration:none;font-size:1.1rem;font-weight:800;padding:18px 24px;border-radius:10px;box-shadow:0 6px 24px rgba(200,168,75,.35);" onclick="trackCTA('hero_alquiler');abrirGeneradorDesdeCTA();return false;">
         Crear mi contrato ahora →
       </a>
       <p style="text-align:center;font-size:.75rem;color:var(--mist);margin-top:8px;font-family:'DM Mono',monospace;">
@@ -605,7 +603,7 @@ footer a:hover{color:var(--gold);}
     </div>
 
     <div style="text-align:center;">
-      <a href="generador.html" class="btn gold" style="display:inline-block;max-width:340px;text-decoration:none;font-weight:800;font-size:1rem;padding:16px 28px;" onclick="trackCTA('how_cta');">
+      <a href="#generador" class="btn gold" style="display:inline-block;max-width:340px;text-decoration:none;font-weight:800;font-size:1rem;padding:16px 28px;" onclick="trackCTA('how_cta');abrirGeneradorDesdeCTA();return false;">
         Crear mi contrato →
       </a>
       <p style="margin-top:12px;font-size:.76rem;color:var(--mist);font-family:'DM Mono',monospace;">
@@ -632,165 +630,66 @@ footer a:hover{color:var(--gold);}
       <div class="step-bar" id="step4">4 · Descarga</div>
     </div>
 
-        <!-- CARD 1 - Selector directo por hojas HTML -->
+        <!-- CARD 1 - Selector interno sin redireccionar -->
     <div class="card visible" id="card1">
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line);">
         <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">🔒 Pago seguro MP</span>
         <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">⚡ Descarga inmediata</span>
         <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">📄 PDF listo para firmar</span>
-        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">✓ Cada botón abre una hoja propia</span>
+        <span style="font-size:.72rem;color:var(--mist);font-family:'DM Mono',monospace;">✓ Todo dentro del index</span>
       </div>
-    
+
       <div class="card-title">¿Qué documento necesitás?</div>
-      <div class="card-sub">Elegí una opción. Cada botón abre un archivo HTML distinto, sin depender de <b>contrato-alquiler.html</b> ni de parámetros <b>?tipo=</b>.</div>
-    
-    <div class="suggest-lbl" style="margin-top:18px;">📋 Contratos</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
-    <a href="contrato-alquiler-residencial.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de alquiler de vivienda', destino:'contrato-alquiler-residencial.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏠 Residencial</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de alquiler de vivienda</div>
-    </a>
-    <a href="contrato-alquiler-comercial.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de alquiler de local comercial', destino:'contrato-alquiler-comercial.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏪 Comercial</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de alquiler de local comercial</div>
-    </a>
-    <a href="contrato-alquiler-temporario.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de alquiler temporario turístico', destino:'contrato-alquiler-temporario.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏖️ Temporario</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de alquiler temporario turístico</div>
-    </a>
-    <a href="contrato-sociedad.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de sociedad simple entre socios', destino:'contrato-sociedad.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🤝 Sociedad</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de sociedad simple entre socios</div>
-    </a>
-    <a href="contrato-compraventa-vehiculo.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de compraventa de vehículo automotor', destino:'contrato-compraventa-vehiculo.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🚗 Vehículo</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de compraventa de vehículo automotor</div>
-    </a>
-    <a href="contrato-compraventa-inmueble.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de compraventa de inmueble', destino:'contrato-compraventa-inmueble.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏡 Inmueble</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de compraventa de inmueble</div>
-    </a>
-    <a href="acuerdo-confidencialidad-nda.html" onclick="track('cta_doc_directo',{doc_tipo:'Acuerdo de confidencialidad NDA bilateral', destino:'acuerdo-confidencialidad-nda.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🔒 NDA</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Acuerdo de confidencialidad NDA bilateral</div>
-    </a>
-    <a href="terminos-condiciones-web.html" onclick="track('cta_doc_directo',{doc_tipo:'Términos y condiciones para sitio web o app', destino:'terminos-condiciones-web.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📱 T&amp;C web</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Términos y condiciones para sitio web o app</div>
-    </a>
-    <a href="politica-privacidad-web.html" onclick="track('cta_doc_directo',{doc_tipo:'Política de privacidad para sitio web', destino:'politica-privacidad-web.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🛡️ Privacidad</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Política de privacidad para sitio web</div>
-    </a>
-    </div>
-    <div class="suggest-lbl" style="margin-top:18px;">💼 Freelance</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
-    <a href="contrato-freelance-diseno.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato freelance para diseñador gráfico', destino:'contrato-freelance-diseno.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🎨 Diseño</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato freelance para diseñador gráfico</div>
-    </a>
-    <a href="contrato-freelance-dev-web.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato freelance para desarrollador web', destino:'contrato-freelance-dev-web.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💻 Dev web</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato freelance para desarrollador web</div>
-    </a>
-    <a href="contrato-community-manager.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato para community manager freelance', destino:'contrato-community-manager.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📲 CM</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato para community manager freelance</div>
-    </a>
-    <a href="contrato-freelance-servicios.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato freelance de servicios profesionales', destino:'contrato-freelance-servicios.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💼 General</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato freelance de servicios profesionales</div>
-    </a>
-    <a href="contrato-consultoria.html" onclick="track('cta_doc_directo',{doc_tipo:'Contrato de locación de servicios de consultoría', destino:'contrato-consultoria.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📊 Consultoría</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Contrato de locación de servicios de consultoría</div>
-    </a>
-    <a href="nda-startup.html" onclick="track('cta_doc_directo',{doc_tipo:'NDA para emprendedores y startups', destino:'nda-startup.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🚀 Startup</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">NDA para emprendedores y startups</div>
-    </a>
-    <a href="propuesta-comercial.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta de propuesta comercial para cliente', destino:'propuesta-comercial.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📧 Propuesta</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta de propuesta comercial para cliente</div>
-    </a>
-    <a href="acuerdo-colaboracion-profesionales.html" onclick="track('cta_doc_directo',{doc_tipo:'Acuerdo de colaboración entre profesionales', destino:'acuerdo-colaboracion-profesionales.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🤝 Colaboración</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Acuerdo de colaboración entre profesionales</div>
-    </a>
-    </div>
-    <div class="suggest-lbl" style="margin-top:18px;">⚠️ Reclamos</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
-    <a href="carta-documento-falta-pago-alquiler.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por falta de pago de alquiler', destino:'carta-documento-falta-pago-alquiler.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏠 Alquiler</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por falta de pago de alquiler</div>
-    </a>
-    <a href="carta-documento-incumplimiento-contrato.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por incumplimiento de contrato', destino:'carta-documento-incumplimiento-contrato.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📋 Contrato</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por incumplimiento de contrato</div>
-    </a>
-    <a href="carta-documento-deuda-impaga.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por deuda impaga', destino:'carta-documento-deuda-impaga.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💰 Deuda</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por deuda impaga</div>
-    </a>
-    <a href="carta-documento-despido.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta documento por despido injustificado', destino:'carta-documento-despido.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">👔 Laboral</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta documento por despido injustificado</div>
-    </a>
-    <a href="reclamo-producto-garantia.html" onclick="track('cta_doc_directo',{doc_tipo:'Reclamo por producto defectuoso o garantía', destino:'reclamo-producto-garantia.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🔧 Garantía</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Reclamo por producto defectuoso o garantía</div>
-    </a>
-    <a href="reclamo-demora-entrega.html" onclick="track('cta_doc_directo',{doc_tipo:'Reclamo por demora o incumplimiento en entrega', destino:'reclamo-demora-entrega.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📦 Entrega</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Reclamo por demora o incumplimiento en entrega</div>
-    </a>
-    <a href="reclamo-servicios-publicos.html" onclick="track('cta_doc_directo',{doc_tipo:'Reclamo a empresa de servicios públicos', destino:'reclamo-servicios-publicos.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💡 Servicios</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Reclamo a empresa de servicios públicos</div>
-    </a>
-    <a href="intimacion-pago-formal.html" onclick="track('cta_doc_directo',{doc_tipo:'Intimación de pago formal', destino:'intimacion-pago-formal.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">⚠️ Intimación</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Intimación de pago formal</div>
-    </a>
-    </div>
-    <div class="suggest-lbl" style="margin-top:18px;">👤 Personales</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
-    <a href="autorizacion-viaje-menor.html" onclick="track('cta_doc_directo',{doc_tipo:'Autorización de viaje para menor de edad', destino:'autorizacion-viaje-menor.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">✈️ Viaje menor</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Autorización de viaje para menor de edad</div>
-    </a>
-    <a href="autorizacion-medica-menor.html" onclick="track('cta_doc_directo',{doc_tipo:'Autorización para acto médico de menor', destino:'autorizacion-medica-menor.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🏥 Médico</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Autorización para acto médico de menor</div>
-    </a>
-    <a href="declaracion-jurada-ingresos.html" onclick="track('cta_doc_directo',{doc_tipo:'Declaración jurada de ingresos', destino:'declaracion-jurada-ingresos.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📜 Ingresos</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Declaración jurada de ingresos</div>
-    </a>
-    <a href="carta-renuncia-laboral.html" onclick="track('cta_doc_directo',{doc_tipo:'Carta de renuncia laboral voluntaria', destino:'carta-renuncia-laboral.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">📄 Renuncia</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Carta de renuncia laboral voluntaria</div>
-    </a>
-    <a href="poder-simple-tramites.html" onclick="track('cta_doc_directo',{doc_tipo:'Poder notarial simple para trámites', destino:'poder-simple-tramites.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🔑 Poder</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Poder notarial simple para trámites</div>
-    </a>
-    <a href="acuerdo-prestamo-particulares.html" onclick="track('cta_doc_directo',{doc_tipo:'Acuerdo de préstamo entre particulares', destino:'acuerdo-prestamo-particulares.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🤝 Préstamo</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Acuerdo de préstamo entre particulares</div>
-    </a>
-    <a href="convenio-pago-cuotas.html" onclick="track('cta_doc_directo',{doc_tipo:'Convenio de pago en cuotas', destino:'convenio-pago-cuotas.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">💳 Cuotas</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Convenio de pago en cuotas</div>
-    </a>
-    <a href="constancia-recibo-dinero.html" onclick="track('cta_doc_directo',{doc_tipo:'Constancia de recibo de dinero', destino:'constancia-recibo-dinero.html'})" style="display:block;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;transition:.15s;">
-      <div style="font-weight:800;font-size:.92rem;line-height:1.25;">🧾 Recibo</div>
-      <div style="font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;">Constancia de recibo de dinero</div>
-    </a>
-    </div>
-    
+      <div class="card-sub">Elegí una opción. El formulario se abre debajo, en esta misma pantalla, con vista previa en vivo al costado.</div>
+
+      <input type="hidden" id="docInput" value="">
+      <select id="paisSelect" style="display:none;"><option value="Argentina" selected>Argentina</option></select>
+      <input type="hidden" id="provinciaInput" value="">
+      <div id="suggestBox" style="display:none;"></div>
+
+      <div class="suggest-lbl" style="margin-top:18px;">📋 Contratos</div>
+      <div class="doc-choice-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px;">
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('alquiler_residencial')">
+          <div class="doc-choice-title">🏠 Residencial</div>
+          <div class="doc-choice-desc">Contrato de alquiler de vivienda</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('alquiler_comercial')">
+          <div class="doc-choice-title">🏪 Comercial</div>
+          <div class="doc-choice-desc">Contrato de alquiler de local comercial</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('alquiler_temporario')">
+          <div class="doc-choice-title">🏖️ Temporario</div>
+          <div class="doc-choice-desc">Contrato de alquiler temporario turístico</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('sociedad')">
+          <div class="doc-choice-title">🤝 Sociedad</div>
+          <div class="doc-choice-desc">Contrato de sociedad simple entre socios</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('vehiculo')">
+          <div class="doc-choice-title">🚗 Vehículo</div>
+          <div class="doc-choice-desc">Contrato de compraventa de vehículo automotor</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('inmueble')">
+          <div class="doc-choice-title">🏡 Inmueble</div>
+          <div class="doc-choice-desc">Contrato de compraventa de inmueble</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('nda')">
+          <div class="doc-choice-title">🔒 NDA</div>
+          <div class="doc-choice-desc">Acuerdo de confidencialidad NDA bilateral</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('terminos_web')">
+          <div class="doc-choice-title">📱 T&amp;C web</div>
+          <div class="doc-choice-desc">Términos y condiciones para sitio web o app</div>
+        </button>
+        <button type="button" class="doc-choice-card" onclick="selectDocInline('privacidad_web')">
+          <div class="doc-choice-title">🛡️ Privacidad</div>
+          <div class="doc-choice-desc">Política de privacidad para sitio web</div>
+        </button>
+      </div>
+
+      <div class="alert err" id="alert1"></div>
       <div class="alert info visible" style="display:block;margin-top:18px;">
-        Si necesitás un documento que no está listado, conviene crear una hoja nueva copiando cualquiera de estas páginas y cambiando solo <b>window.LEGALAI_DOC_CONFIG</b>.
+        El objetivo es reducir pasos: elegís documento → completás datos con preview live → pagás. No abre <b>generador.html</b>, <b>contrato-alquiler.html</b> ni páginas intermedias.
       </div>
     </div>
 
@@ -2937,5 +2836,251 @@ window.addEventListener('load', () => {
   }
 });
 </script>
+
+
+<script>
+/* LegalAI Arg — generador interno unificado en index.html */
+(function(){
+  const css = `
+    .doc-choice-card{display:block;width:100%;text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif;}
+    .doc-choice-card:hover,.doc-choice-card.active{border-color:var(--gold);box-shadow:0 0 0 1px rgba(200,168,75,.25);transform:translateY(-1px);}
+    .doc-choice-title{font-weight:800;font-size:.92rem;line-height:1.25;}
+    .doc-choice-desc{font-size:.73rem;color:var(--mist);line-height:1.35;margin-top:4px;}
+    .inline-toggle-group{display:flex;gap:8px;flex-wrap:wrap;}
+    .inline-toggle-btn{border:1px solid var(--line);background:var(--surface);color:var(--mist);border-radius:999px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;cursor:pointer;transition:.15s;}
+    .inline-toggle-btn.active{border-color:rgba(200,168,75,.55);background:var(--gold-dim);color:var(--gold);font-weight:700;}
+    .inline-help{font-size:.72rem;color:var(--mist);line-height:1.45;margin-top:6px;}
+  `;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+})();
+
+function abrirGeneradorDesdeCTA(){
+  showSec('generador');
+  setTimeout(function(){document.getElementById('sec-generador')?.scrollIntoView({behavior:'smooth',block:'start'});},60);
+}
+
+const LEGALAI_INLINE_DOCS = {
+  alquiler_residencial: {
+    titulo:'Contrato de alquiler de vivienda', precio_usd:5.5, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Formulario para contrato de alquiler residencial. Incluye opciones por clic para depósito, ajuste y servicios.',
+    fields:[
+      {id:'propietario',label:'Propietario / locador',tipo:'text',requerido:true,placeholder:'Nombre y apellido completo'},
+      {id:'inquilino',label:'Inquilino / locatario',tipo:'text',requerido:true,placeholder:'Nombre y apellido completo'},
+      {id:'direccion',label:'Dirección del inmueble',tipo:'text',requerido:true,placeholder:'Ej: Av. Corrientes 1234, 3° B'},
+      {id:'ciudad',label:'Ciudad',tipo:'text',requerido:true,placeholder:'Ej: Buenos Aires'},
+      {id:'provincia',label:'Provincia',tipo:'text',requerido:true,placeholder:'Ej: CABA / Buenos Aires'},
+      {id:'monto_mensual',label:'Monto mensual',tipo:'number',requerido:true,placeholder:'Ej: 450000'},
+      {id:'duracion_meses',label:'Duración en meses',tipo:'number',requerido:true,placeholder:'Ej: 24'},
+      {id:'fecha_inicio',label:'Fecha de inicio',tipo:'date',requerido:true},
+      {id:'deposito',label:'Depósito en garantía',tipo:'toggle',requerido:false,valor:'1 mes de alquiler',opciones:[['1 mes de alquiler','1 mes'],['Sin depósito','Sin depósito'],['A completar','Completar']]},
+      {id:'ajuste',label:'Cláusula de ajuste',tipo:'toggle',requerido:false,valor:'ICL',opciones:[['ICL','ICL'],['IPC','IPC'],['Sin ajuste','Sin ajuste']]},
+      {id:'servicios',label:'Servicios y expensas',tipo:'toggle',requerido:false,valor:'A cargo del inquilino según consumo',opciones:[['A cargo del inquilino según consumo','Inquilino'],['A cargo del propietario','Propietario'],['A detallar','Detallar']]},
+      {id:'observaciones',label:'Observaciones adicionales',tipo:'textarea',requerido:false,placeholder:'Condiciones especiales, mascotas, garantías, pintura, entrega de llaves, etc.'}
+    ]
+  },
+  alquiler_comercial: {
+    titulo:'Contrato de alquiler de local comercial', precio_usd:6.5, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Contrato para local, oficina o espacio comercial con destino de uso y condiciones de habilitación.',
+    fields:[
+      {id:'locador',label:'Locador / propietario',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
+      {id:'locatario',label:'Locatario / comercio',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
+      {id:'direccion_local',label:'Dirección del local',tipo:'text',requerido:true,placeholder:'Calle, número, localidad'},
+      {id:'destino_comercial',label:'Destino comercial permitido',tipo:'text',requerido:true,placeholder:'Ej: local gastronómico, oficina, depósito'},
+      {id:'monto_mensual',label:'Monto mensual',tipo:'number',requerido:true,placeholder:'Ej: 900000'},
+      {id:'duracion_meses',label:'Duración en meses',tipo:'number',requerido:true,placeholder:'Ej: 36'},
+      {id:'fecha_inicio',label:'Fecha de inicio',tipo:'date',requerido:true},
+      {id:'ajuste',label:'Cláusula de ajuste',tipo:'toggle',valor:'IPC trimestral',opciones:[['IPC trimestral','IPC trim.'],['IPC semestral','IPC sem.'],['A pactar','A pactar']]},
+      {id:'habilitacion',label:'Habilitación comercial',tipo:'toggle',valor:'A cargo del locatario',opciones:[['A cargo del locatario','Locatario'],['A cargo del locador','Locador'],['No aplica','No aplica']]},
+      {id:'deposito',label:'Depósito / garantía',tipo:'text',requerido:false,placeholder:'Ej: 2 meses de alquiler / seguro de caución'},
+      {id:'observaciones',label:'Observaciones',tipo:'textarea',requerido:false,placeholder:'Expensas, reformas, cartelería, horario, rubros excluidos.'}
+    ]
+  },
+  alquiler_temporario: {
+    titulo:'Contrato de alquiler temporario turístico', precio_usd:5.5, categoria:'basico', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Contrato breve para alquiler temporario con fechas de ingreso, salida, reglas y depósito.',
+    fields:[
+      {id:'anfitrion',label:'Propietario / anfitrión',tipo:'text',requerido:true,placeholder:'Nombre completo'},
+      {id:'huesped',label:'Huésped / locatario temporario',tipo:'text',requerido:true,placeholder:'Nombre completo'},
+      {id:'direccion',label:'Dirección del inmueble',tipo:'text',requerido:true,placeholder:'Dirección completa'},
+      {id:'fecha_ingreso',label:'Fecha de ingreso',tipo:'date',requerido:true},
+      {id:'fecha_salida',label:'Fecha de salida',tipo:'date',requerido:true},
+      {id:'precio_total',label:'Precio total de la estadía',tipo:'number',requerido:true,placeholder:'Ej: 350000'},
+      {id:'deposito',label:'Depósito de seguridad',tipo:'toggle',valor:'Sí, con devolución al egreso',opciones:[['Sí, con devolución al egreso','Con depósito'],['No se pacta depósito','Sin depósito']]},
+      {id:'personas',label:'Cantidad máxima de personas',tipo:'number',requerido:false,placeholder:'Ej: 4'},
+      {id:'reglas',label:'Reglas de uso',tipo:'textarea',requerido:false,placeholder:'Mascotas, fiestas, horarios, limpieza, daños.'}
+    ]
+  },
+  sociedad: {
+    titulo:'Contrato de sociedad simple entre socios', precio_usd:7, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Acuerdo simple entre socios para ordenar aportes, porcentajes, administración y reparto.',
+    fields:[
+      {id:'socio_1',label:'Socio 1',tipo:'text',requerido:true,placeholder:'Nombre completo'},
+      {id:'socio_2',label:'Socio 2',tipo:'text',requerido:true,placeholder:'Nombre completo'},
+      {id:'objeto',label:'Objeto del emprendimiento/sociedad',tipo:'textarea',requerido:true,placeholder:'Actividad o negocio a desarrollar'},
+      {id:'aportes',label:'Aportes de cada socio',tipo:'textarea',requerido:true,placeholder:'Dinero, trabajo, bienes, contactos, etc.'},
+      {id:'participacion',label:'Participación / porcentajes',tipo:'text',requerido:true,placeholder:'Ej: 50% y 50%'},
+      {id:'administracion',label:'Administración',tipo:'toggle',valor:'Conjunta',opciones:[['Conjunta','Conjunta'],['Socio 1 administra','Socio 1'],['Socio 2 administra','Socio 2']]},
+      {id:'utilidades',label:'Distribución de ganancias',tipo:'text',requerido:false,placeholder:'Ej: proporcional a participación'},
+      {id:'plazo',label:'Plazo / duración',tipo:'text',requerido:false,placeholder:'Ej: 12 meses / indeterminado'}
+    ]
+  },
+  vehiculo: {
+    titulo:'Contrato de compraventa de vehículo automotor', precio_usd:6, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Contrato de compraventa de auto, moto u otro vehículo con datos básicos del bien y pago.',
+    fields:[
+      {id:'vendedor',label:'Vendedor',tipo:'text',requerido:true,placeholder:'Nombre completo'},
+      {id:'comprador',label:'Comprador',tipo:'text',requerido:true,placeholder:'Nombre completo'},
+      {id:'vehiculo',label:'Marca, modelo y versión',tipo:'text',requerido:true,placeholder:'Ej: Toyota Corolla XEI'},
+      {id:'dominio',label:'Dominio / patente',tipo:'text',requerido:true,placeholder:'Ej: AB123CD'},
+      {id:'anio',label:'Año',tipo:'number',requerido:false,placeholder:'Ej: 2018'},
+      {id:'precio',label:'Precio de venta',tipo:'number',requerido:true,placeholder:'Ej: 15000000'},
+      {id:'forma_pago',label:'Forma de pago',tipo:'toggle',valor:'Transferencia bancaria',opciones:[['Transferencia bancaria','Transferencia'],['Efectivo','Efectivo'],['Pago mixto','Mixto']]},
+      {id:'entrega',label:'Entrega del vehículo',tipo:'text',requerido:false,placeholder:'Ej: contra pago total y firma de documentación'},
+      {id:'observaciones',label:'Observaciones',tipo:'textarea',requerido:false,placeholder:'Estado, deudas, multas, transferencia, accesorios incluidos.'}
+    ]
+  },
+  inmueble: {
+    titulo:'Contrato de compraventa de inmueble', precio_usd:7, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Boleto/acuerdo orientativo de compraventa de inmueble con precio, seña y escritura.',
+    fields:[
+      {id:'vendedor',label:'Vendedor',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
+      {id:'comprador',label:'Comprador',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
+      {id:'inmueble',label:'Identificación del inmueble',tipo:'textarea',requerido:true,placeholder:'Dirección, matrícula/partida si la tenés, localidad'},
+      {id:'precio',label:'Precio total',tipo:'number',requerido:true,placeholder:'Ej: 75000'},
+      {id:'moneda',label:'Moneda',tipo:'toggle',valor:'USD',opciones:[['USD','USD'],['ARS','ARS']]},
+      {id:'sena',label:'Seña / anticipo',tipo:'text',requerido:false,placeholder:'Ej: USD 5.000'},
+      {id:'escritura',label:'Plazo estimado de escritura',tipo:'text',requerido:false,placeholder:'Ej: dentro de 60 días'},
+      {id:'posesion',label:'Entrega de posesión',tipo:'text',requerido:false,placeholder:'Ej: al momento de la escritura'},
+      {id:'observaciones',label:'Observaciones',tipo:'textarea',requerido:false,placeholder:'Gastos, impuestos, escribanía, ocupación, condiciones especiales.'}
+    ]
+  },
+  nda: {
+    titulo:'Acuerdo de confidencialidad NDA bilateral', precio_usd:5.5, categoria:'basico', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'NDA bilateral para proteger información comercial, técnica o estratégica.',
+    fields:[
+      {id:'parte_1',label:'Parte 1',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
+      {id:'parte_2',label:'Parte 2',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
+      {id:'proyecto',label:'Proyecto / motivo de intercambio',tipo:'textarea',requerido:true,placeholder:'Ej: evaluación de alianza comercial / software / inversión'},
+      {id:'informacion_confidencial',label:'Información confidencial protegida',tipo:'textarea',requerido:false,placeholder:'Datos comerciales, técnicos, financieros, clientes, código, etc.'},
+      {id:'vigencia',label:'Vigencia de la obligación',tipo:'toggle',valor:'2 años',opciones:[['1 año','1 año'],['2 años','2 años'],['5 años','5 años'],['Indeterminada','Indeterminada']]},
+      {id:'penalidad',label:'Penalidad por incumplimiento',tipo:'toggle',valor:'Sin monto fijo',opciones:[['Sin monto fijo','Sin monto'],['Con monto a completar','Con monto']]},
+      {id:'jurisdiccion',label:'Jurisdicción',tipo:'text',requerido:false,placeholder:'Ej: CABA / Provincia de Buenos Aires'}
+    ]
+  },
+  terminos_web: {
+    titulo:'Términos y condiciones para sitio web o app', precio_usd:6, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Términos básicos para web, app, SaaS, marketplace o servicio digital.',
+    fields:[
+      {id:'titular',label:'Titular del sitio/app',tipo:'text',requerido:true,placeholder:'Persona, empresa o marca'},
+      {id:'sitio',label:'Sitio web o app',tipo:'text',requerido:true,placeholder:'Ej: legalai-arg.com'},
+      {id:'servicio',label:'Servicio ofrecido',tipo:'textarea',requerido:true,placeholder:'Qué hace la web/app y qué obtiene el usuario'},
+      {id:'usuarios',label:'Tipo de usuarios',tipo:'text',requerido:false,placeholder:'Ej: consumidores, empresas, profesionales'},
+      {id:'pagos',label:'Pagos y reembolsos',tipo:'toggle',valor:'Tiene pagos online',opciones:[['Tiene pagos online','Con pagos'],['No cobra online','Sin pagos'],['A definir','A definir']]},
+      {id:'responsabilidad',label:'Limitación de responsabilidad',tipo:'toggle',valor:'Estándar',opciones:[['Estándar','Estándar'],['Más estricta','Más estricta']]},
+      {id:'contacto',label:'Email de contacto',tipo:'email',requerido:false,placeholder:'contacto@dominio.com'}
+    ]
+  },
+  privacidad_web: {
+    titulo:'Política de privacidad para sitio web', precio_usd:6, categoria:'intermedio', legislacion:'Argentina 2026', provinciaDefault:'Buenos Aires',
+    descripcion:'Política de privacidad orientativa para sitios web y apps en Argentina.',
+    fields:[
+      {id:'titular',label:'Responsable / titular',tipo:'text',requerido:true,placeholder:'Persona, empresa o marca'},
+      {id:'sitio',label:'Sitio web o app',tipo:'text',requerido:true,placeholder:'Ej: legalai-arg.com'},
+      {id:'datos_recopilados',label:'Datos personales recopilados',tipo:'textarea',requerido:true,placeholder:'Nombre, email, teléfono, cookies, IP, datos de pago, etc.'},
+      {id:'finalidad',label:'Finalidad del tratamiento',tipo:'textarea',requerido:true,placeholder:'Atención, facturación, marketing, seguridad, mejora del servicio'},
+      {id:'cookies',label:'Uso de cookies',tipo:'toggle',valor:'Sí usa cookies',opciones:[['Sí usa cookies','Con cookies'],['No usa cookies','Sin cookies']]},
+      {id:'terceros',label:'Comparte datos con terceros',tipo:'toggle',valor:'Solo proveedores necesarios',opciones:[['Solo proveedores necesarios','Proveedores'],['No comparte','No comparte'],['A detallar','A detallar']]},
+      {id:'contacto',label:'Email para ejercer derechos',tipo:'email',requerido:false,placeholder:'privacidad@dominio.com'}
+    ]
+  }
+};
+
+function selectDocInline(docId){
+  const cfg = LEGALAI_INLINE_DOCS[docId];
+  if(!cfg) return;
+  document.querySelectorAll('.doc-choice-card').forEach(function(b){ b.classList.remove('active'); });
+  const btn = Array.from(document.querySelectorAll('.doc-choice-card')).find(function(b){ return (b.getAttribute('onclick')||'').includes(docId); });
+  if(btn) btn.classList.add('active');
+  document.getElementById('docInput').value = cfg.titulo;
+  document.getElementById('provinciaInput').value = cfg.provinciaDefault || '';
+  sessionStorage.setItem('legalai_inline_doc_id', docId);
+  track('cta_doc_inline',{doc_tipo:cfg.titulo, origen:'index_inline'});
+  generarFormulario();
+}
+
+function renderLegalAiField(c){
+  const div = document.createElement('div');
+  div.className = 'field-group' + ((c.tipo === 'textarea' || c.full) ? ' field-full' : '');
+  const lbl = document.createElement('label');
+  lbl.className = 'field-label'; lbl.htmlFor = c.id;
+  lbl.innerHTML = c.label + (c.requerido ? '<span class="req">*</span>' : '');
+  div.appendChild(lbl);
+  if(c.tipo === 'textarea'){
+    const inp = document.createElement('textarea'); inp.id = c.id; inp.name = c.id; inp.rows = 3; if(c.placeholder) inp.placeholder = c.placeholder; if(c.requerido) inp.required = true; div.appendChild(inp);
+  } else if(c.tipo === 'select'){
+    const inp = document.createElement('select'); inp.id = c.id; inp.name = c.id; (c.opciones||[]).forEach(function(o){ const opt=document.createElement('option'); opt.value=Array.isArray(o)?o[0]:o; opt.textContent=Array.isArray(o)?o[1]:o; inp.appendChild(opt); }); div.appendChild(inp);
+  } else if(c.tipo === 'toggle'){
+    const hid = document.createElement('input'); hid.type='hidden'; hid.id=c.id; hid.name=c.id; hid.value=c.valor || (c.opciones?.[0]?.[0] || ''); div.appendChild(hid);
+    const group = document.createElement('div'); group.className='inline-toggle-group'; group.setAttribute('data-hidden', c.id);
+    (c.opciones||[]).forEach(function(o,idx){ const val=Array.isArray(o)?o[0]:o; const txt=Array.isArray(o)?o[1]:o; const b=document.createElement('button'); b.type='button'; b.className='inline-toggle-btn'+(idx===0?' active':''); b.textContent=txt; b.onclick=function(){ legalAiToggleOption(group,c.id,val,b); }; group.appendChild(b); });
+    div.appendChild(group);
+    if(c.help){ const h=document.createElement('div'); h.className='inline-help'; h.textContent=c.help; div.appendChild(h); }
+  } else {
+    const inp = document.createElement('input'); inp.type = c.tipo || 'text'; inp.id = c.id; inp.name = c.id; if(c.placeholder) inp.placeholder = c.placeholder; if(c.requerido) inp.required = true; div.appendChild(inp);
+  }
+  return div;
+}
+
+function legalAiToggleOption(group, hiddenId, value, btn){
+  const hidden = document.getElementById(hiddenId);
+  if(hidden) hidden.value = value;
+  group.querySelectorAll('.inline-toggle-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  actualizarPreviewLive();
+}
+
+(function(){
+  const originalGenerarFormulario = window.generarFormulario;
+  const originalShowCard = window.showCard;
+
+  window.generarFormulario = async function(){
+    const doc = (document.getElementById('docInput')?.value || '').trim();
+    const docId = sessionStorage.getItem('legalai_inline_doc_id') || '';
+    const cfg = LEGALAI_INLINE_DOCS[docId] || Object.values(LEGALAI_INLINE_DOCS).find(function(x){return x.titulo === doc;});
+    if(!cfg){ return originalGenerarFormulario ? originalGenerarFormulario() : null; }
+
+    hideErr('alert1'); hideErr('alert2');
+    G.tipo = cfg.titulo;
+    G.pais = 'Argentina';
+    G.provincia = cfg.provinciaDefault || 'Buenos Aires';
+    G.form = { titulo: cfg.titulo, descripcion: cfg.descripcion, legislacion: cfg.legislacion, precio_usd: cfg.precio_usd, categoria: cfg.categoria, requiere_advertencia_legal: false };
+    G.campos = cfg.fields;
+    G.precio_usd = cfg.precio_usd || 6;
+    G.upgrade_porcentaje = cfg.upgrade_porcentaje || 40;
+    G.categoria = cfg.categoria || 'intermedio';
+    G.requiere_advertencia_legal = false;
+
+    const title = document.getElementById('formTitle'); if(title) title.textContent = cfg.titulo;
+    const desc = document.getElementById('formDesc'); if(desc) desc.textContent = (cfg.descripcion || '') + ' Los campos con * son obligatorios.';
+    const leg = document.getElementById('alertLeg'); if(leg){ leg.textContent = '📋 Legislación aplicable: ' + (cfg.legislacion || 'Argentina'); leg.style.display='block'; }
+    const container = document.getElementById('formFields');
+    if(container){ container.innerHTML=''; cfg.fields.forEach(function(c){ container.appendChild(renderLegalAiField(c)); }); }
+    showCard(2);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ engacharPreviewListeners(); const c2=document.getElementById('card2'); if(c2)c2.scrollIntoView({behavior:'smooth',block:'start'}); }); });
+    track('inicio_formulario',{doc_tipo:cfg.titulo, origen:'index_inline'});
+  };
+
+  window.showCard = function(n){
+    if(originalShowCard) originalShowCard(n);
+    if(n === 2){
+      const c1 = document.getElementById('card1');
+      const c2 = document.getElementById('card2');
+      if(c1) c1.classList.add('visible');
+      if(c2) c2.classList.add('visible');
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
