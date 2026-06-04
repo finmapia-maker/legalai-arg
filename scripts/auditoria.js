@@ -79,9 +79,6 @@ function validarArchivosPublicos() {
     if (!index.includes("LEGALAI_INLINE_DOCS") || !index.includes("selectDocInline")) {
       problemas.push("index.html no parece tener activo el generador unificado inline.");
     }
-    if (!/p\.get\(['\"]doc['\"]\)/.test(index) && !/docParam/i.test(index)) {
-      oportunidades.push("index.html todavía no abre automáticamente el formulario cuando llega ?doc=...#generador.");
-    }
     if (!index.includes("gclid") && !index.includes("utm_source")) {
       oportunidades.push("index.html no expone tracking completo de Google Ads/UTM en eventos propios.");
     }
@@ -209,13 +206,30 @@ function isMeaningfulClick(ev) {
     t.includes("click") ||
     t.startsWith("cta_") ||
     t.startsWith("nav_") ||
-    ["interaccion", "form_start", "inicio_formulario", "inicio_pago", "checkout_start", "preview_action", "cta_generar", "cta_formulario", "cta_planes", "cta_contrato_alquiler"].includes(t)
+    ["interaccion", "doc_selected", "form_first_input", "form_start", "inicio_formulario", "inicio_pago", "checkout_start", "preview_action", "preview_live_ok", "cta_generar", "cta_formulario", "cta_planes", "cta_contrato_alquiler"].includes(t)
   );
 }
 
 function isVisit(ev) {
   const t = eventType(ev);
   return t === "page_view" || t === "form_page_view" || t.endsWith("page_view");
+}
+
+function eventPath(ev) {
+  return String(ev?.path || ev?.raw?.path || ev?.raw?.url || ev?.url || "").toLowerCase();
+}
+
+function isObsoleteUrlEvent(ev) {
+  const path = eventPath(ev);
+  return REFERENCIAS_OBSOLETAS.some(ref => path.includes(ref.toLowerCase()));
+}
+
+function isPaymentReturnFailed(ev) {
+  return eventType(ev) === "payment_return_failed" || (eventPath(ev).includes("payment_error=1") && !eventPath(ev).includes("status=approved"));
+}
+
+function isFrontendError(ev) {
+  return eventType(ev) === "frontend_error" || eventType(ev).includes("js_error");
 }
 
 function isConfirmedSale(ev) {
@@ -355,8 +369,9 @@ function buildEventosFromEvents(events) {
 
   const funnel_doc = buildFunnel([
     { label: "Visitas", count: countWhere(events, isVisit) },
-    { label: "Interacciones/CTA", count: countWhere(events, isMeaningfulClick) },
-    { label: "Inicio formulario", count: countWhere(events, ev => ["form_start", "inicio_formulario", "click_generar", "cta_generar", "form_fields_generated"].includes(eventType(ev))) },
+    { label: "Documento elegido", count: countWhere(events, ev => ["doc_selected", "cta_doc_inline", "click_residencial", "click_comercial", "click_temporario"].includes(eventType(ev))) },
+    { label: "Inicio formulario", count: countWhere(events, ev => ["form_start", "form_first_input", "inicio_formulario", "click_generar", "cta_generar", "form_fields_generated"].includes(eventType(ev))) },
+    { label: "Preview live OK", count: countWhere(events, ev => eventType(ev) === "preview_live_ok" || eventType(ev) === "preview_ok") },
     { label: "Pago iniciado", count: countWhere(events, ev => ["click_pagar", "inicio_pago", "checkout_start"].includes(eventType(ev))) },
     { label: "Venta confirmada", count: dedupeSales(events).length }
   ]);
@@ -370,12 +385,23 @@ function buildEventosFromEvents(events) {
 
   const adsEvents = events.filter(isAdsEvent);
   const funnel_ads = buildFunnel([
-    { label: "Ads visitas", count: countWhere(adsEvents, isVisit) },
-    { label: "Ads clicks/CTA", count: countWhere(adsEvents, isMeaningfulClick) },
-    { label: "Ads inicio formulario", count: countWhere(adsEvents, ev => ["form_start", "inicio_formulario", "cta_doc_inline"].includes(eventType(ev))) },
+    { label: "Ads visitas", count: countWhere(adsEvents, ev => isVisit(ev) || eventType(ev) === "ads_landing_view") },
+    { label: "Ads click documento", count: countWhere(adsEvents, ev => ["click_residencial", "click_comercial", "click_temporario", "doc_selected", "cta_doc_inline"].includes(eventType(ev))) },
+    { label: "Ads inicio formulario", count: countWhere(adsEvents, ev => ["form_start", "form_first_input", "inicio_formulario", "cta_doc_inline"].includes(eventType(ev))) },
+    { label: "Ads preview OK", count: countWhere(adsEvents, ev => ["preview_live_ok", "preview_ok"].includes(eventType(ev))) },
     { label: "Ads inicio pago", count: countWhere(adsEvents, ev => ["click_pagar", "inicio_pago", "checkout_start"].includes(eventType(ev))) },
+    { label: "Ads vuelta sin pago", count: countWhere(adsEvents, isPaymentReturnFailed) },
     { label: "Ads venta", count: dedupeSales(adsEvents).length }
   ]);
+
+  const alertas_tracking = {
+    frontend_errors: countWhere(events, isFrontendError),
+    preview_live_errors: countWhere(events, ev => eventType(ev) === "preview_live_error"),
+    payment_return_failed: countWhere(events, isPaymentReturnFailed),
+    obsolete_url_views: countWhere(events, isObsoleteUrlEvent),
+    form_first_input: countWhere(events, ev => eventType(ev) === "form_first_input"),
+    doc_selected: countWhere(events, ev => eventType(ev) === "doc_selected"),
+  };
 
   return {
     ok: true,
@@ -384,6 +410,7 @@ function buildEventosFromEvents(events) {
     funnel_doc,
     funnel_plan,
     funnel_ads,
+    alertas_tracking,
     cuello_botella: detectBottleneck({ doc: funnel_doc, planes: funnel_plan, ads: funnel_ads })
   };
 }
@@ -412,6 +439,7 @@ function calcularMetricas({ stats48, stats7d, eventosRaw, fetch_errors = [] }) {
   const funnel_ads  = eventosRaw?.funnel_ads  || [];
   const cuello      = eventosRaw?.cuello_botella || null;
   const embudoEventos = eventosRaw?.por_tipo || {};
+  const alertasTracking = eventosRaw?.alertas_tracking || {};
 
   const m48 = metricasPeriodo(stats48);
   const problemas     = [];
@@ -428,6 +456,38 @@ function calcularMetricas({ stats48, stats7d, eventosRaw, fetch_errors = [] }) {
       problemas.push("Sin eventos registrados en 48h → revisar tracker, Worker o tráfico real.");
     } else if (m48.visitas > 0 && m48.clics === 0) {
       problemas.push(`Hay ${m48.visitas} visitas registradas pero 0 clics útiles → revisar visibilidad de CTAs o tracking de clicks.`);
+    }
+
+    const adsLanding = (funnel_ads.find(x => x.label === "Ads visitas")?.count || 0);
+    const adsDocClick = (funnel_ads.find(x => x.label === "Ads click documento")?.count || 0);
+    const adsForm = (funnel_ads.find(x => x.label === "Ads inicio formulario")?.count || 0);
+    const adsPago = (funnel_ads.find(x => x.label === "Ads inicio pago")?.count || 0);
+    const adsFailed = (funnel_ads.find(x => x.label === "Ads vuelta sin pago")?.count || 0);
+
+    if (adsLanding >= 3 && adsDocClick === 0) {
+      problemas.push(`Google Ads: ${adsLanding} visita(s) a landing sin click en documento → revisar claridad del CTA o carga mobile.`);
+    }
+    if (adsDocClick >= 3 && adsForm === 0) {
+      problemas.push(`Google Ads: ${adsDocClick} click(s) de documento sin inicio de formulario → revisar pasaje contrato-alquiler.html → index.`);
+    }
+    if (adsForm >= 3 && adsPago === 0) {
+      problemas.push(`Google Ads: ${adsForm} formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.`);
+    }
+    if (adsFailed > 0) {
+      problemas.push(`Google Ads/MercadoPago: ${adsFailed} vuelta(s) sin pago aprobado → revisar rechazo, abandono o medio de pago.`);
+    }
+
+    if (alertasTracking.frontend_errors > 0) {
+      problemas.push(`Errores frontend detectados: ${alertasTracking.frontend_errors} → revisar consola/compatibilidad mobile.`);
+    }
+    if (alertasTracking.preview_live_errors > 0) {
+      problemas.push(`Preview live con errores: ${alertasTracking.preview_live_errors} → revisar render del formulario.`);
+    }
+    if (alertasTracking.payment_return_failed > 0) {
+      problemas.push(`Retornos de MercadoPago sin pago aprobado: ${alertasTracking.payment_return_failed}.`);
+    }
+    if (alertasTracking.obsolete_url_views > 0) {
+      problemas.push(`Se registraron ${alertasTracking.obsolete_url_views} visita(s) a URLs viejas → revisar enlaces/caché/campañas.`);
     }
 
     if (m48.clics > 20 && m48.ventas === 0) {
@@ -458,6 +518,7 @@ function calcularMetricas({ stats48, stats7d, eventosRaw, fetch_errors = [] }) {
     periodo_48h:    m48,
     periodo_7d:     metricasPeriodo(stats7d),
     embudo_eventos: embudoEventos,
+    alertas_tracking: alertasTracking,
     total_eventos:  eventosRaw?.total || 0,
     funnel_doc,
     funnel_plan,
@@ -545,6 +606,7 @@ MÉTRICAS 48H:
   Conv%: ${metricas.periodo_48h?.tasa_conv ?? 'N/A'}
   ARS: ${metricas.periodo_48h?.total_ars ?? 'N/A'}
   Eventos totales: ${metricas.periodo_48h?.total_eventos ?? metricas.total_eventos ?? 'N/A'}
+  Tracking fino: ${JSON.stringify(metricas.alertas_tracking || {})}
 
 DIAGNÓSTICO:
   Estado: ${metricas.diagnostico.estado}
@@ -662,6 +724,7 @@ function saveLog(decision, state, metricas) {
     funnel_doc:     metricas.funnel_doc,
     funnel_plan:    metricas.funnel_plan,
     funnel_ads:     metricas.funnel_ads,
+    alertas_tracking: metricas.alertas_tracking,
     cuello_botella: metricas.cuello_botella,
     diagnostico:    metricas.diagnostico,
   }, null, 2));
@@ -690,6 +753,7 @@ Conv Rate:  ${m?.tasa_conv ?? "—"}
 Total ARS:  $${m?.total_ars ?? "—"}
 Eventos:    ${m?.total_eventos ?? metricas.total_eventos ?? "—"}
 Ads funnel: ${metricas.funnel_ads?.map(x => `${x.label}:${x.count}`).join(" | ") || "—"}
+Tracking:   ${JSON.stringify(metricas.alertas_tracking || {})}
 
 ── DIAGNÓSTICO ─────────────────────
 Estado:     ${diag.estado}

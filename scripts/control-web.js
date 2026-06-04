@@ -6,7 +6,8 @@ const required = [
   'planes.html',
   'gracias.html',
   'worker.js',
-  'scripts/auditoria.js'
+  'scripts/auditoria.js',
+  'legalai-tracker.js'
 ];
 
 const publicFilesToScan = [
@@ -48,10 +49,6 @@ if (fs.existsSync('index.html')) {
   index.includes('LEGALAI_INLINE_DOCS') && index.includes('selectDocInline')
     ? ok('Index tiene generador unificado inline')
     : fail('Index no contiene generador unificado inline');
-
-  /p\.get\(['"]doc['"]\)/.test(index) || /docParam/i.test(index)
-    ? ok('Index parece leer ?doc=')
-    : warn('Index todavía no parece leer ?doc= para abrir formulario preseleccionado');
 }
 
 if (fs.existsSync('contrato-alquiler.html')) {
@@ -59,6 +56,29 @@ if (fs.existsSync('contrato-alquiler.html')) {
   c.includes('index.html?doc=') && c.includes('#generador')
     ? ok('Contrato-alquiler deriva al index con doc seleccionado')
     : fail('Contrato-alquiler no deriva al index con doc seleccionado');
+}
+
+
+
+if (fs.existsSync('index.html')) {
+  const index = fs.readFileSync('index.html','utf8');
+  ['doc_selected','form_first_input','preview_live_ok','preview_live_error','payment_return_failed','frontend_error'].forEach(ev => {
+    index.includes(ev) ? ok(`Index trackea ${ev}`) : fail(`Index no trackea ${ev}`);
+  });
+}
+
+if (fs.existsSync('contrato-alquiler.html')) {
+  const c = fs.readFileSync('contrato-alquiler.html','utf8');
+  ['ads_landing_view','click_residencial','click_comercial','click_temporario'].forEach(ev => {
+    c.includes(ev) ? ok(`Contrato-alquiler trackea ${ev}`) : fail(`Contrato-alquiler no trackea ${ev}`);
+  });
+}
+
+if (fs.existsSync('legalai-tracker.js')) {
+  const tracker = fs.readFileSync('legalai-tracker.js','utf8');
+  ['frontend_error','form_first_input','payment_return_failed','click_residencial','click_comercial','click_temporario'].forEach(ev => {
+    tracker.includes(ev) ? ok(`Tracker central soporta ${ev}`) : fail(`Tracker central no soporta ${ev}`);
+  });
 }
 
 if (fs.existsSync('worker.js')) {
