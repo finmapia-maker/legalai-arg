@@ -3369,7 +3369,7 @@ function legalAiToggleOption(group, hiddenId, value, btn){
     setAnyField(['monto_mensual', 'canon', 'precio', 'alquiler_mensual'], onlyNumber(data.monto));
     setAnyField(['duracion_meses', 'duracion', 'plazo_meses'], durationMonths(data.duracion));
     setAnyField(['fecha_inicio', 'inicio'], toDateInput(data.fecha_inicio));
-    setAnyField(['observaciones'], data.observaciones || 'Datos precargados desde Telegram. ID: ' + session.sessionId);
+    if (data.observaciones) setAnyField(['observaciones'], data.observaciones);
 
     setToggle('deposito', data.deposito);
     setToggle('ajuste', data.ajuste);
