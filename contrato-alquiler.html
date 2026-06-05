@@ -272,7 +272,17 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 
 function copyTrackingParams(targetUrl) {
   const current = new URLSearchParams(window.location.search);
-  const keep = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','ref'];
+  const keep = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_content',
+    'utm_term',
+    'gclid',
+    'ref',
+    'src',
+    'session'
+  ];
   const url = new URL(targetUrl, window.location.href);
   keep.forEach(k => {
     const v = current.get(k);
