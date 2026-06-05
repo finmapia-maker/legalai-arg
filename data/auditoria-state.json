@@ -71,10 +71,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-04T14:05:28.746Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Inicio formulario",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-05T13:52:33.438Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar que la URL de checkout en el botón CTA sea válida y accesible. Testear manualmente el flujo completo: hacer clic en el botón y confirmar que redirige a una página de pago funcional. Si la URL está rota o devuelve error, reemplazarla con la URL correcta del procesador de pagos. Agregar console.log o evento de analítica en el click para confirmar que el evento se dispara.",
     "archivo": "index.html",
