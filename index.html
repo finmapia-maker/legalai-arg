@@ -3162,5 +3162,289 @@ function legalAiToggleOption(group, hiddenId, value, btn){
 })();
 </script>
 
+<script>
+/* LegalAI — Precarga desde Telegram Bot (solo integración bot) */
+(function(){
+  const BOT_SESSION_ENDPOINT = 'https://legalai-telegram-bot.finmap-ia.workers.dev/telegram-session';
+  const MAX_WAIT_MS = 12000;
+
+  function norm(v) {
+    return String(v || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+
+  function getSessionId() {
+    const p = new URLSearchParams(window.location.search);
+    return p.get('session') || sessionStorage.getItem('legalai_telegram_session_id') || '';
+  }
+
+  function mapDocId(data) {
+    const tipo = norm(data && data.tipo);
+    if (tipo.includes('comercial')) return 'alquiler_comercial';
+    if (tipo.includes('temporario')) return 'alquiler_temporario';
+    return 'alquiler_residencial';
+  }
+
+  function onlyNumber(v) {
+    const raw = String(v || '').replace(/[^\d]/g, '');
+    return raw || '';
+  }
+
+  function durationMonths(v) {
+    const s = norm(v);
+    const m = s.match(/(\d+)/);
+    return m ? m[1] : '';
+  }
+
+  function toDateInput(v) {
+    const s = String(v || '').trim();
+    const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if (!m) return '';
+    let d = m[1].padStart(2, '0');
+    let mo = m[2].padStart(2, '0');
+    let y = m[3];
+    if (y.length === 2) y = '20' + y;
+    return `${y}-${mo}-${d}`;
+  }
+
+  function splitLocalidad(v) {
+    const txt = String(v || '').trim();
+    const partes = txt.split(',').map(x => x.trim()).filter(Boolean);
+
+    if (partes.length >= 2) {
+      return { ciudad: partes[0], provincia: partes.slice(1).join(', ') };
+    }
+
+    const n = norm(txt);
+    if (n.includes('palomar')) return { ciudad: 'El Palomar', provincia: 'Buenos Aires' };
+    if (n.includes('moron')) return { ciudad: 'Morón', provincia: 'Buenos Aires' };
+    if (n.includes('caba')) return { ciudad: 'CABA', provincia: 'CABA' };
+    if (n.includes('buenos aires')) return { ciudad: txt, provincia: 'Buenos Aires' };
+
+    return { ciudad: txt, provincia: '' };
+  }
+
+  function setField(id, value) {
+    if (value === undefined || value === null || value === '') return false;
+    const el = document.getElementById(id);
+    if (!el) return false;
+
+    el.value = value;
+
+    try {
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    } catch(_) {}
+
+    return true;
+  }
+
+  function setAnyField(ids, value) {
+    for (const id of ids) {
+      if (setField(id, value)) return true;
+    }
+    return false;
+  }
+
+  function setToggle(id, value) {
+    if (!value) return false;
+
+    const hidden = document.getElementById(id);
+    if (!hidden) return false;
+
+    hidden.value = value;
+
+    const group = document.querySelector('[data-hidden="' + id + '"]');
+    if (group) {
+      const buttons = Array.from(group.querySelectorAll('.inline-toggle-btn'));
+      buttons.forEach(b => b.classList.remove('active'));
+
+      const valueNorm = norm(value);
+      const match = buttons.find(b => {
+        const txt = norm(b.textContent);
+        const onclick = norm(b.getAttribute('onclick') || '');
+        return valueNorm.includes(txt) || txt.includes(valueNorm) || onclick.includes(valueNorm);
+      });
+
+      if (match) match.classList.add('active');
+    }
+
+    try {
+      hidden.dispatchEvent(new Event('input', { bubbles: true }));
+      hidden.dispatchEvent(new Event('change', { bubbles: true }));
+    } catch(_) {}
+
+    return true;
+  }
+
+  function waitForFields() {
+    const start = Date.now();
+
+    return new Promise((resolve, reject) => {
+      const tick = () => {
+        const formFields = document.getElementById('formFields');
+        const hasFields = formFields && formFields.querySelector('input, textarea, select');
+
+        if (hasFields && Array.isArray(window.G?.campos || G?.campos) && (window.G?.campos || G?.campos).length) {
+          resolve(true);
+          return;
+        }
+
+        if (Date.now() - start > MAX_WAIT_MS) {
+          reject(new Error('timeout_waiting_form_fields'));
+          return;
+        }
+
+        setTimeout(tick, 250);
+      };
+
+      tick();
+    });
+  }
+
+  function fillByLabels(data) {
+    const labels = Array.from(document.querySelectorAll('#formFields label'));
+
+    function setByLabel(words, value) {
+      if (!value) return false;
+
+      const target = labels.find(label => {
+        const txt = norm(label.textContent);
+        return words.some(w => txt.includes(norm(w)));
+      });
+
+      if (!target) return false;
+
+      const forId = target.getAttribute('for');
+      return forId ? setField(forId, value) : false;
+    }
+
+    setByLabel(['propietario', 'locador'], data.locador);
+    setByLabel(['inquilino', 'locatario'], data.locatario);
+    setByLabel(['dirección', 'direccion', 'inmueble', 'local'], data.inmueble);
+    setByLabel(['ciudad'], splitLocalidad(data.localidad).ciudad);
+    setByLabel(['provincia'], splitLocalidad(data.localidad).provincia);
+    setByLabel(['monto', 'alquiler', 'canon'], onlyNumber(data.monto));
+    setByLabel(['duración', 'duracion', 'meses'], durationMonths(data.duracion));
+    setByLabel(['fecha', 'inicio'], toDateInput(data.fecha_inicio));
+    setByLabel(['observaciones'], data.observaciones);
+  }
+
+  async function prefillAlquiler(session) {
+    const data = session && session.data ? session.data : {};
+    const docId = mapDocId(data);
+
+    sessionStorage.setItem('legalai_inline_doc_id', docId);
+    sessionStorage.setItem('legalai_autostart_doc', docId);
+    sessionStorage.setItem('legalai_telegram_session_id', session.sessionId || '');
+    sessionStorage.setItem('legalai_origen', 'telegram_bot');
+
+    try {
+      sessionStorage.setItem('legalai_telegram_session_payload', JSON.stringify(session));
+    } catch(_) {}
+
+    if (typeof showSec === 'function') {
+      showSec('generador');
+    }
+
+    if (typeof selectDocInline === 'function') {
+      selectDocInline(docId);
+    } else {
+      console.warn('selectDocInline no disponible para precarga Telegram');
+      return;
+    }
+
+    await waitForFields();
+
+    const loc = splitLocalidad(data.localidad);
+
+    setAnyField(['propietario', 'locador'], data.locador);
+    setAnyField(['inquilino', 'locatario'], data.locatario);
+    setAnyField(['direccion', 'direccion_local', 'domicilio_propiedad', 'inmueble'], data.inmueble);
+    setAnyField(['ciudad'], loc.ciudad);
+    setAnyField(['provincia', 'provincia_estado'], loc.provincia);
+    setAnyField(['monto_mensual', 'canon', 'precio', 'alquiler_mensual'], onlyNumber(data.monto));
+    setAnyField(['duracion_meses', 'duracion', 'plazo_meses'], durationMonths(data.duracion));
+    setAnyField(['fecha_inicio', 'inicio'], toDateInput(data.fecha_inicio));
+    setAnyField(['observaciones'], data.observaciones || 'Datos precargados desde Telegram. ID: ' + session.sessionId);
+
+    setToggle('deposito', data.deposito);
+    setToggle('ajuste', data.ajuste);
+    setToggle('servicios', data.servicios);
+
+    fillByLabels(data);
+
+    try {
+      if (typeof actualizarPreviewLive === 'function') actualizarPreviewLive();
+    } catch(_) {}
+
+    try {
+      if (typeof track === 'function') {
+        track('telegram_session_prefill_ok', {
+          source: 'telegram_bot',
+          origen: 'telegram_bot',
+          session_id: session.sessionId,
+          doc_id: docId
+        });
+      }
+    } catch(_) {}
+
+    const card2 = document.getElementById('card2');
+    if (card2) card2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function cargarSesionTelegram() {
+    const sessionId = getSessionId();
+    if (!sessionId || !sessionId.startsWith('BOT-')) return;
+
+    try {
+      sessionStorage.setItem('legalai_telegram_session_id', sessionId);
+      sessionStorage.setItem('legalai_origen', 'telegram_bot');
+
+      const cacheKey = 'legalai_telegram_session_' + sessionId;
+      const cached = sessionStorage.getItem(cacheKey);
+
+      if (cached) {
+        await prefillAlquiler(JSON.parse(cached));
+        return;
+      }
+
+      const res = await fetch(BOT_SESSION_ENDPOINT + '?session=' + encodeURIComponent(sessionId), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+
+      const json = await res.json();
+
+      if (!json.ok || !json.session) {
+        console.warn('No se pudo cargar sesión Telegram', json);
+        return;
+      }
+
+      sessionStorage.setItem(cacheKey, JSON.stringify(json.session));
+      await prefillAlquiler(json.session);
+    } catch (err) {
+      console.warn('Error precargando sesión Telegram', err);
+
+      try {
+        if (typeof track === 'function') {
+          track('telegram_session_prefill_error', {
+            source: 'telegram_bot',
+            error: String(err?.message || err).slice(0, 180),
+            session_id: sessionId
+          });
+        }
+      } catch(_) {}
+    }
+  }
+
+  window.addEventListener('load', function(){
+    setTimeout(cargarSesionTelegram, 450);
+  });
+})();
+</script>
 </body>
 </html>
