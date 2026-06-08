@@ -76,10 +76,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-07T12:22:27.001Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-08T14:49:54.230Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Realizar una compra de prueba real con tarjeta de test para confirmar si el pago procesa o falla silenciosamente. Verificar: (1) que el procesador de pagos esté activo y sin errores en su dashboard, (2) que la URL de retorno post-pago (webhook/callback) esté configurada correctamente, (3) que los 3 errores frontend no bloqueen el submit del formulario de pago, (4) revisar consola mobile ya que el tráfico Ads puede ser mayormente mobile. Si el pago falla silenciosamente, agregar manejo explícito de error con mensaje visible al usuario.",
     "archivo": "checkout.html",
