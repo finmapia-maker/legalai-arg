@@ -74,19 +74,24 @@
       "descripcion": "Realizar una compra de prueba real con tarjeta de test para confirmar si el pago procesa o falla silenciosamente. Verificar: (1) que el procesador de pagos esté activo y sin errores en su dashboard, (2) que la URL de retorno post-pago (webhook/callback) esté configurada correctamente, (3) que los 3 errores frontend no bloqueen el submit del formulario de pago, (4) revisar consola mobile ya que el tráfico Ads puede ser mayormente mobile. Si el pago falla silenciosamente, agregar manejo explícito de error con mensaje visible al usuario.",
       "fecha": "2026-06-07T12:22:27.001Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar o reconfigurar integración MercadoPago: (1) regenerar preferencia de pago desde el backend y loguear el preference_id, (2) verificar que las URLs de back_url (success, failure, pending) estén correctamente seteadas y sean accesibles, (3) confirmar que el webhook de notificación IPN/API esté activo y procesando el estado 'approved', (4) agregar log explícito del estado de retorno de MercadoPago en la URL de callback para detectar si llega como 'rejected' o 'pending', (5) mostrar mensaje de error visible al usuario si el pago no es aprobado",
+      "fecha": "2026-06-09T13:45:19.105Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-08T14:49:54.230Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-09T13:45:19.105Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Realizar una compra de prueba real con tarjeta de test para confirmar si el pago procesa o falla silenciosamente. Verificar: (1) que el procesador de pagos esté activo y sin errores en su dashboard, (2) que la URL de retorno post-pago (webhook/callback) esté configurada correctamente, (3) que los 3 errores frontend no bloqueen el submit del formulario de pago, (4) revisar consola mobile ya que el tráfico Ads puede ser mayormente mobile. Si el pago falla silenciosamente, agregar manejo explícito de error con mensaje visible al usuario.",
+    "descripcion": "Reemplazar o reconfigurar integración MercadoPago: (1) regenerar preferencia de pago desde el backend y loguear el preference_id, (2) verificar que las URLs de back_url (success, failure, pending) estén correctamente seteadas y sean accesibles, (3) confirmar que el webhook de notificación IPN/API esté activo y procesando el estado 'approved', (4) agregar log explícito del estado de retorno de MercadoPago en la URL de callback para detectar si llega como 'rejected' o 'pending', (5) mostrar mensaje de error visible al usuario si el pago no es aprobado",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el procesador de pagos tiene webhook o callback mal configurado → el pago se procesa pero la confirmación nunca llega y el usuario queda en limbo, generando 0 ventas pese a inicios de pago",
+    "hipotesis": "Si el flujo de retorno de MercadoPago está mal configurado → los pagos se procesan pero nunca se confirman como vendidos, causando 0 conversiones con múltiples intentos de pago",
     "conv_base": 0,
-    "clics_base": 69
+    "clics_base": 70
   },
-  "cambio_activo_desde": "2026-06-07T12:22:27.001Z"
+  "cambio_activo_desde": "2026-06-09T13:45:19.105Z"
 }
