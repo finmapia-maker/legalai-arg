@@ -79,19 +79,24 @@
       "descripcion": "Reemplazar o reconfigurar integración MercadoPago: (1) regenerar preferencia de pago desde el backend y loguear el preference_id, (2) verificar que las URLs de back_url (success, failure, pending) estén correctamente seteadas y sean accesibles, (3) confirmar que el webhook de notificación IPN/API esté activo y procesando el estado 'approved', (4) agregar log explícito del estado de retorno de MercadoPago en la URL de callback para detectar si llega como 'rejected' o 'pending', (5) mostrar mensaje de error visible al usuario si el pago no es aprobado",
       "fecha": "2026-06-09T13:45:19.105Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar flujo MercadoPago por prueba con pasarela alternativa o modo sandbox explícito: (1) forzar una compra de prueba con credenciales de test y loguear respuesta completa del SDK, (2) si el preference_id se genera pero el pago no se aprueba, verificar que el monto no esté en 0 o en formato incorrecto, (3) revisar que el access_token sea de PRODUCCIÓN y no de sandbox si el sitio está live, (4) agregar endpoint /debug-payment que devuelva el JSON completo de la preferencia generada para inspección manual, (5) si MercadoPago sigue fallando sin logs claros, instalar Stripe o PayPal como canal alternativo temporal para desbloquear ventas",
+      "fecha": "2026-06-11T14:40:31.650Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-10T14:25:44.862Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-11T14:40:31.650Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Reemplazar o reconfigurar integración MercadoPago: (1) regenerar preferencia de pago desde el backend y loguear el preference_id, (2) verificar que las URLs de back_url (success, failure, pending) estén correctamente seteadas y sean accesibles, (3) confirmar que el webhook de notificación IPN/API esté activo y procesando el estado 'approved', (4) agregar log explícito del estado de retorno de MercadoPago en la URL de callback para detectar si llega como 'rejected' o 'pending', (5) mostrar mensaje de error visible al usuario si el pago no es aprobado",
-    "archivo": "checkout.html",
+    "descripcion": "Reemplazar flujo MercadoPago por prueba con pasarela alternativa o modo sandbox explícito: (1) forzar una compra de prueba con credenciales de test y loguear respuesta completa del SDK, (2) si el preference_id se genera pero el pago no se aprueba, verificar que el monto no esté en 0 o en formato incorrecto, (3) revisar que el access_token sea de PRODUCCIÓN y no de sandbox si el sitio está live, (4) agregar endpoint /debug-payment que devuelva el JSON completo de la preferencia generada para inspección manual, (5) si MercadoPago sigue fallando sin logs claros, instalar Stripe o PayPal como canal alternativo temporal para desbloquear ventas",
+    "archivo": "backend/payment.js",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el flujo de retorno de MercadoPago está mal configurado → los pagos se procesan pero nunca se confirman como vendidos, causando 0 conversiones con múltiples intentos de pago",
+    "hipotesis": "si se confirma que access_token es de producción y la preferencia se genera correctamente → el pago debería procesarse y convertir al menos 1 de cada 4 usuarios que inician pago",
     "conv_base": 0,
-    "clics_base": 70
+    "clics_base": 46
   },
-  "cambio_activo_desde": "2026-06-09T13:45:19.105Z"
+  "cambio_activo_desde": "2026-06-11T14:40:31.650Z"
 }
