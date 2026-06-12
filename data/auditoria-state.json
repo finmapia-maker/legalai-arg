@@ -86,10 +86,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-11T14:40:31.650Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-12T14:10:52.738Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar flujo MercadoPago por prueba con pasarela alternativa o modo sandbox explícito: (1) forzar una compra de prueba con credenciales de test y loguear respuesta completa del SDK, (2) si el preference_id se genera pero el pago no se aprueba, verificar que el monto no esté en 0 o en formato incorrecto, (3) revisar que el access_token sea de PRODUCCIÓN y no de sandbox si el sitio está live, (4) agregar endpoint /debug-payment que devuelva el JSON completo de la preferencia generada para inspección manual, (5) si MercadoPago sigue fallando sin logs claros, instalar Stripe o PayPal como canal alternativo temporal para desbloquear ventas",
     "archivo": "backend/payment.js",
