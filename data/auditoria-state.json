@@ -84,19 +84,24 @@
       "descripcion": "Reemplazar flujo MercadoPago por prueba con pasarela alternativa o modo sandbox explícito: (1) forzar una compra de prueba con credenciales de test y loguear respuesta completa del SDK, (2) si el preference_id se genera pero el pago no se aprueba, verificar que el monto no esté en 0 o en formato incorrecto, (3) revisar que el access_token sea de PRODUCCIÓN y no de sandbox si el sitio está live, (4) agregar endpoint /debug-payment que devuelva el JSON completo de la preferencia generada para inspección manual, (5) si MercadoPago sigue fallando sin logs claros, instalar Stripe o PayPal como canal alternativo temporal para desbloquear ventas",
       "fecha": "2026-06-11T14:40:31.650Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Abandonar temporalmente MercadoPago como flujo principal. Implementar Stripe Checkout o PayPal como pasarela alternativa activa para producción. Paralelamente: (1) loguear en consola/servidor el JSON completo de preferencia MP generada, (2) verificar access_token de producción vs sandbox, (3) confirmar que back_urls apunten a rutas reales y accesibles, (4) si en 48h con pasarela alternativa hay 0 ventas también, escalar a revisión de precio y confianza de landing",
+      "fecha": "2026-06-14T13:00:25.868Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-13T12:27:32.167Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-14T13:00:25.868Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Reemplazar flujo MercadoPago por prueba con pasarela alternativa o modo sandbox explícito: (1) forzar una compra de prueba con credenciales de test y loguear respuesta completa del SDK, (2) si el preference_id se genera pero el pago no se aprueba, verificar que el monto no esté en 0 o en formato incorrecto, (3) revisar que el access_token sea de PRODUCCIÓN y no de sandbox si el sitio está live, (4) agregar endpoint /debug-payment que devuelva el JSON completo de la preferencia generada para inspección manual, (5) si MercadoPago sigue fallando sin logs claros, instalar Stripe o PayPal como canal alternativo temporal para desbloquear ventas",
-    "archivo": "backend/payment.js",
+    "descripcion": "Abandonar temporalmente MercadoPago como flujo principal. Implementar Stripe Checkout o PayPal como pasarela alternativa activa para producción. Paralelamente: (1) loguear en consola/servidor el JSON completo de preferencia MP generada, (2) verificar access_token de producción vs sandbox, (3) confirmar que back_urls apunten a rutas reales y accesibles, (4) si en 48h con pasarela alternativa hay 0 ventas también, escalar a revisión de precio y confianza de landing",
+    "archivo": "payment.js o backend/checkout",
     "tipo": "flujo_pago",
-    "hipotesis": "si se confirma que access_token es de producción y la preferencia se genera correctamente → el pago debería procesarse y convertir al menos 1 de cada 4 usuarios que inician pago",
+    "hipotesis": "Si se reemplaza MercadoPago por Stripe/PayPal funcional en producción → se desbloqueará al menos 1 venta en 48h dado que hay tráfico real e intención de pago confirmada (2 inicios de pago en 48h)",
     "conv_base": 0,
-    "clics_base": 46
+    "clics_base": 28
   },
-  "cambio_activo_desde": "2026-06-11T14:40:31.650Z"
+  "cambio_activo_desde": "2026-06-14T13:00:25.868Z"
 }
