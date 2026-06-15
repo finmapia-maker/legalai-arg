@@ -91,10 +91,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-14T13:00:25.868Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-15T16:20:01.768Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Abandonar temporalmente MercadoPago como flujo principal. Implementar Stripe Checkout o PayPal como pasarela alternativa activa para producción. Paralelamente: (1) loguear en consola/servidor el JSON completo de preferencia MP generada, (2) verificar access_token de producción vs sandbox, (3) confirmar que back_urls apunten a rutas reales y accesibles, (4) si en 48h con pasarela alternativa hay 0 ventas también, escalar a revisión de precio y confianza de landing",
     "archivo": "payment.js o backend/checkout",
