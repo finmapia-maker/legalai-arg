@@ -1,28 +1,28 @@
 {
-  "fecha": "2026-06-15T16:20:01.768Z",
+  "fecha": "2026-06-16T15:58:19.588Z",
   "periodo_48h": {
-    "visitas": 19,
-    "clics": 57,
+    "visitas": 27,
+    "clics": 103,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 159,
+    "total_eventos": 279,
     "por_fuente": {
       "google_ads": {
-        "visitas": 13,
-        "clics": 53,
+        "visitas": 23,
+        "clics": 96,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 6,
+        "visitas": 4,
         "clics": 2,
         "ventas": 0,
         "total_ars": 0
       },
       "directo": {
         "visitas": 0,
-        "clics": 2,
+        "clics": 5,
         "ventas": 0,
         "total_ars": 0
       }
@@ -30,48 +30,60 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 81,
+        "eventos": 134,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 41,
+        "eventos": 79,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 27,
+        "eventos": 43,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 4,
+        "eventos": 12,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "planes",
-        "eventos": 3,
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "hero_alquiler",
-        "eventos": 1,
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "pagar_mp",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "hero_alquiler",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de sociedad simple entre socios",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de compraventa de vehículo automotor",
+        "documento": "Documento legal: Contrato de alquiler de vivienda",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -80,28 +92,28 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 50,
-    "clics": 172,
+    "visitas": 61,
+    "clics": 194,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 523,
+    "total_eventos": 599,
     "por_fuente": {
       "google_ads": {
-        "visitas": 32,
-        "clics": 163,
+        "visitas": 42,
+        "clics": 185,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 18,
-        "clics": 6,
+        "visitas": 19,
+        "clics": 4,
         "ventas": 0,
         "total_ars": 0
       },
       "directo": {
         "visitas": 0,
-        "clics": 3,
+        "clics": 5,
         "ventas": 0,
         "total_ars": 0
       }
@@ -109,60 +121,60 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 259,
+        "eventos": 298,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 164,
+        "eventos": 187,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 67,
+        "eventos": 72,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 17,
+        "eventos": 23,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "planes",
-        "eventos": 6,
+        "eventos": 7,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 4,
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de compraventa de vehículo automotor",
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "pagar_mp",
         "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "hero_alquiler",
-        "eventos": 1,
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "pagar_mp",
-        "eventos": 1,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Error al verificar pago MercadoPago",
+        "documento": "Contrato de sociedad simple entre socios",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -171,48 +183,50 @@
     "ultimas_conversiones": []
   },
   "embudo_eventos": {
-    "ads_landing_view": 35,
-    "scroll_75pct": 20,
-    "page_view": 19,
-    "click_pagar": 6,
-    "cta_generador": 17,
-    "scroll_50pct": 16,
-    "scroll_25pct": 11,
-    "click_comercial": 1,
-    "inicio_formulario": 2,
-    "form_first_input": 6,
-    "cta_doc_inline": 9,
-    "preview_live_ok": 6,
-    "click_residencial": 5,
-    "interaccion": 2,
-    "doc_selected": 3,
+    "ads_landing_view": 67,
+    "scroll_75pct": 31,
+    "inicio_formulario": 6,
+    "scroll_50pct": 24,
+    "scroll_25pct": 24,
+    "cta_generador": 29,
+    "form_first_input": 12,
+    "page_view": 27,
+    "cta_doc_inline": 8,
+    "click_pagar": 15,
+    "click_comercial": 4,
+    "doc_selected": 7,
+    "click_residencial": 8,
+    "preview_live_ok": 9,
+    "error": 2,
+    "checkout_start": 1,
+    "interaccion": 4,
     "frontend_error": 1
   },
-  "total_eventos": 159,
+  "total_eventos": 279,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 19,
+      "count": 27,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 18,
-      "drop_pct": 5
+      "count": 27,
+      "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 8,
-      "drop_pct": 56
+      "count": 18,
+      "drop_pct": 33
     },
     {
       "label": "Preview live OK",
-      "count": 6,
-      "drop_pct": 25
+      "count": 9,
+      "drop_pct": 50
     },
     {
       "label": "Pago iniciado",
-      "count": 6,
+      "count": 16,
       "drop_pct": 0
     },
     {
@@ -224,12 +238,12 @@
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 3,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 3,
+      "count": 2,
       "drop_pct": 0
     },
     {
@@ -246,27 +260,27 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 47,
+      "count": 89,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 17,
-      "drop_pct": 64
+      "count": 27,
+      "drop_pct": 70
     },
     {
       "label": "Ads inicio formulario",
-      "count": 15,
-      "drop_pct": 12
+      "count": 26,
+      "drop_pct": 4
     },
     {
       "label": "Ads preview OK",
-      "count": 6,
-      "drop_pct": 60
+      "count": 9,
+      "drop_pct": 65
     },
     {
       "label": "Ads inicio pago",
-      "count": 6,
+      "count": 14,
       "drop_pct": 0
     },
     {
@@ -285,8 +299,8 @@
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 6,
-    "doc_selected": 3
+    "form_first_input": 12,
+    "doc_selected": 7
   },
   "cuello_botella": {
     "funnel": "doc",
@@ -299,7 +313,7 @@
       "Errores frontend detectados: 1 → revisar consola/compatibilidad mobile.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 53 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 96 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"

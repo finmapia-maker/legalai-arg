@@ -89,19 +89,24 @@
       "descripcion": "Abandonar temporalmente MercadoPago como flujo principal. Implementar Stripe Checkout o PayPal como pasarela alternativa activa para producción. Paralelamente: (1) loguear en consola/servidor el JSON completo de preferencia MP generada, (2) verificar access_token de producción vs sandbox, (3) confirmar que back_urls apunten a rutas reales y accesibles, (4) si en 48h con pasarela alternativa hay 0 ventas también, escalar a revisión de precio y confianza de landing",
       "fecha": "2026-06-14T13:00:25.868Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reducir precio del documento en al menos 40% (prueba con precio ancla tachado + precio promocional visible). Agregar señales de confianza en la pantalla previa al pago: testimonios reales, número de documentos generados, badge de pago seguro. Si el precio actual supera ARS 2000, probar con ARS 990 como test de sensibilidad. Paralelamente verificar que la pasarela alternativa (Stripe/PayPal) esté efectivamente activa y no solo configurada.",
+      "fecha": "2026-06-16T15:58:19.588Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-15T16:20:01.768Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-16T15:58:19.588Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Abandonar temporalmente MercadoPago como flujo principal. Implementar Stripe Checkout o PayPal como pasarela alternativa activa para producción. Paralelamente: (1) loguear en consola/servidor el JSON completo de preferencia MP generada, (2) verificar access_token de producción vs sandbox, (3) confirmar que back_urls apunten a rutas reales y accesibles, (4) si en 48h con pasarela alternativa hay 0 ventas también, escalar a revisión de precio y confianza de landing",
-    "archivo": "payment.js o backend/checkout",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si se reemplaza MercadoPago por Stripe/PayPal funcional en producción → se desbloqueará al menos 1 venta en 48h dado que hay tráfico real e intención de pago confirmada (2 inicios de pago en 48h)",
+    "descripcion": "Reducir precio del documento en al menos 40% (prueba con precio ancla tachado + precio promocional visible). Agregar señales de confianza en la pantalla previa al pago: testimonios reales, número de documentos generados, badge de pago seguro. Si el precio actual supera ARS 2000, probar con ARS 990 como test de sensibilidad. Paralelamente verificar que la pasarela alternativa (Stripe/PayPal) esté efectivamente activa y no solo configurada.",
+    "archivo": "index.html",
+    "tipo": "precio",
+    "hipotesis": "Si el precio baja y se agregan señales de confianza → al menos 1 venta en 48h, confirmando que el bloqueo ya no es técnico sino de percepción de valor",
     "conv_base": 0,
-    "clics_base": 28
+    "clics_base": 103
   },
-  "cambio_activo_desde": "2026-06-14T13:00:25.868Z"
+  "cambio_activo_desde": "2026-06-16T15:58:19.588Z"
 }
