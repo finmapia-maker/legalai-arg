@@ -500,7 +500,7 @@ Formato exacto:
  "titulo": "...",
  "descripcion": "...",
  "legislacion": "...",
- "precio_usd": 8,
+ "precio_usd": ${(lower.includes("alquiler") ? 11 : 8) * PRICE_MULTIPLIER},
  "upgrade_porcentaje": 40,
  "categoria": "basico|intermedio|complejo",
  "requiere_advertencia_legal": false,
