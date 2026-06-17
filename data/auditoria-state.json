@@ -96,10 +96,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-16T15:58:19.588Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-17T14:26:39.883Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reducir precio del documento en al menos 40% (prueba con precio ancla tachado + precio promocional visible). Agregar señales de confianza en la pantalla previa al pago: testimonios reales, número de documentos generados, badge de pago seguro. Si el precio actual supera ARS 2000, probar con ARS 990 como test de sensibilidad. Paralelamente verificar que la pasarela alternativa (Stripe/PayPal) esté efectivamente activa y no solo configurada.",
     "archivo": "index.html",
