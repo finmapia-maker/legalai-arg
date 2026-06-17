@@ -12,7 +12,7 @@ const PREVIEWS_KEY = "previews";
 
 const PACKS_KEY = "packs";
 
-const PRICE_MULTIPLIER = 0.5;
+const PRICE_MULTIPLIER = 0.3;
 
 export default {
   async fetch(request, env, ctx) {
