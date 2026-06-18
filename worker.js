@@ -506,7 +506,7 @@ Formato exacto:
  "requiere_advertencia_legal": false,
  "campos": [{"id":"...", "label":"...", "tipo":"text|number|date|textarea|select", "requerido":true, "placeholder":"...", "opciones":["..."]}]
 }
-Máximo 12 campos. IDs en snake_case.`;
+Si el documento identifica personas o entidades, incluí para cada parte campos separados de nombre o razón social, DNI / CUIT / CUIL y domicilio. Priorizá esos datos identificatorios dentro del máximo permitido.\nMáximo 12 campos. IDs en snake_case.`;
 
   try {
     const txt = await callBestAI(env, prompt, 1200);
@@ -593,7 +593,11 @@ function camposFallback(tipoDocumento) {
   if (lower.includes("alquiler")) {
     return [
       { id: "propietario", label: "Propietario / locador", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
+      { id: "dni_cuit_locador", label: "DNI / CUIT / CUIL del locador", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3" },
+      { id: "domicilio_locador", label: "Domicilio del locador", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "inquilino", label: "Inquilino / locatario", tipo: "text", requerido: true, placeholder: "Nombre completo" },
+      { id: "dni_cuit_locatario", label: "DNI / CUIT / CUIL del locatario", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIL 20-12345678-3" },
+      { id: "domicilio_locatario", label: "Domicilio del locatario", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "direccion", label: "Dirección del inmueble", tipo: "text", requerido: true, placeholder: "Calle, número, piso/depto" },
       { id: "ciudad", label: "Ciudad", tipo: "text", requerido: true, placeholder: "Ej: Buenos Aires" },
       { id: "provincia", label: "Provincia", tipo: "text", requerido: true, placeholder: "Ej: CABA" },
@@ -610,7 +614,11 @@ function camposFallback(tipoDocumento) {
   if (lower.includes("community") || lower.includes("freelance") || lower.includes("servicio") || lower.includes("diseño") || lower.includes("dev")) {
     return [
       { id: "cliente", label: "Cliente", tipo: "text", requerido: true, placeholder: "Nombre o razón social" },
+      { id: "dni_cuit_cliente", label: "DNI / CUIT / CUIL del cliente", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
+      { id: "domicilio_cliente", label: "Domicilio del cliente", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "prestador", label: "Prestador / freelancer", tipo: "text", requerido: true, placeholder: "Nombre completo o marca" },
+      { id: "dni_cuit_prestador", label: "DNI / CUIT / CUIL del prestador", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3" },
+      { id: "domicilio_prestador", label: "Domicilio del prestador", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "servicio", label: "Servicio contratado", tipo: "textarea", requerido: true, placeholder: "Describir tareas incluidas" },
       { id: "honorarios", label: "Honorarios", tipo: "text", requerido: true, placeholder: "Monto y moneda" },
       { id: "plazo", label: "Plazo o duración", tipo: "text", requerido: true, placeholder: "Ej: mensual / 3 meses" },
@@ -623,7 +631,11 @@ function camposFallback(tipoDocumento) {
 
   return [
     { id: "parte_1", label: "Parte 1", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
+    { id: "dni_cuit_parte_1", label: "DNI / CUIT / CUIL de la parte 1", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
+    { id: "domicilio_parte_1", label: "Domicilio de la parte 1", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
     { id: "parte_2", label: "Parte 2", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
+    { id: "dni_cuit_parte_2", label: "DNI / CUIT / CUIL de la parte 2", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
+    { id: "domicilio_parte_2", label: "Domicilio de la parte 2", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
     { id: "objeto", label: "Objeto del documento", tipo: "textarea", requerido: true, placeholder: "Describir el motivo o acuerdo" },
     { id: "monto", label: "Monto / valor si corresponde", tipo: "text", requerido: false, placeholder: "Ej: $100.000" },
     { id: "plazo", label: "Plazo / fecha", tipo: "text", requerido: false, placeholder: "Ej: 30 días" },
