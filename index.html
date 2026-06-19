@@ -557,7 +557,7 @@ footer a:hover{color:var(--gold);}
         Crear mi contrato ahora →
       </a>
       <p style="text-align:center;font-size:.75rem;color:var(--mist);margin-top:8px;font-family:'DM Mono',monospace;">
-        · Pago único · Descarga directa después del pago ·
+        Desde <strong style="color:var(--ink);" id="hero-precio-desde">$ —</strong> ARS · Pago único · Descarga directa después del pago
       </p>
       <div style="margin:12px auto 0;padding:12px 16px;max-width:440px;background:var(--gold-dim);border:1px solid rgba(200,168,75,.28);border-radius:9px;font-size:.82rem;line-height:1.55;color:var(--ink);text-align:center;">
         <strong>Importante:</strong> el PDF no llega por email. Después de pagar, volvés automáticamente a esta página y aparece el botón <strong>“Descargar PDF”</strong>.
@@ -824,7 +824,7 @@ footer a:hover{color:var(--gold);}
       <div class="success-box">
         <div class="success-icon">📄</div>
         <h2>¡Tu documento está listo!</h2>
-        <p>Fue generado exitosamente. Descargalo ahora desde el botón de abajo.<br><strong style="color:var(--ink);">No se envía por email ni queda almacenado.</strong></p>
+        <p>Fue generado exitosamente. Descargalo ahora desde el botón de abajo.<br><strong style="color:var(--ink);">No se envía por email. El respaldo temporal para reintentar la descarga vence automáticamente.</strong></p>
         <button class="btn gold" onclick="descargarPDF()">⬇ Descargar PDF</button>
 
         <div class="upsell-block" id="upsellSinMarca">
@@ -1287,7 +1287,7 @@ footer a:hover{color:var(--gold);}
         <div class="about-step"><div class="about-step-n">①</div><div class="about-step-title">Describís qué necesitás</div><div class="about-step-desc">Escribí con tus propias palabras o elegí entre 32 tipos de documentos predefinidos. Indicá el país y la provincia para que el documento se adapte a la legislación correspondiente.</div></div>
         <div class="about-step"><div class="about-step-n">②</div><div class="about-step-title">Completás el formulario</div><div class="about-step-desc">La IA analiza tu pedido y genera un formulario personalizado para ese documento específico. Cada campo tiene ejemplos orientativos reales. Sin tecnicismos, sin confusión.</div></div>
         <div class="about-step"><div class="about-step-n">③</div><div class="about-step-title">Pagás con MercadoPago</div><div class="about-step-desc">Pago seguro con tarjeta, transferencia o cualquier medio disponible en MercadoPago. El precio se muestra en pesos al tipo de cambio del momento.</div></div>
-        <div class="about-step"><div class="about-step-n">④</div><div class="about-step-title">Descargás el PDF en la web</div><div class="about-step-desc">Al volver de MercadoPago aparece el botón “Descargar PDF”. El archivo baja directo a tu dispositivo: no se envía por email ni se almacena en ningún servidor.</div></div>
+        <div class="about-step"><div class="about-step-n">④</div><div class="about-step-title">Descargás el PDF en la web</div><div class="about-step-desc">Al volver de MercadoPago aparece el botón “Descargar PDF”. El archivo baja directo a tu dispositivo y no se envía por email. Los datos se conservan temporalmente, por un máximo de 24 horas, solo para completar o reintentar la descarga.</div></div>
       </div>
     </div>
 
@@ -1385,8 +1385,8 @@ footer a:hover{color:var(--gold);}
       <h2 class="about-block-title">Preguntas frecuentes</h2>
       <div class="about-faq">
         <div class="about-faq-item"><div class="about-faq-q">¿Los documentos tienen validez legal?</div><div class="about-faq-a">Son documentos orientativos redactados conforme a la legislación vigente. Para presentación formal ante organismos o situaciones de alta complejidad, recomendamos validarlos con un profesional matriculado.</div></div>
-        <div class="about-faq-item"><div class="about-faq-q">¿El PDF llega por email?</div><div class="about-faq-a"><strong>No.</strong> Después de pagar con MercadoPago volvés automáticamente a LegalAI Arg. Allí se genera el documento y aparece el botón “Descargar PDF”. Tenés que descargarlo en ese momento porque no se envía por correo ni queda almacenado.</div></div>
-        <div class="about-faq-item"><div class="about-faq-q">¿Mis datos se guardan en algún servidor?</div><div class="about-faq-a">No. El PDF se genera directamente en tu navegador y no se almacena en ningún servidor. Los datos del formulario solo existen durante tu sesión.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿El PDF llega por email?</div><div class="about-faq-a"><strong>No.</strong> Después de pagar con MercadoPago volvés automáticamente a LegalAI Arg. Allí se genera el documento y aparece el botón “Descargar PDF”. No se envía por correo. El sistema conserva un respaldo temporal por hasta 24 horas para permitir reintentos si la descarga falla.</div></div>
+        <div class="about-faq-item"><div class="about-faq-q">¿Mis datos se guardan en algún servidor?</div><div class="about-faq-a">Se conservan temporalmente por un máximo de 24 horas, únicamente para verificar el pago, generar el documento y permitir reintentos de descarga. Después vencen automáticamente.</div></div>
         <div class="about-faq-item"><div class="about-faq-q">¿Para qué país están los documentos?</div><div class="about-faq-a">El sistema está optimizado para Argentina pero genera documentos para cualquier país y provincia. La IA adapta la legislación citada según el lugar indicado.</div></div>
         <div class="about-faq-item"><div class="about-faq-q">¿Qué pasa si me equivoco en algún dato?</div><div class="about-faq-a">Podés volver al formulario antes de pagar para corregir cualquier dato. Una vez generado el documento, los datos quedan fijos en ese PDF.</div></div>
         <div class="about-faq-item"><div class="about-faq-q">¿Cómo funciona el pack de documentos?</div><div class="about-faq-a">Cuando comprás el pack recibís un código que podés usar en cualquier momento desde cualquier dispositivo. Tiene vigencia de 30 días y viene con créditos para los documentos adicionales que elegiste.</div></div>
@@ -1424,6 +1424,39 @@ const CONFIG = {
   CONTACT_EMAIL: 'finmap.ia@gmail.com',
   PRECIO_GUIA_USD: 2.5,
 };
+
+const LEGALAI_PAYMENT_KEYS = new Set([
+  'legalai_datos','legalai_meta','legalai_titulo','legalai_previewId','legalai_precio_usd',
+  'legalai_monto_ars','legalai_sessionId','legalai_origen','legalai_paymentId','legalai_texto',
+  'legalai_upgrade_pendiente','legalai_guia_pendiente','legalai_pack_cot','legalai_pack_ref',
+  'legalai_external_reference'
+]);
+function guardarEstadoPago(key, value) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  try { sessionStorage.setItem(key, text); } catch(_) {}
+  if (LEGALAI_PAYMENT_KEYS.has(key)) { try { localStorage.setItem(key, text); } catch(_) {} }
+}
+function leerEstadoPago(key, fallback = null) {
+  let value = null;
+  try { value = sessionStorage.getItem(key); } catch(_) {}
+  if (value === null && LEGALAI_PAYMENT_KEYS.has(key)) { try { value = localStorage.getItem(key); } catch(_) {} }
+  return value === null ? fallback : value;
+}
+function borrarEstadoPago(key) {
+  try { sessionStorage.removeItem(key); } catch(_) {}
+  if (LEGALAI_PAYMENT_KEYS.has(key)) { try { localStorage.removeItem(key); } catch(_) {} }
+}
+function parseEstadoPago(key, fallback) {
+  try { return JSON.parse(leerEstadoPago(key, '')); } catch(_) { return fallback; }
+}
+function obtenerPaymentIdReal(params) {
+  const candidatos = [params.get('collection_id'), params.get('payment_id')].filter(Boolean);
+  return candidatos.find(v => /^\d+$/.test(String(v))) || '';
+}
+function limpiarRetornoMercadoPago() {
+  const hash = window.location.hash === '#generador' ? '#generador' : '';
+  window.history.replaceState({}, '', window.location.pathname + hash);
+}
 
 // ── Tracking /evento ──────────────────────────────────────────────────────
 function getUTM() {
@@ -2140,9 +2173,9 @@ async function irAPreview() {
     titulo: G.form?.titulo || G.tipo, categoria: G.categoria, precio_usd: G.precio_usd,
     upgrade_porcentaje: G.upgrade_porcentaje, requiere_advertencia_legal: G.requiere_advertencia_legal,
   };
-  sessionStorage.setItem('legalai_datos',  JSON.stringify(datos));
-  sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
-  sessionStorage.setItem('legalai_meta',   JSON.stringify(meta));
+  guardarEstadoPago('legalai_datos', datos);
+  guardarEstadoPago('legalai_titulo', G.form?.titulo || G.tipo);
+  guardarEstadoPago('legalai_meta', meta);
 
   // Si tiene pack, saltar preview e ir directo al pago
   if (G.codigoPack) { irAlPago(); return; }
@@ -2167,7 +2200,7 @@ async function irAPreview() {
 
     // Guardar previewId para usarlo en /generar
     G.previewId = data.previewId;
-    sessionStorage.setItem('legalai_previewId', data.previewId);
+    guardarEstadoPago('legalai_previewId', data.previewId);
 
     // Renderizar preview en canvas con marca de agua
     renderizarPreviewCanvas(data.texto, G.form?.titulo || G.tipo);
@@ -2180,7 +2213,7 @@ async function irAPreview() {
     // FALLBACK: preview falló → avanzar al pago sin bloquear
     document.getElementById('loadingPreview').classList.remove('visible');
     G.previewId = null;
-    sessionStorage.removeItem('legalai_previewId');
+    borrarEstadoPago('legalai_previewId');
     track('preview_fallback', { ...getCurrentDocTracking(), error: err.message?.slice(0,80) });
     track('preview_live_error', { ...getCurrentDocTracking(), error: err.message?.slice(0,80), origen_error: 'preview_ia' });
     showCard('2');
@@ -2210,11 +2243,11 @@ function irAlPagoDirecto() {
     titulo: G.form?.titulo || G.tipo, categoria: G.categoria, precio_usd: G.precio_usd,
     upgrade_porcentaje: G.upgrade_porcentaje, requiere_advertencia_legal: G.requiere_advertencia_legal,
   };
-  sessionStorage.setItem('legalai_datos',  JSON.stringify(datos));
-  sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo);
-  sessionStorage.setItem('legalai_meta',   JSON.stringify(meta));
+  guardarEstadoPago('legalai_datos', datos);
+  guardarEstadoPago('legalai_titulo', G.form?.titulo || G.tipo);
+  guardarEstadoPago('legalai_meta', meta);
   G.previewId = null;
-  sessionStorage.removeItem('legalai_previewId');
+  borrarEstadoPago('legalai_previewId');
   track('click_pagar', getCurrentDocTracking());
   ocultarStickyMobile();
   irAlPago();
@@ -2331,7 +2364,7 @@ function renderizarPreviewCanvas(texto, titulo) {
 
 function volverDatosDesdePreview() {
   G.previewId = null;
-  sessionStorage.removeItem('legalai_previewId');
+  borrarEstadoPago('legalai_previewId');
   showCard(2);
 }
 
@@ -2341,10 +2374,17 @@ function irAlPagoDesdePreview() {
 
 async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPago, onError }) {
   try {
-    const ref = sessionStorage.getItem('legalai_ref') || null;
+    const ref = sessionStorage.getItem('legalai_ref') || localStorage.getItem('legalai_ref') || null;
+    const datosDoc = parseEstadoPago('legalai_datos', null);
+    const metadata = parseEstadoPago('legalai_meta', null);
+    const previewId = leerEstadoPago('legalai_previewId', null);
+    guardarEstadoPago('legalai_external_reference', externalRef);
     const res  = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, montoARS, descripcion, externalRef, ref, datosPago: Object.assign({}, datosPago, {utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',utm_cnt:sessionStorage.getItem('legalai_utm_content')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''}) }),
+      body: JSON.stringify({
+        tipo, montoARS, descripcion, externalRef, ref, datosDoc, metadata, previewId,
+        datosPago: Object.assign({}, datosPago, {utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',utm_cnt:sessionStorage.getItem('legalai_utm_content')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''})
+      }),
     });
     const data = await res.json();
     if (!data.init_point) throw new Error(data.detalle || data.error || 'Error al crear el pago');
@@ -2361,11 +2401,11 @@ async function procesarPago() {
   const { toARS } = calcularPrecios();
   const montoARS = toARS(G.precio_usd) || Math.round(G.precio_usd * 1200);
   const sessionId = 'sess_' + Date.now();
-  sessionStorage.setItem('legalai_sessionId', sessionId);
-  sessionStorage.setItem('legalai_precio_usd', String(G.precio_usd || 5));
-  sessionStorage.setItem('legalai_monto_ars', String(montoARS));
-  sessionStorage.setItem('legalai_titulo', G.form?.titulo || G.tipo || 'Documento legal');
-  sessionStorage.setItem('legalai_origen', 'index');
+  guardarEstadoPago('legalai_sessionId', sessionId);
+  guardarEstadoPago('legalai_precio_usd', String(G.precio_usd || 5));
+  guardarEstadoPago('legalai_monto_ars', String(montoARS));
+  guardarEstadoPago('legalai_titulo', G.form?.titulo || G.tipo || 'Documento legal');
+  guardarEstadoPago('legalai_origen', 'index');
   track('click_pagar', { ...getCurrentDocTracking(), precio_usd: G.precio_usd || 5, monto_ars: montoARS });
   track('inicio_pago', { ...getCurrentDocTracking(), precio_usd: G.precio_usd || 5, monto_ars: montoARS });
   await iniciarPagoMP({
@@ -2377,48 +2417,59 @@ async function procesarPago() {
   });
 }
 
-async function generarDocumento(paymentId) {
+async function generarDocumento(paymentId, externalRef = '') {
+  const btnPagar = document.getElementById('btnPagar');
+  if (btnPagar && paymentId && !String(paymentId).startsWith('PACK_')) btnPagar.style.display = 'none';
   document.getElementById('card3').classList.remove('visible');
   document.getElementById('loadingDoc').classList.add('visible');
   try {
-    const datos     = JSON.parse(sessionStorage.getItem('legalai_datos'));
-    const meta      = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
+    const datos = parseEstadoPago('legalai_datos', null);
+    const meta = parseEstadoPago('legalai_meta', {});
     const codigoPack = G.codigoPack || null;
-    const previewId = G.previewId || sessionStorage.getItem('legalai_previewId') || null;
-    const res   = await fetch(`${CONFIG.WORKER_URL}/generar`, {
+    const previewId = G.previewId || leerEstadoPago('legalai_previewId', null);
+    const referencia = externalRef || leerEstadoPago('legalai_external_reference', '');
+    const res = await fetch(`${CONFIG.WORKER_URL}/generar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paymentId, datosDoc: datos, metadata: meta, codigoPack, previewId }),
-      signal: AbortSignal.timeout(35000),
+      body: JSON.stringify({ paymentId, externalRef: referencia, datosDoc: datos, metadata: meta, codigoPack, previewId }),
+      signal: AbortSignal.timeout(45000),
     });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    G.texto = data.texto; G.paymentId = data.paymentId || paymentId;
-    G.previewId = null; sessionStorage.removeItem('legalai_previewId');
-    sessionStorage.setItem('legalai_texto',     data.texto);
-    sessionStorage.setItem('legalai_paymentId', G.paymentId);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.error) throw new Error(data.message || data.error || `Error del servidor (${res.status})`);
+    G.texto = data.texto;
+    G.paymentId = data.paymentId || paymentId;
+    if (data.metadata?.titulo && !leerEstadoPago('legalai_titulo')) guardarEstadoPago('legalai_titulo', data.metadata.titulo);
+    G.previewId = null;
+    borrarEstadoPago('legalai_previewId');
+    guardarEstadoPago('legalai_texto', data.texto);
+    guardarEstadoPago('legalai_paymentId', G.paymentId);
+    borrarEstadoPago('legalai_datos');
+    borrarEstadoPago('legalai_meta');
+    borrarEstadoPago('legalai_external_reference');
     document.getElementById('loadingDoc').classList.remove('visible');
     showCard(4);
-    track('pago_ok', { status: 'approved', doc_tipo: G.form?.titulo || G.tipo, monto: G.precio_usd || 0, amount: G.precio_usd || 0, amount_ars: Number(sessionStorage.getItem('legalai_monto_ars') || 0), payment_id: G.paymentId, payment_method: 'MercadoPago' });
+    limpiarRetornoMercadoPago();
+    track('pago_ok', { status: 'approved', doc_tipo: data.metadata?.titulo || G.form?.titulo || G.tipo || leerEstadoPago('legalai_titulo',''), monto: G.precio_usd || 0, amount: G.precio_usd || 0, amount_ars: Number(leerEstadoPago('legalai_monto_ars','0') || 0), payment_id: G.paymentId, payment_method: 'MercadoPago' });
   } catch(err) {
     document.getElementById('loadingDoc').classList.remove('visible');
     document.getElementById('card3').classList.add('visible');
+    if (btnPagar) btnPagar.style.display = 'none';
     const msg = (err.name === 'TimeoutError' || err.name === 'AbortError')
-      ? 'La generación tardó demasiado. Tu pago fue acreditado — hacé click en "Reintentar".'
-      : 'Error al generar: ' + err.message;
-    showErr('alert3', '⚠️ ' + msg);
+      ? 'La generación tardó demasiado. Tu pago sigue acreditado.'
+      : (err.message || 'No se pudo generar el documento.');
+    showErr('alert3', '⚠️ ' + msg + ' No vuelvas a pagar. Usá “Reintentar generación”.');
     if (!document.getElementById('btnReintentar')) {
       const btn = document.createElement('button');
-      btn.id = 'btnReintentar'; btn.className = 'btn ghost'; btn.style.marginTop = '10px';
-      btn.textContent = '↺ Reintentar generación';
-      btn.onclick = () => { document.getElementById('btnReintentar').remove(); hideErr('alert3'); generarDocumento(paymentId); };
+      btn.id = 'btnReintentar'; btn.className = 'btn gold'; btn.style.marginTop = '10px';
+      btn.textContent = '↺ Reintentar generación y descarga';
+      btn.onclick = () => { btn.remove(); hideErr('alert3'); generarDocumento(paymentId, externalRef); };
       document.getElementById('alert3').insertAdjacentElement('afterend', btn);
     }
   }
 }
 
 function descargarPDF() {
-  const texto  = G.texto || sessionStorage.getItem('legalai_texto');
-  const titulo = sessionStorage.getItem('legalai_titulo') || 'documento-legal';
+  const texto  = G.texto || leerEstadoPago('legalai_texto', '');
+  const titulo = leerEstadoPago('legalai_titulo', 'documento-legal');
   if (!texto) { alert('No se encontró el documento. Generalo de nuevo.'); return; }
   _generarPDF(texto, titulo, true, false);
 }
@@ -2450,7 +2501,7 @@ async function confirmarSinMarca() {
   const montoARS      = toARS(upgradeUSD) || Math.round(upgradeUSD * 1200);
   const paymentIdOrig = G.paymentId || sessionStorage.getItem('legalai_paymentId') || 'unknown';
   const titulo        = sessionStorage.getItem('legalai_titulo') || 'documento';
-  sessionStorage.setItem('legalai_upgrade_pendiente', paymentIdOrig);
+  guardarEstadoPago('legalai_upgrade_pendiente', paymentIdOrig);
   await iniciarPagoMP({
     tipo: 'upgrade', montoARS,
     descripcion: `Versión sin marca: ${titulo}`,
@@ -2461,8 +2512,8 @@ async function confirmarSinMarca() {
 }
 
 function descargarPDFSinMarca(mantenerAdvertencia = false) {
-  const texto  = G.texto || sessionStorage.getItem('legalai_texto');
-  const titulo = sessionStorage.getItem('legalai_titulo') || 'documento-legal';
+  const texto  = G.texto || leerEstadoPago('legalai_texto', '');
+  const titulo = leerEstadoPago('legalai_titulo', 'documento-legal');
   if (!texto) { alert('No se encontró el documento.'); return; }
   _generarPDF(texto, titulo, false, mantenerAdvertencia);
 }
@@ -2483,7 +2534,7 @@ async function confirmarGuia() {
   const montoARS      = toARS(guiaUSD) || Math.round(guiaUSD * 1200);
   const paymentIdOrig = G.paymentId || sessionStorage.getItem('legalai_paymentId') || 'unknown';
   const titulo        = sessionStorage.getItem('legalai_titulo') || 'documento';
-  sessionStorage.setItem('legalai_guia_pendiente', paymentIdOrig);
+  guardarEstadoPago('legalai_guia_pendiente', paymentIdOrig);
   await iniciarPagoMP({
     tipo: 'guia', montoARS,
     descripcion: `Guía de uso: ${titulo}`,
@@ -2505,7 +2556,8 @@ async function generarYDescargarGuia(paymentIdGuia) {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    _generarPDF(data.guia, (data.titulo || 'documento') + ' - Guía de uso', true, false);
+    _generarPDF(data.guia || data.texto, (data.titulo || 'documento') + ' - Guía de uso', true, false);
+    limpiarRetornoMercadoPago();
   } catch(err) {
     alert('Error al generar la guía: ' + err.message);
   } finally {
@@ -2583,17 +2635,17 @@ async function confirmarPack() {
   if (!packCotizacion) { showErr('alertPackB', 'Calculá el precio antes de confirmar.'); return; }
   const doc2 = document.getElementById('packDoc2').value.trim();
   const doc3 = document.getElementById('packDoc3').value.trim();
-  sessionStorage.setItem('legalai_pack_cot', JSON.stringify({
+  guardarEstadoPago('legalai_pack_cot', {
     doc2, doc3,
     precioDoc2: packCotizacion.doc2.precio_usd, precioDoc3: packCotizacion.doc3.precio_usd,
     totalConDescuento: packCotizacion.totalConDescuento, token: packCotizacion.token, tokenTs: packCotizacion.tokenTs,
     paymentIdDoc1: G.paymentId || sessionStorage.getItem('legalai_paymentId'),
     pais: G.pais || 'Argentina', provincia: G.provincia || '',
-  }));
+  });
   const { toARS } = calcularPrecios();
   const montoARS = toARS(packCotizacion.totalConDescuento) || Math.round(packCotizacion.totalConDescuento * 1200);
   const packRef  = `pack_${Date.now()}`;
-  sessionStorage.setItem('legalai_pack_ref', packRef);
+  guardarEstadoPago('legalai_pack_ref', packRef);
   cerrarModal('modalPack');
   await iniciarPagoMP({
     tipo: 'pack', montoARS,
@@ -2648,7 +2700,8 @@ async function habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal) {
     const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
     showCard(4);
     descargarPDFSinMarca(data.requiere_advertencia_legal || meta.requiere_advertencia_legal || false);
-    sessionStorage.removeItem('legalai_upgrade_pendiente');
+    borrarEstadoPago('legalai_upgrade_pendiente');
+    limpiarRetornoMercadoPago();
   } catch(err) {
     showCard(4);
     alert('Error al habilitar la versión sin marca: ' + err.message);
@@ -2668,12 +2721,13 @@ async function crearPackTrasRetornoMP(paymentIdPack, cot) {
     });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Error al crear el pack');
-    G.texto = sessionStorage.getItem('legalai_texto') || '';
+    G.texto = leerEstadoPago('legalai_texto', '');
     G.paymentId = cot.paymentIdDoc1 || null;
     if (G.texto) showCard(4);
     mostrarCodigoPack(data.codigo, data.creditos, data.expiraDias);
-    sessionStorage.removeItem('legalai_pack_cot');
-    sessionStorage.removeItem('legalai_pack_ref');
+    borrarEstadoPago('legalai_pack_cot');
+    borrarEstadoPago('legalai_pack_ref');
+    limpiarRetornoMercadoPago();
   } catch(err) {
     alert('Error al activar el pack: ' + err.message + '\nGuardá tu comprobante de pago y contactanos.');
   }
@@ -2821,10 +2875,10 @@ window.addEventListener('load', () => {
       G.categoria = m.categoria || 'intermedio'; G.requiere_advertencia_legal = m.requiere_advertencia_legal || false;
     } catch(_) {}
   }
-  G.paymentId = sessionStorage.getItem('legalai_paymentId') || null;
+  G.paymentId = leerEstadoPago('legalai_paymentId', null);
 
   const p    = new URLSearchParams(window.location.search);
-  const stat = p.get('status');
+  const stat = p.get('status') || p.get('collection_status');
   const tipo = p.get('tipo') || '';
   const statLower = String(stat || '').toLowerCase();
   const cameBackFromMP = p.has('payment_error') || p.has('preference_id') || p.has('collection_status') || p.has('merchant_order_id');
@@ -2872,47 +2926,54 @@ window.addEventListener('load', () => {
     return;
   }
 
-  if (stat === 'approved') {
-    window.history.replaceState({}, '', window.location.pathname);
+  if (statLower === 'approved') {
     showSec('generador');
 
     // ✅ Conversión REAL — solo cuando MercadoPago confirma el pago
     try {
-      const precioUSD = parseFloat(sessionStorage.getItem('legalai_precio_usd') || '5') || 5;
+      const precioUSD = parseFloat(leerEstadoPago('legalai_precio_usd', '5') || '5') || 5;
       gtag('event', 'conversion', {
         'send_to':        'AW-18073890544',
         'value':          precioUSD,
         'currency':       'USD',
-        'transaction_id': p.get('payment_id') || p.get('collection_id') || '',
+        'transaction_id': obtenerPaymentIdReal(p),
       });
     } catch(_) {}
 
-    if (tipo === 'doc') {
-      const paymentId = p.get('payment_id') || p.get('collection_id');
-      if (paymentId) generarDocumento(paymentId);
+    if (tipo === 'doc' || !tipo) {
+      const paymentId = obtenerPaymentIdReal(p);
+      const externalRef = p.get('external_reference') || leerEstadoPago('legalai_external_reference', '');
+      if (externalRef) guardarEstadoPago('legalai_external_reference', externalRef);
+      if (paymentId) generarDocumento(paymentId, externalRef);
+      else {
+        irAlPago();
+        const btnPagar = document.getElementById('btnPagar');
+        if (btnPagar) btnPagar.style.display = 'none';
+        showErr('alert3', 'El pago regresó sin un identificador verificable. No vuelvas a pagar; contactá a soporte con el comprobante.');
+      }
     } else if (tipo === 'upgrade') {
-      const paymentIdUpgrade  = p.get('payment_id') || p.get('collection_id');
-      const paymentIdOriginal = sessionStorage.getItem('legalai_upgrade_pendiente');
+      const paymentIdUpgrade  = obtenerPaymentIdReal(p);
+      const paymentIdOriginal = leerEstadoPago('legalai_upgrade_pendiente', '');
       if (paymentIdUpgrade && paymentIdOriginal) habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal);
     } else if (tipo === 'guia') {
-      const paymentIdGuia     = p.get('payment_id') || p.get('collection_id');
-      const paymentIdOriginal = sessionStorage.getItem('legalai_guia_pendiente');
+      const paymentIdGuia     = obtenerPaymentIdReal(p);
+      const paymentIdOriginal = leerEstadoPago('legalai_guia_pendiente', '');
       if (paymentIdGuia && paymentIdOriginal) {
-        G.texto = sessionStorage.getItem('legalai_texto') || '';
+        G.texto = leerEstadoPago('legalai_texto', '');
         G.paymentId = paymentIdOriginal;
         showCard(4);
         generarYDescargarGuia(paymentIdGuia);
       }
     } else if (tipo === 'pack') {
-      const paymentIdPack = p.get('payment_id') || p.get('collection_id');
-      const cotStr        = sessionStorage.getItem('legalai_pack_cot');
+      const paymentIdPack = obtenerPaymentIdReal(p);
+      const cotStr        = leerEstadoPago('legalai_pack_cot', '');
       if (paymentIdPack && cotStr) crearPackTrasRetornoMP(paymentIdPack, JSON.parse(cotStr));
     }
-  } else if (stat === 'failure') {
+  } else if (statLower === 'failure') {
     trackOnce('payment_return_failed', 'payment_return_failed', { ...getCurrentDocTracking(), status: 'failure', payment_id: p.get('payment_id') || p.get('collection_id') || '' });
     showSec('generador'); irAlPago(); // irAlPago restaura datos + muestra card3
     showErr('alert3', 'El pago fue rechazado. Intentá de nuevo o usá otro medio de pago.');
-  } else if (stat === 'pending') {
+  } else if (statLower === 'pending') {
     showSec('generador'); irAlPago();
     showErr('alert3', 'El pago está pendiente de acreditación. Te avisaremos cuando esté confirmado.');
   }
@@ -2947,11 +3008,7 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Formulario para contrato de alquiler residencial. Incluye opciones por clic para depósito, ajuste y servicios.',
     fields:[
       {id:'propietario',label:'Propietario / locador',tipo:'text',requerido:true,placeholder:'Nombre y apellido completo'},
-      {id:'dni_cuit_locador',label:'DNI / CUIT / CUIL del locador',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_locador',label:'Domicilio del locador',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'inquilino',label:'Inquilino / locatario',tipo:'text',requerido:true,placeholder:'Nombre y apellido completo'},
-      {id:'dni_cuit_locatario',label:'DNI / CUIT / CUIL del locatario',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIL 20-12345678-3'},
-      {id:'domicilio_locatario',label:'Domicilio del locatario',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'direccion',label:'Dirección del inmueble',tipo:'text',requerido:true,placeholder:'Ej: Av. Corrientes 1234, 3° B'},
       {id:'ciudad',label:'Ciudad',tipo:'text',requerido:true,placeholder:'Ej: Buenos Aires'},
       {id:'provincia',label:'Provincia',tipo:'text',requerido:true,placeholder:'Ej: CABA / Buenos Aires'},
@@ -2969,11 +3026,7 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Contrato para local, oficina o espacio comercial con destino de uso y condiciones de habilitación.',
     fields:[
       {id:'locador',label:'Locador / propietario',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
-      {id:'dni_cuit_locador',label:'DNI / CUIT / CUIL del locador',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 30-12345678-9'},
-      {id:'domicilio_locador',label:'Domicilio legal del locador',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'locatario',label:'Locatario / comercio',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
-      {id:'dni_cuit_locatario',label:'DNI / CUIT / CUIL del locatario',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 30-12345678-9'},
-      {id:'domicilio_locatario',label:'Domicilio legal del locatario',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'direccion_local',label:'Dirección del local',tipo:'text',requerido:true,placeholder:'Calle, número, localidad'},
       {id:'destino_comercial',label:'Destino comercial permitido',tipo:'text',requerido:true,placeholder:'Ej: local gastronómico, oficina, depósito'},
       {id:'monto_mensual',label:'Monto mensual',tipo:'number',requerido:true,placeholder:'Ej: 900000'},
@@ -2990,11 +3043,7 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Contrato breve para alquiler temporario con fechas de ingreso, salida, reglas y depósito.',
     fields:[
       {id:'anfitrion',label:'Propietario / anfitrión',tipo:'text',requerido:true,placeholder:'Nombre completo'},
-      {id:'dni_cuit_anfitrion',label:'DNI / CUIT / CUIL del anfitrión',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_anfitrion',label:'Domicilio del anfitrión',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'huesped',label:'Huésped / locatario temporario',tipo:'text',requerido:true,placeholder:'Nombre completo'},
-      {id:'dni_pasaporte_huesped',label:'DNI / pasaporte / CUIT / CUIL del huésped',tipo:'text',requerido:true,placeholder:'Número de documento o pasaporte'},
-      {id:'domicilio_huesped',label:'Domicilio del huésped',tipo:'text',requerido:true,placeholder:'Calle, número, localidad, provincia o país'},
       {id:'direccion',label:'Dirección del inmueble',tipo:'text',requerido:true,placeholder:'Dirección completa'},
       {id:'fecha_ingreso',label:'Fecha de ingreso',tipo:'date',requerido:true},
       {id:'fecha_salida',label:'Fecha de salida',tipo:'date',requerido:true},
@@ -3009,12 +3058,7 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Acuerdo simple entre socios para ordenar aportes, porcentajes, administración y reparto.',
     fields:[
       {id:'socio_1',label:'Socio 1',tipo:'text',requerido:true,placeholder:'Nombre completo'},
-      {id:'dni_cuit_socio_1',label:'DNI / CUIT / CUIL del socio 1',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_socio_1',label:'Domicilio del socio 1',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'socio_2',label:'Socio 2',tipo:'text',requerido:true,placeholder:'Nombre completo'},
-      {id:'dni_cuit_socio_2',label:'DNI / CUIT / CUIL del socio 2',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_socio_2',label:'Domicilio del socio 2',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
-      {id:'domicilio_actividad',label:'Domicilio de la actividad o sede',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'objeto',label:'Objeto del emprendimiento/sociedad',tipo:'textarea',requerido:true,placeholder:'Actividad o negocio a desarrollar'},
       {id:'aportes',label:'Aportes de cada socio',tipo:'textarea',requerido:true,placeholder:'Dinero, trabajo, bienes, contactos, etc.'},
       {id:'participacion',label:'Participación / porcentajes',tipo:'text',requerido:true,placeholder:'Ej: 50% y 50%'},
@@ -3028,15 +3072,9 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Contrato de compraventa de auto, moto u otro vehículo con datos básicos del bien y pago.',
     fields:[
       {id:'vendedor',label:'Vendedor',tipo:'text',requerido:true,placeholder:'Nombre completo'},
-      {id:'dni_cuit_vendedor',label:'DNI / CUIT / CUIL del vendedor',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_vendedor',label:'Domicilio del vendedor',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'comprador',label:'Comprador',tipo:'text',requerido:true,placeholder:'Nombre completo'},
-      {id:'dni_cuit_comprador',label:'DNI / CUIT / CUIL del comprador',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_comprador',label:'Domicilio del comprador',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'vehiculo',label:'Marca, modelo y versión',tipo:'text',requerido:true,placeholder:'Ej: Toyota Corolla XEI'},
       {id:'dominio',label:'Dominio / patente',tipo:'text',requerido:true,placeholder:'Ej: AB123CD'},
-      {id:'numero_chasis',label:'Número de chasis',tipo:'text',requerido:true,placeholder:'Según título o cédula del vehículo'},
-      {id:'numero_motor',label:'Número de motor',tipo:'text',requerido:true,placeholder:'Según título o cédula del vehículo'},
       {id:'anio',label:'Año',tipo:'number',requerido:false,placeholder:'Ej: 2018'},
       {id:'precio',label:'Precio de venta',tipo:'number',requerido:true,placeholder:'Ej: 15000000'},
       {id:'forma_pago',label:'Forma de pago',tipo:'toggle',valor:'Transferencia bancaria',opciones:[['Transferencia bancaria','Transferencia'],['Efectivo','Efectivo'],['Pago mixto','Mixto']]},
@@ -3049,13 +3087,8 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Boleto/acuerdo orientativo de compraventa de inmueble con precio, seña y escritura.',
     fields:[
       {id:'vendedor',label:'Vendedor',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
-      {id:'dni_cuit_vendedor',label:'DNI / CUIT / CUIL del vendedor',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_vendedor',label:'Domicilio del vendedor',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'comprador',label:'Comprador',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
-      {id:'dni_cuit_comprador',label:'DNI / CUIT / CUIL del comprador',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 20-12345678-3'},
-      {id:'domicilio_comprador',label:'Domicilio del comprador',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'inmueble',label:'Identificación del inmueble',tipo:'textarea',requerido:true,placeholder:'Dirección, matrícula/partida si la tenés, localidad'},
-      {id:'matricula_partida',label:'Matrícula / partida / nomenclatura catastral',tipo:'text',requerido:false,placeholder:'Consignar al menos uno si está disponible'},
       {id:'precio',label:'Precio total',tipo:'number',requerido:true,placeholder:'Ej: 75000'},
       {id:'moneda',label:'Moneda',tipo:'toggle',valor:'USD',opciones:[['USD','USD'],['ARS','ARS']]},
       {id:'sena',label:'Seña / anticipo',tipo:'text',requerido:false,placeholder:'Ej: USD 5.000'},
@@ -3069,11 +3102,7 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'NDA bilateral para proteger información comercial, técnica o estratégica.',
     fields:[
       {id:'parte_1',label:'Parte 1',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
-      {id:'dni_cuit_parte_1',label:'DNI / CUIT / CUIL de la parte 1',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 30-12345678-9'},
-      {id:'domicilio_parte_1',label:'Domicilio de la parte 1',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'parte_2',label:'Parte 2',tipo:'text',requerido:true,placeholder:'Nombre completo o razón social'},
-      {id:'dni_cuit_parte_2',label:'DNI / CUIT / CUIL de la parte 2',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 30-12345678-9'},
-      {id:'domicilio_parte_2',label:'Domicilio de la parte 2',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'proyecto',label:'Proyecto / motivo de intercambio',tipo:'textarea',requerido:true,placeholder:'Ej: evaluación de alianza comercial / software / inversión'},
       {id:'informacion_confidencial',label:'Información confidencial protegida',tipo:'textarea',requerido:false,placeholder:'Datos comerciales, técnicos, financieros, clientes, código, etc.'},
       {id:'vigencia',label:'Vigencia de la obligación',tipo:'toggle',valor:'2 años',opciones:[['1 año','1 año'],['2 años','2 años'],['5 años','5 años'],['Indeterminada','Indeterminada']]},
@@ -3086,8 +3115,6 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Términos básicos para web, app, SaaS, marketplace o servicio digital.',
     fields:[
       {id:'titular',label:'Titular del sitio/app',tipo:'text',requerido:true,placeholder:'Persona, empresa o marca'},
-      {id:'dni_cuit_titular',label:'DNI / CUIT / CUIL del titular',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 30-12345678-9'},
-      {id:'domicilio_legal_titular',label:'Domicilio legal del titular',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'sitio',label:'Sitio web o app',tipo:'text',requerido:true,placeholder:'Ej: legalai-arg.com'},
       {id:'servicio',label:'Servicio ofrecido',tipo:'textarea',requerido:true,placeholder:'Qué hace la web/app y qué obtiene el usuario'},
       {id:'usuarios',label:'Tipo de usuarios',tipo:'text',requerido:false,placeholder:'Ej: consumidores, empresas, profesionales'},
@@ -3101,8 +3128,6 @@ const LEGALAI_INLINE_DOCS = {
     descripcion:'Política de privacidad orientativa para sitios web y apps en Argentina.',
     fields:[
       {id:'titular',label:'Responsable / titular',tipo:'text',requerido:true,placeholder:'Persona, empresa o marca'},
-      {id:'dni_cuit_titular',label:'DNI / CUIT / CUIL del responsable',tipo:'text',requerido:true,placeholder:'Ej: DNI 12.345.678 / CUIT 30-12345678-9'},
-      {id:'domicilio_legal_titular',label:'Domicilio legal del responsable',tipo:'text',requerido:true,placeholder:'Calle, número, localidad y provincia'},
       {id:'sitio',label:'Sitio web o app',tipo:'text',requerido:true,placeholder:'Ej: legalai-arg.com'},
       {id:'datos_recopilados',label:'Datos personales recopilados',tipo:'textarea',requerido:true,placeholder:'Nombre, email, teléfono, cookies, IP, datos de pago, etc.'},
       {id:'finalidad',label:'Finalidad del tratamiento',tipo:'textarea',requerido:true,placeholder:'Atención, facturación, marketing, seguridad, mejora del servicio'},

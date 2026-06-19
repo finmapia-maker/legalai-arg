@@ -13,6 +13,17 @@
   gtag('js', new Date());
   gtag('config', 'AW-18073890544');
 </script>
+<script>
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var tieneRetornoPago = p.get('payment_id') || p.get('collection_id') || p.get('status') || p.get('collection_status');
+  var esPlan = p.get('tipo') === 'plan' || sessionStorage.getItem('legalai_plan_id');
+  if (tieneRetornoPago && !esPlan) {
+    if (!p.get('tipo')) p.set('tipo', 'doc');
+    window.location.replace('index.html?' + p.toString() + '#generador');
+  }
+})();
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -156,7 +167,7 @@ footer span{font-size:.75rem;color:var(--mist)}
   <div class="check-circle">✓</div>
   <div class="gracias-kicker">Pago confirmado</div>
   <h1>¡Tu documento está listo!</h1>
-  <p>Revisá tu correo — el PDF llegó a tu casilla. También podés volver al sitio para descargarlo nuevamente.</p>
+  <p>Volvé al generador para descargar tu PDF. También podés volver al sitio para descargarlo nuevamente.</p>
   <a class="btn-primary" href="https://legalai-arg.com">Volver al inicio →</a>
 </div>
 

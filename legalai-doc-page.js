@@ -6,6 +6,13 @@ const PRICE_USD = Number(CFG.priceUsd || 4);
 const SESSION = Math.random().toString(36).slice(2) + Date.now().toString(36);
 let state = { previewId:null, texto:'', cotizacion:null, montoARS:0 };
 
+function savePaymentState(key, value){
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  try{ sessionStorage.setItem(key, text); }catch(_){}
+  try{ localStorage.setItem(key, text); }catch(_){}
+}
+function removePaymentState(key){ try{sessionStorage.removeItem(key);}catch(_){} try{localStorage.removeItem(key);}catch(_){} }
+
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const cleanName = (s) => String(s || 'documento').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || 'documento';
@@ -105,10 +112,10 @@ async function generarPreview(){
   if(!validate()) return;
   clearAlert('errPago');
   const datos = getDatos();
-  sessionStorage.setItem('legalai_datos', JSON.stringify(datos));
-  sessionStorage.setItem('legalai_meta', JSON.stringify(meta()));
-  sessionStorage.setItem('legalai_titulo', CFG.title || 'Documento legal');
-  sessionStorage.setItem('legalai_precio_usd', String(PRICE_USD));
+  savePaymentState('legalai_datos', datos);
+  savePaymentState('legalai_meta', meta());
+  savePaymentState('legalai_titulo', CFG.title || 'Documento legal');
+  savePaymentState('legalai_precio_usd', String(PRICE_USD));
   showLoading(2);
   track('generar_preview', {doc_tipo: CFG.title});
   try{
@@ -116,11 +123,11 @@ async function generarPreview(){
     const data = await res.json().catch(()=>({}));
     if(!res.ok || data.error) throw new Error(data.error || 'No se pudo generar la vista previa');
     state.previewId = data.previewId || null; state.texto = data.texto || '';
-    sessionStorage.setItem('legalai_previewId', state.previewId || '');
+    savePaymentState('legalai_previewId', state.previewId || '');
     renderPreview(state.texto || fallbackPreview(datos));
   }catch(err){
     state.previewId = null; state.texto = fallbackPreview(datos);
-    sessionStorage.removeItem('legalai_previewId');
+    removePaymentState('legalai_previewId');
     renderPreview(state.texto);
     track('preview_fallback', {doc_tipo: CFG.title, error:String(err.message||err).slice(0,90)});
   }
@@ -142,17 +149,18 @@ async function pagar(){
   $('btnPagar').disabled = true;
   showLoading(3);
   const datos = getDatos();
-  sessionStorage.setItem('legalai_datos', JSON.stringify(datos));
-  sessionStorage.setItem('legalai_meta', JSON.stringify(meta()));
-  sessionStorage.setItem('legalai_titulo', CFG.title || 'Documento legal');
-  sessionStorage.setItem('legalai_precio_usd', String(PRICE_USD));
+  savePaymentState('legalai_datos', datos);
+  savePaymentState('legalai_meta', meta());
+  savePaymentState('legalai_titulo', CFG.title || 'Documento legal');
+  savePaymentState('legalai_precio_usd', String(PRICE_USD));
   const montoARS = state.montoARS || Math.ceil(PRICE_USD * 1400 / 100) * 100;
-  sessionStorage.setItem('legalai_monto_ars', String(montoARS));
+  savePaymentState('legalai_monto_ars', String(montoARS));
   const ref = new URLSearchParams(location.search).get('ref') || sessionStorage.getItem('legalai_ref') || '';
   const externalRef = 'doc_' + cleanName(CFG.slug || CFG.title) + '_' + Date.now();
   track('inicio_pago', {doc_tipo: CFG.title, amount_ars:montoARS});
   try{
-    const res = await fetch(WORKER + '/mp/preferencia', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({tipo:'doc', montoARS, descripcion:CFG.title || 'Documento LegalAI', externalRef, ref, datosPago:{titulo:CFG.title, origen:'doc_page', page:location.pathname, previewId:state.previewId || '', ...utmData()}}), signal:AbortSignal.timeout(25000)});
+    savePaymentState('legalai_external_reference', externalRef);
+    const res = await fetch(WORKER + '/mp/preferencia', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({tipo:'doc', montoARS, descripcion:CFG.title || 'Documento LegalAI', externalRef, ref, datosDoc:datos, metadata:meta(), previewId:state.previewId || '', datosPago:{titulo:CFG.title, origen:'doc_page', page:location.pathname, previewId:state.previewId || '', ...utmData()}}), signal:AbortSignal.timeout(25000)});
     const data = await res.json().catch(()=>({}));
     if(!res.ok || !data.init_point) throw new Error(data.detalle || data.error || 'MercadoPago no devolvió link de pago');
     location.href = data.init_point;
@@ -185,7 +193,7 @@ function renderPrecio(){
   if(p1) p1.textContent = txt;
   if(p2) p2.textContent = det + ' · pago único';
   if(p3) p3.textContent = '✓ ' + txt + ' ARS aprox.';
-  sessionStorage.setItem('legalai_monto_ars', String(ars));
+  savePaymentState('legalai_monto_ars', String(ars));
 }
 
 function initUTM(){

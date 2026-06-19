@@ -9,6 +9,8 @@ const OWNER_EVENTS_KEY = "events";
 const AFFILIATES_KEY = "afiliados";
 const AFFILIATE_CONVERSIONS_KEY = "afiliados_conversiones";
 const PREVIEWS_KEY = "previews";
+const CHECKOUTS_KEY = "checkout";
+const CHECKOUT_TTL_SECONDS = 24 * 60 * 60;
 
 const PACKS_KEY = "packs";
 
@@ -148,7 +150,12 @@ async function handleProductRoutes(request, env) {
     const descripcion = String(body.descripcion || body.title || "Documento LegalAI").slice(0, 250);
     const externalRef = String(body.externalRef || body.external_reference || ("legalai_" + Date.now()));
     const ref = normalizeRef(body.ref || body.affiliate || "");
+    const tipoCompra = String(body.tipo || "doc").trim().toLowerCase();
     const datosPago = body.datosPago || {};
+    const checkoutPayload = body.checkoutPayload || {};
+    const checkoutDatosDoc = body.datosDoc || checkoutPayload.datosDoc || null;
+    const checkoutMetadata = body.metadata || checkoutPayload.metadata || null;
+    const checkoutPreviewId = body.previewId || checkoutPayload.previewId || datosPago.previewId || null;
 
     if (!env.MERCADOPAGO_ACCESS_TOKEN) {
       await safeAppendOwnerEvent(env, {
@@ -172,6 +179,10 @@ async function handleProductRoutes(request, env) {
     }
 
     const origin = "https://legalai-arg.com";
+    const returnParams = new URLSearchParams({ tipo: tipoCompra, external_reference: externalRef });
+    const successPage = tipoCompra === "plan" ? "gracias.html" : "index.html";
+    const pendingPage = tipoCompra === "plan" ? "gracias.html" : "index.html";
+    const failurePage = tipoCompra === "plan" ? "planes.html" : "index.html";
     const preferenceBody = {
       items: [{
         title: descripcion || "Documento LegalAI",
@@ -183,14 +194,14 @@ async function handleProductRoutes(request, env) {
       metadata: {
         legalai_external_ref: externalRef,
         legalai_ref: ref,
-        legalai_tipo: body.tipo || "doc",
+        legalai_tipo: tipoCompra,
         ...safeMetadata(datosPago)
       },
       notification_url: `https://legalai-worker.finmap-ia.workers.dev/mp/webhook`,
       back_urls: {
-        success: `${origin}/gracias.html?payment_id=${encodeURIComponent(externalRef)}&status=approved`,
-        pending: `${origin}/gracias.html?payment_id=${encodeURIComponent(externalRef)}&status=pending`,
-        failure: `${origin}/index.html?payment_error=1#generador`
+        success: `${origin}/${successPage}?${returnParams.toString()}`,
+        pending: `${origin}/${pendingPage}?${returnParams.toString()}`,
+        failure: `${origin}/${failurePage}?status=failure&${returnParams.toString()}${tipoCompra === "plan" ? "" : "#generador"}`
       },
       auto_return: "approved",
       statement_descriptor: "LEGALAI",
@@ -231,6 +242,20 @@ async function handleProductRoutes(request, env) {
       }, 502);
     }
 
+    await writeCheckout(env, externalRef, {
+      external_reference: externalRef,
+      tipo: tipoCompra,
+      datosDoc: checkoutDatosDoc,
+      metadata: checkoutMetadata,
+      previewId: checkoutPreviewId,
+      datosPago,
+      ref,
+      montoARS,
+      descripcion,
+      preference_id: mpData.id,
+      created_at: new Date().toISOString()
+    });
+
     await safeAppendOwnerEvent(env, {
       id: externalRef,
       type: "checkout_start",
@@ -258,10 +283,71 @@ async function handleProductRoutes(request, env) {
 
   if (request.method === "POST" && url.pathname === "/generar") {
     const body = await readRequestBody(request);
-    const paymentId = String(body.paymentId || body.payment_id || body.externalRef || ("manual_" + Date.now()));
-    const datosDoc = body.datosDoc || body.datos || {};
-    const metadata = body.metadata || {};
-    const previewId = body.previewId || null;
+    const paymentId = String(body.paymentId || body.payment_id || "").trim();
+    const codigoPack = String(body.codigoPack || body.codigo_pack || "").trim();
+    const requestedExternalRef = String(body.externalRef || body.external_reference || "").trim();
+
+    let datosDoc = body.datosDoc || body.datos || null;
+    let metadata = body.metadata || null;
+    let previewId = body.previewId || null;
+    let externalRef = requestedExternalRef;
+    let checkout = null;
+    let mp = null;
+
+    if (!codigoPack) {
+      if (!paymentId) {
+        return json(request, { ok: false, error: "missing_payment_id", message: "Falta el identificador real del pago." }, 400);
+      }
+
+      const verified = await fetchMercadoPagoPayment(env, paymentId);
+      if (!verified.ok) {
+        return json(request, { ok: false, error: verified.error, message: verified.message }, verified.status || 502);
+      }
+
+      mp = verified.payment;
+      if (String(mp.status || "").toLowerCase() !== "approved") {
+        return json(request, { ok: false, error: "payment_not_approved", message: "El pago todavía no figura aprobado en MercadoPago." }, 402);
+      }
+      if (!isLegalAiPayment(mp)) {
+        return json(request, { ok: false, error: "payment_not_legalai", message: "El pago no corresponde a una operación de LegalAI Arg." }, 403);
+      }
+      const paidType = String(mp.metadata?.legalai_tipo || "doc").toLowerCase();
+      if (paidType !== "doc") {
+        return json(request, { ok: false, error: "wrong_payment_type", message: "Este pago no corresponde a la compra de un documento." }, 403);
+      }
+
+      externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
+      if (requestedExternalRef && externalRef && requestedExternalRef !== externalRef) {
+        return json(request, { ok: false, error: "external_reference_mismatch", message: "La referencia del pago no coincide con la operación iniciada." }, 409);
+      }
+
+      checkout = externalRef ? await readCheckout(env, externalRef) : null;
+      if (checkout?.texto) {
+        return json(request, {
+          ok: true,
+          texto: checkout.texto,
+          paymentId,
+          external_reference: externalRef,
+          metadata: checkout.metadata || metadata || {},
+          recovered: true
+        });
+      }
+
+      if (!datosDoc || !Object.keys(datosDoc).length) datosDoc = checkout?.datosDoc || null;
+      if (!metadata || !Object.keys(metadata).length) metadata = checkout?.metadata || null;
+      if (!previewId) previewId = checkout?.previewId || null;
+
+      if (!datosDoc || !Object.keys(datosDoc).length) {
+        return json(request, {
+          ok: false,
+          error: "checkout_data_not_found",
+          message: "El pago está aprobado, pero no se encontraron los datos temporales del formulario. No vuelvas a pagar; contactá a soporte con el comprobante."
+        }, 409);
+      }
+    }
+
+    datosDoc = datosDoc || {};
+    metadata = metadata || {};
 
     let texto = "";
     if (previewId) {
@@ -271,25 +357,41 @@ async function handleProductRoutes(request, env) {
 
     if (!texto) texto = await generarDocumentoTexto(env, datosDoc, metadata, false);
 
+    if (!codigoPack && externalRef) {
+      await writeCheckout(env, externalRef, {
+        ...(checkout || {}),
+        external_reference: externalRef,
+        tipo: checkout?.tipo || mp?.metadata?.legalai_tipo || "doc",
+        datosDoc,
+        metadata,
+        previewId,
+        texto,
+        payment_id: paymentId,
+        generated_at: new Date().toISOString()
+      });
+    }
+
     await safeAppendOwnerEvent(env, {
-      id: paymentId,
+      id: paymentId || ("PACK-" + codigoPack),
       type: "document_generated",
       product: metadata.titulo || datosDoc.tipo || "Documento legal",
       category: "documento",
       amount: Number(metadata.precio_usd || 0),
-      amount_ars: 0,
-      currency: "USD",
-      payment_method: "MercadoPago",
+      amount_ars: Number(mp?.transaction_amount || checkout?.montoARS || 0),
+      currency: mp?.currency_id || "USD",
+      payment_method: codigoPack ? "Pack" : "MercadoPago",
       status: "approved",
-      customer: datosDoc.email || "",
-      affiliate: datosDoc.ref || "",
-      raw: { paymentId, previewId, metadata }
+      customer: datosDoc.email || mp?.payer?.email || "",
+      affiliate: checkout?.ref || datosDoc.ref || "",
+      raw: { paymentId, externalRef, previewId, metadata, recovered_from_checkout: Boolean(checkout) }
     });
 
     return json(request, {
       ok: true,
       texto,
-      paymentId
+      paymentId: paymentId || ("PACK_" + Date.now()),
+      external_reference: externalRef,
+      metadata
     });
   }
 
@@ -318,13 +420,26 @@ async function handleProductRoutes(request, env) {
 
   if (request.method === "POST" && url.pathname === "/guia") {
     const body = await readRequestBody(request);
-    const texto = generarGuiaUso(body.datosDoc || {}, body.metadata || {});
-    return json(request, { ok: true, texto, paymentId: body.paymentId || ("guia_" + Date.now()) });
+    const paymentIdGuia = String(body.paymentIdGuia || body.payment_id || "").trim();
+    const verified = await fetchMercadoPagoPayment(env, paymentIdGuia);
+    if (!verified.ok) return json(request, { ok: false, error: verified.error, message: verified.message }, verified.status || 502);
+    const mp = verified.payment;
+    if (String(mp.status || "").toLowerCase() !== "approved") return json(request, { ok: false, error: "payment_not_approved" }, 402);
+    if (!isLegalAiPayment(mp) || String(mp.metadata?.legalai_tipo || "").toLowerCase() !== "guia") return json(request, { ok: false, error: "wrong_payment_type" }, 403);
+    const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "");
+    const checkout = externalRef ? await readCheckout(env, externalRef) : null;
+    const texto = generarGuiaUso(body.datosDoc || checkout?.datosDoc || {}, body.metadata || checkout?.metadata || {});
+    return json(request, { ok: true, texto, paymentId: paymentIdGuia });
   }
 
   if (request.method === "POST" && url.pathname === "/habilitar") {
     const body = await readRequestBody(request);
-    return json(request, { ok: true, habilitado: true, paymentId: body.paymentId || ("hab_" + Date.now()) });
+    const paymentIdUpgrade = String(body.paymentIdUpgrade || body.payment_id || "").trim();
+    const verified = await fetchMercadoPagoPayment(env, paymentIdUpgrade);
+    if (!verified.ok) return json(request, { ok: false, error: verified.error, message: verified.message }, verified.status || 502);
+    if (String(verified.payment.status || "").toLowerCase() !== "approved") return json(request, { ok: false, error: "payment_not_approved" }, 402);
+    if (!isLegalAiPayment(verified.payment) || String(verified.payment.metadata?.legalai_tipo || "").toLowerCase() !== "upgrade") return json(request, { ok: false, error: "wrong_payment_type" }, 403);
+    return json(request, { ok: true, habilitado: true, paymentId: paymentIdUpgrade });
   }
 
   if (request.method === "POST" && url.pathname === "/pack/cotizar") {
@@ -506,7 +621,7 @@ Formato exacto:
  "requiere_advertencia_legal": false,
  "campos": [{"id":"...", "label":"...", "tipo":"text|number|date|textarea|select", "requerido":true, "placeholder":"...", "opciones":["..."]}]
 }
-Si el documento identifica personas o entidades, incluí para cada parte campos separados de nombre o razón social, DNI / CUIT / CUIL y domicilio. Priorizá esos datos identificatorios dentro del máximo permitido.\nMáximo 12 campos. IDs en snake_case.`;
+Máximo 12 campos. IDs en snake_case.`;
 
   try {
     const txt = await callBestAI(env, prompt, 1200);
@@ -593,11 +708,7 @@ function camposFallback(tipoDocumento) {
   if (lower.includes("alquiler")) {
     return [
       { id: "propietario", label: "Propietario / locador", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
-      { id: "dni_cuit_locador", label: "DNI / CUIT / CUIL del locador", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3" },
-      { id: "domicilio_locador", label: "Domicilio del locador", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "inquilino", label: "Inquilino / locatario", tipo: "text", requerido: true, placeholder: "Nombre completo" },
-      { id: "dni_cuit_locatario", label: "DNI / CUIT / CUIL del locatario", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIL 20-12345678-3" },
-      { id: "domicilio_locatario", label: "Domicilio del locatario", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "direccion", label: "Dirección del inmueble", tipo: "text", requerido: true, placeholder: "Calle, número, piso/depto" },
       { id: "ciudad", label: "Ciudad", tipo: "text", requerido: true, placeholder: "Ej: Buenos Aires" },
       { id: "provincia", label: "Provincia", tipo: "text", requerido: true, placeholder: "Ej: CABA" },
@@ -614,11 +725,7 @@ function camposFallback(tipoDocumento) {
   if (lower.includes("community") || lower.includes("freelance") || lower.includes("servicio") || lower.includes("diseño") || lower.includes("dev")) {
     return [
       { id: "cliente", label: "Cliente", tipo: "text", requerido: true, placeholder: "Nombre o razón social" },
-      { id: "dni_cuit_cliente", label: "DNI / CUIT / CUIL del cliente", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
-      { id: "domicilio_cliente", label: "Domicilio del cliente", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "prestador", label: "Prestador / freelancer", tipo: "text", requerido: true, placeholder: "Nombre completo o marca" },
-      { id: "dni_cuit_prestador", label: "DNI / CUIT / CUIL del prestador", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3" },
-      { id: "domicilio_prestador", label: "Domicilio del prestador", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "servicio", label: "Servicio contratado", tipo: "textarea", requerido: true, placeholder: "Describir tareas incluidas" },
       { id: "honorarios", label: "Honorarios", tipo: "text", requerido: true, placeholder: "Monto y moneda" },
       { id: "plazo", label: "Plazo o duración", tipo: "text", requerido: true, placeholder: "Ej: mensual / 3 meses" },
@@ -631,11 +738,7 @@ function camposFallback(tipoDocumento) {
 
   return [
     { id: "parte_1", label: "Parte 1", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
-    { id: "dni_cuit_parte_1", label: "DNI / CUIT / CUIL de la parte 1", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
-    { id: "domicilio_parte_1", label: "Domicilio de la parte 1", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
     { id: "parte_2", label: "Parte 2", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
-    { id: "dni_cuit_parte_2", label: "DNI / CUIT / CUIL de la parte 2", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
-    { id: "domicilio_parte_2", label: "Domicilio de la parte 2", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
     { id: "objeto", label: "Objeto del documento", tipo: "textarea", requerido: true, placeholder: "Describir el motivo o acuerdo" },
     { id: "monto", label: "Monto / valor si corresponde", tipo: "text", requerido: false, placeholder: "Ej: $100.000" },
     { id: "plazo", label: "Plazo / fecha", tipo: "text", requerido: false, placeholder: "Ej: 30 días" },
@@ -1119,6 +1222,40 @@ async function maybeCreateAffiliateConversionFromOwnerEvent(env, event) {
     customer: event.customer,
     raw_event: event
   });
+}
+
+async function fetchMercadoPagoPayment(env, paymentId) {
+  if (!paymentId) return { ok: false, error: "missing_payment_id", message: "Falta payment_id.", status: 400 };
+  if (!env.MERCADOPAGO_ACCESS_TOKEN) return { ok: false, error: "missing_mp_token", message: "Falta configurar MercadoPago.", status: 500 };
+  try {
+    const res = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
+      headers: { "Authorization": `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` }
+    });
+    const payment = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: "mp_payment_lookup_error", message: payment.message || "No se pudo verificar el pago en MercadoPago.", status: 502 };
+    return { ok: true, payment };
+  } catch (err) {
+    return { ok: false, error: "mp_payment_lookup_exception", message: err?.message || String(err), status: 502 };
+  }
+}
+
+function checkoutKV(env) { return env.PAGOS_KV || env.OWNER_EVENTS_KV || null; }
+async function readCheckout(env, externalRef) {
+  const kv = checkoutKV(env);
+  if (!kv || !externalRef) return null;
+  try {
+    const txt = await kv.get(`${CHECKOUTS_KEY}:${externalRef}`);
+    if (!txt) return null;
+    return JSON.parse(txt);
+  } catch { return null; }
+}
+async function writeCheckout(env, externalRef, value) {
+  const kv = checkoutKV(env);
+  if (!kv || !externalRef) return false;
+  try {
+    await kv.put(`${CHECKOUTS_KEY}:${externalRef}`, JSON.stringify(value), { expirationTtl: CHECKOUT_TTL_SECONDS });
+    return true;
+  } catch { return false; }
 }
 
 async function readOwnerEvents(env) { return await readJsonKV(env, OWNER_EVENTS_KEY, []); }
