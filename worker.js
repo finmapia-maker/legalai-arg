@@ -621,12 +621,15 @@ Formato exacto:
  "requiere_advertencia_legal": false,
  "campos": [{"id":"...", "label":"...", "tipo":"text|number|date|textarea|select", "requerido":true, "placeholder":"...", "opciones":["..."]}]
 }
-Máximo 12 campos. IDs en snake_case.`;
+Si el documento identifica personas o entidades, incluí para cada parte campos separados de nombre o razón social, DNI / CUIT / CUIL y domicilio. Priorizá esos datos identificatorios dentro del máximo permitido.\nMáximo 12 campos. IDs en snake_case.`;
 
   try {
     const txt = await callBestAI(env, prompt, 1200);
     const parsed = parseJsonLoose(txt);
-    if (parsed?.campos?.length) return { ...base, ...parsed, ok: true };
+    if (parsed?.campos?.length) {
+      parsed.campos = asegurarCamposIdentificacion(parsed.campos);
+      return { ...base, ...parsed, ok: true };
+    }
   } catch (_) {}
 
   return base;
@@ -702,13 +705,88 @@ async function callBestAI(env, prompt, maxTokens) {
   throw new Error("no_ai_configured");
 }
 
+
+function asegurarCamposIdentificacion(campos) {
+  const lista = Array.isArray(campos) ? campos.map(c => ({ ...c })) : [];
+  if (!lista.length) return lista;
+
+  const normalizar = valor => String(valor || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  const esIdentificador = campo => /\b(dni|cuit|cuil|pasaporte)\b|documento de identidad/.test(
+    normalizar(`${campo?.id || ""} ${campo?.label || ""}`)
+  );
+
+  const esParte = campo => {
+    if (esIdentificador(campo)) return false;
+    const texto = normalizar(`${campo?.id || ""} ${campo?.label || ""}`);
+    return /(propietar|locador|inquilin|locatari|anfitri|huesped|socio|vendedor|comprador|parte[_\s-]*[0-9]|cliente|prestador|freelancer|titular|responsable|declarante|trabajador|empleador|acreedor|deudor|remitente|destinatario|otorgante|apoderado|poderdante|autorizante|autorizado|representante|proveedor|consumidor|contratante|contratista|cedente|cesionario|donante|donatario|comodante|comodatario|mutuante|mutuario|garante|fiador|beneficiario|progenitor|padre|madre|menor)/.test(texto);
+  };
+
+  const slug = valor => normalizar(valor)
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 60) || "parte";
+
+  const obtenerRol = campo => {
+    const texto = slug(`${campo?.id || ""}_${campo?.label || ""}`);
+    const match = texto.match(/(parte_[0-9]+|socio_[0-9]+|propietario|locador|inquilino|locatario|anfitrion|huesped|socio|vendedor|comprador|cliente|prestador|freelancer|titular|responsable|declarante|trabajador|empleador|acreedor|deudor|remitente|destinatario|otorgante|apoderado|poderdante|autorizante|autorizado|representante|proveedor|consumidor|contratante|contratista|cedente|cesionario|donante|donatario|comodante|comodatario|mutuante|mutuario|garante|fiador|beneficiario|progenitor|padre|madre|menor)/);
+    return match?.[1] || slug(campo?.id || campo?.label || "parte");
+  };
+
+  const partes = lista
+    .map((campo, indice) => ({ campo, indice }))
+    .filter(item => esParte(item.campo));
+
+  if (!partes.length) {
+    if (!lista.some(esIdentificador)) {
+      lista.splice(Math.min(1, lista.length), 0, {
+        id: "dni_cuit_cuil",
+        label: "DNI / CUIT / CUIL",
+        tipo: "text",
+        requerido: true,
+        placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3"
+      });
+    }
+    return lista;
+  }
+
+  let desplazamiento = 0;
+  for (const { campo, indice } of partes.slice(0, 4)) {
+    const clave = obtenerRol(campo);
+    const identificadoresExistentes = lista.filter(esIdentificador);
+    const yaExiste = identificadoresExistentes.some(otro =>
+      slug(`${otro.id || ""}_${otro.label || ""}`).includes(clave)
+    ) || (partes.length === 1 && identificadoresExistentes.length > 0);
+    if (yaExiste) continue;
+
+    const etiquetaParte = String(campo.label || campo.id || "la parte").trim();
+    lista.splice(indice + desplazamiento + 1, 0, {
+      id: `dni_cuit_${clave}`,
+      label: `DNI / CUIT / CUIL — ${etiquetaParte}`,
+      tipo: "text",
+      requerido: true,
+      placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3"
+    });
+    desplazamiento += 1;
+  }
+
+  return lista;
+}
+
 function camposFallback(tipoDocumento) {
   const lower = tipoDocumento.toLowerCase();
 
   if (lower.includes("alquiler")) {
     return [
       { id: "propietario", label: "Propietario / locador", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
+      { id: "dni_cuit_locador", label: "DNI / CUIT / CUIL del locador", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3" },
+      { id: "domicilio_locador", label: "Domicilio del locador", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "inquilino", label: "Inquilino / locatario", tipo: "text", requerido: true, placeholder: "Nombre completo" },
+      { id: "dni_cuit_locatario", label: "DNI / CUIT / CUIL del locatario", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIL 20-12345678-3" },
+      { id: "domicilio_locatario", label: "Domicilio del locatario", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "direccion", label: "Dirección del inmueble", tipo: "text", requerido: true, placeholder: "Calle, número, piso/depto" },
       { id: "ciudad", label: "Ciudad", tipo: "text", requerido: true, placeholder: "Ej: Buenos Aires" },
       { id: "provincia", label: "Provincia", tipo: "text", requerido: true, placeholder: "Ej: CABA" },
@@ -725,7 +803,11 @@ function camposFallback(tipoDocumento) {
   if (lower.includes("community") || lower.includes("freelance") || lower.includes("servicio") || lower.includes("diseño") || lower.includes("dev")) {
     return [
       { id: "cliente", label: "Cliente", tipo: "text", requerido: true, placeholder: "Nombre o razón social" },
+      { id: "dni_cuit_cliente", label: "DNI / CUIT / CUIL del cliente", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
+      { id: "domicilio_cliente", label: "Domicilio del cliente", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "prestador", label: "Prestador / freelancer", tipo: "text", requerido: true, placeholder: "Nombre completo o marca" },
+      { id: "dni_cuit_prestador", label: "DNI / CUIT / CUIL del prestador", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 20-12345678-3" },
+      { id: "domicilio_prestador", label: "Domicilio del prestador", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
       { id: "servicio", label: "Servicio contratado", tipo: "textarea", requerido: true, placeholder: "Describir tareas incluidas" },
       { id: "honorarios", label: "Honorarios", tipo: "text", requerido: true, placeholder: "Monto y moneda" },
       { id: "plazo", label: "Plazo o duración", tipo: "text", requerido: true, placeholder: "Ej: mensual / 3 meses" },
@@ -738,7 +820,11 @@ function camposFallback(tipoDocumento) {
 
   return [
     { id: "parte_1", label: "Parte 1", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
+    { id: "dni_cuit_parte_1", label: "DNI / CUIT / CUIL de la parte 1", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
+    { id: "domicilio_parte_1", label: "Domicilio de la parte 1", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
     { id: "parte_2", label: "Parte 2", tipo: "text", requerido: true, placeholder: "Nombre completo o razón social" },
+    { id: "dni_cuit_parte_2", label: "DNI / CUIT / CUIL de la parte 2", tipo: "text", requerido: true, placeholder: "Ej: DNI 12.345.678 / CUIT 30-12345678-9" },
+    { id: "domicilio_parte_2", label: "Domicilio de la parte 2", tipo: "text", requerido: true, placeholder: "Calle, número, localidad y provincia" },
     { id: "objeto", label: "Objeto del documento", tipo: "textarea", requerido: true, placeholder: "Describir el motivo o acuerdo" },
     { id: "monto", label: "Monto / valor si corresponde", tipo: "text", requerido: false, placeholder: "Ej: $100.000" },
     { id: "plazo", label: "Plazo / fecha", tipo: "text", requerido: false, placeholder: "Ej: 30 días" },
