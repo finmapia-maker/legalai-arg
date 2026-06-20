@@ -94,19 +94,24 @@
       "descripcion": "Reducir precio del documento en al menos 40% (prueba con precio ancla tachado + precio promocional visible). Agregar señales de confianza en la pantalla previa al pago: testimonios reales, número de documentos generados, badge de pago seguro. Si el precio actual supera ARS 2000, probar con ARS 990 como test de sensibilidad. Paralelamente verificar que la pasarela alternativa (Stripe/PayPal) esté efectivamente activa y no solo configurada.",
       "fecha": "2026-06-16T15:58:19.588Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "1) Investigar por qué el preview falla para tráfico de Ads (84% drop vs 55% orgánico): revisar si hay diferencia de dispositivo/browser en tráfico pago, el error frontend detectado puede estar afectando específicamente mobile o Chrome desde Ads. 2) Pausar o reducir presupuesto Ads mientras se diagnostica: cada clic pago que no convierte es gasto puro. 3) Para planes: verificar que el botón de pago plan esté funcional y no rompa silenciosamente (3 clicks, 0 pagos iniciados = posible JS error). 4) Escalar lo que funciona: identificar qué documento compraron las 2 ventas directas y destacarlo en home.",
+      "fecha": "2026-06-20T12:27:30.325Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "OBSERVAR",
-  "fecha": "2026-06-19T14:14:10.991Z",
-  "ultima_prioridad": "media",
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-20T12:27:30.325Z",
+  "ultima_prioridad": "alta",
   "ultimo_embudo": "Ads preview OK → Ads inicio pago",
   "cambio_activo": {
-    "descripcion": "Reducir precio del documento en al menos 40% (prueba con precio ancla tachado + precio promocional visible). Agregar señales de confianza en la pantalla previa al pago: testimonios reales, número de documentos generados, badge de pago seguro. Si el precio actual supera ARS 2000, probar con ARS 990 como test de sensibilidad. Paralelamente verificar que la pasarela alternativa (Stripe/PayPal) esté efectivamente activa y no solo configurada.",
+    "descripcion": "1) Investigar por qué el preview falla para tráfico de Ads (84% drop vs 55% orgánico): revisar si hay diferencia de dispositivo/browser en tráfico pago, el error frontend detectado puede estar afectando específicamente mobile o Chrome desde Ads. 2) Pausar o reducir presupuesto Ads mientras se diagnostica: cada clic pago que no convierte es gasto puro. 3) Para planes: verificar que el botón de pago plan esté funcional y no rompa silenciosamente (3 clicks, 0 pagos iniciados = posible JS error). 4) Escalar lo que funciona: identificar qué documento compraron las 2 ventas directas y destacarlo en home.",
     "archivo": "index.html",
-    "tipo": "precio",
-    "hipotesis": "Si el precio baja y se agregan señales de confianza → al menos 1 venta en 48h, confirmando que el bloqueo ya no es técnico sino de percepción de valor",
-    "conv_base": 0,
-    "clics_base": 103
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el error frontend (1 detectado) está bloqueando el preview en tráfico de Ads (mobile/Chrome), corregirlo debería subir Ads preview OK de 4 a ~15 y habilitar ventas desde ese canal",
+    "conv_base": 2,
+    "clics_base": 90
   },
-  "cambio_activo_desde": "2026-06-16T15:58:19.588Z"
+  "cambio_activo_desde": "2026-06-20T12:27:30.325Z"
 }
