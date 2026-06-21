@@ -101,10 +101,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-20T12:27:30.325Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Ads preview OK → Ads inicio pago",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-21T13:08:58.839Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "1) Investigar por qué el preview falla para tráfico de Ads (84% drop vs 55% orgánico): revisar si hay diferencia de dispositivo/browser en tráfico pago, el error frontend detectado puede estar afectando específicamente mobile o Chrome desde Ads. 2) Pausar o reducir presupuesto Ads mientras se diagnostica: cada clic pago que no convierte es gasto puro. 3) Para planes: verificar que el botón de pago plan esté funcional y no rompa silenciosamente (3 clicks, 0 pagos iniciados = posible JS error). 4) Escalar lo que funciona: identificar qué documento compraron las 2 ventas directas y destacarlo en home.",
     "archivo": "index.html",
