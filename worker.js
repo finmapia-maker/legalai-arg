@@ -11,6 +11,8 @@ const AFFILIATE_CONVERSIONS_KEY = "afiliados_conversiones";
 const PREVIEWS_KEY = "previews";
 const CHECKOUTS_KEY = "checkout";
 const CHECKOUT_TTL_SECONDS = 24 * 60 * 60;
+const BACKUP_PDF_MAX_BYTES = 8 * 1024 * 1024;
+const BACKUP_EMAIL_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 const PACKS_KEY = "packs";
 
@@ -87,6 +89,8 @@ async function handleProductRoutes(request, env) {
       openai_configured: Boolean(env.OPENAI_API_KEY),
       claude_configured: Boolean(env.CLAUDE_API_KEY || env.ANTHROPIC_API_KEY),
       resend_configured: Boolean(env.RESEND_API_KEY),
+      backup_email_to_configured: Boolean(env.EMAIL_TO),
+      backup_email_from_configured: Boolean(env.EMAIL_FROM),
       owner_routes: true,
       affiliate_admin_routes: true,
       tracking_routes: true,
@@ -316,6 +320,8 @@ async function handleProductRoutes(request, env) {
         return json(request, { ok: false, error: "wrong_payment_type", message: "Este pago no corresponde a la compra de un documento." }, 403);
       }
 
+      await recordApprovedPaymentOnce(env, mp, "generation_validation");
+
       externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
       if (requestedExternalRef && externalRef && requestedExternalRef !== externalRef) {
         return json(request, { ok: false, error: "external_reference_mismatch", message: "La referencia del pago no coincide con la operación iniciada." }, 409);
@@ -323,12 +329,30 @@ async function handleProductRoutes(request, env) {
 
       checkout = externalRef ? await readCheckout(env, externalRef) : null;
       if (checkout?.texto) {
+        await safeAppendOwnerEvent(env, {
+          id: `DOC-${paymentId}`,
+          payment_id: paymentId,
+          order_id: externalRef,
+          type: "document_generated",
+          product: checkout.metadata?.titulo || metadata?.titulo || checkout.datosDoc?.tipo || "Documento legal",
+          category: "documento",
+          amount: Number(checkout.metadata?.precio_usd || metadata?.precio_usd || 0),
+          amount_ars: Number(mp?.transaction_amount || checkout?.montoARS || 0),
+          currency: mp?.currency_id || "ARS",
+          payment_method: "MercadoPago",
+          status: "approved",
+          customer: checkout.datosDoc?.email || mp?.payer?.email || "",
+          affiliate: checkout?.ref || "",
+          date: checkout.generated_at || new Date().toISOString(),
+          raw: { paymentId, externalRef, previewId: checkout.previewId || previewId, recovered: true }
+        });
         return json(request, {
           ok: true,
           texto: checkout.texto,
           paymentId,
           external_reference: externalRef,
           metadata: checkout.metadata || metadata || {},
+          generated_at: checkout.generated_at || "",
           recovered: true
         });
       }
@@ -338,6 +362,19 @@ async function handleProductRoutes(request, env) {
       if (!previewId) previewId = checkout?.previewId || null;
 
       if (!datosDoc || !Object.keys(datosDoc).length) {
+        await safeAppendOwnerEvent(env, {
+          id: `DOC-ERROR-${paymentId}`,
+          payment_id: paymentId,
+          order_id: externalRef,
+          type: "document_generation_failed",
+          product: metadata?.titulo || mp?.description || "Documento legal",
+          category: "documento",
+          status: "failed",
+          error_flag: true,
+          error_tipo: "checkout_data_not_found",
+          error_detalle: "Pago aprobado sin datos temporales del formulario.",
+          raw: { paymentId, externalRef }
+        });
         return json(request, {
           ok: false,
           error: "checkout_data_not_found",
@@ -349,50 +386,89 @@ async function handleProductRoutes(request, env) {
     datosDoc = datosDoc || {};
     metadata = metadata || {};
 
-    let texto = "";
-    if (previewId) {
-      const prev = await readPreview(env, previewId);
-      if (prev?.texto) texto = prev.texto;
-    }
-
-    if (!texto) texto = await generarDocumentoTexto(env, datosDoc, metadata, false);
-
-    if (!codigoPack && externalRef) {
-      await writeCheckout(env, externalRef, {
-        ...(checkout || {}),
-        external_reference: externalRef,
-        tipo: checkout?.tipo || mp?.metadata?.legalai_tipo || "doc",
-        datosDoc,
-        metadata,
-        previewId,
-        texto,
-        payment_id: paymentId,
-        generated_at: new Date().toISOString()
-      });
-    }
-
     await safeAppendOwnerEvent(env, {
-      id: paymentId || ("PACK-" + codigoPack),
-      type: "document_generated",
+      id: `DOC-START-${paymentId || codigoPack}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: "document_generation_started",
       product: metadata.titulo || datosDoc.tipo || "Documento legal",
       category: "documento",
-      amount: Number(metadata.precio_usd || 0),
-      amount_ars: Number(mp?.transaction_amount || checkout?.montoARS || 0),
-      currency: mp?.currency_id || "USD",
-      payment_method: codigoPack ? "Pack" : "MercadoPago",
-      status: "approved",
+      status: "pending",
       customer: datosDoc.email || mp?.payer?.email || "",
-      affiliate: checkout?.ref || datosDoc.ref || "",
-      raw: { paymentId, externalRef, previewId, metadata, recovered_from_checkout: Boolean(checkout) }
+      raw: { paymentId, externalRef, previewId, codigoPack: Boolean(codigoPack) }
     });
 
-    return json(request, {
-      ok: true,
-      texto,
-      paymentId: paymentId || ("PACK_" + Date.now()),
-      external_reference: externalRef,
-      metadata
-    });
+    try {
+      let texto = "";
+      if (previewId) {
+        const prev = await readPreview(env, previewId);
+        if (prev?.texto) texto = prev.texto;
+      }
+
+      if (!texto) texto = await generarDocumentoTexto(env, datosDoc, metadata, false);
+      const generatedAt = new Date().toISOString();
+
+      if (!codigoPack && externalRef) {
+        await writeCheckout(env, externalRef, {
+          ...(checkout || {}),
+          external_reference: externalRef,
+          tipo: checkout?.tipo || mp?.metadata?.legalai_tipo || "doc",
+          datosDoc,
+          metadata,
+          previewId,
+          texto,
+          payment_id: paymentId,
+          generated_at: generatedAt
+        });
+      }
+
+      await safeAppendOwnerEvent(env, {
+        id: `DOC-${paymentId || ("PACK-" + codigoPack)}`,
+        payment_id: paymentId,
+        order_id: externalRef,
+        type: "document_generated",
+        product: metadata.titulo || datosDoc.tipo || "Documento legal",
+        category: "documento",
+        amount: Number(metadata.precio_usd || 0),
+        amount_ars: Number(mp?.transaction_amount || checkout?.montoARS || 0),
+        currency: mp?.currency_id || "USD",
+        payment_method: codigoPack ? "Pack" : "MercadoPago",
+        status: "approved",
+        customer: datosDoc.email || mp?.payer?.email || "",
+        affiliate: checkout?.ref || datosDoc.ref || "",
+        date: generatedAt,
+        raw: { paymentId, externalRef, previewId, metadata, recovered_from_checkout: Boolean(checkout) }
+      });
+
+      return json(request, {
+        ok: true,
+        texto,
+        paymentId: paymentId || ("PACK_" + Date.now()),
+        external_reference: externalRef,
+        metadata,
+        generated_at: generatedAt
+      });
+    } catch (err) {
+      await safeAppendOwnerEvent(env, {
+        id: `DOC-ERROR-${paymentId || codigoPack}`,
+        payment_id: paymentId,
+        order_id: externalRef,
+        type: "document_generation_failed",
+        product: metadata.titulo || datosDoc.tipo || "Documento legal",
+        category: "documento",
+        status: "failed",
+        customer: datosDoc.email || mp?.payer?.email || "",
+        error_flag: true,
+        error_tipo: "document_generation_exception",
+        error_detalle: err?.message || String(err),
+        raw: { paymentId, externalRef, previewId }
+      });
+      throw err;
+    }
+  }
+
+  if (request.method === "POST" && url.pathname === "/respaldo-pdf") {
+    return await handlePdfBackupEmail(request, env);
   }
 
   if (request.method === "POST" && ["/evento", "/interaccion", "/track"].includes(url.pathname)) {
@@ -401,9 +477,12 @@ async function handleProductRoutes(request, env) {
 
     const saved = await safeAppendOwnerEvent(env, {
       id: body.id || body.event_id || body.payment_id || body.paymentId || body.externalRef || body.external_reference,
+      payment_id: body.payment_id || body.paymentId || "",
+      order_id: body.order_id || body.externalRef || body.external_reference || "",
+      date: body.date || body.event_time || body.client_time || new Date().toISOString(),
       type: tipo,
       product: body.doc_tipo || body.product || body.boton || body.pagina || "Web LegalAI",
-      category: url.pathname.replace("/", ""),
+      category: body.category || url.pathname.replace("/", ""),
       amount: Number(body.precio_usd || body.amount || 0),
       amount_ars: Number(body.amount_ars || body.monto_ars || 0),
       currency: body.currency || body.moneda || (body.precio_usd ? "USD" : "ARS"),
@@ -412,6 +491,9 @@ async function handleProductRoutes(request, env) {
       customer: body.email || body.customer || "",
       affiliate: body.ref || body.affiliate || "",
       affiliate_source: body.utm_src || "",
+      error_flag: Boolean(body.error_flag || body.error),
+      error_tipo: body.error_tipo || body.error_type || "",
+      error_detalle: body.error_detalle || body.error_detail || body.message || "",
       raw: body
     });
 
@@ -494,23 +576,45 @@ async function handleMercadoPagoWebhook(request, env) {
   const body = request.method === "POST" ? await readRequestBody(request) : {};
   const topic = url.searchParams.get("topic") || url.searchParams.get("type") || body.type || body.topic || "";
   const paymentId = url.searchParams.get("id") || url.searchParams.get("data.id") || body?.data?.id || body.id || body.payment_id || "";
+  const requestId = request.headers.get("x-request-id") || crypto.randomUUID();
+  const receivedAt = new Date().toISOString();
+
+  await safeAppendOwnerEvent(env, {
+    id: `MP-WH-${paymentId || "SIN-ID"}-${requestId}`,
+    payment_id: String(paymentId || ""),
+    type: "payment_webhook_received",
+    category: "webhook",
+    product: "Notificación MercadoPago",
+    status: "pending",
+    date: receivedAt,
+    raw: {
+      topic,
+      paymentId,
+      request_id: requestId,
+      x_signature_present: Boolean(request.headers.get("x-signature")),
+      body
+    }
+  });
 
   if (!paymentId) {
     await safeAppendOwnerEvent(env, {
+      id: `MP-WH-ERROR-${requestId}`,
       type: "error",
       category: "webhook",
       product: "MercadoPago webhook sin payment_id",
       status: "failed",
       error_flag: true,
       error_tipo: "mp_webhook_missing_payment_id",
-      error_detalle: JSON.stringify({ query: Object.fromEntries(url.searchParams), body }).slice(0, 600)
+      error_detalle: "La notificación no incluyó un identificador de pago.",
+      raw: { topic, body, request_id: requestId }
     });
     return json(request, { ok: true, ignored: "missing_payment_id" });
   }
 
   if (!env.MERCADOPAGO_ACCESS_TOKEN) {
     await safeAppendOwnerEvent(env, {
-      id: `MP-WH-${paymentId}`,
+      id: `MP-WH-ERROR-${paymentId}`,
+      payment_id: String(paymentId),
       type: "error",
       category: "webhook",
       product: "MercadoPago webhook sin token",
@@ -518,60 +622,42 @@ async function handleMercadoPagoWebhook(request, env) {
       error_flag: true,
       error_tipo: "missing_mp_token",
       error_detalle: "No se pudo verificar el pago porque falta MERCADOPAGO_ACCESS_TOKEN.",
-      raw: { topic, paymentId, body }
+      raw: { topic, paymentId, body, request_id: requestId }
     });
     return json(request, { ok: true, warning: "missing_mp_token" });
   }
 
   try {
-    const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
-      headers: { "Authorization": `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` }
-    });
-    const mp = await mpRes.json().catch(() => ({}));
-
-    if (!mpRes.ok) {
+    const verified = await fetchMercadoPagoPayment(env, String(paymentId));
+    if (!verified.ok) {
       await safeAppendOwnerEvent(env, {
-        id: `MP-WH-${paymentId}`,
+        id: `MP-WH-ERROR-${paymentId}`,
+        payment_id: String(paymentId),
         type: "error",
         category: "webhook",
         product: "Error al verificar pago MercadoPago",
         status: "failed",
         error_flag: true,
-        error_tipo: "mp_payment_lookup_error",
-        error_detalle: JSON.stringify(mp).slice(0, 600),
-        raw: { topic, paymentId, mp }
+        error_tipo: verified.error || "mp_payment_lookup_error",
+        error_detalle: verified.message || "No se pudo consultar el pago.",
+        raw: { topic, paymentId, request_id: requestId }
       });
       return json(request, { ok: true, warning: "mp_lookup_error" });
     }
 
+    const mp = verified.payment;
     const approved = String(mp.status || "").toLowerCase() === "approved";
-    const externalRef = mp.external_reference || mp.metadata?.legalai_external_ref || paymentId;
-    const amountARS = Number(mp.transaction_amount || mp.metadata?.amount_ars || 0);
-    const product = mp.description || mp.metadata?.legalai_tipo || "Documento LegalAI";
-    const customer = mp.payer?.email || mp.metadata?.email || "";
-    const affiliate = mp.metadata?.legalai_ref || mp.metadata?.ref || "";
-
-    await safeAppendOwnerEvent(env, {
-      id: `MP-${paymentId}`,
-      payment_id: String(paymentId),
-      order_id: externalRef,
-      type: approved ? "venta" : "payment_update",
-      product,
-      category: "mercadopago",
-      amount: amountARS,
-      amount_ars: amountARS,
-      currency: "ARS",
-      payment_method: "MercadoPago",
-      status: approved ? "approved" : (mp.status || "pending"),
-      customer,
-      affiliate,
-      raw: { topic, paymentId, externalRef, mp }
-    });
+    if (approved) {
+      await recordApprovedPaymentOnce(env, mp, "webhook");
+    } else {
+      await recordPaymentStatusEvent(env, mp, "webhook");
+    }
 
     return json(request, { ok: true, saved: true, status: mp.status || "" });
   } catch (err) {
     await safeAppendOwnerEvent(env, {
-      id: `MP-WH-${paymentId}`,
+      id: `MP-WH-EXCEPTION-${paymentId}-${requestId}`,
+      payment_id: String(paymentId),
       type: "error",
       category: "webhook",
       product: "Excepción verificando webhook MercadoPago",
@@ -579,7 +665,7 @@ async function handleMercadoPagoWebhook(request, env) {
       error_flag: true,
       error_tipo: "mp_webhook_exception",
       error_detalle: err?.message || String(err),
-      raw: { topic, paymentId, body }
+      raw: { topic, paymentId, body, request_id: requestId }
     });
     return json(request, { ok: true, warning: "webhook_exception" });
   }
@@ -1183,24 +1269,8 @@ async function syncMercadoPagoPayments(request, env) {
     const paymentId = String(mp.id || "");
     if (!paymentId) { skipped++; continue; }
     const approved = String(mp.status || "").toLowerCase() === "approved";
-    const externalRef = mp.external_reference || mp.metadata?.legalai_external_ref || "";
-    const amountARS = Number(mp.transaction_amount || 0);
-    await safeAppendOwnerEvent(env, {
-      id: `MP-${paymentId}`,
-      payment_id: paymentId,
-      order_id: externalRef,
-      type: approved ? "venta" : "payment_update",
-      product: mp.description || mp.metadata?.legalai_tipo || "Documento LegalAI",
-      category: "mercadopago",
-      amount: amountARS,
-      amount_ars: String(mp.currency_id || "ARS").toUpperCase() === "ARS" ? amountARS : 0,
-      currency: mp.currency_id || "ARS",
-      payment_method: "MercadoPago",
-      status: approved ? "approved" : (mp.status || "pending"),
-      customer: mp.payer?.email || mp.metadata?.email || "",
-      affiliate: mp.metadata?.legalai_ref || mp.metadata?.ref || "",
-      raw: { source: "mp_sync", paymentId, externalRef, mp }
-    });
+    if (approved) await recordApprovedPaymentOnce(env, mp, "mp_sync");
+    else await recordPaymentStatusEvent(env, mp, "mp_sync");
     imported++;
   }
 
@@ -1310,6 +1380,320 @@ async function maybeCreateAffiliateConversionFromOwnerEvent(env, event) {
   });
 }
 
+async function recordApprovedPaymentOnce(env, mp, source = "unknown") {
+  const paymentId = String(mp?.id || "").trim();
+  if (!paymentId || String(mp?.status || "").toLowerCase() !== "approved" || !isLegalAiPayment(mp)) return null;
+
+  const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
+  const amountARS = Number(mp.transaction_amount || 0);
+  return await safeAppendOwnerEvent(env, {
+    id: `SALE-${paymentId}`,
+    payment_id: paymentId,
+    order_id: externalRef,
+    type: "payment_approved",
+    product: mp.description || mp.metadata?.titulo || mp.metadata?.legalai_tipo || "Documento LegalAI",
+    category: "mercadopago",
+    amount: amountARS,
+    amount_ars: String(mp.currency_id || "ARS").toUpperCase() === "ARS" ? amountARS : 0,
+    currency: mp.currency_id || "ARS",
+    payment_method: "MercadoPago",
+    status: "approved",
+    customer: mp.payer?.email || mp.metadata?.email || "",
+    affiliate: mp.metadata?.legalai_ref || mp.metadata?.ref || "",
+    date: mp.date_approved || mp.date_last_updated || new Date().toISOString(),
+    raw: {
+      source,
+      paymentId,
+      externalRef,
+      payment_status: mp.status || "approved",
+      approved_at: mp.date_approved || "",
+      preference_id: mp.preference_id || "",
+      mp
+    }
+  });
+}
+
+async function recordPaymentStatusEvent(env, mp, source = "unknown") {
+  const paymentId = String(mp?.id || "").trim();
+  if (!paymentId || !isLegalAiPayment(mp)) return null;
+  const status = String(mp.status || "pending").toLowerCase();
+  const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
+  return await safeAppendOwnerEvent(env, {
+    id: `MP-STATUS-${paymentId}-${status}`,
+    payment_id: paymentId,
+    order_id: externalRef,
+    type: "payment_status_updated",
+    product: mp.description || mp.metadata?.legalai_tipo || "Documento LegalAI",
+    category: "mercadopago",
+    amount: Number(mp.transaction_amount || 0),
+    amount_ars: String(mp.currency_id || "ARS").toUpperCase() === "ARS" ? Number(mp.transaction_amount || 0) : 0,
+    currency: mp.currency_id || "ARS",
+    payment_method: "MercadoPago",
+    status,
+    customer: mp.payer?.email || mp.metadata?.email || "",
+    affiliate: mp.metadata?.legalai_ref || mp.metadata?.ref || "",
+    date: mp.date_last_updated || new Date().toISOString(),
+    raw: { source, paymentId, externalRef, mp }
+  });
+}
+
+async function handlePdfBackupEmail(request, env) {
+  let form;
+  try {
+    form = await request.formData();
+  } catch (err) {
+    return json(request, { ok: false, error: "invalid_multipart", message: "No se pudo leer el archivo PDF." }, 400);
+  }
+
+  const paymentId = String(form.get("paymentId") || form.get("payment_id") || "").trim();
+  const requestedExternalRef = String(form.get("externalRef") || form.get("external_reference") || "").trim();
+  const file = form.get("archivo");
+  const clientDatos = parseJsonValue(form.get("datosDoc"), {});
+  const clientMetadata = parseJsonValue(form.get("metadata"), {});
+
+  if (!paymentId || !/^\d+$/.test(paymentId)) {
+    return json(request, { ok: false, error: "missing_payment_id", message: "Falta un payment_id válido." }, 400);
+  }
+  if (!file || typeof file.arrayBuffer !== "function") {
+    return json(request, { ok: false, error: "missing_pdf", message: "Falta adjuntar el PDF generado." }, 400);
+  }
+  if (file.size <= 0 || file.size > BACKUP_PDF_MAX_BYTES) {
+    return json(request, { ok: false, error: "invalid_pdf_size", message: "El PDF está vacío o supera el límite permitido." }, 413);
+  }
+  if (String(file.type || "application/pdf").toLowerCase() !== "application/pdf") {
+    return json(request, { ok: false, error: "invalid_file_type", message: "El archivo de respaldo debe ser PDF." }, 415);
+  }
+
+  const verified = await fetchMercadoPagoPayment(env, paymentId);
+  if (!verified.ok) return json(request, { ok: false, error: verified.error, message: verified.message }, verified.status || 502);
+  const mp = verified.payment;
+  if (String(mp.status || "").toLowerCase() !== "approved") {
+    return json(request, { ok: false, error: "payment_not_approved", message: "El pago no figura aprobado." }, 402);
+  }
+  if (!isLegalAiPayment(mp) || String(mp.metadata?.legalai_tipo || "doc").toLowerCase() !== "doc") {
+    return json(request, { ok: false, error: "wrong_payment_type", message: "El pago no corresponde a un documento LegalAI." }, 403);
+  }
+
+  await recordApprovedPaymentOnce(env, mp, "backup_email_validation");
+
+  const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
+  if (requestedExternalRef && externalRef && requestedExternalRef !== externalRef) {
+    return json(request, { ok: false, error: "external_reference_mismatch", message: "La referencia no coincide con el pago." }, 409);
+  }
+
+  const checkout = externalRef ? await readCheckout(env, externalRef) : null;
+  const backupState = await readBackupEmailState(env, paymentId);
+  const previousSent = backupState?.status === "sent" ? backupState : (checkout?.backup_email?.status === "sent" ? checkout.backup_email : null);
+  if (previousSent) {
+    return json(request, {
+      ok: true,
+      already_sent: true,
+      resend_id: previousSent.resend_id || "",
+      sent_at: previousSent.sent_at || ""
+    });
+  }
+
+  const datosDoc = checkout?.datosDoc && Object.keys(checkout.datosDoc).length ? checkout.datosDoc : clientDatos;
+  const metadata = checkout?.metadata && Object.keys(checkout.metadata).length ? checkout.metadata : clientMetadata;
+  const title = metadata?.titulo || datosDoc?.tipo || mp.description || "Documento LegalAI";
+  const buyerName = extractBuyerName(datosDoc) || mp.payer?.first_name || "Sin nombre identificado";
+  const payerEmail = mp.payer?.email || datosDoc?.email || "";
+  const approvedAt = mp.date_approved || mp.date_last_updated || new Date().toISOString();
+  const safeFilename = sanitizePdfFilename(file.name || `${title}-${paymentId}.pdf`);
+
+  await safeAppendOwnerEvent(env, {
+    id: `BACKUP-REQUEST-${paymentId}`,
+    payment_id: paymentId,
+    order_id: externalRef,
+    type: "backup_email_requested",
+    product: title,
+    category: "email_respaldo",
+    status: "pending",
+    customer: payerEmail,
+    date: new Date().toISOString(),
+    raw: { paymentId, externalRef, filename: safeFilename, bytes: file.size, buyerName }
+  });
+
+  if (!env.RESEND_API_KEY || !env.EMAIL_TO || !env.EMAIL_FROM) {
+    const missing = [
+      !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
+      !env.EMAIL_TO ? "EMAIL_TO" : "",
+      !env.EMAIL_FROM ? "EMAIL_FROM" : ""
+    ].filter(Boolean).join(", ");
+    await markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, "missing_email_config", `Falta configurar: ${missing}`);
+    return json(request, { ok: false, error: "missing_email_config", message: `Falta configurar: ${missing}` }, 500);
+  }
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfBase64 = arrayBufferToBase64(arrayBuffer);
+    const resendPayload = {
+      from: env.EMAIL_FROM,
+      to: [env.EMAIL_TO],
+      subject: `[LegalAI respaldo] Pago ${paymentId} · ${title} · ${buyerName}`.slice(0, 240),
+      html: buildBackupEmailHtml({ paymentId, externalRef, title, buyerName, payerEmail, approvedAt, datosDoc, metadata, filename: safeFilename }),
+      attachments: [{ filename: safeFilename, content: pdfBase64 }],
+      tags: [
+        { name: "payment_id", value: paymentId.slice(0, 256) },
+        { name: "email_type", value: "legalai_backup" }
+      ]
+    };
+
+    const resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `legalai-backup-${paymentId}`
+      },
+      body: JSON.stringify(resendPayload)
+    });
+    const resendData = await resendResponse.json().catch(() => ({}));
+    if (!resendResponse.ok || !resendData.id) {
+      throw new Error(resendData.message || resendData.error || `Resend HTTP ${resendResponse.status}`);
+    }
+
+    const sentAt = new Date().toISOString();
+    const sentState = {
+      status: "sent",
+      sent_at: sentAt,
+      resend_id: resendData.id,
+      filename: safeFilename,
+      bytes: file.size,
+      to: env.EMAIL_TO
+    };
+    await writeBackupEmailState(env, paymentId, sentState);
+    if (externalRef) {
+      await writeCheckout(env, externalRef, {
+        ...(checkout || {}),
+        external_reference: externalRef,
+        datosDoc,
+        metadata,
+        backup_email: sentState
+      });
+    }
+
+    await safeAppendOwnerEvent(env, {
+      id: `BACKUP-EMAIL-${paymentId}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: "backup_email_sent",
+      product: title,
+      category: "email_respaldo",
+      status: "approved",
+      customer: payerEmail,
+      date: sentAt,
+      raw: { paymentId, externalRef, resend_id: resendData.id, filename: safeFilename, bytes: file.size, buyerName, to: env.EMAIL_TO }
+    });
+
+    return json(request, { ok: true, sent: true, resend_id: resendData.id, sent_at: sentAt });
+  } catch (err) {
+    await markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, "backup_email_send_error", err?.message || String(err));
+    return json(request, { ok: false, error: "backup_email_send_error", message: err?.message || String(err) }, 502);
+  }
+}
+
+async function markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, errorType, detail) {
+  const failedAt = new Date().toISOString();
+  const failedState = { status: "failed", failed_at: failedAt, error: detail };
+  await writeBackupEmailState(env, paymentId, failedState);
+  if (externalRef) {
+    await writeCheckout(env, externalRef, {
+      ...(checkout || {}),
+      external_reference: externalRef,
+      backup_email: failedState
+    });
+  }
+  await safeAppendOwnerEvent(env, {
+    id: `BACKUP-EMAIL-ERROR-${paymentId}`,
+    payment_id: paymentId,
+    order_id: externalRef,
+    type: "backup_email_error",
+    product: title,
+    category: "email_respaldo",
+    status: "failed",
+    customer: payerEmail,
+    date: failedAt,
+    error_flag: true,
+    error_tipo: errorType,
+    error_detalle: detail,
+    raw: { paymentId, externalRef, to: env.EMAIL_TO || "" }
+  });
+}
+
+function parseJsonValue(value, fallback = {}) {
+  if (typeof value !== "string" || !value) return fallback;
+  try { return JSON.parse(value); } catch { return fallback; }
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+function extractBuyerName(datos = {}) {
+  const preferredKeys = [
+    "comprador", "inquilino", "locatario", "huesped", "cliente", "contratante",
+    "parte_1", "socio_1", "deudor", "mutuario", "beneficiario", "titular",
+    "nombre_completo", "nombre", "razon_social"
+  ];
+  for (const key of preferredKeys) {
+    const value = datos?.[key];
+    if (value !== undefined && value !== null && String(value).trim()) return String(value).trim();
+  }
+  for (const [key, value] of Object.entries(datos || {})) {
+    if (/nombre|comprador|inquilin|locatari|cliente|huesped|parte_1|socio_1/i.test(key) && String(value || "").trim()) {
+      return String(value).trim();
+    }
+  }
+  return "";
+}
+
+function sanitizePdfFilename(filename) {
+  const clean = String(filename || "documento-legal.pdf")
+    .replace(/[\\/:*?"<>|\u0000-\u001F]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 180);
+  return clean.toLowerCase().endsWith(".pdf") ? clean : `${clean || "documento-legal"}.pdf`;
+}
+
+function buildBackupEmailHtml({ paymentId, externalRef, title, buyerName, payerEmail, approvedAt, datosDoc, metadata, filename }) {
+  const rows = Object.entries(datosDoc || {}).map(([key, value]) => {
+    const displayed = typeof value === "object" ? JSON.stringify(value) : String(value ?? "");
+    return `<tr><td style="padding:6px 8px;border:1px solid #ddd;font-weight:600;vertical-align:top">${escapeHtml(humanize(key))}</td><td style="padding:6px 8px;border:1px solid #ddd;white-space:pre-wrap">${escapeHtml(displayed)}</td></tr>`;
+  }).join("");
+  return `
+    <div style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+      <h2 style="margin:0 0 14px">Respaldo automático LegalAI Arg</h2>
+      <p><strong>Pago Mercado Pago:</strong> ${escapeHtml(paymentId)}</p>
+      <p><strong>Referencia:</strong> ${escapeHtml(externalRef || "—")}</p>
+      <p><strong>Estado validado:</strong> approved</p>
+      <p><strong>Fecha de aprobación:</strong> ${escapeHtml(approvedAt || "—")}</p>
+      <p><strong>Documento:</strong> ${escapeHtml(title)}</p>
+      <p><strong>Comprador / parte identificada:</strong> ${escapeHtml(buyerName || "—")}</p>
+      <p><strong>Email informado por Mercado Pago:</strong> ${escapeHtml(payerEmail || "—")}</p>
+      <p><strong>Archivo adjunto:</strong> ${escapeHtml(filename)}</p>
+      <h3 style="margin-top:22px">Datos ingresados en el formulario</h3>
+      <table style="border-collapse:collapse;width:100%;font-size:13px">${rows || '<tr><td style="padding:8px;border:1px solid #ddd">Sin datos recuperables</td></tr>'}</table>
+      <p style="margin-top:18px;color:#666;font-size:12px">Metadata: ${escapeHtml(JSON.stringify(metadata || {}))}</p>
+    </div>`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 async function fetchMercadoPagoPayment(env, paymentId) {
   if (!paymentId) return { ok: false, error: "missing_payment_id", message: "Falta payment_id.", status: 400 };
   if (!env.MERCADOPAGO_ACCESS_TOKEN) return { ok: false, error: "missing_mp_token", message: "Falta configurar MercadoPago.", status: 500 };
@@ -1340,6 +1724,22 @@ async function writeCheckout(env, externalRef, value) {
   if (!kv || !externalRef) return false;
   try {
     await kv.put(`${CHECKOUTS_KEY}:${externalRef}`, JSON.stringify(value), { expirationTtl: CHECKOUT_TTL_SECONDS });
+    return true;
+  } catch { return false; }
+}
+async function readBackupEmailState(env, paymentId) {
+  const kv = checkoutKV(env);
+  if (!kv || !paymentId) return null;
+  try {
+    const txt = await kv.get(`backup_email:${paymentId}`);
+    return txt ? JSON.parse(txt) : null;
+  } catch { return null; }
+}
+async function writeBackupEmailState(env, paymentId, value) {
+  const kv = checkoutKV(env);
+  if (!kv || !paymentId) return false;
+  try {
+    await kv.put(`backup_email:${paymentId}`, JSON.stringify(value), { expirationTtl: BACKUP_EMAIL_TTL_SECONDS });
     return true;
   } catch { return false; }
 }
@@ -1480,8 +1880,8 @@ async function buildOwnerPayload(env, events, hasKv) {
       });
     }
 
-    if (event.type === "email") {
-      emails.push({ id: `EMAIL-${event.id}`, fecha: event.date, para: event.customer, asunto: event.product, estado: event.status, resend: event.raw?.resend_id || "" });
+    if (event.type === "email" || String(event.type || "").startsWith("backup_email_")) {
+      emails.push({ id: `EMAIL-${event.id}`, fecha: event.date, para: event.raw?.to || event.customer, asunto: event.product, estado: event.status, resend: event.raw?.resend_id || "" });
     }
 
     if (event.type === "audit" || event.type === "auditoria") {
@@ -1713,7 +2113,7 @@ function dedupeConfirmedSalesOwnerEvents(events = []) {
 function isConfirmedSaleOwnerEvent(event = {}) {
   const type = String(event.type || "").toLowerCase();
   const status = String(event.status || "").toLowerCase();
-  const saleTypes = new Set(["venta", "sale", "payment_approved", "pago_ok", "document_generated", "plan_activated", "pack_created"]);
+  const saleTypes = new Set(["venta", "sale", "payment_approved", "plan_activated", "pack_created"]);
   return saleTypes.has(type) && ["approved", "active", "paid", "success", "ok"].includes(status);
 }
 

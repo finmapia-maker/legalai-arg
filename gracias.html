@@ -325,7 +325,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',func
 })();
 
 
-// ── Registro interno de venta confirmada para Owner Panel ─────────────
+// ── Registro del retorno del comprador desde Mercado Pago ─────────────
 (function() {
   var p = new URLSearchParams(window.location.search);
   var paymentId = p.get('payment_id') || p.get('collection_id') || '';
@@ -341,7 +341,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',func
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        tipo: 'venta',
+        tipo: 'payment_returned',
         status: 'approved',
         payment_id: paymentId,
         doc_tipo: titulo,
@@ -350,6 +350,8 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',func
         currency: montoARS ? 'ARS' : 'USD',
         payment_method: 'MercadoPago',
         ref: sessionStorage.getItem('legalai_ref') || '',
+        external_reference: p.get('external_reference') || '',
+        client_time: new Date().toISOString(),
         origen: sessionStorage.getItem('legalai_origen') || 'gracias'
       })
     }).catch(function(){});

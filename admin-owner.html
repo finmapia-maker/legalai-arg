@@ -564,8 +564,8 @@ function renderSystemFlow(){
     {key:'checkout', label:'Checkout iniciado', types:['checkout_start','checkout_click','pagar_preview'], desc:'clic de pago'},
     {key:'payment_pending', label:'Pagos pendientes', custom:()=>ops.filter(o=>o.tipo==='venta' && o.estado==='Pendiente').length, desc:'MP pendiente / mediación'},
     {key:'payment_approved', label:'Ventas confirmadas', custom:()=>confirmedSales.length, desc:'pagos aprobados reales'},
-    {key:'document', label:'Documento listo', types:['document_generated','document_ready_page_view','document_download_click'], desc:'generado o descargado'},
-    {key:'email', label:'Emails enviados', types:['email','email_sent'], custom:()=>Math.max((state.emails||[]).length, countTypes(['email','email_sent'])), desc:'entregas registradas'}
+    {key:'document', label:'Documento listo', types:['document_generated','pdf_generated','download_button_shown'], desc:'texto, PDF o botón disponible'},
+    {key:'email', label:'Respaldos por email', types:['backup_email_sent'], custom:()=>Math.max((state.emails||[]).filter(e=>String(e.estado||'').toLowerCase()!=='failed').length, countTypes(['backup_email_sent'])), desc:'copias aceptadas por Resend'}
   ];
 
   const values = steps.map(s => ({...s, value: typeof s.custom === 'function' ? s.custom() : countTypes(s.types)}));
@@ -781,7 +781,7 @@ function dedupeConfirmedSales(rows){
   });
   return out;
 }
-function isConfirmedSale(o){ return ['venta','sale','payment_approved','pago_ok','document_generated','plan_activated','pack_created','pack'].includes(String(o.tipo).toLowerCase()) && o.estado === 'Confirmada'; }
+function isConfirmedSale(o){ return ['venta','sale','payment_approved','plan_activated','pack_created','pack'].includes(String(o.tipo).toLowerCase()) && o.estado === 'Confirmada'; }
 function unique(arr){ return [...new Set(arr.filter(Boolean).map(String))].sort((a,b)=>a.localeCompare(b,'es')); }
 function val(id){ return document.getElementById(id)?.value || ''; }
 function str(v){ return v === undefined || v === null ? '' : String(v); } function num(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; } function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || v === 'yes' || v === 'si'; }

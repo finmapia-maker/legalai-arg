@@ -1997,14 +1997,16 @@ function showSec(name, _anchor) {
 
 let G = {
   tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'',
-  paymentId: null, codigoPack: null, previewId: null,
+  paymentId: null, codigoPack: null, previewId: null, externalRef: '',
   precio_usd: 8, upgrade_porcentaje: 40, categoria: 'intermedio', requiere_advertencia_legal: false,
 };
+let LEGALAI_FINAL_PDF = null;
 
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
 function empezarDeNuevo() {
-  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, previewId:null, precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
+  G = { tipo:'', pais:'Argentina', provincia:'', campos:[], form:null, texto:'', paymentId:null, codigoPack:null, previewId:null, externalRef:'', precio_usd:8, upgrade_porcentaje:40, categoria:'intermedio', requiere_advertencia_legal:false };
+  LEGALAI_FINAL_PDF = null;
   const pci = document.getElementById('packCodeInput');
   const pcs = document.getElementById('packCodeStatus');
   const pcb = document.getElementById('packCodeBox');
@@ -2422,12 +2424,18 @@ async function generarDocumento(paymentId, externalRef = '') {
   if (btnPagar && paymentId && !String(paymentId).startsWith('PACK_')) btnPagar.style.display = 'none';
   document.getElementById('card3').classList.remove('visible');
   document.getElementById('loadingDoc').classList.add('visible');
+  const referenciaInicial = externalRef || leerEstadoPago('legalai_external_reference', '');
+  track('document_generation_started', {
+    ...getCurrentDocTracking(),
+    status: 'pending', payment_id: paymentId, external_reference: referenciaInicial,
+    client_time: new Date().toISOString()
+  });
   try {
     const datos = parseEstadoPago('legalai_datos', null);
     const meta = parseEstadoPago('legalai_meta', {});
     const codigoPack = G.codigoPack || null;
     const previewId = G.previewId || leerEstadoPago('legalai_previewId', null);
-    const referencia = externalRef || leerEstadoPago('legalai_external_reference', '');
+    const referencia = referenciaInicial;
     const res = await fetch(`${CONFIG.WORKER_URL}/generar`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ paymentId, externalRef: referencia, datosDoc: datos, metadata: meta, codigoPack, previewId }),
@@ -2437,18 +2445,39 @@ async function generarDocumento(paymentId, externalRef = '') {
     if (!res.ok || data.error) throw new Error(data.message || data.error || `Error del servidor (${res.status})`);
     G.texto = data.texto;
     G.paymentId = data.paymentId || paymentId;
+    G.externalRef = data.external_reference || referencia || '';
     if (data.metadata?.titulo && !leerEstadoPago('legalai_titulo')) guardarEstadoPago('legalai_titulo', data.metadata.titulo);
     G.previewId = null;
     borrarEstadoPago('legalai_previewId');
     guardarEstadoPago('legalai_texto', data.texto);
     guardarEstadoPago('legalai_paymentId', G.paymentId);
+    if (G.externalRef) guardarEstadoPago('legalai_external_reference', G.externalRef);
+    document.getElementById('loadingDoc').classList.remove('visible');
+    const tituloFinal = leerEstadoPago('legalai_titulo', data.metadata?.titulo || 'documento-legal');
+    LEGALAI_FINAL_PDF = _generarPDF(data.texto, tituloFinal, true, false, { descargar: false });
+    showCard(4);
+    track('pdf_generated', {
+      ...getCurrentDocTracking(), status: 'approved', payment_id: G.paymentId,
+      external_reference: G.externalRef, filename: LEGALAI_FINAL_PDF.filename,
+      bytes: LEGALAI_FINAL_PDF.blob.size, client_time: new Date().toISOString()
+    });
+    track('download_button_shown', {
+      ...getCurrentDocTracking(), status: 'approved', payment_id: G.paymentId,
+      external_reference: G.externalRef, client_time: new Date().toISOString()
+    });
+
+    void enviarRespaldoPDF({
+      paymentId: G.paymentId,
+      externalRef: G.externalRef,
+      pdf: LEGALAI_FINAL_PDF,
+      datosDoc: datos || {},
+      metadata: data.metadata || meta || {}
+    });
+
+    limpiarRetornoMercadoPago();
+    track('pago_ok', { status: 'approved', doc_tipo: data.metadata?.titulo || G.form?.titulo || G.tipo || leerEstadoPago('legalai_titulo',''), monto: G.precio_usd || 0, amount: G.precio_usd || 0, amount_ars: Number(leerEstadoPago('legalai_monto_ars','0') || 0), payment_id: G.paymentId, external_reference: G.externalRef, payment_method: 'MercadoPago' });
     borrarEstadoPago('legalai_datos');
     borrarEstadoPago('legalai_meta');
-    borrarEstadoPago('legalai_external_reference');
-    document.getElementById('loadingDoc').classList.remove('visible');
-    showCard(4);
-    limpiarRetornoMercadoPago();
-    track('pago_ok', { status: 'approved', doc_tipo: data.metadata?.titulo || G.form?.titulo || G.tipo || leerEstadoPago('legalai_titulo',''), monto: G.precio_usd || 0, amount: G.precio_usd || 0, amount_ars: Number(leerEstadoPago('legalai_monto_ars','0') || 0), payment_id: G.paymentId, payment_method: 'MercadoPago' });
   } catch(err) {
     document.getElementById('loadingDoc').classList.remove('visible');
     document.getElementById('card3').classList.add('visible');
@@ -2456,6 +2485,12 @@ async function generarDocumento(paymentId, externalRef = '') {
     const msg = (err.name === 'TimeoutError' || err.name === 'AbortError')
       ? 'La generación tardó demasiado. Tu pago sigue acreditado.'
       : (err.message || 'No se pudo generar el documento.');
+    track('document_generation_failed', {
+      ...getCurrentDocTracking(), status: 'failed', payment_id: paymentId,
+      external_reference: referenciaInicial, error_flag: true,
+      error_tipo: err.name || 'document_generation_error', error_detalle: msg,
+      client_time: new Date().toISOString()
+    });
     showErr('alert3', '⚠️ ' + msg + ' No vuelvas a pagar. Usá “Reintentar generación”.');
     if (!document.getElementById('btnReintentar')) {
       const btn = document.createElement('button');
@@ -2467,11 +2502,67 @@ async function generarDocumento(paymentId, externalRef = '') {
   }
 }
 
+async function enviarRespaldoPDF({ paymentId, externalRef, pdf, datosDoc, metadata }) {
+  if (!paymentId || !/^\d+$/.test(String(paymentId)) || !pdf?.blob) return;
+  try {
+    const form = new FormData();
+    form.append('paymentId', String(paymentId));
+    form.append('externalRef', String(externalRef || ''));
+    form.append('datosDoc', JSON.stringify(datosDoc || {}));
+    form.append('metadata', JSON.stringify(metadata || {}));
+    form.append('archivo', pdf.blob, pdf.filename);
+    const response = await fetch(`${CONFIG.WORKER_URL}/respaldo-pdf`, { method: 'POST', body: form });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.error) throw new Error(data.message || data.error || `Error del servidor (${response.status})`);
+  } catch (err) {
+    track('backup_email_request_failed', {
+      ...getCurrentDocTracking(), status: 'failed', payment_id: paymentId,
+      external_reference: externalRef, error_flag: true,
+      error_tipo: 'backup_email_request_failed', error_detalle: err.message || String(err),
+      client_time: new Date().toISOString()
+    });
+  }
+}
+
 function descargarPDF() {
   const texto  = G.texto || leerEstadoPago('legalai_texto', '');
   const titulo = leerEstadoPago('legalai_titulo', 'documento-legal');
-  if (!texto) { alert('No se encontró el documento. Generalo de nuevo.'); return; }
-  _generarPDF(texto, titulo, true, false);
+  const paymentId = G.paymentId || leerEstadoPago('legalai_paymentId', '');
+  const externalRef = G.externalRef || leerEstadoPago('legalai_external_reference', '');
+  track('download_click', {
+    ...getCurrentDocTracking(), status: 'pending', payment_id: paymentId,
+    external_reference: externalRef, client_time: new Date().toISOString()
+  });
+  try {
+    if (!texto) throw new Error('No se encontró el documento. Generalo de nuevo.');
+    if (!LEGALAI_FINAL_PDF) LEGALAI_FINAL_PDF = _generarPDF(texto, titulo, true, false, { descargar: false });
+    iniciarDescargaBlob(LEGALAI_FINAL_PDF.blob, LEGALAI_FINAL_PDF.filename);
+    track('download_started', {
+      ...getCurrentDocTracking(), status: 'approved', payment_id: paymentId,
+      external_reference: externalRef, filename: LEGALAI_FINAL_PDF.filename,
+      bytes: LEGALAI_FINAL_PDF.blob.size, client_time: new Date().toISOString()
+    });
+  } catch (err) {
+    track('download_error', {
+      ...getCurrentDocTracking(), status: 'failed', payment_id: paymentId,
+      external_reference: externalRef, error_flag: true,
+      error_tipo: 'pdf_download_error', error_detalle: err.message || String(err),
+      client_time: new Date().toISOString()
+    });
+    alert(err.message || 'No se pudo iniciar la descarga.');
+  }
+}
+
+function iniciarDescargaBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
 function abrirModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -2733,7 +2824,7 @@ async function crearPackTrasRetornoMP(paymentIdPack, cot) {
   }
 }
 
-function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
+function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal, opciones = {}) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ format: 'a4', unit: 'mm' });
   const PW=210, PH=297, ML=25, MR=25, MT= conMarca ? 28 : 20, MB=20;
@@ -2802,7 +2893,10 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
     doc.setPage(i); doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(150,140,120);
     doc.text('Pág '+i+' / '+total, PW-MR, PH-MB+5, {align:'right'});
   }
-  doc.save(titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf');
+  const filename = titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf';
+  const blob = doc.output('blob');
+  if (opciones.descargar !== false) iniciarDescargaBlob(blob, filename);
+  return { doc, blob, filename };
 }
 
 function togglePackCode() {
@@ -2928,6 +3022,13 @@ window.addEventListener('load', () => {
 
   if (statLower === 'approved') {
     showSec('generador');
+    const returnedPaymentId = obtenerPaymentIdReal(p);
+    const returnedExternalRef = p.get('external_reference') || leerEstadoPago('legalai_external_reference', '');
+    track('payment_returned', {
+      ...getCurrentDocTracking(), status: 'approved', payment_id: returnedPaymentId,
+      external_reference: returnedExternalRef, payment_status: statLower,
+      client_time: new Date().toISOString()
+    });
 
     // ✅ Conversión REAL — solo cuando MercadoPago confirma el pago
     try {
