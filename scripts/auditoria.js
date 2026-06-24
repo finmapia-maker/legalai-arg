@@ -235,7 +235,7 @@ function isFrontendError(ev) {
 function isConfirmedSale(ev) {
   const t = eventType(ev);
   const s = eventStatus(ev);
-  const saleTypes = new Set(["venta", "sale", "payment_approved", "pago_ok", "document_generated", "plan_activated", "pack_created"]);
+  const saleTypes = new Set(["venta", "sale", "payment_approved", "plan_activated", "pack_created"]);
   return saleTypes.has(t) && ["approved", "active", "paid", "success", "ok"].includes(s);
 }
 
