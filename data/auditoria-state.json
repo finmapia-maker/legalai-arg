@@ -109,19 +109,24 @@
       "descripcion": "1) Auditar los 11 errores frontend en consola: identificar si bloquean el redirect post-pago o rompen el callback de confirmación. 2) Testear manualmente el flujo completo pago en mobile y desktop: simular compra real y verificar que la página de éxito carga y el webhook dispara correctamente. 3) Revisar que MercadoPago/Stripe esté en modo producción y no sandbox. 4) Verificar que la URL de retorno post-pago no esté rota ni devuelva 404. 5) Si los 11 errores frontend persisten sin fix confirmado, priorizar corrección JS antes de cualquier cambio de copy o precio.",
       "fecha": "2026-06-25T13:21:52.678Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Escalar urgente: 1) Confirmar con log de servidor si el botón de pago genera preferencia/intent correctamente o falla silenciosamente. 2) Verificar que el SDK de MercadoPago/Stripe carga sin errores de red (revisar Network tab en DevTools). 3) Testear con tarjeta de prueba en producción y capturar response exacto del gateway. 4) Si el botón de pago no dispara nada, revisar event listener JS del CTA de pago. 5) Considerar reemplazar temporalmente el checkout actual por un link directo de pago (MercadoPago link o Stripe payment link) para descartar que el problema sea del formulario custom y no del gateway.",
+      "fecha": "2026-06-28T12:17:39.949Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-27T12:10:08.121Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-28T12:17:39.949Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "1) Auditar los 11 errores frontend en consola: identificar si bloquean el redirect post-pago o rompen el callback de confirmación. 2) Testear manualmente el flujo completo pago en mobile y desktop: simular compra real y verificar que la página de éxito carga y el webhook dispara correctamente. 3) Revisar que MercadoPago/Stripe esté en modo producción y no sandbox. 4) Verificar que la URL de retorno post-pago no esté rota ni devuelva 404. 5) Si los 11 errores frontend persisten sin fix confirmado, priorizar corrección JS antes de cualquier cambio de copy o precio.",
+    "descripcion": "Escalar urgente: 1) Confirmar con log de servidor si el botón de pago genera preferencia/intent correctamente o falla silenciosamente. 2) Verificar que el SDK de MercadoPago/Stripe carga sin errores de red (revisar Network tab en DevTools). 3) Testear con tarjeta de prueba en producción y capturar response exacto del gateway. 4) Si el botón de pago no dispara nada, revisar event listener JS del CTA de pago. 5) Considerar reemplazar temporalmente el checkout actual por un link directo de pago (MercadoPago link o Stripe payment link) para descartar que el problema sea del formulario custom y no del gateway.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si los 11 errores frontend bloquean el redirect de confirmación → corregirlos restaura ventas a niveles previos (2-3 cada 48h)",
+    "hipotesis": "Si el botón de pago no genera preferencia válida o el SDK falla al cargar → 0 pagos iniciados aunque el usuario quiera pagar → fix técnico desbloqueará conversiones inmediatamente",
     "conv_base": 0,
-    "clics_base": 61
+    "clics_base": 22
   },
-  "cambio_activo_desde": "2026-06-25T13:21:52.678Z"
+  "cambio_activo_desde": "2026-06-28T12:17:39.949Z"
 }
