@@ -116,10 +116,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-06-28T12:17:39.949Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-06-29T14:48:07.649Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Escalar urgente: 1) Confirmar con log de servidor si el botón de pago genera preferencia/intent correctamente o falla silenciosamente. 2) Verificar que el SDK de MercadoPago/Stripe carga sin errores de red (revisar Network tab en DevTools). 3) Testear con tarjeta de prueba en producción y capturar response exacto del gateway. 4) Si el botón de pago no dispara nada, revisar event listener JS del CTA de pago. 5) Considerar reemplazar temporalmente el checkout actual por un link directo de pago (MercadoPago link o Stripe payment link) para descartar que el problema sea del formulario custom y no del gateway.",
     "archivo": "checkout.html",
