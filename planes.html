@@ -402,7 +402,7 @@ const PLANES = [
   },
 ];
 
-let modoPago      = 'cripto';
+let modoPago      = 'tarjeta';
 let cargando      = null;
 let planPendiente = null;
 
@@ -530,9 +530,9 @@ async function confirmarEmail() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ plan_id, metodo_pago: modoPago === 'cripto' ? 'cripto' : 'tarjeta', email, ref: refAfiliado || null }),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
 
-    if (data.invoice_url) {
+    if (res.ok && data.invoice_url) {
       sessionStorage.setItem('legalai_invoice', data.invoice_id || '');
       sessionStorage.setItem('legalai_email', email);
       // Google Ads: conversión de plan iniciada
@@ -548,7 +548,7 @@ async function confirmarEmail() {
       renderPlanes();
       planPendiente = plan_id;
       document.getElementById('inputEmailPago').value = email;
-      mostrarMsg(document.getElementById('msgEmailError'), data.error || 'Error al crear la orden. Intentá de nuevo.', 'error');
+      mostrarMsg(document.getElementById('msgEmailError'), data.error || data.message || `No se pudo crear la orden (${res.status}). Intentá de nuevo.`, 'error');
       document.getElementById('btnConfirmarEmail').disabled  = false;
       document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
       document.getElementById('modalEmail').classList.add('visible');
@@ -558,7 +558,7 @@ async function confirmarEmail() {
     renderPlanes();
     planPendiente = plan_id;
     document.getElementById('inputEmailPago').value = email;
-    mostrarMsg(document.getElementById('msgEmailError'), 'Error de conexión. Verificá tu internet.', 'error');
+    mostrarMsg(document.getElementById('msgEmailError'), 'No se pudo conectar con el servicio de pagos. Intentá nuevamente.', 'error');
     document.getElementById('btnConfirmarEmail').disabled  = false;
     document.getElementById('btnConfirmarEmail').innerHTML = 'Continuar al pago →';
     document.getElementById('modalEmail').classList.add('visible');
