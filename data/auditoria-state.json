@@ -114,19 +114,24 @@
       "descripcion": "Escalar urgente: 1) Confirmar con log de servidor si el botón de pago genera preferencia/intent correctamente o falla silenciosamente. 2) Verificar que el SDK de MercadoPago/Stripe carga sin errores de red (revisar Network tab en DevTools). 3) Testear con tarjeta de prueba en producción y capturar response exacto del gateway. 4) Si el botón de pago no dispara nada, revisar event listener JS del CTA de pago. 5) Considerar reemplazar temporalmente el checkout actual por un link directo de pago (MercadoPago link o Stripe payment link) para descartar que el problema sea del formulario custom y no del gateway.",
       "fecha": "2026-06-28T12:17:39.949Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "El funnel de planes tiene 6 clicks en plan seleccionado y 0 pagos iniciados: el botón de pago del plan no dispara ninguna acción. Verificar event listener del CTA de plan, que el precio del plan genere correctamente la preferencia de pago y que no haya error JS bloqueante en esa ruta específica. Paralelamente, para Ads: revisar que la landing de destino de los anuncios tenga el mismo flujo corregido que generó la venta orgánica, ya que la venta vino de fuente directa y Ads sigue sin convertir con 72 visitas.",
+      "fecha": "2026-06-30T13:09:47.770Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-06-29T14:48:07.649Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-06-30T13:09:47.770Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads inicio pago → Ads venta (0%) y Pago plan iniciado (100% drop)",
   "cambio_activo": {
-    "descripcion": "Escalar urgente: 1) Confirmar con log de servidor si el botón de pago genera preferencia/intent correctamente o falla silenciosamente. 2) Verificar que el SDK de MercadoPago/Stripe carga sin errores de red (revisar Network tab en DevTools). 3) Testear con tarjeta de prueba en producción y capturar response exacto del gateway. 4) Si el botón de pago no dispara nada, revisar event listener JS del CTA de pago. 5) Considerar reemplazar temporalmente el checkout actual por un link directo de pago (MercadoPago link o Stripe payment link) para descartar que el problema sea del formulario custom y no del gateway.",
-    "archivo": "checkout.html",
+    "descripcion": "El funnel de planes tiene 6 clicks en plan seleccionado y 0 pagos iniciados: el botón de pago del plan no dispara ninguna acción. Verificar event listener del CTA de plan, que el precio del plan genere correctamente la preferencia de pago y que no haya error JS bloqueante en esa ruta específica. Paralelamente, para Ads: revisar que la landing de destino de los anuncios tenga el mismo flujo corregido que generó la venta orgánica, ya que la venta vino de fuente directa y Ads sigue sin convertir con 72 visitas.",
+    "archivo": "planes.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el botón de pago no genera preferencia válida o el SDK falla al cargar → 0 pagos iniciados aunque el usuario quiera pagar → fix técnico desbloqueará conversiones inmediatamente",
-    "conv_base": 0,
-    "clics_base": 22
+    "hipotesis": "Si el botón de pago de planes genera correctamente el intent de pago y la landing de Ads usa el mismo flujo funcional → se recuperan los 6 usuarios de planes y se reduce el drop de Ads del 100% al promedio del funnel orgánico",
+    "conv_base": 1,
+    "clics_base": 71
   },
-  "cambio_activo_desde": "2026-06-28T12:17:39.949Z"
+  "cambio_activo_desde": "2026-06-30T13:09:47.770Z"
 }
