@@ -2001,6 +2001,8 @@ let G = {
   precio_usd: 8, upgrade_porcentaje: 40, categoria: 'intermedio', requiere_advertencia_legal: false,
 };
 let LEGALAI_FINAL_PDF = null;
+let LEGALAI_BACKUP_EMAIL_SENT = false;
+let LEGALAI_BACKUP_EMAIL_CONTEXT = null;
 
 function setDoc(t) { document.getElementById('docInput').value = t; }
 function volver()  { showCard(2); }
@@ -2466,13 +2468,14 @@ async function generarDocumento(paymentId, externalRef = '') {
       external_reference: G.externalRef, client_time: new Date().toISOString()
     });
 
-    void enviarRespaldoPDF({
+    LEGALAI_BACKUP_EMAIL_CONTEXT = {
       paymentId: G.paymentId,
       externalRef: G.externalRef,
       pdf: LEGALAI_FINAL_PDF,
       datosDoc: datos || {},
       metadata: data.metadata || meta || {}
-    });
+    };
+    enviarRespaldoPDF(LEGALAI_BACKUP_EMAIL_CONTEXT).catch(function(){});
 
     limpiarRetornoMercadoPago();
     track('pago_ok', { status: 'approved', doc_tipo: data.metadata?.titulo || G.form?.titulo || G.tipo || leerEstadoPago('legalai_titulo',''), monto: G.precio_usd || 0, amount: G.precio_usd || 0, amount_ars: Number(leerEstadoPago('legalai_monto_ars','0') || 0), payment_id: G.paymentId, external_reference: G.externalRef, payment_method: 'MercadoPago' });
@@ -2503,25 +2506,37 @@ async function generarDocumento(paymentId, externalRef = '') {
 }
 
 async function enviarRespaldoPDF({ paymentId, externalRef, pdf, datosDoc, metadata }) {
-  if (!paymentId || !/^\d+$/.test(String(paymentId)) || !pdf?.blob) return;
-  try {
-    const form = new FormData();
-    form.append('paymentId', String(paymentId));
-    form.append('externalRef', String(externalRef || ''));
-    form.append('datosDoc', JSON.stringify(datosDoc || {}));
-    form.append('metadata', JSON.stringify(metadata || {}));
-    form.append('archivo', pdf.blob, pdf.filename);
-    const response = await fetch(`${CONFIG.WORKER_URL}/respaldo-pdf`, { method: 'POST', body: form });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || data.error) throw new Error(data.message || data.error || `Error del servidor (${response.status})`);
-  } catch (err) {
-    track('backup_email_request_failed', {
-      ...getCurrentDocTracking(), status: 'failed', payment_id: paymentId,
-      external_reference: externalRef, error_flag: true,
-      error_tipo: 'backup_email_request_failed', error_detalle: err.message || String(err),
-      client_time: new Date().toISOString()
-    });
+  if (LEGALAI_BACKUP_EMAIL_SENT) return true;
+  if (!paymentId || !/^\d+$/.test(String(paymentId)) || !pdf?.blob) return false;
+  let lastError = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const form = new FormData();
+      form.append('paymentId', String(paymentId));
+      form.append('externalRef', String(externalRef || ''));
+      form.append('datosDoc', JSON.stringify(datosDoc || {}));
+      form.append('metadata', JSON.stringify(metadata || {}));
+      form.append('archivo', pdf.blob, pdf.filename);
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 30000);
+      const response = await fetch(`${CONFIG.WORKER_URL}/respaldo-pdf`, { method: 'POST', body: form, signal: controller.signal });
+      clearTimeout(timer);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.error) throw new Error(data.message || data.error || `Error del servidor (${response.status})`);
+      LEGALAI_BACKUP_EMAIL_SENT = true;
+      return true;
+    } catch (err) {
+      lastError = err;
+      if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 700 * attempt));
+    }
   }
+  track('backup_email_request_failed', {
+    ...getCurrentDocTracking(), status: 'failed', payment_id: paymentId,
+    external_reference: externalRef, error_flag: true,
+    error_tipo: 'backup_email_request_failed', error_detalle: lastError?.message || String(lastError || ''),
+    client_time: new Date().toISOString()
+  });
+  return false;
 }
 
 function descargarPDF() {
@@ -2533,6 +2548,9 @@ function descargarPDF() {
     ...getCurrentDocTracking(), status: 'pending', payment_id: paymentId,
     external_reference: externalRef, client_time: new Date().toISOString()
   });
+  if (!LEGALAI_BACKUP_EMAIL_SENT && LEGALAI_BACKUP_EMAIL_CONTEXT) {
+    enviarRespaldoPDF(LEGALAI_BACKUP_EMAIL_CONTEXT).catch(function(){});
+  }
   try {
     if (!texto) throw new Error('No se encontró el documento. Generalo de nuevo.');
     if (!LEGALAI_FINAL_PDF) LEGALAI_FINAL_PDF = _generarPDF(texto, titulo, true, false, { descargar: false });
