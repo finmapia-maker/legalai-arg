@@ -15,6 +15,18 @@ const BACKUP_PDF_MAX_BYTES = 8 * 1024 * 1024;
 const BACKUP_EMAIL_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 const PACKS_KEY = "packs";
+const PLAN_ORDER_PREFIX = "plan_order";
+const PLAN_CODE_PREFIX = "plan_code";
+const PLAN_PAYMENT_PREFIX = "plan_payment";
+const PLAN_CODE_TTL_SECONDS = 90 * 24 * 60 * 60;
+const PLAN_ACTIVE_TTL_SECONDS = 370 * 24 * 60 * 60;
+const PLAN_CONFIG = {
+  starter:   { name: "Starter",   crypto_usd: 19,  card_usd: 22,  duration_days: 30, quota: 10 },
+  standard:  { name: "Standard",  crypto_usd: 49,  card_usd: 55,  duration_days: 30, quota: 30 },
+  pro:       { name: "PRO",       crypto_usd: 99,  card_usd: 112, duration_days: 30, quota: null },
+  business:  { name: "Business",  crypto_usd: 249, card_usd: 279, duration_days: 30, quota: null },
+  enterprise:{ name: "Enterprise",crypto_usd: 599, card_usd: 679, duration_days: 30, quota: null }
+};
 
 const PRICE_MULTIPLIER = 0.3;
 
@@ -91,12 +103,26 @@ async function handleProductRoutes(request, env) {
       resend_configured: Boolean(env.RESEND_API_KEY),
       backup_email_to_configured: Boolean(env.EMAIL_TO),
       backup_email_from_configured: Boolean(env.EMAIL_FROM),
+      nowpayments_configured: Boolean(env.NOWPAYMENTS_API_KEY),
+      nowpayments_ipn_configured: Boolean(env.NOWPAYMENTS_IPN_SECRET),
       owner_routes: true,
       affiliate_admin_routes: true,
       tracking_routes: true,
       kv_binding_exists: Boolean(env.OWNER_EVENTS_KV),
       time: new Date().toISOString()
     });
+  }
+
+  if (request.method === "POST" && url.pathname === "/planes/crear-orden") {
+    return await handleCreatePlanOrder(request, env);
+  }
+
+  if (request.method === "POST" && url.pathname === "/planes/activar") {
+    return await handleActivatePlanCode(request, env);
+  }
+
+  if (request.method === "POST" && url.pathname === "/nowpayments/webhook") {
+    return await handleNowPaymentsWebhook(request, env);
   }
 
   if (request.method === "POST" && url.pathname === "/campos") {
@@ -649,6 +675,21 @@ async function handleMercadoPagoWebhook(request, env) {
     const approved = String(mp.status || "").toLowerCase() === "approved";
     if (approved) {
       await recordApprovedPaymentOnce(env, mp, "webhook");
+      if (String(mp.metadata?.legalai_tipo || "").toLowerCase() === "plan") {
+        const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
+        const checkout = externalRef ? await readCheckout(env, externalRef) : null;
+        await ensurePlanCodeIssued(env, {
+          provider: "mercadopago",
+          payment_id: String(mp.id || paymentId),
+          order_id: externalRef,
+          plan_id: checkout?.plan_id || mp.metadata?.plan_id || "",
+          email: checkout?.email || mp.metadata?.email || mp.payer?.email || "",
+          amount: Number(mp.transaction_amount || 0),
+          currency: mp.currency_id || "ARS",
+          approved_at: mp.date_approved || mp.date_last_updated || new Date().toISOString(),
+          affiliate: checkout?.ref || mp.metadata?.legalai_ref || ""
+        });
+      }
     } else {
       await recordPaymentStatusEvent(env, mp, "webhook");
     }
@@ -670,6 +711,518 @@ async function handleMercadoPagoWebhook(request, env) {
     return json(request, { ok: true, warning: "webhook_exception" });
   }
 }
+
+
+/* =========================================================
+   PLANES — ORDEN, PAGO Y ACTIVACIÓN
+   ========================================================= */
+
+async function handleCreatePlanOrder(request, env) {
+  const body = await readRequestBody(request);
+  const planId = String(body.plan_id || "").trim().toLowerCase();
+  const method = String(body.metodo_pago || "tarjeta").trim().toLowerCase();
+  const email = String(body.email || "").trim().toLowerCase();
+  const ref = normalizeRef(body.ref || "");
+  const plan = PLAN_CONFIG[planId];
+
+  if (!plan) return json(request, { ok: false, error: "Plan inválido." }, 400);
+  if (!isValidEmail(email)) return json(request, { ok: false, error: "Ingresá un email válido." }, 400);
+  if (!["tarjeta", "cripto"].includes(method)) return json(request, { ok: false, error: "Método de pago inválido." }, 400);
+
+  const orderId = `plan_${planId}_${Date.now()}_${randomToken(6).toLowerCase()}`;
+  const createdAt = new Date().toISOString();
+
+  if (method === "tarjeta") {
+    if (!env.MERCADOPAGO_ACCESS_TOKEN) {
+      return json(request, { ok: false, error: "Mercado Pago no está configurado." }, 500);
+    }
+
+    const usdRate = await getPlanUsdArsRate(env);
+    if (!usdRate || usdRate <= 0) {
+      return json(request, { ok: false, error: "No se pudo obtener la cotización para crear el pago. Intentá nuevamente." }, 502);
+    }
+    const amountARS = Math.max(100, Math.ceil((plan.card_usd * usdRate) / 100) * 100);
+    const origin = "https://legalai-arg.com";
+    const preferenceBody = {
+      items: [{
+        title: `Plan ${plan.name} LegalAI Arg`,
+        quantity: 1,
+        currency_id: "ARS",
+        unit_price: amountARS
+      }],
+      payer: { email },
+      external_reference: orderId,
+      metadata: {
+        legalai_external_ref: orderId,
+        legalai_tipo: "plan",
+        legalai_ref: ref,
+        plan_id: planId,
+        email
+      },
+      notification_url: `https://legalai-worker.finmap-ia.workers.dev/mp/webhook`,
+      back_urls: {
+        success: `${origin}/planes.html?status=success&tipo=plan&external_reference=${encodeURIComponent(orderId)}`,
+        pending: `${origin}/planes.html?status=pending&tipo=plan&external_reference=${encodeURIComponent(orderId)}`,
+        failure: `${origin}/planes.html?status=failure&tipo=plan&external_reference=${encodeURIComponent(orderId)}`
+      },
+      auto_return: "approved",
+      statement_descriptor: "LEGALAI",
+      binary_mode: false
+    };
+
+    const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(preferenceBody)
+    });
+    const mpData = await mpRes.json().catch(() => ({}));
+    if (!mpRes.ok || !mpData.init_point) {
+      await safeAppendOwnerEvent(env, {
+        id: `PLAN-ORDER-ERROR-${orderId}`,
+        order_id: orderId,
+        type: "plan_order_failed",
+        product: `Plan ${plan.name}`,
+        plan_name: planId,
+        category: "planes",
+        status: "failed",
+        customer: email,
+        affiliate: ref,
+        error_flag: true,
+        error_tipo: "mp_preference_error",
+        error_detalle: mpData.message || mpData.error || `Mercado Pago HTTP ${mpRes.status}`,
+        raw: mpData
+      });
+      return json(request, { ok: false, error: mpData.message || mpData.error || "Mercado Pago no pudo crear la orden." }, 502);
+    }
+
+    const order = {
+      order_id: orderId,
+      provider: "mercadopago",
+      preference_id: mpData.id,
+      plan_id: planId,
+      email,
+      ref,
+      amount: amountARS,
+      amount_usd: plan.card_usd,
+      currency: "ARS",
+      status: "pending",
+      created_at: createdAt
+    };
+    await writePlanOrder(env, orderId, order);
+    await writeCheckout(env, orderId, {
+      external_reference: orderId,
+      tipo: "plan",
+      plan_id: planId,
+      email,
+      ref,
+      metodo_pago: "tarjeta",
+      montoARS: amountARS,
+      precio_usd: plan.card_usd,
+      preference_id: mpData.id,
+      created_at: createdAt
+    });
+    await safeAppendOwnerEvent(env, {
+      id: `PLAN-ORDER-${orderId}`,
+      order_id: orderId,
+      type: "checkout_start",
+      product: `Plan ${plan.name}`,
+      plan_name: planId,
+      category: "planes",
+      amount: amountARS,
+      amount_ars: amountARS,
+      currency: "ARS",
+      payment_method: "MercadoPago",
+      status: "pending",
+      customer: email,
+      affiliate: ref,
+      raw: order
+    });
+    return json(request, { ok: true, invoice_url: mpData.init_point, invoice_id: mpData.id, order_id: orderId });
+  }
+
+  if (!env.NOWPAYMENTS_API_KEY) {
+    return json(request, {
+      ok: false,
+      error: "El pago con USDT no está configurado. Seleccioná ‘Tarjeta / Mercado Pago’ o configurá NOWPAYMENTS_API_KEY."
+    }, 503);
+  }
+
+  const invoiceBody = {
+    price_amount: plan.crypto_usd,
+    price_currency: "usd",
+    order_id: orderId,
+    order_description: `Plan ${plan.name} LegalAI Arg`,
+    ipn_callback_url: "https://legalai-worker.finmap-ia.workers.dev/nowpayments/webhook",
+    success_url: `https://legalai-arg.com/planes.html?status=success&tipo=plan&provider=nowpayments&external_reference=${encodeURIComponent(orderId)}`,
+    cancel_url: `https://legalai-arg.com/planes.html?status=failure&tipo=plan&provider=nowpayments&external_reference=${encodeURIComponent(orderId)}`
+  };
+  const npRes = await fetch("https://api.nowpayments.io/v1/invoice", {
+    method: "POST",
+    headers: { "x-api-key": env.NOWPAYMENTS_API_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify(invoiceBody)
+  });
+  const npData = await npRes.json().catch(() => ({}));
+  if (!npRes.ok || !npData.invoice_url) {
+    await safeAppendOwnerEvent(env, {
+      id: `PLAN-ORDER-ERROR-${orderId}`,
+      order_id: orderId,
+      type: "plan_order_failed",
+      product: `Plan ${plan.name}`,
+      plan_name: planId,
+      category: "planes",
+      status: "failed",
+      customer: email,
+      affiliate: ref,
+      error_flag: true,
+      error_tipo: "nowpayments_invoice_error",
+      error_detalle: npData.message || npData.error || `NOWPayments HTTP ${npRes.status}`,
+      raw: npData
+    });
+    return json(request, { ok: false, error: npData.message || npData.error || "NOWPayments no pudo crear la orden." }, 502);
+  }
+
+  const order = {
+    order_id: orderId,
+    provider: "nowpayments",
+    invoice_id: String(npData.id || ""),
+    plan_id: planId,
+    email,
+    ref,
+    amount: plan.crypto_usd,
+    amount_usd: plan.crypto_usd,
+    currency: "USD",
+    status: "pending",
+    created_at: createdAt
+  };
+  await writePlanOrder(env, orderId, order);
+  await safeAppendOwnerEvent(env, {
+    id: `PLAN-ORDER-${orderId}`,
+    order_id: orderId,
+    invoice_id: String(npData.id || ""),
+    type: "checkout_start",
+    product: `Plan ${plan.name}`,
+    plan_name: planId,
+    category: "planes",
+    amount: plan.crypto_usd,
+    currency: "USD",
+    payment_method: "NOWPayments",
+    status: "pending",
+    customer: email,
+    affiliate: ref,
+    raw: order
+  });
+  return json(request, { ok: true, invoice_url: npData.invoice_url, invoice_id: npData.id || "", order_id: orderId });
+}
+
+async function handleActivatePlanCode(request, env) {
+  const body = await readRequestBody(request);
+  const code = String(body.codigo || body.code || "").trim().toUpperCase();
+  const email = String(body.email || "").trim().toLowerCase();
+  if (!code || !isValidEmail(email)) return json(request, { ok: false, error: "Código o email inválido." }, 400);
+
+  const record = await readPlanCode(env, code);
+  if (!record) return json(request, { ok: false, error: "Código inexistente o vencido." }, 404);
+  if (String(record.email || "").toLowerCase() !== email) return json(request, { ok: false, error: "El código no corresponde a ese email." }, 403);
+  if (record.code_expires_at && Date.now() > new Date(record.code_expires_at).getTime() && record.status !== "active") {
+    return json(request, { ok: false, error: "El código venció antes de ser activado." }, 410);
+  }
+
+  const plan = PLAN_CONFIG[record.plan_id];
+  if (!plan) return json(request, { ok: false, error: "El plan asociado al código no es válido." }, 409);
+
+  if (record.status === "active" && record.expires_at) {
+    return json(request, { ok: true, already_active: true, plan_id: record.plan_id, expires_at: record.expires_at });
+  }
+
+  const activatedAt = new Date();
+  const expiresAt = new Date(activatedAt.getTime() + plan.duration_days * 24 * 60 * 60 * 1000).toISOString();
+  const updated = { ...record, status: "active", activated_at: activatedAt.toISOString(), expires_at: expiresAt };
+  await writePlanCode(env, code, updated, PLAN_ACTIVE_TTL_SECONDS);
+  await writePlanActiveByEmail(env, email, updated);
+  await safeAppendOwnerEvent(env, {
+    id: `PLAN-ACTIVATED-${record.provider}-${record.payment_id || record.order_id}`,
+    payment_id: record.payment_id || "",
+    order_id: record.order_id || "",
+    type: "plan_activated",
+    product: `Plan ${plan.name}`,
+    plan_name: record.plan_id,
+    category: "planes",
+    status: "active",
+    customer: email,
+    payment_method: record.provider === "mercadopago" ? "MercadoPago" : "NOWPayments",
+    date: activatedAt.toISOString(),
+    raw: { code, expires_at: expiresAt, provider: record.provider }
+  });
+  return json(request, { ok: true, plan_id: record.plan_id, expires_at: expiresAt });
+}
+
+async function handleNowPaymentsWebhook(request, env) {
+  let body = {};
+  try { body = await request.json(); }
+  catch { return json(request, { ok: false, error: "invalid_json" }, 400); }
+
+  const signature = request.headers.get("x-nowpayments-sig") || "";
+  if (!env.NOWPAYMENTS_IPN_SECRET) {
+    await safeAppendOwnerEvent(env, {
+      id: `NOW-IPN-ERROR-${body.payment_id || body.order_id || crypto.randomUUID()}`,
+      order_id: body.order_id || "",
+      payment_id: String(body.payment_id || ""),
+      type: "plan_payment_webhook_error",
+      product: "NOWPayments",
+      category: "planes",
+      status: "failed",
+      error_flag: true,
+      error_tipo: "missing_nowpayments_ipn_secret",
+      error_detalle: "Falta NOWPAYMENTS_IPN_SECRET."
+    });
+    return json(request, { ok: false, error: "missing_nowpayments_ipn_secret" }, 500);
+  }
+  const valid = await verifyNowPaymentsSignature(body, signature, env.NOWPAYMENTS_IPN_SECRET);
+  if (!valid) return json(request, { ok: false, error: "invalid_signature" }, 401);
+
+  const orderId = String(body.order_id || "").trim();
+  const paymentId = String(body.payment_id || "").trim();
+  const status = String(body.payment_status || "").toLowerCase();
+  const order = orderId ? await readPlanOrder(env, orderId) : null;
+
+  await safeAppendOwnerEvent(env, {
+    id: `NOW-IPN-${paymentId || orderId}-${status}`,
+    payment_id: paymentId,
+    order_id: orderId,
+    invoice_id: String(body.invoice_id || order?.invoice_id || ""),
+    type: "payment_webhook_received",
+    product: order?.plan_id ? `Plan ${PLAN_CONFIG[order.plan_id]?.name || order.plan_id}` : "Plan LegalAI",
+    plan_name: order?.plan_id || "",
+    category: "planes",
+    amount: Number(body.price_amount || order?.amount || 0),
+    currency: String(body.price_currency || order?.currency || "USD").toUpperCase(),
+    payment_method: "NOWPayments",
+    status,
+    customer: order?.email || "",
+    affiliate: order?.ref || "",
+    raw: body
+  });
+
+  if (["finished", "confirmed"].includes(status) && order) {
+    await safeAppendOwnerEvent(env, {
+      id: `SALE-NOW-${paymentId || orderId}`,
+      payment_id: paymentId || String(body.invoice_id || order.invoice_id || orderId),
+      order_id: orderId,
+      invoice_id: String(body.invoice_id || order.invoice_id || ""),
+      type: "payment_approved",
+      product: `Plan ${PLAN_CONFIG[order.plan_id]?.name || order.plan_id}`,
+      plan_name: order.plan_id,
+      category: "planes",
+      amount: Number(body.price_amount || order.amount || 0),
+      currency: String(body.price_currency || order.currency || "USD").toUpperCase(),
+      payment_method: "NOWPayments",
+      status: "approved",
+      customer: order.email || "",
+      affiliate: order.ref || "",
+      date: new Date().toISOString(),
+      raw: body
+    });
+    await ensurePlanCodeIssued(env, {
+      provider: "nowpayments",
+      payment_id: paymentId || String(body.invoice_id || order.invoice_id || orderId),
+      order_id: orderId,
+      plan_id: order.plan_id,
+      email: order.email,
+      amount: Number(body.price_amount || order.amount || 0),
+      currency: String(body.price_currency || order.currency || "USD").toUpperCase(),
+      approved_at: new Date().toISOString(),
+      affiliate: order.ref || ""
+    });
+  }
+  return json(request, { ok: true });
+}
+
+async function ensurePlanCodeIssued(env, input) {
+  const planId = String(input.plan_id || "").toLowerCase();
+  const email = String(input.email || "").trim().toLowerCase();
+  const paymentKey = `${input.provider}:${input.payment_id || input.order_id}`;
+  const plan = PLAN_CONFIG[planId];
+  if (!plan || !isValidEmail(email) || !paymentKey) {
+    await safeAppendOwnerEvent(env, {
+      id: `PLAN-CODE-ERROR-${paymentKey || crypto.randomUUID()}`,
+      payment_id: input.payment_id || "",
+      order_id: input.order_id || "",
+      type: "plan_code_error",
+      product: planId || "Plan LegalAI",
+      category: "planes",
+      status: "failed",
+      customer: email,
+      error_flag: true,
+      error_tipo: "missing_plan_data",
+      error_detalle: "No se pudo emitir el código: faltan plan o email.",
+      raw: input
+    });
+    return null;
+  }
+
+  let record = await readPlanPayment(env, paymentKey);
+  if (!record) {
+    const code = `${planId.toUpperCase()}-${randomToken(4)}-${randomToken(4)}-${randomToken(4)}`;
+    record = {
+      code,
+      plan_id: planId,
+      email,
+      provider: input.provider,
+      payment_id: input.payment_id || "",
+      order_id: input.order_id || "",
+      amount: Number(input.amount || 0),
+      currency: input.currency || "",
+      affiliate: input.affiliate || "",
+      status: "issued",
+      issued_at: new Date().toISOString(),
+      code_expires_at: new Date(Date.now() + PLAN_CODE_TTL_SECONDS * 1000).toISOString(),
+      email_sent: false
+    };
+    await writePlanPayment(env, paymentKey, record);
+    await writePlanCode(env, code, record, PLAN_CODE_TTL_SECONDS);
+  }
+
+  if (!record.email_sent) {
+    try {
+      await sendPlanCodeEmail(env, record, plan);
+      record = { ...record, email_sent: true, email_sent_at: new Date().toISOString() };
+      await writePlanPayment(env, paymentKey, record);
+      await writePlanCode(env, record.code, record, PLAN_CODE_TTL_SECONDS);
+      await safeAppendOwnerEvent(env, {
+        id: `PLAN-CODE-SENT-${paymentKey}`,
+        payment_id: record.payment_id,
+        order_id: record.order_id,
+        type: "plan_code_sent",
+        product: `Plan ${plan.name}`,
+        plan_name: planId,
+        category: "planes",
+        amount: record.amount,
+        currency: record.currency,
+        payment_method: input.provider === "mercadopago" ? "MercadoPago" : "NOWPayments",
+        status: "approved",
+        customer: email,
+        affiliate: record.affiliate || "",
+        raw: { code: record.code, email_sent_at: record.email_sent_at }
+      });
+    } catch (err) {
+      await safeAppendOwnerEvent(env, {
+        id: `PLAN-CODE-EMAIL-ERROR-${paymentKey}`,
+        payment_id: record.payment_id,
+        order_id: record.order_id,
+        type: "plan_code_email_error",
+        product: `Plan ${plan.name}`,
+        plan_name: planId,
+        category: "planes",
+        status: "failed",
+        customer: email,
+        error_flag: true,
+        error_tipo: "plan_code_email_error",
+        error_detalle: err?.message || String(err),
+        raw: { code: record.code }
+      });
+    }
+  }
+  return record;
+}
+
+async function sendPlanCodeEmail(env, record, plan) {
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) throw new Error("Falta configurar RESEND_API_KEY o EMAIL_FROM.");
+  const payload = {
+    from: env.EMAIL_FROM,
+    to: [record.email],
+    subject: `Tu código del Plan ${plan.name} · LegalAI Arg`,
+    html: `<div style="font-family:Arial,sans-serif;color:#222;line-height:1.55"><h2>Pago confirmado</h2><p>Tu código para activar el <strong>Plan ${escapeHtml(plan.name)}</strong> es:</p><p style="font-size:22px;font-weight:700;letter-spacing:1px">${escapeHtml(record.code)}</p><p>Ingresalo junto con este email en la sección “Ya tengo un código de activación” de LegalAI Arg.</p><p>El código puede activarse hasta el ${escapeHtml(new Date(record.code_expires_at).toLocaleDateString("es-AR"))}.</p></div>`
+  };
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+      "Idempotency-Key": `legalai-plan-${record.provider}-${record.payment_id || record.order_id}`
+    },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.id) throw new Error(data.message || data.error || `Resend HTTP ${res.status}`);
+  return data;
+}
+
+async function getPlanUsdArsRate(env) {
+  const configured = Number(env.PLAN_USD_ARS_RATE || 0);
+  if (configured > 0) return configured;
+  const urls = [
+    "https://dolarapi.com/v1/dolares/bolsa",
+    "https://dolarapi.com/v1/dolares/oficial"
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } });
+      const data = await res.json();
+      const rate = Number(data?.venta || 0);
+      if (res.ok && rate > 0) return rate;
+    } catch (_) {}
+  }
+  return 0;
+}
+
+function planKV(env) { return env.PAGOS_KV || env.OWNER_EVENTS_KV || null; }
+async function writePlanOrder(env, orderId, value) {
+  const kv = planKV(env); if (!kv || !orderId) return false;
+  await kv.put(`${PLAN_ORDER_PREFIX}:${orderId}`, JSON.stringify(value), { expirationTtl: PLAN_CODE_TTL_SECONDS });
+  return true;
+}
+async function readPlanOrder(env, orderId) {
+  const kv = planKV(env); if (!kv || !orderId) return null;
+  const value = await kv.get(`${PLAN_ORDER_PREFIX}:${orderId}`); return value ? JSON.parse(value) : null;
+}
+async function writePlanPayment(env, key, value) {
+  const kv = planKV(env); if (!kv || !key) return false;
+  await kv.put(`${PLAN_PAYMENT_PREFIX}:${key}`, JSON.stringify(value), { expirationTtl: PLAN_ACTIVE_TTL_SECONDS });
+  return true;
+}
+async function readPlanPayment(env, key) {
+  const kv = planKV(env); if (!kv || !key) return null;
+  const value = await kv.get(`${PLAN_PAYMENT_PREFIX}:${key}`); return value ? JSON.parse(value) : null;
+}
+async function writePlanCode(env, code, value, ttl = PLAN_CODE_TTL_SECONDS) {
+  const kv = planKV(env); if (!kv || !code) return false;
+  await kv.put(`${PLAN_CODE_PREFIX}:${code}`, JSON.stringify(value), { expirationTtl: ttl }); return true;
+}
+async function readPlanCode(env, code) {
+  const kv = planKV(env); if (!kv || !code) return null;
+  const value = await kv.get(`${PLAN_CODE_PREFIX}:${code}`); return value ? JSON.parse(value) : null;
+}
+async function writePlanActiveByEmail(env, email, value) {
+  const kv = planKV(env); if (!kv || !email) return false;
+  await kv.put(`plan_active:${email}`, JSON.stringify(value), { expirationTtl: PLAN_ACTIVE_TTL_SECONDS }); return true;
+}
+
+async function verifyNowPaymentsSignature(body, signature, secret) {
+  if (!signature || !secret) return false;
+  const canonical = JSON.stringify(sortObjectDeep(body));
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-512" }, false, ["sign"]);
+  const signed = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(canonical));
+  const expected = Array.from(new Uint8Array(signed)).map(b => b.toString(16).padStart(2, "0")).join("");
+  return timingSafeEqual(expected.toLowerCase(), String(signature).toLowerCase());
+}
+function sortObjectDeep(value) {
+  if (Array.isArray(value)) return value.map(sortObjectDeep);
+  if (!value || typeof value !== "object") return value;
+  return Object.keys(value).sort().reduce((out, key) => { out[key] = sortObjectDeep(value[key]); return out; }, {});
+}
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0; for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i); return diff === 0;
+}
+function randomToken(length = 4) {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = new Uint8Array(length); crypto.getRandomValues(bytes);
+  return Array.from(bytes, b => alphabet[b % alphabet.length]).join("");
+}
+function isValidEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim()); }
 
 /* =========================================================
    IA / DOCUMENTOS
@@ -1527,9 +2080,13 @@ async function handlePdfBackupEmail(request, env) {
   try {
     const arrayBuffer = await file.arrayBuffer();
     const pdfBase64 = arrayBufferToBase64(arrayBuffer);
+    const backupRecipients = String(env.EMAIL_TO || "").split(/[;,]/).map(v => v.trim()).filter(Boolean);
+    if (!backupRecipients.length || !backupRecipients.every(isValidEmail)) {
+      throw new Error("EMAIL_TO no contiene una casilla receptora válida.");
+    }
     const resendPayload = {
       from: env.EMAIL_FROM,
-      to: [env.EMAIL_TO],
+      to: backupRecipients,
       subject: `[LegalAI respaldo] Pago ${paymentId} · ${title} · ${buyerName}`.slice(0, 240),
       html: buildBackupEmailHtml({ paymentId, externalRef, title, buyerName, payerEmail, approvedAt, datosDoc, metadata, filename: safeFilename }),
       attachments: [{ filename: safeFilename, content: pdfBase64 }],
@@ -1539,18 +2096,31 @@ async function handlePdfBackupEmail(request, env) {
       ]
     };
 
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-        "Idempotency-Key": `legalai-backup-${paymentId}`
-      },
-      body: JSON.stringify(resendPayload)
-    });
-    const resendData = await resendResponse.json().catch(() => ({}));
-    if (!resendResponse.ok || !resendData.id) {
-      throw new Error(resendData.message || resendData.error || `Resend HTTP ${resendResponse.status}`);
+    let resendResponse = null;
+    let resendData = {};
+    let lastResendError = "";
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        resendResponse = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+            "Idempotency-Key": `legalai-backup-${paymentId}`
+          },
+          body: JSON.stringify(resendPayload)
+        });
+        resendData = await resendResponse.json().catch(() => ({}));
+        if (resendResponse.ok && resendData.id) break;
+        lastResendError = resendData.message || resendData.error || `Resend HTTP ${resendResponse.status}`;
+        if (resendResponse.status < 500 && resendResponse.status !== 429) break;
+      } catch (err) {
+        lastResendError = err?.message || String(err);
+      }
+      if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 350 * attempt));
+    }
+    if (!resendResponse?.ok || !resendData.id) {
+      throw new Error(lastResendError || "Resend no aceptó el correo de respaldo.");
     }
 
     const sentAt = new Date().toISOString();
