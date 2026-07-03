@@ -119,19 +119,24 @@
       "descripcion": "El funnel de planes tiene 6 clicks en plan seleccionado y 0 pagos iniciados: el botón de pago del plan no dispara ninguna acción. Verificar event listener del CTA de plan, que el precio del plan genere correctamente la preferencia de pago y que no haya error JS bloqueante en esa ruta específica. Paralelamente, para Ads: revisar que la landing de destino de los anuncios tenga el mismo flujo corregido que generó la venta orgánica, ya que la venta vino de fuente directa y Ads sigue sin convertir con 72 visitas.",
       "fecha": "2026-06-30T13:09:47.770Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "El drop del 100% en venta confirmada con 3 pagos iniciados indica falla silenciosa en el gateway. Acción inmediata: 1) Revisar logs del servidor para confirmar si la preferencia de pago se crea correctamente al llegar al paso de pago. 2) Verificar en Network tab si el SDK de MercadoPago retorna error al montar el brick/botón. 3) Testear con tarjeta de prueba en producción y capturar response exacto. 4) Si falla el checkout custom, reemplazar temporalmente por link directo de MercadoPago para descartar problema en formulario propio vs gateway. 5) Revisar si hay redirección post-pago que no devuelve la confirmación correctamente (webhook o return_url rota).",
+      "fecha": "2026-07-03T12:57:07.628Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-02T12:59:41.787Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-03T12:57:07.628Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "El funnel de planes tiene 6 clicks en plan seleccionado y 0 pagos iniciados: el botón de pago del plan no dispara ninguna acción. Verificar event listener del CTA de plan, que el precio del plan genere correctamente la preferencia de pago y que no haya error JS bloqueante en esa ruta específica. Paralelamente, para Ads: revisar que la landing de destino de los anuncios tenga el mismo flujo corregido que generó la venta orgánica, ya que la venta vino de fuente directa y Ads sigue sin convertir con 72 visitas.",
-    "archivo": "planes.html",
+    "descripcion": "El drop del 100% en venta confirmada con 3 pagos iniciados indica falla silenciosa en el gateway. Acción inmediata: 1) Revisar logs del servidor para confirmar si la preferencia de pago se crea correctamente al llegar al paso de pago. 2) Verificar en Network tab si el SDK de MercadoPago retorna error al montar el brick/botón. 3) Testear con tarjeta de prueba en producción y capturar response exacto. 4) Si falla el checkout custom, reemplazar temporalmente por link directo de MercadoPago para descartar problema en formulario propio vs gateway. 5) Revisar si hay redirección post-pago que no devuelve la confirmación correctamente (webhook o return_url rota).",
+    "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el botón de pago de planes genera correctamente el intent de pago y la landing de Ads usa el mismo flujo funcional → se recuperan los 6 usuarios de planes y se reduce el drop de Ads del 100% al promedio del funnel orgánico",
-    "conv_base": 1,
-    "clics_base": 71
+    "hipotesis": "Si el checkout custom tiene un error en la integración con el gateway → reemplazarlo por link directo recupera las ventas perdidas de los 3 usuarios que iniciaron pago",
+    "conv_base": 0,
+    "clics_base": 55
   },
-  "cambio_activo_desde": "2026-06-30T13:09:47.770Z"
+  "cambio_activo_desde": "2026-07-03T12:57:07.628Z"
 }
