@@ -126,10 +126,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-03T12:57:07.628Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-04T12:08:38.673Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "El drop del 100% en venta confirmada con 3 pagos iniciados indica falla silenciosa en el gateway. Acción inmediata: 1) Revisar logs del servidor para confirmar si la preferencia de pago se crea correctamente al llegar al paso de pago. 2) Verificar en Network tab si el SDK de MercadoPago retorna error al montar el brick/botón. 3) Testear con tarjeta de prueba en producción y capturar response exacto. 4) Si falla el checkout custom, reemplazar temporalmente por link directo de MercadoPago para descartar problema en formulario propio vs gateway. 5) Revisar si hay redirección post-pago que no devuelve la confirmación correctamente (webhook o return_url rota).",
     "archivo": "checkout.html",
