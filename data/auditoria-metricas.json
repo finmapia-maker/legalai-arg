@@ -1,28 +1,22 @@
 {
-  "fecha": "2026-07-05T12:18:07.025Z",
+  "fecha": "2026-07-06T14:27:55.029Z",
   "periodo_48h": {
-    "visitas": 12,
-    "clics": 43,
+    "visitas": 16,
+    "clics": 44,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 139,
+    "total_eventos": 162,
     "por_fuente": {
       "google_ads": {
-        "visitas": 9,
-        "clics": 34,
+        "visitas": 13,
+        "clics": 44,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
         "visitas": 3,
-        "clics": 7,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      "directo": {
-        "visitas": 0,
-        "clics": 2,
+        "clics": 0,
         "ventas": 0,
         "total_ars": 0
       }
@@ -30,25 +24,31 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 66,
+        "eventos": 77,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 47,
+        "eventos": 60,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 19,
+        "eventos": 18,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de sociedad simple entre socios",
-        "eventos": 3,
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 4,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
@@ -57,44 +57,26 @@
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 1,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Documento legal: Contrato de alquiler de vivienda",
-        "eventos": 1,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "hero_alquiler",
-        "eventos": 1,
-        "ventas": 0,
-        "total_ars": 0
       }
     ],
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 66,
-    "clics": 196,
+    "visitas": 63,
+    "clics": 199,
     "ventas": 1,
     "tasa_conv": "0.5%",
     "total_ars": 8300,
-    "total_eventos": 647,
+    "total_eventos": 669,
     "por_fuente": {
       "google_ads": {
-        "visitas": 42,
-        "clics": 171,
+        "visitas": 38,
+        "clics": 174,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 24,
+        "visitas": 25,
         "clics": 19,
         "ventas": 0,
         "total_ars": 0
@@ -115,31 +97,31 @@
       },
       {
         "documento": "index",
-        "eventos": 308,
+        "eventos": 317,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 194,
+        "eventos": 206,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 70,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 24,
+        "eventos": 73,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "planes",
-        "eventos": 20,
+        "eventos": 22,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 21,
         "ventas": 0,
         "total_ars": 0
       },
@@ -151,7 +133,7 @@
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 6,
+        "eventos": 5,
         "ventas": 0,
         "total_ars": 0
       },
@@ -401,49 +383,48 @@
     ]
   },
   "embudo_eventos": {
-    "ads_landing_view": 40,
-    "page_view": 12,
-    "preview_live_ok": 4,
-    "scroll_50pct": 14,
-    "scroll_25pct": 13,
-    "scroll_75pct": 15,
-    "inicio_formulario": 7,
-    "click_residencial": 7,
-    "cta_generador": 10,
-    "doc_selected": 3,
-    "click_pagar": 3,
-    "form_first_input": 4,
-    "cta_doc_inline": 3,
-    "frontend_error": 2,
-    "checkout_start": 1,
-    "interaccion": 1
+    "doc_selected": 6,
+    "cta_generador": 12,
+    "ads_landing_view": 51,
+    "scroll_75pct": 17,
+    "cta_doc_inline": 2,
+    "page_view": 16,
+    "form_first_input": 3,
+    "preview_live_ok": 7,
+    "scroll_50pct": 17,
+    "scroll_25pct": 16,
+    "frontend_error": 1,
+    "click_comercial": 3,
+    "click_residencial": 6,
+    "click_pagar": 1,
+    "inicio_formulario": 4
   },
-  "total_eventos": 139,
+  "total_eventos": 162,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 12,
+      "count": 16,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 13,
+      "count": 17,
       "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 11,
-      "drop_pct": 15
+      "count": 7,
+      "drop_pct": 59
     },
     {
       "label": "Preview live OK",
-      "count": 4,
-      "drop_pct": 64
+      "count": 7,
+      "drop_pct": 0
     },
     {
       "label": "Pago iniciado",
-      "count": 4,
-      "drop_pct": 0
+      "count": 1,
+      "drop_pct": 86
     },
     {
       "label": "Venta confirmada",
@@ -454,18 +435,18 @@
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 0,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 0,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Pago plan iniciado",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "label": "Plan activo",
@@ -476,28 +457,28 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 49,
+      "count": 64,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 12,
-      "drop_pct": 76
+      "count": 17,
+      "drop_pct": 73
     },
     {
       "label": "Ads inicio formulario",
       "count": 9,
-      "drop_pct": 25
+      "drop_pct": 47
     },
     {
       "label": "Ads preview OK",
-      "count": 4,
-      "drop_pct": 56
+      "count": 7,
+      "drop_pct": 22
     },
     {
       "label": "Ads inicio pago",
       "count": 1,
-      "drop_pct": 75
+      "drop_pct": 86
     },
     {
       "label": "Ads vuelta sin pago",
@@ -511,12 +492,12 @@
     }
   ],
   "alertas_tracking": {
-    "frontend_errors": 2,
+    "frontend_errors": 1,
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 4,
-    "doc_selected": 3
+    "form_first_input": 3,
+    "doc_selected": 6
   },
   "cuello_botella": {
     "funnel": "doc",
@@ -526,10 +507,10 @@
   },
   "diagnostico": {
     "problemas": [
-      "Errores frontend detectados: 2 → revisar consola/compatibilidad mobile.",
+      "Errores frontend detectados: 1 → revisar consola/compatibilidad mobile.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 34 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 44 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"

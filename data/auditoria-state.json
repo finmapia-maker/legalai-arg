@@ -124,19 +124,24 @@
       "descripcion": "El drop del 100% en venta confirmada con 3 pagos iniciados indica falla silenciosa en el gateway. Acción inmediata: 1) Revisar logs del servidor para confirmar si la preferencia de pago se crea correctamente al llegar al paso de pago. 2) Verificar en Network tab si el SDK de MercadoPago retorna error al montar el brick/botón. 3) Testear con tarjeta de prueba en producción y capturar response exacto. 4) Si falla el checkout custom, reemplazar temporalmente por link directo de MercadoPago para descartar problema en formulario propio vs gateway. 5) Revisar si hay redirección post-pago que no devuelve la confirmación correctamente (webhook o return_url rota).",
       "fecha": "2026-07-03T12:57:07.628Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar checkout custom con MercadoPago Brick/SDK por link de pago directo generado desde el backend (preference_id → init_point). Eliminar montaje del Brick en frontend como punto de falla. Redirigir directamente al init_point de MercadoPago al confirmar formulario. Verificar que webhook y return_url reciban y procesen el pago correctamente en producción.",
+      "fecha": "2026-07-06T14:27:55.029Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-05T12:18:07.024Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-06T14:27:55.029Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "El drop del 100% en venta confirmada con 3 pagos iniciados indica falla silenciosa en el gateway. Acción inmediata: 1) Revisar logs del servidor para confirmar si la preferencia de pago se crea correctamente al llegar al paso de pago. 2) Verificar en Network tab si el SDK de MercadoPago retorna error al montar el brick/botón. 3) Testear con tarjeta de prueba en producción y capturar response exacto. 4) Si falla el checkout custom, reemplazar temporalmente por link directo de MercadoPago para descartar problema en formulario propio vs gateway. 5) Revisar si hay redirección post-pago que no devuelve la confirmación correctamente (webhook o return_url rota).",
+    "descripcion": "Reemplazar checkout custom con MercadoPago Brick/SDK por link de pago directo generado desde el backend (preference_id → init_point). Eliminar montaje del Brick en frontend como punto de falla. Redirigir directamente al init_point de MercadoPago al confirmar formulario. Verificar que webhook y return_url reciban y procesen el pago correctamente en producción.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el checkout custom tiene un error en la integración con el gateway → reemplazarlo por link directo recupera las ventas perdidas de los 3 usuarios que iniciaron pago",
+    "hipotesis": "Si se elimina el Brick custom y se usa el link directo de MercadoPago, el gateway completa el pago sin falla silenciosa y se recuperan ventas",
     "conv_base": 0,
-    "clics_base": 55
+    "clics_base": 44
   },
-  "cambio_activo_desde": "2026-07-03T12:57:07.628Z"
+  "cambio_activo_desde": "2026-07-06T14:27:55.029Z"
 }
