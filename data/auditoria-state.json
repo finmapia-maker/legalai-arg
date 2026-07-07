@@ -131,10 +131,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-06T14:27:55.029Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-07T13:21:48.738Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar checkout custom con MercadoPago Brick/SDK por link de pago directo generado desde el backend (preference_id → init_point). Eliminar montaje del Brick en frontend como punto de falla. Redirigir directamente al init_point de MercadoPago al confirmar formulario. Verificar que webhook y return_url reciban y procesen el pago correctamente en producción.",
     "archivo": "checkout.html",
