@@ -2546,6 +2546,20 @@ async function generarDocumento(paymentId, externalRef = '') {
       btn.onclick = () => { btn.remove(); hideErr('alert3'); generarDocumento(paymentId, externalRef); };
       document.getElementById('alert3').insertAdjacentElement('afterend', btn);
     }
+    if (paymentId && /^\d+$/.test(String(paymentId)) && !document.getElementById('btnDescargarAlmacenado')) {
+      const btnStored = document.createElement('button');
+      btnStored.id = 'btnDescargarAlmacenado'; btnStored.className = 'btn ghost'; btnStored.style.marginTop = '10px';
+      btnStored.textContent = 'Descargar PDF ya respaldado';
+      btnStored.onclick = () => {
+        track('stored_pdf_download_requested', {
+          ...getCurrentDocTracking(), status: 'pending', payment_id: paymentId,
+          external_reference: externalRef, client_time: new Date().toISOString()
+        });
+        window.location.href = `${CONFIG.WORKER_URL}/documento/descargar?payment_id=${encodeURIComponent(paymentId)}`;
+      };
+      const retryBtn = document.getElementById('btnReintentar');
+      (retryBtn || document.getElementById('alert3')).insertAdjacentElement('afterend', btnStored);
+    }
   }
 }
 

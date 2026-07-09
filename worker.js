@@ -10,7 +10,7 @@ const AFFILIATES_KEY = "afiliados";
 const AFFILIATE_CONVERSIONS_KEY = "afiliados_conversiones";
 const PREVIEWS_KEY = "previews";
 const CHECKOUTS_KEY = "checkout";
-const CHECKOUT_TTL_SECONDS = 24 * 60 * 60;
+const CHECKOUT_TTL_SECONDS = 30 * 24 * 60 * 60;
 const BACKUP_PDF_MAX_BYTES = 8 * 1024 * 1024;
 const BACKUP_EMAIL_TTL_SECONDS = 30 * 24 * 60 * 60;
 
@@ -39,7 +39,7 @@ export default {
     }
 
     try {
-      const productResponse = await handleProductRoutes(request, env);
+      const productResponse = await handleProductRoutes(request, env, ctx);
       if (productResponse) return productResponse;
 
       const trackResponse = await handleTrackingRoutes(request, env);
@@ -89,7 +89,7 @@ export default {
    PRODUCT ROUTES — WEB LEGALAI
    ========================================================= */
 
-async function handleProductRoutes(request, env) {
+async function handleProductRoutes(request, env, ctx) {
   const url = new URL(request.url);
 
   if (request.method === "GET" && url.pathname === "/ping") {
@@ -127,7 +127,7 @@ async function handleProductRoutes(request, env) {
   }
 
   if (request.method === "GET" && url.pathname === "/mp/pago-por-referencia") {
-    return await handlePaymentLookupByReference(request, env);
+    return await handlePaymentLookupByReference(request, env, ctx);
   }
 
   if (request.method === "GET" && url.pathname === "/documento/estado") {
@@ -183,7 +183,7 @@ async function handleProductRoutes(request, env) {
   }
 
   if (["GET", "POST"].includes(request.method) && url.pathname === "/mp/webhook") {
-    return await handleMercadoPagoWebhook(request, env);
+    return await handleMercadoPagoWebhook(request, env, ctx);
   }
 
   if (request.method === "POST" && url.pathname === "/mp/preferencia") {
@@ -612,7 +612,7 @@ async function handleProductRoutes(request, env) {
 
 
 
-async function handlePaymentLookupByReference(request, env) {
+async function handlePaymentLookupByReference(request, env, ctx) {
   const url = new URL(request.url);
   const externalRef = String(url.searchParams.get("external_reference") || url.searchParams.get("externalRef") || "").trim();
   if (!externalRef) return json(request, { ok: false, error: "missing_external_reference" }, 400);
@@ -623,6 +623,11 @@ async function handlePaymentLookupByReference(request, env) {
     if (verified.ok && String(verified.payment?.status || "").toLowerCase() === "approved" && isLegalAiPayment(verified.payment)) {
       await recordApprovedPaymentOnce(env, verified.payment, "lookup_by_reference_checkout");
       await markCheckoutPaymentApproved(env, verified.payment, "lookup_by_reference_checkout");
+      if (String(verified.payment.metadata?.legalai_tipo || "doc").toLowerCase() === "doc") {
+        const backupTask = ensureServerDocumentBackup(env, verified.payment, "lookup_by_reference_checkout");
+        if (ctx?.waitUntil) ctx.waitUntil(backupTask);
+        else await backupTask;
+      }
       return json(request, {
         ok: true,
         payment_id: String(verified.payment.id || checkout.payment_id),
@@ -654,6 +659,11 @@ async function handlePaymentLookupByReference(request, env) {
   if (String(mp.status || "").toLowerCase() === "approved") {
     await recordApprovedPaymentOnce(env, mp, "lookup_by_reference_mp");
     await markCheckoutPaymentApproved(env, mp, "lookup_by_reference_mp");
+    if (String(mp.metadata?.legalai_tipo || "doc").toLowerCase() === "doc") {
+      const backupTask = ensureServerDocumentBackup(env, mp, "lookup_by_reference");
+      if (ctx?.waitUntil) ctx.waitUntil(backupTask);
+      else await backupTask;
+    }
   } else {
     await recordPaymentStatusEvent(env, mp, "lookup_by_reference_mp");
   }
@@ -759,7 +769,7 @@ async function handleStoredDocumentDownload(request, env) {
   });
 }
 
-async function handleMercadoPagoWebhook(request, env) {
+async function handleMercadoPagoWebhook(request, env, ctx) {
   const url = new URL(request.url);
   const body = request.method === "POST" ? await readRequestBody(request) : {};
   const topic = url.searchParams.get("topic") || url.searchParams.get("type") || body.type || body.topic || "";
@@ -838,7 +848,13 @@ async function handleMercadoPagoWebhook(request, env) {
     if (approved) {
       await recordApprovedPaymentOnce(env, mp, "webhook");
       await markCheckoutPaymentApproved(env, mp, "webhook");
-      if (String(mp.metadata?.legalai_tipo || "").toLowerCase() === "plan") {
+      const legalaiPaymentType = String(mp.metadata?.legalai_tipo || "doc").toLowerCase();
+      if (legalaiPaymentType === "doc") {
+        const backupTask = ensureServerDocumentBackup(env, mp, "webhook");
+        if (ctx?.waitUntil) ctx.waitUntil(backupTask);
+        else await backupTask;
+      }
+      if (legalaiPaymentType === "plan") {
         const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
         const checkout = externalRef ? await readCheckout(env, externalRef) : null;
         await ensurePlanCodeIssued(env, {
@@ -2360,6 +2376,374 @@ async function handlePdfBackupEmail(request, env) {
     await markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, "backup_email_send_error", err?.message || String(err));
     return json(request, { ok: false, error: "backup_email_send_error", message: err?.message || String(err) }, 502);
   }
+}
+
+
+async function ensureServerDocumentBackup(env, mp, source = "server") {
+  const paymentId = String(mp?.id || "").trim();
+  const externalRef = String(mp?.external_reference || mp?.metadata?.legalai_external_ref || "").trim();
+  if (!paymentId || String(mp?.status || "").toLowerCase() !== "approved") return { ok: false, skipped: "payment_not_approved" };
+  if (!isLegalAiPayment(mp) || String(mp?.metadata?.legalai_tipo || "doc").toLowerCase() !== "doc") return { ok: false, skipped: "not_doc_payment" };
+
+  const backupState = await readBackupEmailState(env, paymentId);
+  const r2Key = documentR2Key(paymentId);
+  const r2Exists = Boolean(env.DOCUMENTS_R2 && await env.DOCUMENTS_R2.head(r2Key));
+  if (backupState?.status === "sent" && r2Exists) return { ok: true, already_done: true };
+
+  const checkout = externalRef ? await readCheckout(env, externalRef) : null;
+  const datosDoc = checkout?.datosDoc && Object.keys(checkout.datosDoc).length ? checkout.datosDoc : null;
+  const metadata = checkout?.metadata && Object.keys(checkout.metadata).length ? checkout.metadata : {};
+  const title = metadata?.titulo || datosDoc?.tipo || mp.description || "Documento LegalAI";
+  const payerEmail = mp.payer?.email || datosDoc?.email || "";
+  const buyerName = extractBuyerName(datosDoc || {}) || mp.payer?.first_name || "Sin nombre identificado";
+  const approvedAt = mp.date_approved || mp.date_last_updated || new Date().toISOString();
+
+  if (!datosDoc) {
+    await safeAppendOwnerEvent(env, {
+      id: `SERVER-DOC-ERROR-${paymentId}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: "server_document_generation_failed",
+      product: title,
+      category: "documento_servidor",
+      status: "failed",
+      customer: payerEmail,
+      error_flag: true,
+      error_tipo: "checkout_data_not_found",
+      error_detalle: "Pago aprobado sin datos de formulario en PAGOS_KV. No se puede generar respaldo automático.",
+      raw: { paymentId, externalRef, source }
+    });
+    return { ok: false, error: "checkout_data_not_found" };
+  }
+
+  await safeAppendOwnerEvent(env, {
+    id: `SERVER-DOC-START-${paymentId}`,
+    payment_id: paymentId,
+    order_id: externalRef,
+    type: "server_document_generation_started",
+    product: title,
+    category: "documento_servidor",
+    status: "pending",
+    customer: payerEmail,
+    raw: { paymentId, externalRef, source }
+  });
+
+  try {
+    let texto = String(checkout?.texto || "").trim();
+    if (!texto && checkout?.previewId) {
+      const prev = await readPreview(env, checkout.previewId);
+      if (prev?.texto) texto = String(prev.texto || "").trim();
+    }
+    if (!texto) texto = await generarDocumentoTexto(env, datosDoc, metadata, false);
+
+    const generatedAt = new Date().toISOString();
+    if (externalRef) {
+      await writeCheckout(env, externalRef, {
+        ...(checkout || {}),
+        external_reference: externalRef,
+        tipo: checkout?.tipo || "doc",
+        datosDoc,
+        metadata,
+        texto,
+        payment_id: paymentId,
+        payment_status: "approved",
+        generated_at: checkout?.generated_at || generatedAt,
+        server_generated_at: generatedAt
+      });
+    }
+
+    const pdf = createPrintableLegalPdf({ texto, title, paymentId, externalRef, buyerName, approvedAt });
+    const safeFilename = sanitizePdfFilename(`${title}-${paymentId}.pdf`);
+    const r2State = await storeGeneratedPdfInR2(env, {
+      paymentId,
+      externalRef,
+      title,
+      buyerName,
+      payerEmail,
+      approvedAt,
+      filename: safeFilename,
+      contentType: "application/pdf",
+      size: pdf.arrayBuffer.byteLength,
+      arrayBuffer: pdf.arrayBuffer,
+      datosDoc,
+      metadata
+    });
+
+    await safeAppendOwnerEvent(env, {
+      id: `SERVER-DOC-${paymentId}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: "server_document_generated",
+      product: title,
+      category: "documento_servidor",
+      status: "approved",
+      customer: payerEmail,
+      date: generatedAt,
+      raw: { paymentId, externalRef, filename: safeFilename, bytes: pdf.arrayBuffer.byteLength, r2: r2State }
+    });
+
+    if (backupState?.status !== "sent") {
+      await sendBackupPdfBufferEmail(env, {
+        paymentId,
+        externalRef,
+        title,
+        buyerName,
+        payerEmail,
+        approvedAt,
+        datosDoc,
+        metadata,
+        filename: safeFilename,
+        arrayBuffer: pdf.arrayBuffer,
+        size: pdf.arrayBuffer.byteLength,
+        checkout,
+        r2State,
+        idempotencySuffix: "server"
+      });
+    }
+
+    return { ok: true, paymentId, externalRef, filename: safeFilename, r2: r2State };
+  } catch (err) {
+    await markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, "server_document_backup_error", err?.message || String(err));
+    await safeAppendOwnerEvent(env, {
+      id: `SERVER-DOC-ERROR-${paymentId}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: "server_document_generation_failed",
+      product: title,
+      category: "documento_servidor",
+      status: "failed",
+      customer: payerEmail,
+      error_flag: true,
+      error_tipo: "server_document_backup_error",
+      error_detalle: err?.message || String(err),
+      raw: { paymentId, externalRef, source }
+    });
+    return { ok: false, error: "server_document_backup_error", message: err?.message || String(err) };
+  }
+}
+
+async function sendBackupPdfBufferEmail(env, info) {
+  if (!env.RESEND_API_KEY || !env.EMAIL_TO || !env.EMAIL_FROM) {
+    const missing = [
+      !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
+      !env.EMAIL_TO ? "EMAIL_TO" : "",
+      !env.EMAIL_FROM ? "EMAIL_FROM" : ""
+    ].filter(Boolean).join(", ");
+    await markBackupEmailFailure(env, info.checkout, info.externalRef, info.paymentId, info.title, info.payerEmail, "missing_email_config", `Falta configurar: ${missing}`);
+    throw new Error(`Falta configurar: ${missing}`);
+  }
+
+  const backupRecipients = String(env.EMAIL_TO || "").split(/[;,]/).map(v => v.trim()).filter(Boolean);
+  if (!backupRecipients.length || !backupRecipients.every(isValidEmail)) {
+    throw new Error("EMAIL_TO no contiene una casilla receptora válida.");
+  }
+
+  const resendPayload = {
+    from: env.EMAIL_FROM,
+    to: backupRecipients,
+    subject: `[LegalAI respaldo] Pago ${info.paymentId} · ${info.title} · ${info.buyerName}`.slice(0, 240),
+    html: buildBackupEmailHtml({
+      paymentId: info.paymentId,
+      externalRef: info.externalRef,
+      title: info.title,
+      buyerName: info.buyerName,
+      payerEmail: info.payerEmail,
+      approvedAt: info.approvedAt,
+      datosDoc: info.datosDoc,
+      metadata: info.metadata,
+      filename: info.filename
+    }),
+    attachments: [{ filename: info.filename, content: arrayBufferToBase64(info.arrayBuffer) }],
+    tags: [
+      { name: "payment_id", value: String(info.paymentId).slice(0, 256) },
+      { name: "email_type", value: "legalai_backup" }
+    ]
+  };
+
+  let resendResponse = null;
+  let resendData = {};
+  let lastResendError = "";
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      resendResponse = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+          "Idempotency-Key": `legalai-backup-${info.paymentId}-${info.idempotencySuffix || "pdf"}`
+        },
+        body: JSON.stringify(resendPayload)
+      });
+      resendData = await resendResponse.json().catch(() => ({}));
+      if (resendResponse.ok && resendData.id) break;
+      lastResendError = resendData.message || resendData.error || `Resend HTTP ${resendResponse.status}`;
+      if (resendResponse.status < 500 && resendResponse.status !== 429) break;
+    } catch (err) {
+      lastResendError = err?.message || String(err);
+    }
+    if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 350 * attempt));
+  }
+  if (!resendResponse?.ok || !resendData.id) {
+    throw new Error(lastResendError || "Resend no aceptó el correo de respaldo.");
+  }
+
+  const sentAt = new Date().toISOString();
+  const sentState = {
+    status: "sent",
+    sent_at: sentAt,
+    resend_id: resendData.id,
+    filename: info.filename,
+    bytes: Number(info.size || 0),
+    to: env.EMAIL_TO,
+    r2: info.r2State || null,
+    source: info.idempotencySuffix || "pdf"
+  };
+  await writeBackupEmailState(env, info.paymentId, sentState);
+  if (info.externalRef) {
+    const latestCheckout = await readCheckout(env, info.externalRef);
+    await writeCheckout(env, info.externalRef, {
+      ...(latestCheckout || info.checkout || {}),
+      external_reference: info.externalRef,
+      datosDoc: info.datosDoc,
+      metadata: info.metadata,
+      backup_email: sentState
+    });
+  }
+
+  await safeAppendOwnerEvent(env, {
+    id: `BACKUP-EMAIL-${info.paymentId}`,
+    payment_id: info.paymentId,
+    order_id: info.externalRef,
+    type: "backup_email_sent",
+    product: info.title,
+    category: "email_respaldo",
+    status: "approved",
+    customer: info.payerEmail,
+    date: sentAt,
+    raw: { paymentId: info.paymentId, externalRef: info.externalRef, resend_id: resendData.id, filename: info.filename, bytes: info.size, buyerName: info.buyerName, to: env.EMAIL_TO, source: info.idempotencySuffix || "pdf" }
+  });
+
+  return { ok: true, sent: true, resend_id: resendData.id, sent_at: sentAt };
+}
+
+function createPrintableLegalPdf({ texto, title, paymentId, externalRef, buyerName, approvedAt }) {
+  const safeTitle = String(title || "Documento LegalAI").trim();
+  const header = [
+    safeTitle,
+    `Pago Mercado Pago: ${paymentId || "-"}`,
+    externalRef ? `Referencia: ${externalRef}` : "",
+    buyerName ? `Comprador / parte: ${buyerName}` : "",
+    approvedAt ? `Fecha de aprobacion: ${approvedAt}` : ""
+  ].filter(Boolean).join("\n");
+  const cleanText = markdownToPrintableText(`${header}\n\n${texto || ""}`);
+  const lines = wrapPdfLines(cleanText, 88);
+  const pages = [];
+  const linesPerPage = 46;
+  for (let i = 0; i < lines.length; i += linesPerPage) pages.push(lines.slice(i, i + linesPerPage));
+  if (!pages.length) pages.push(["Documento generado por LegalAI Arg."]);
+
+  const objects = [];
+  const addObj = content => { objects.push(content); return objects.length; };
+  const catalogId = addObj("<< /Type /Catalog /Pages 2 0 R >>");
+  const pagesPlaceholderId = addObj("");
+  const fontId = addObj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  const pageIds = [];
+  for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
+    const contentStream = buildPdfPageContent(pages[pageIndex], pageIndex + 1, pages.length);
+    const streamId = addObj(`<< /Length ${winAnsiByteLength(contentStream)} >>\nstream\n${contentStream}\nendstream`);
+    const pageId = addObj(`<< /Type /Page /Parent ${pagesPlaceholderId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontId} 0 R >> >> /Contents ${streamId} 0 R >>`);
+    pageIds.push(pageId);
+  }
+  objects[pagesPlaceholderId - 1] = `<< /Type /Pages /Kids [${pageIds.map(id => `${id} 0 R`).join(" ")}] /Count ${pageIds.length} >>`;
+
+  let pdf = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
+  const offsets = [0];
+  for (let i = 0; i < objects.length; i++) {
+    offsets.push(winAnsiByteLength(pdf));
+    pdf += `${i + 1} 0 obj\n${objects[i]}\nendobj\n`;
+  }
+  const xrefOffset = winAnsiByteLength(pdf);
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  for (let i = 1; i < offsets.length; i++) pdf += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+
+  return { arrayBuffer: winAnsiStringToArrayBuffer(pdf) };
+}
+
+function markdownToPrintableText(value) {
+  return String(value || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/^#{1,6}\s*/gm, "")
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/__(.*?)__/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function wrapPdfLines(text, maxChars = 88) {
+  const output = [];
+  for (const rawLine of String(text || "").split("\n")) {
+    const line = rawLine.trimEnd();
+    if (!line.trim()) { output.push(""); continue; }
+    const words = line.split(/\s+/);
+    let current = "";
+    for (const word of words) {
+      if (!current) current = word;
+      else if ((current + " " + word).length <= maxChars) current += " " + word;
+      else { output.push(current); current = word; }
+    }
+    if (current) output.push(current);
+  }
+  return output;
+}
+
+function buildPdfPageContent(lines, pageNumber, totalPages) {
+  const content = ["BT", "/F1 10 Tf", "14 TL", "50 795 Td"];
+  lines.forEach((line, index) => {
+    if (index > 0) content.push("T*");
+    content.push(`${pdfTextLiteral(line)} Tj`);
+  });
+  content.push("ET");
+  content.push("BT", "/F1 8 Tf", "50 32 Td", `${pdfTextLiteral(`LegalAI Arg · Pagina ${pageNumber} de ${totalPages}`)} Tj`, "ET");
+  return content.join("\n");
+}
+
+function pdfTextLiteral(value) {
+  const bytes = winAnsiBytes(String(value || ""));
+  let out = "(";
+  for (const b of bytes) {
+    if (b === 0x28 || b === 0x29 || b === 0x5c) out += "\\" + String.fromCharCode(b);
+    else if (b < 32 || b > 126) out += "\\" + b.toString(8).padStart(3, "0");
+    else out += String.fromCharCode(b);
+  }
+  return out + ")";
+}
+
+function winAnsiBytes(value) {
+  const map = {
+    0x20AC: 128, 0x201A: 130, 0x0192: 131, 0x201E: 132, 0x2026: 133, 0x2020: 134, 0x2021: 135, 0x02C6: 136, 0x2030: 137, 0x0160: 138, 0x2039: 139, 0x0152: 140,
+    0x017D: 142, 0x2018: 145, 0x2019: 146, 0x201C: 147, 0x201D: 148, 0x2022: 149, 0x2013: 150, 0x2014: 151, 0x02DC: 152, 0x2122: 153, 0x0161: 154, 0x203A: 155,
+    0x0153: 156, 0x017E: 158, 0x0178: 159
+  };
+  const bytes = [];
+  for (const ch of String(value || "")) {
+    const code = ch.codePointAt(0);
+    if (code <= 255) bytes.push(code);
+    else if (map[code]) bytes.push(map[code]);
+    else bytes.push(63);
+  }
+  return bytes;
+}
+
+function winAnsiStringToArrayBuffer(value) {
+  const bytes = winAnsiBytes(value);
+  return new Uint8Array(bytes).buffer;
+}
+
+function winAnsiByteLength(value) {
+  return winAnsiBytes(value).length;
 }
 
 async function markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, errorType, detail) {
