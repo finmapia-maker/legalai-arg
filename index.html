@@ -1458,6 +1458,50 @@ function limpiarRetornoMercadoPago() {
   window.history.replaceState({}, '', window.location.pathname + hash);
 }
 
+async function recuperarPagoPorReferencia(externalRef) {
+  if (!externalRef) throw new Error('Falta la referencia de la operación.');
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+  try {
+    const res = await fetch(`${CONFIG.WORKER_URL}/mp/pago-por-referencia?external_reference=${encodeURIComponent(externalRef)}`, { signal: controller.signal });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.error || !data.payment_id) throw new Error(data.message || data.error || 'No se pudo recuperar el pago aprobado.');
+    return data;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function mostrarReintentoRecuperarPago(externalRef) {
+  irAlPago();
+  const btnPagar = document.getElementById('btnPagar');
+  if (btnPagar) btnPagar.style.display = 'none';
+  showErr('alert3', 'Estamos confirmando tu pago para habilitar la descarga. No vuelvas a pagar. Tocá “Reintentar descarga” en unos segundos.');
+  if (!document.getElementById('btnRecuperarPago')) {
+    const btn = document.createElement('button');
+    btn.id = 'btnRecuperarPago';
+    btn.className = 'btn gold';
+    btn.style.marginTop = '10px';
+    btn.textContent = '↺ Reintentar descarga';
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.textContent = 'Verificando pago...';
+      try {
+        const data = await recuperarPagoPorReferencia(externalRef);
+        guardarEstadoPago('legalai_paymentId', data.payment_id);
+        hideErr('alert3');
+        btn.remove();
+        generarDocumento(data.payment_id, data.external_reference || externalRef);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = '↺ Reintentar descarga';
+        showErr('alert3', 'Tu pago todavía no pudo recuperarse automáticamente. No vuelvas a pagar. Reintentá en unos segundos o contactá soporte con el comprobante.');
+      }
+    };
+    document.getElementById('alert3').insertAdjacentElement('afterend', btn);
+  }
+}
+
 // ── Tracking /evento ──────────────────────────────────────────────────────
 function getUTM() {
   const p = new URLSearchParams(window.location.search);
@@ -2552,6 +2596,14 @@ function descargarPDF() {
     enviarRespaldoPDF(LEGALAI_BACKUP_EMAIL_CONTEXT).catch(function(){});
   }
   try {
+    if (!texto && paymentId && /^\d+$/.test(String(paymentId))) {
+      track('stored_pdf_download_requested', {
+        ...getCurrentDocTracking(), status: 'pending', payment_id: paymentId,
+        external_reference: externalRef, client_time: new Date().toISOString()
+      });
+      window.location.href = `${CONFIG.WORKER_URL}/documento/descargar?payment_id=${encodeURIComponent(paymentId)}`;
+      return;
+    }
     if (!texto) throw new Error('No se encontró el documento. Generalo de nuevo.');
     if (!LEGALAI_FINAL_PDF) LEGALAI_FINAL_PDF = _generarPDF(texto, titulo, true, false, { descargar: false });
     iniciarDescargaBlob(LEGALAI_FINAL_PDF.blob, LEGALAI_FINAL_PDF.filename);
@@ -3064,11 +3116,25 @@ window.addEventListener('load', () => {
       const externalRef = p.get('external_reference') || leerEstadoPago('legalai_external_reference', '');
       if (externalRef) guardarEstadoPago('legalai_external_reference', externalRef);
       if (paymentId) generarDocumento(paymentId, externalRef);
-      else {
-        irAlPago();
-        const btnPagar = document.getElementById('btnPagar');
-        if (btnPagar) btnPagar.style.display = 'none';
-        showErr('alert3', 'El pago regresó sin un identificador verificable. No vuelvas a pagar; contactá a soporte con el comprobante.');
+      else if (externalRef) {
+        guardarEstadoPago('legalai_external_reference', externalRef);
+        document.getElementById('card3').classList.remove('visible');
+        document.getElementById('loadingDoc').classList.add('visible');
+        recuperarPagoPorReferencia(externalRef).then(data => {
+          const recoveredPaymentId = data.payment_id;
+          guardarEstadoPago('legalai_paymentId', recoveredPaymentId);
+          generarDocumento(recoveredPaymentId, data.external_reference || externalRef);
+        }).catch(err => {
+          document.getElementById('loadingDoc').classList.remove('visible');
+          track('payment_lookup_by_reference_failed', {
+            ...getCurrentDocTracking(), status: 'failed', external_reference: externalRef,
+            error_flag: true, error_tipo: 'payment_lookup_by_reference_failed',
+            error_detalle: err.message || String(err), client_time: new Date().toISOString()
+          });
+          mostrarReintentoRecuperarPago(externalRef);
+        });
+      } else {
+        mostrarReintentoRecuperarPago('');
       }
     } else if (tipo === 'upgrade') {
       const paymentIdUpgrade  = obtenerPaymentIdReal(p);

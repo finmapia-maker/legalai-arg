@@ -31,3 +31,7 @@ required = [
   "OPENAI_API_KEY",
   "RESEND_API_KEY"
 ]
+
+[[r2_buckets]]
+binding = "DOCUMENTS_R2"
+bucket_name = "legalai-documentos"

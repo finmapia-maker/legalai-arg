@@ -105,6 +105,7 @@ async function handleProductRoutes(request, env) {
       backup_email_from_configured: Boolean(env.EMAIL_FROM),
       nowpayments_configured: Boolean(env.NOWPAYMENTS_API_KEY),
       nowpayments_ipn_configured: Boolean(env.NOWPAYMENTS_IPN_SECRET),
+      documents_r2_configured: Boolean(env.DOCUMENTS_R2),
       owner_routes: true,
       affiliate_admin_routes: true,
       tracking_routes: true,
@@ -123,6 +124,18 @@ async function handleProductRoutes(request, env) {
 
   if (request.method === "POST" && url.pathname === "/nowpayments/webhook") {
     return await handleNowPaymentsWebhook(request, env);
+  }
+
+  if (request.method === "GET" && url.pathname === "/mp/pago-por-referencia") {
+    return await handlePaymentLookupByReference(request, env);
+  }
+
+  if (request.method === "GET" && url.pathname === "/documento/estado") {
+    return await handleDocumentStatus(request, env);
+  }
+
+  if (request.method === "GET" && url.pathname === "/documento/descargar") {
+    return await handleStoredDocumentDownload(request, env);
   }
 
   if (request.method === "POST" && url.pathname === "/campos") {
@@ -347,6 +360,7 @@ async function handleProductRoutes(request, env) {
       }
 
       await recordApprovedPaymentOnce(env, mp, "generation_validation");
+      await markCheckoutPaymentApproved(env, mp, "generation_validation");
 
       externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
       if (requestedExternalRef && externalRef && requestedExternalRef !== externalRef) {
@@ -597,6 +611,154 @@ async function handleProductRoutes(request, env) {
 }
 
 
+
+async function handlePaymentLookupByReference(request, env) {
+  const url = new URL(request.url);
+  const externalRef = String(url.searchParams.get("external_reference") || url.searchParams.get("externalRef") || "").trim();
+  if (!externalRef) return json(request, { ok: false, error: "missing_external_reference" }, 400);
+
+  const checkout = await readCheckout(env, externalRef);
+  if (checkout?.payment_id) {
+    const verified = await fetchMercadoPagoPayment(env, String(checkout.payment_id));
+    if (verified.ok && String(verified.payment?.status || "").toLowerCase() === "approved" && isLegalAiPayment(verified.payment)) {
+      await recordApprovedPaymentOnce(env, verified.payment, "lookup_by_reference_checkout");
+      await markCheckoutPaymentApproved(env, verified.payment, "lookup_by_reference_checkout");
+      return json(request, {
+        ok: true,
+        payment_id: String(verified.payment.id || checkout.payment_id),
+        status: verified.payment.status || "approved",
+        external_reference: externalRef,
+        source: "checkout"
+      });
+    }
+  }
+
+  const found = await fetchMercadoPagoPaymentByReference(env, externalRef);
+  if (!found.ok) {
+    await safeAppendOwnerEvent(env, {
+      id: `MP-LOOKUP-REF-ERROR-${externalRef}`,
+      order_id: externalRef,
+      type: "payment_lookup_by_reference_failed",
+      category: "mercadopago",
+      product: "Recuperar pago por referencia",
+      status: "failed",
+      error_flag: true,
+      error_tipo: found.error || "payment_lookup_failed",
+      error_detalle: found.message || "No se pudo recuperar el pago por external_reference.",
+      raw: { externalRef }
+    });
+    return json(request, { ok: false, error: found.error, message: found.message }, found.status || 404);
+  }
+
+  const mp = found.payment;
+  if (String(mp.status || "").toLowerCase() === "approved") {
+    await recordApprovedPaymentOnce(env, mp, "lookup_by_reference_mp");
+    await markCheckoutPaymentApproved(env, mp, "lookup_by_reference_mp");
+  } else {
+    await recordPaymentStatusEvent(env, mp, "lookup_by_reference_mp");
+  }
+
+  return json(request, {
+    ok: true,
+    payment_id: String(mp.id || ""),
+    status: mp.status || "",
+    external_reference: externalRef,
+    source: "mercadopago"
+  });
+}
+
+async function handleDocumentStatus(request, env) {
+  const url = new URL(request.url);
+  const paymentId = String(url.searchParams.get("payment_id") || url.searchParams.get("paymentId") || "").trim();
+  const externalRef = String(url.searchParams.get("external_reference") || url.searchParams.get("externalRef") || "").trim();
+  let resolvedPaymentId = paymentId;
+  if (!resolvedPaymentId && externalRef) {
+    const checkout = await readCheckout(env, externalRef);
+    resolvedPaymentId = String(checkout?.payment_id || "").trim();
+  }
+  if (!resolvedPaymentId) return json(request, { ok: false, error: "missing_payment_id" }, 400);
+
+  const verified = await fetchMercadoPagoPayment(env, resolvedPaymentId);
+  if (!verified.ok) return json(request, { ok: false, error: verified.error, message: verified.message }, verified.status || 502);
+  const mp = verified.payment;
+  if (String(mp.status || "").toLowerCase() !== "approved" || !isLegalAiPayment(mp)) {
+    return json(request, { ok: false, error: "payment_not_approved", status: mp.status || "" }, 402);
+  }
+
+  const r2Key = documentR2Key(resolvedPaymentId);
+  const exists = Boolean(env.DOCUMENTS_R2 && await env.DOCUMENTS_R2.head(r2Key));
+  const backupState = await readBackupEmailState(env, resolvedPaymentId);
+  return json(request, {
+    ok: true,
+    payment_id: resolvedPaymentId,
+    external_reference: String(mp.external_reference || mp.metadata?.legalai_external_ref || externalRef || ""),
+    payment_status: mp.status || "approved",
+    pdf_stored: exists,
+    download_available: exists,
+    backup_email_status: backupState?.status || "unknown",
+    r2_configured: Boolean(env.DOCUMENTS_R2)
+  });
+}
+
+async function handleStoredDocumentDownload(request, env) {
+  const url = new URL(request.url);
+  const paymentId = String(url.searchParams.get("payment_id") || url.searchParams.get("paymentId") || "").trim();
+  if (!paymentId || !/^\d+$/.test(paymentId)) {
+    return json(request, { ok: false, error: "missing_payment_id" }, 400);
+  }
+  if (!env.DOCUMENTS_R2) {
+    return json(request, { ok: false, error: "missing_documents_r2" }, 500);
+  }
+
+  const verified = await fetchMercadoPagoPayment(env, paymentId);
+  if (!verified.ok) return json(request, { ok: false, error: verified.error, message: verified.message }, verified.status || 502);
+  const mp = verified.payment;
+  if (String(mp.status || "").toLowerCase() !== "approved" || !isLegalAiPayment(mp) || String(mp.metadata?.legalai_tipo || "doc").toLowerCase() !== "doc") {
+    return json(request, { ok: false, error: "payment_not_approved_or_wrong_type" }, 403);
+  }
+
+  const r2Key = documentR2Key(paymentId);
+  const object = await env.DOCUMENTS_R2.get(r2Key);
+  if (!object) {
+    await safeAppendOwnerEvent(env, {
+      id: `R2-DOWNLOAD-MISS-${paymentId}`,
+      payment_id: paymentId,
+      order_id: String(mp.external_reference || mp.metadata?.legalai_external_ref || ""),
+      type: "stored_pdf_not_found",
+      product: mp.description || "Documento LegalAI",
+      category: "documento_r2",
+      status: "failed",
+      error_flag: true,
+      error_tipo: "stored_pdf_not_found",
+      error_detalle: "No existe PDF almacenado en R2 para este pago."
+    });
+    return json(request, { ok: false, error: "stored_pdf_not_found" }, 404);
+  }
+
+  const filename = object.customMetadata?.filename || `legalai-${paymentId}.pdf`;
+  await safeAppendOwnerEvent(env, {
+    id: `R2-DOWNLOAD-${paymentId}-${Date.now()}`,
+    payment_id: paymentId,
+    order_id: String(mp.external_reference || mp.metadata?.legalai_external_ref || ""),
+    type: "stored_pdf_download_started",
+    product: mp.description || "Documento LegalAI",
+    category: "documento_r2",
+    status: "approved",
+    customer: mp.payer?.email || "",
+    raw: { r2Key, filename }
+  });
+
+  return new Response(object.body, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${filename.replace(/"/g, "")}"`,
+      "Cache-Control": "no-store",
+      ...corsHeaders(request)
+    }
+  });
+}
+
 async function handleMercadoPagoWebhook(request, env) {
   const url = new URL(request.url);
   const body = request.method === "POST" ? await readRequestBody(request) : {};
@@ -675,6 +837,7 @@ async function handleMercadoPagoWebhook(request, env) {
     const approved = String(mp.status || "").toLowerCase() === "approved";
     if (approved) {
       await recordApprovedPaymentOnce(env, mp, "webhook");
+      await markCheckoutPaymentApproved(env, mp, "webhook");
       if (String(mp.metadata?.legalai_tipo || "").toLowerCase() === "plan") {
         const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
         const checkout = externalRef ? await readCheckout(env, externalRef) : null;
@@ -2028,6 +2191,7 @@ async function handlePdfBackupEmail(request, env) {
   }
 
   await recordApprovedPaymentOnce(env, mp, "backup_email_validation");
+  await markCheckoutPaymentApproved(env, mp, "backup_email_validation");
 
   const externalRef = String(mp.external_reference || mp.metadata?.legalai_external_ref || "").trim();
   if (requestedExternalRef && externalRef && requestedExternalRef !== externalRef) {
@@ -2067,6 +2231,41 @@ async function handlePdfBackupEmail(request, env) {
     raw: { paymentId, externalRef, filename: safeFilename, bytes: file.size, buyerName }
   });
 
+  let pdfArrayBuffer = null;
+  let r2State = null;
+  try {
+    pdfArrayBuffer = await file.arrayBuffer();
+    r2State = await storeGeneratedPdfInR2(env, {
+      paymentId,
+      externalRef,
+      title,
+      buyerName,
+      payerEmail,
+      approvedAt,
+      filename: safeFilename,
+      contentType: file.type || "application/pdf",
+      size: file.size,
+      arrayBuffer: pdfArrayBuffer,
+      datosDoc,
+      metadata
+    });
+  } catch (err) {
+    await safeAppendOwnerEvent(env, {
+      id: `R2-STORE-ERROR-${paymentId}`,
+      payment_id: paymentId,
+      order_id: externalRef,
+      type: "stored_pdf_error",
+      product: title,
+      category: "documento_r2",
+      status: "failed",
+      customer: payerEmail,
+      error_flag: true,
+      error_tipo: "r2_store_error",
+      error_detalle: err?.message || String(err),
+      raw: { paymentId, externalRef, filename: safeFilename }
+    });
+  }
+
   if (!env.RESEND_API_KEY || !env.EMAIL_TO || !env.EMAIL_FROM) {
     const missing = [
       !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
@@ -2078,8 +2277,7 @@ async function handlePdfBackupEmail(request, env) {
   }
 
   try {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdfBase64 = arrayBufferToBase64(arrayBuffer);
+    const pdfBase64 = arrayBufferToBase64(pdfArrayBuffer || await file.arrayBuffer());
     const backupRecipients = String(env.EMAIL_TO || "").split(/[;,]/).map(v => v.trim()).filter(Boolean);
     if (!backupRecipients.length || !backupRecipients.every(isValidEmail)) {
       throw new Error("EMAIL_TO no contiene una casilla receptora válida.");
@@ -2130,7 +2328,8 @@ async function handlePdfBackupEmail(request, env) {
       resend_id: resendData.id,
       filename: safeFilename,
       bytes: file.size,
-      to: env.EMAIL_TO
+      to: env.EMAIL_TO,
+      r2: r2State
     };
     await writeBackupEmailState(env, paymentId, sentState);
     if (externalRef) {
@@ -2189,6 +2388,60 @@ async function markBackupEmailFailure(env, checkout, externalRef, paymentId, tit
     error_detalle: detail,
     raw: { paymentId, externalRef, to: env.EMAIL_TO || "" }
   });
+}
+
+
+function documentR2Key(paymentId) {
+  return `documentos/${String(paymentId || "").replace(/[^0-9A-Za-z_-]/g, "")}/documento.pdf`;
+}
+
+async function storeGeneratedPdfInR2(env, info) {
+  if (!env.DOCUMENTS_R2) return { stored: false, reason: "missing_documents_r2" };
+  if (!info?.paymentId || !info?.arrayBuffer) return { stored: false, reason: "missing_pdf_data" };
+  const key = documentR2Key(info.paymentId);
+  await env.DOCUMENTS_R2.put(key, info.arrayBuffer, {
+    httpMetadata: {
+      contentType: info.contentType || "application/pdf",
+      contentDisposition: `attachment; filename="${String(info.filename || `legalai-${info.paymentId}.pdf`).replace(/"/g, "")}"`
+    },
+    customMetadata: {
+      payment_id: String(info.paymentId || ""),
+      external_reference: String(info.externalRef || "").slice(0, 512),
+      filename: String(info.filename || "documento-legal.pdf").slice(0, 256),
+      buyer: String(info.buyerName || "").slice(0, 256),
+      payer_email: String(info.payerEmail || "").slice(0, 256),
+      approved_at: String(info.approvedAt || "").slice(0, 128),
+      stored_at: new Date().toISOString()
+    }
+  });
+  const storedAt = new Date().toISOString();
+  const state = { stored: true, key, stored_at: storedAt, filename: info.filename || "documento-legal.pdf", bytes: Number(info.size || 0) };
+
+  const checkout = info.externalRef ? await readCheckout(env, info.externalRef) : null;
+  if (info.externalRef) {
+    await writeCheckout(env, info.externalRef, {
+      ...(checkout || {}),
+      external_reference: info.externalRef,
+      payment_id: String(info.paymentId || checkout?.payment_id || ""),
+      datosDoc: checkout?.datosDoc || info.datosDoc || {},
+      metadata: checkout?.metadata || info.metadata || {},
+      document_r2: state
+    });
+  }
+
+  await safeAppendOwnerEvent(env, {
+    id: `R2-STORED-${info.paymentId}`,
+    payment_id: String(info.paymentId || ""),
+    order_id: String(info.externalRef || ""),
+    type: "stored_pdf_saved",
+    product: info.title || "Documento LegalAI",
+    category: "documento_r2",
+    status: "approved",
+    customer: info.payerEmail || "",
+    date: storedAt,
+    raw: { key, filename: info.filename, bytes: info.size }
+  });
+  return state;
 }
 
 function parseJsonValue(value, fallback = {}) {
@@ -2262,6 +2515,44 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+
+async function fetchMercadoPagoPaymentByReference(env, externalRef) {
+  if (!externalRef) return { ok: false, error: "missing_external_reference", message: "Falta external_reference.", status: 400 };
+  if (!env.MERCADOPAGO_ACCESS_TOKEN) return { ok: false, error: "missing_mp_token", message: "Falta configurar MercadoPago.", status: 500 };
+  try {
+    const params = new URLSearchParams({ external_reference: externalRef, sort: "date_created", criteria: "desc", limit: "10" });
+    const res = await fetch(`https://api.mercadopago.com/v1/payments/search?${params.toString()}`, {
+      headers: { "Authorization": `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` }
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: "mp_payment_reference_lookup_error", message: data.message || data.error || "No se pudo buscar el pago en MercadoPago.", status: 502 };
+    const results = Array.isArray(data.results) ? data.results : [];
+    const legalai = results.find(p => isLegalAiPayment(p) && String(p.external_reference || p.metadata?.legalai_external_ref || "") === externalRef);
+    if (!legalai) return { ok: false, error: "payment_not_found_by_reference", message: "No se encontró un pago asociado a esta referencia.", status: 404 };
+    return { ok: true, payment: legalai };
+  } catch (err) {
+    return { ok: false, error: "mp_payment_reference_lookup_exception", message: err?.message || String(err), status: 502 };
+  }
+}
+
+async function markCheckoutPaymentApproved(env, mp, source = "unknown") {
+  const externalRef = String(mp?.external_reference || mp?.metadata?.legalai_external_ref || "").trim();
+  const paymentId = String(mp?.id || "").trim();
+  if (!externalRef || !paymentId || String(mp?.status || "").toLowerCase() !== "approved") return false;
+  const checkout = await readCheckout(env, externalRef);
+  await writeCheckout(env, externalRef, {
+    ...(checkout || {}),
+    external_reference: externalRef,
+    payment_id: paymentId,
+    payment_status: "approved",
+    approved_at: mp.date_approved || mp.date_last_updated || new Date().toISOString(),
+    payment_source: source,
+    mp_amount: Number(mp.transaction_amount || checkout?.montoARS || 0),
+    mp_currency: mp.currency_id || checkout?.currency || "ARS"
+  });
+  return true;
 }
 
 async function fetchMercadoPagoPayment(env, paymentId) {
