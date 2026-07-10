@@ -136,10 +136,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-09T13:50:52.614Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Ads click documento → Ads venta (0%) y Planes Click plan → Pago plan iniciado (100% drop)",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-10T13:13:28.176Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "1) Pausar o reevaluar segmentación de Google Ads: 36 visitas, 0 ventas, costo sin retorno. Revisar audiencia, keywords y landing destino. 2) Investigar por qué 3 usuarios que hicieron click en un plan no iniciaron pago: verificar si el botón de pago de planes redirige correctamente al init_point de MercadoPago o falla silenciosamente. Agregar log en backend para confirmar si se genera preference_id al seleccionar plan.",
     "archivo": "ads_landing.html",
