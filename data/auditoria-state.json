@@ -134,19 +134,24 @@
       "descripcion": "1) Pausar o reevaluar segmentación de Google Ads: 36 visitas, 0 ventas, costo sin retorno. Revisar audiencia, keywords y landing destino. 2) Investigar por qué 3 usuarios que hicieron click en un plan no iniciaron pago: verificar si el botón de pago de planes redirige correctamente al init_point de MercadoPago o falla silenciosamente. Agregar log en backend para confirmar si se genera preference_id al seleccionar plan.",
       "fecha": "2026-07-09T13:50:52.614Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar que la return_url post-pago de MercadoPago procese correctamente el webhook y confirme la venta en base de datos. Agregar log explícito en backend al recibir notificación de pago aprobado. Revisar si el frontend muestra confirmación al usuario aunque el backend falle silenciosamente. Además, revisar el 1 error de frontend detectado en consola que puede estar bloqueando el flujo en mobile.",
+      "fecha": "2026-07-12T12:02:22.018Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-11T11:54:26.295Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-12T12:02:22.018Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "1) Pausar o reevaluar segmentación de Google Ads: 36 visitas, 0 ventas, costo sin retorno. Revisar audiencia, keywords y landing destino. 2) Investigar por qué 3 usuarios que hicieron click en un plan no iniciaron pago: verificar si el botón de pago de planes redirige correctamente al init_point de MercadoPago o falla silenciosamente. Agregar log en backend para confirmar si se genera preference_id al seleccionar plan.",
-    "archivo": "ads_landing.html",
-    "tipo": "ads",
-    "hipotesis": "Si la segmentación de ads apunta a intención incorrecta Y el botón de pago de planes no genera preferencia válida → corregir ambos aumentará conversión de ads y desbloqueará el funnel de planes",
-    "conv_base": 1,
-    "clics_base": 32
+    "descripcion": "Verificar que la return_url post-pago de MercadoPago procese correctamente el webhook y confirme la venta en base de datos. Agregar log explícito en backend al recibir notificación de pago aprobado. Revisar si el frontend muestra confirmación al usuario aunque el backend falle silenciosamente. Además, revisar el 1 error de frontend detectado en consola que puede estar bloqueando el flujo en mobile.",
+    "archivo": "checkout.html",
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el webhook o return_url falla silenciosamente, los pagos se procesan en MercadoPago pero no se confirman como venta en el sistema → corregir listener de webhook resuelve las 0 ventas con pagos iniciados",
+    "conv_base": 0,
+    "clics_base": 43
   },
-  "cambio_activo_desde": "2026-07-09T13:50:52.614Z"
+  "cambio_activo_desde": "2026-07-12T12:02:22.018Z"
 }
