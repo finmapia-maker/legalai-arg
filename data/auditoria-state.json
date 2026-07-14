@@ -139,19 +139,24 @@
       "descripcion": "Verificar que la return_url post-pago de MercadoPago procese correctamente el webhook y confirme la venta en base de datos. Agregar log explícito en backend al recibir notificación de pago aprobado. Revisar si el frontend muestra confirmación al usuario aunque el backend falle silenciosamente. Además, revisar el 1 error de frontend detectado en consola que puede estar bloqueando el flujo en mobile.",
       "fecha": "2026-07-12T12:02:22.018Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Forzar test manual end-to-end del flujo de pago: simular un pago aprobado en sandbox de MercadoPago y verificar que el backend recibe el webhook, actualiza la base de datos y devuelve confirmación al frontend. Si el webhook no llega, verificar que la URL esté expuesta públicamente (no localhost). Agregar endpoint de diagnóstico que loguee cada notificación entrante de MP con timestamp y status. Corregir además el 1 error de frontend que puede estar interrumpiendo el flujo post-pago en mobile.",
+      "fecha": "2026-07-14T12:16:35.376Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-13T13:25:51.891Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-14T12:16:35.376Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Verificar que la return_url post-pago de MercadoPago procese correctamente el webhook y confirme la venta en base de datos. Agregar log explícito en backend al recibir notificación de pago aprobado. Revisar si el frontend muestra confirmación al usuario aunque el backend falle silenciosamente. Además, revisar el 1 error de frontend detectado en consola que puede estar bloqueando el flujo en mobile.",
-    "archivo": "checkout.html",
+    "descripcion": "Forzar test manual end-to-end del flujo de pago: simular un pago aprobado en sandbox de MercadoPago y verificar que el backend recibe el webhook, actualiza la base de datos y devuelve confirmación al frontend. Si el webhook no llega, verificar que la URL esté expuesta públicamente (no localhost). Agregar endpoint de diagnóstico que loguee cada notificación entrante de MP con timestamp y status. Corregir además el 1 error de frontend que puede estar interrumpiendo el flujo post-pago en mobile.",
+    "archivo": "backend/webhook.py o equivalente",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el webhook o return_url falla silenciosamente, los pagos se procesan en MercadoPago pero no se confirman como venta en el sistema → corregir listener de webhook resuelve las 0 ventas con pagos iniciados",
+    "hipotesis": "Si el webhook recibe y procesa correctamente el pago aprobado → las ventas se confirman y la tasa de conversión sube desde 0%",
     "conv_base": 0,
-    "clics_base": 43
+    "clics_base": 48
   },
-  "cambio_activo_desde": "2026-07-12T12:02:22.018Z"
+  "cambio_activo_desde": "2026-07-14T12:16:35.376Z"
 }
