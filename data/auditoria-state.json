@@ -151,10 +151,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-16T12:21:35.276Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-17T12:11:11.559Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Escalar diagnóstico: 1) Verificar en logs de MercadoPago Dashboard si los pagos llegan con status 'approved' del lado de MP. Si MP los marca como aprobados pero el backend no registra la venta, el problema es 100% del webhook receptor. 2) Reemplazar temporalmente el endpoint de webhook por uno que responda 200 siempre y loguee el body completo en un archivo o servicio externo (ej. webhook.site) para confirmar que las notificaciones llegan. 3) Si el webhook nunca llega, revisar que la URL de notificación configurada en la preferencia de pago sea HTTPS público y no localhost. 4) Si el webhook llega pero no actualiza DB, revisar validación de firma y manejo de errores silenciosos. 5) Corregir el frontend_error detectado que puede estar bloqueando confirmación en mobile.",
     "archivo": "backend/webhook_mp.js",
