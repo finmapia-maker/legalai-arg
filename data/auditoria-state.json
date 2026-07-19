@@ -149,19 +149,24 @@
       "descripcion": "Escalar diagnóstico: 1) Verificar en logs de MercadoPago Dashboard si los pagos llegan con status 'approved' del lado de MP. Si MP los marca como aprobados pero el backend no registra la venta, el problema es 100% del webhook receptor. 2) Reemplazar temporalmente el endpoint de webhook por uno que responda 200 siempre y loguee el body completo en un archivo o servicio externo (ej. webhook.site) para confirmar que las notificaciones llegan. 3) Si el webhook nunca llega, revisar que la URL de notificación configurada en la preferencia de pago sea HTTPS público y no localhost. 4) Si el webhook llega pero no actualiza DB, revisar validación de firma y manejo de errores silenciosos. 5) Corregir el frontend_error detectado que puede estar bloqueando confirmación en mobile.",
       "fecha": "2026-07-16T12:21:35.276Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Abandonar diagnóstico pasivo. Ejecutar acción directa: 1) Reemplazar el botón de pago por un enlace hardcodeado a una preferencia de MercadoPago creada manualmente desde el Dashboard de MP (sin pasar por el backend) para confirmar si el problema está en la generación de la preferencia o en el webhook. 2) Si ese pago hardcodeado funciona, el bug está en la creación dinámica de preferencias en el backend. 3) Si tampoco funciona, el problema está en la cuenta de MP o en la configuración del checkout. 4) Registrar cualquier resultado como primer dato concreto del lado de MP en 5 días.",
+      "fecha": "2026-07-19T12:01:49.635Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-18T11:54:16.152Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-19T12:01:49.635Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Escalar diagnóstico: 1) Verificar en logs de MercadoPago Dashboard si los pagos llegan con status 'approved' del lado de MP. Si MP los marca como aprobados pero el backend no registra la venta, el problema es 100% del webhook receptor. 2) Reemplazar temporalmente el endpoint de webhook por uno que responda 200 siempre y loguee el body completo en un archivo o servicio externo (ej. webhook.site) para confirmar que las notificaciones llegan. 3) Si el webhook nunca llega, revisar que la URL de notificación configurada en la preferencia de pago sea HTTPS público y no localhost. 4) Si el webhook llega pero no actualiza DB, revisar validación de firma y manejo de errores silenciosos. 5) Corregir el frontend_error detectado que puede estar bloqueando confirmación en mobile.",
-    "archivo": "backend/webhook_mp.js",
+    "descripcion": "Abandonar diagnóstico pasivo. Ejecutar acción directa: 1) Reemplazar el botón de pago por un enlace hardcodeado a una preferencia de MercadoPago creada manualmente desde el Dashboard de MP (sin pasar por el backend) para confirmar si el problema está en la generación de la preferencia o en el webhook. 2) Si ese pago hardcodeado funciona, el bug está en la creación dinámica de preferencias en el backend. 3) Si tampoco funciona, el problema está en la cuenta de MP o en la configuración del checkout. 4) Registrar cualquier resultado como primer dato concreto del lado de MP en 5 días.",
+    "archivo": "backend/webhook.js",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el webhook de MercadoPago no está llegando al backend o está fallando silenciosamente → ninguna venta se confirmará jamás aunque los pagos se procesen correctamente del lado de MP",
+    "hipotesis": "Si el pago con preferencia hardcodeada se completa → el backend no está generando correctamente la preferencia de pago dinámica y esa es la causa raíz de 0 ventas en 5 días",
     "conv_base": 0,
-    "clics_base": 45
+    "clics_base": 35
   },
-  "cambio_activo_desde": "2026-07-16T12:21:35.276Z"
+  "cambio_activo_desde": "2026-07-19T12:01:49.635Z"
 }
