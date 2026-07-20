@@ -156,10 +156,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-19T12:01:49.635Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-20T13:08:26.736Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Abandonar diagnóstico pasivo. Ejecutar acción directa: 1) Reemplazar el botón de pago por un enlace hardcodeado a una preferencia de MercadoPago creada manualmente desde el Dashboard de MP (sin pasar por el backend) para confirmar si el problema está en la generación de la preferencia o en el webhook. 2) Si ese pago hardcodeado funciona, el bug está en la creación dinámica de preferencias en el backend. 3) Si tampoco funciona, el problema está en la cuenta de MP o en la configuración del checkout. 4) Registrar cualquier resultado como primer dato concreto del lado de MP en 5 días.",
     "archivo": "backend/webhook.js",
