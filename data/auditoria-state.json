@@ -154,19 +154,24 @@
       "descripcion": "Abandonar diagnóstico pasivo. Ejecutar acción directa: 1) Reemplazar el botón de pago por un enlace hardcodeado a una preferencia de MercadoPago creada manualmente desde el Dashboard de MP (sin pasar por el backend) para confirmar si el problema está en la generación de la preferencia o en el webhook. 2) Si ese pago hardcodeado funciona, el bug está en la creación dinámica de preferencias en el backend. 3) Si tampoco funciona, el problema está en la cuenta de MP o en la configuración del checkout. 4) Registrar cualquier resultado como primer dato concreto del lado de MP en 5 días.",
       "fecha": "2026-07-19T12:01:49.635Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar completamente el botón de pago por un modal que muestre al usuario un CBU/alias o un link de pago estático de MercadoPago generado desde el panel (no desde el backend). Eliminar temporalmente cualquier lógica dinámica de creación de preferencia. Si el usuario llega al modal y no puede pagar, el problema está en la cuenta de MP o en restricciones de la cuenta. Si paga por el link estático, confirmar manualmente la venta y registrar el primer evento de conversión real. Esto descarta de forma definitiva si el backend es el único punto de falla o si la cuenta de MP tiene restricciones activas.",
+      "fecha": "2026-07-21T12:24:23.098Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-20T13:08:26.736Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-21T12:24:23.098Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Abandonar diagnóstico pasivo. Ejecutar acción directa: 1) Reemplazar el botón de pago por un enlace hardcodeado a una preferencia de MercadoPago creada manualmente desde el Dashboard de MP (sin pasar por el backend) para confirmar si el problema está en la generación de la preferencia o en el webhook. 2) Si ese pago hardcodeado funciona, el bug está en la creación dinámica de preferencias en el backend. 3) Si tampoco funciona, el problema está en la cuenta de MP o en la configuración del checkout. 4) Registrar cualquier resultado como primer dato concreto del lado de MP en 5 días.",
-    "archivo": "backend/webhook.js",
+    "descripcion": "Reemplazar completamente el botón de pago por un modal que muestre al usuario un CBU/alias o un link de pago estático de MercadoPago generado desde el panel (no desde el backend). Eliminar temporalmente cualquier lógica dinámica de creación de preferencia. Si el usuario llega al modal y no puede pagar, el problema está en la cuenta de MP o en restricciones de la cuenta. Si paga por el link estático, confirmar manualmente la venta y registrar el primer evento de conversión real. Esto descarta de forma definitiva si el backend es el único punto de falla o si la cuenta de MP tiene restricciones activas.",
+    "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el pago con preferencia hardcodeada se completa → el backend no está generando correctamente la preferencia de pago dinámica y esa es la causa raíz de 0 ventas en 5 días",
+    "hipotesis": "Si el link estático de MP convierte → el backend no está generando preferencias válidas. Si el link estático tampoco convierte → la cuenta de MP tiene restricciones o el segmento de audiencia no tiene intención de pago real.",
     "conv_base": 0,
-    "clics_base": 35
+    "clics_base": 44
   },
-  "cambio_activo_desde": "2026-07-19T12:01:49.635Z"
+  "cambio_activo_desde": "2026-07-21T12:24:23.098Z"
 }
