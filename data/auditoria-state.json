@@ -161,10 +161,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-21T12:24:23.098Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-22T12:26:17.061Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar completamente el botón de pago por un modal que muestre al usuario un CBU/alias o un link de pago estático de MercadoPago generado desde el panel (no desde el backend). Eliminar temporalmente cualquier lógica dinámica de creación de preferencia. Si el usuario llega al modal y no puede pagar, el problema está en la cuenta de MP o en restricciones de la cuenta. Si paga por el link estático, confirmar manualmente la venta y registrar el primer evento de conversión real. Esto descarta de forma definitiva si el backend es el único punto de falla o si la cuenta de MP tiene restricciones activas.",
     "archivo": "checkout.html",
