@@ -166,10 +166,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-24T12:21:05.997Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-25T12:03:51.139Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Abandonar el modal CBU/link estático. Ejecutar una compra de prueba real y controlada: 1) Crear una preferencia de prueba en modo sandbox de MercadoPago con un monto mínimo ($1 ARS) desde el backend, loggear el response completo. 2) Si la preferencia se crea OK, abrir el init_point manualmente y completar el pago con tarjeta de prueba de MP. 3) Verificar en el panel de MP si la transacción aparece como aprobada. 4) Si aparece aprobada pero no se registra venta en el sistema, el bug está en el webhook receptor. 5) Si no aparece en MP, el bug está en la cuenta o en el entorno productivo. Registrar el resultado exacto del paso donde falla como primer diagnóstico técnico concreto.",
     "archivo": "checkout.html",
