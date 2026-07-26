@@ -1,28 +1,22 @@
 {
-  "fecha": "2026-07-25T12:03:51.139Z",
+  "fecha": "2026-07-26T12:04:55.343Z",
   "periodo_48h": {
-    "visitas": 10,
-    "clics": 69,
+    "visitas": 7,
+    "clics": 45,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 192,
+    "total_eventos": 134,
     "por_fuente": {
       "google_ads": {
-        "visitas": 9,
-        "clics": 66,
+        "visitas": 5,
+        "clics": 44,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 1,
+        "visitas": 2,
         "clics": 1,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      "directo": {
-        "visitas": 0,
-        "clics": 2,
         "ventas": 0,
         "total_ars": 0
       }
@@ -30,49 +24,25 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 90,
+        "eventos": 67,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 56,
+        "eventos": 40,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 30,
+        "eventos": 22,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 7,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Documento legal: Contrato de alquiler de vivienda",
-        "eventos": 3,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Notificación MercadoPago",
-        "eventos": 3,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Documento legal: Contrato de alquiler de local comercial",
-        "eventos": 2,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Error al verificar pago MercadoPago",
-        "eventos": 1,
+        "eventos": 5,
         "ventas": 0,
         "total_ars": 0
       }
@@ -80,21 +50,21 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 32,
-    "clics": 145,
+    "visitas": 33,
+    "clics": 143,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 490,
+    "total_eventos": 494,
     "por_fuente": {
       "google_ads": {
-        "visitas": 23,
-        "clics": 140,
+        "visitas": 25,
+        "clics": 138,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 9,
+        "visitas": 8,
         "clics": 3,
         "ventas": 0,
         "total_ars": 0
@@ -109,25 +79,25 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 236,
+        "eventos": 239,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 163,
+        "eventos": 166,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 56,
+        "eventos": 55,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 11,
+        "eventos": 12,
         "ventas": 0,
         "total_ars": 0
       },
@@ -162,8 +132,8 @@
         "total_ars": 0
       },
       {
-        "documento": "planes",
-        "eventos": 2,
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       }
@@ -171,51 +141,48 @@
     "ultimas_conversiones": []
   },
   "embudo_eventos": {
-    "click_pagar": 5,
-    "form_first_input": 8,
-    "scroll_75pct": 21,
-    "scroll_50pct": 21,
-    "preview_live_ok": 10,
-    "scroll_25pct": 14,
-    "cta_generador": 23,
-    "ads_landing_view": 49,
-    "frontend_error": 1,
-    "click_residencial": 7,
-    "page_view": 10,
+    "scroll_75pct": 15,
+    "scroll_50pct": 16,
     "doc_selected": 4,
+    "scroll_25pct": 15,
+    "page_view": 7,
+    "click_comercial": 1,
+    "ads_landing_view": 35,
     "inicio_formulario": 7,
-    "cta_doc_inline": 3,
-    "server_document_generation_failed": 3,
-    "payment_webhook_received": 3,
-    "checkout_start": 2,
-    "error": 1
+    "cta_generador": 13,
+    "form_first_input": 6,
+    "click_pagar": 3,
+    "preview_live_ok": 6,
+    "frontend_error": 1,
+    "click_residencial": 4,
+    "cta_doc_inline": 1
   },
-  "total_eventos": 192,
+  "total_eventos": 134,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 10,
+      "count": 7,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 14,
+      "count": 10,
       "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 15,
+      "count": 13,
       "drop_pct": 0
     },
     {
       "label": "Preview live OK",
-      "count": 10,
-      "drop_pct": 33
+      "count": 6,
+      "drop_pct": 54
     },
     {
       "label": "Pago iniciado",
-      "count": 7,
-      "drop_pct": 30
+      "count": 3,
+      "drop_pct": 50
     },
     {
       "label": "Venta confirmada",
@@ -248,27 +215,27 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 56,
+      "count": 38,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 13,
-      "drop_pct": 77
+      "count": 9,
+      "drop_pct": 76
     },
     {
       "label": "Ads inicio formulario",
-      "count": 18,
+      "count": 14,
       "drop_pct": 0
     },
     {
       "label": "Ads preview OK",
-      "count": 10,
-      "drop_pct": 44
+      "count": 6,
+      "drop_pct": 57
     },
     {
       "label": "Ads inicio pago",
-      "count": 5,
+      "count": 3,
       "drop_pct": 50
     },
     {
@@ -287,7 +254,7 @@
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 8,
+    "form_first_input": 6,
     "doc_selected": 4
   },
   "cuello_botella": {
@@ -301,7 +268,7 @@
       "Errores frontend detectados: 1 → revisar consola/compatibilidad mobile.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 66 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 44 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
