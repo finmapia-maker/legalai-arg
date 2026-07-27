@@ -164,19 +164,24 @@
       "descripcion": "Abandonar el modal CBU/link estático. Ejecutar una compra de prueba real y controlada: 1) Crear una preferencia de prueba en modo sandbox de MercadoPago con un monto mínimo ($1 ARS) desde el backend, loggear el response completo. 2) Si la preferencia se crea OK, abrir el init_point manualmente y completar el pago con tarjeta de prueba de MP. 3) Verificar en el panel de MP si la transacción aparece como aprobada. 4) Si aparece aprobada pero no se registra venta en el sistema, el bug está en el webhook receptor. 5) Si no aparece en MP, el bug está en la cuenta o en el entorno productivo. Registrar el resultado exacto del paso donde falla como primer diagnóstico técnico concreto.",
       "fecha": "2026-07-24T12:21:05.997Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Pausar o revisar segmentación del anuncio de Google Ads: la audiencia trae 38 visitas con intención baja (solo 5 hacen click en documento = 13%). Crear una variante de landing específica para tráfico pago con propuesta de valor más directa y un único documento destacado como recomendado para reducir fricción de elección. Paralelamente, analizar qué fuente/documento generó la única venta confirmada (fuente directa) y replicar ese contexto en la landing de Ads.",
+      "fecha": "2026-07-27T13:39:50.414Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-07-26T12:04:55.342Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-07-27T13:39:50.414Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads click documento",
   "cambio_activo": {
-    "descripcion": "Abandonar el modal CBU/link estático. Ejecutar una compra de prueba real y controlada: 1) Crear una preferencia de prueba en modo sandbox de MercadoPago con un monto mínimo ($1 ARS) desde el backend, loggear el response completo. 2) Si la preferencia se crea OK, abrir el init_point manualmente y completar el pago con tarjeta de prueba de MP. 3) Verificar en el panel de MP si la transacción aparece como aprobada. 4) Si aparece aprobada pero no se registra venta en el sistema, el bug está en el webhook receptor. 5) Si no aparece en MP, el bug está en la cuenta o en el entorno productivo. Registrar el resultado exacto del paso donde falla como primer diagnóstico técnico concreto.",
-    "archivo": "checkout.html",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si el pago sandbox se completa y aparece en el panel de MP → el webhook está roto o no está configurado; si no aparece → la cuenta de MP tiene restricciones o el entorno productivo está bloqueado",
-    "conv_base": 0,
-    "clics_base": 37
+    "descripcion": "Pausar o revisar segmentación del anuncio de Google Ads: la audiencia trae 38 visitas con intención baja (solo 5 hacen click en documento = 13%). Crear una variante de landing específica para tráfico pago con propuesta de valor más directa y un único documento destacado como recomendado para reducir fricción de elección. Paralelamente, analizar qué fuente/documento generó la única venta confirmada (fuente directa) y replicar ese contexto en la landing de Ads.",
+    "archivo": "landing_ads.html",
+    "tipo": "ads",
+    "hipotesis": "Si la landing de Ads presenta un documento preseleccionado con copy orientado a la intención del anuncio → el click en documento sube de 13% a >40% y se generan al menos 2 ventas en las próximas 48h",
+    "conv_base": 1,
+    "clics_base": 26
   },
-  "cambio_activo_desde": "2026-07-24T12:21:05.997Z"
+  "cambio_activo_desde": "2026-07-27T13:39:50.414Z"
 }
