@@ -171,10 +171,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-07-27T13:39:50.414Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Ads click documento",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-07-28T12:55:23.983Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Pausar o revisar segmentación del anuncio de Google Ads: la audiencia trae 38 visitas con intención baja (solo 5 hacen click en documento = 13%). Crear una variante de landing específica para tráfico pago con propuesta de valor más directa y un único documento destacado como recomendado para reducir fricción de elección. Paralelamente, analizar qué fuente/documento generó la única venta confirmada (fuente directa) y replicar ese contexto en la landing de Ads.",
     "archivo": "landing_ads.html",
