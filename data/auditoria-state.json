@@ -174,19 +174,24 @@
       "descripcion": "Agregar log visible en frontend y backend del momento exacto en que el usuario sale del preview sin iniciar pago: verificar si el botón de pago carga correctamente el init_point de MercadoPago, si hay error silencioso de JS, o si el precio mostrado en preview genera abandono. Colocar un CTA secundario de urgencia ('Pagar ahora - acceso inmediato') directamente visible en la pantalla de preview sin scroll, y loggear el click para confirmar si el botón es visible o si hay problema de UI.",
       "fecha": "2026-07-30T12:46:36.102Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar manualmente el endpoint que genera el init_point de MercadoPago: hacer una compra de prueba real end-to-end y loggear si el init_point se crea correctamente, si la URL de retorno (back_urls) está configurada y si el webhook de confirmación de pago está recibiendo eventos. Revisar logs del servidor para el único pago iniciado y confirmar si MercadoPago devolvió aprobación sin que el sistema lo registrara.",
+      "fecha": "2026-08-02T12:04:28.791Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-01T12:03:16.038Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-02T12:04:28.791Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Agregar log visible en frontend y backend del momento exacto en que el usuario sale del preview sin iniciar pago: verificar si el botón de pago carga correctamente el init_point de MercadoPago, si hay error silencioso de JS, o si el precio mostrado en preview genera abandono. Colocar un CTA secundario de urgencia ('Pagar ahora - acceso inmediato') directamente visible en la pantalla de preview sin scroll, y loggear el click para confirmar si el botón es visible o si hay problema de UI.",
-    "archivo": "checkout.html",
+    "descripcion": "Verificar manualmente el endpoint que genera el init_point de MercadoPago: hacer una compra de prueba real end-to-end y loggear si el init_point se crea correctamente, si la URL de retorno (back_urls) está configurada y si el webhook de confirmación de pago está recibiendo eventos. Revisar logs del servidor para el único pago iniciado y confirmar si MercadoPago devolvió aprobación sin que el sistema lo registrara.",
+    "archivo": "checkout.js o backend/payment_init.py",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el botón de pago en preview es visible y funcional → al menos 1 pago iniciado en las próximas 48h con el tráfico actual de Ads",
+    "hipotesis": "Si el init_point se genera pero el webhook no procesa la confirmación → la venta ocurre en MercadoPago pero no se registra en el sistema, resultando en conv=0 falso o en abandono real por URL de retorno rota",
     "conv_base": 0,
-    "clics_base": 37
+    "clics_base": 30
   },
-  "cambio_activo_desde": "2026-07-30T12:46:36.102Z"
+  "cambio_activo_desde": "2026-08-02T12:04:28.791Z"
 }
