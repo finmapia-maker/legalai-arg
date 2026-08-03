@@ -181,10 +181,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-08-02T12:04:28.791Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-08-03T13:41:57.463Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar manualmente el endpoint que genera el init_point de MercadoPago: hacer una compra de prueba real end-to-end y loggear si el init_point se crea correctamente, si la URL de retorno (back_urls) está configurada y si el webhook de confirmación de pago está recibiendo eventos. Revisar logs del servidor para el único pago iniciado y confirmar si MercadoPago devolvió aprobación sin que el sistema lo registrara.",
     "archivo": "checkout.js o backend/payment_init.py",
