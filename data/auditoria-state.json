@@ -179,19 +179,24 @@
       "descripcion": "Verificar manualmente el endpoint que genera el init_point de MercadoPago: hacer una compra de prueba real end-to-end y loggear si el init_point se crea correctamente, si la URL de retorno (back_urls) está configurada y si el webhook de confirmación de pago está recibiendo eventos. Revisar logs del servidor para el único pago iniciado y confirmar si MercadoPago devolvió aprobación sin que el sistema lo registrara.",
       "fecha": "2026-08-02T12:04:28.791Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar el botón de pago actual por un link directo hardcodeado a MercadoPago (init_point estático de prueba) para aislar si el problema es la generación dinámica del init_point. Simultáneamente revisar y corregir los 7 errores de JS en consola que pueden estar bloqueando el evento de click del botón de pago. Agregar un fallback visible: si init_point tarda más de 2s en cargar, mostrar botón alternativo con URL directa.",
+      "fecha": "2026-08-04T13:04:06.014Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-03T13:41:57.463Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-04T13:04:06.014Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Verificar manualmente el endpoint que genera el init_point de MercadoPago: hacer una compra de prueba real end-to-end y loggear si el init_point se crea correctamente, si la URL de retorno (back_urls) está configurada y si el webhook de confirmación de pago está recibiendo eventos. Revisar logs del servidor para el único pago iniciado y confirmar si MercadoPago devolvió aprobación sin que el sistema lo registrara.",
-    "archivo": "checkout.js o backend/payment_init.py",
+    "descripcion": "Reemplazar el botón de pago actual por un link directo hardcodeado a MercadoPago (init_point estático de prueba) para aislar si el problema es la generación dinámica del init_point. Simultáneamente revisar y corregir los 7 errores de JS en consola que pueden estar bloqueando el evento de click del botón de pago. Agregar un fallback visible: si init_point tarda más de 2s en cargar, mostrar botón alternativo con URL directa.",
+    "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el init_point se genera pero el webhook no procesa la confirmación → la venta ocurre en MercadoPago pero no se registra en el sistema, resultando en conv=0 falso o en abandono real por URL de retorno rota",
+    "hipotesis": "Si el init_point dinámico falla silenciosamente por error de JS o timeout del endpoint → reemplazarlo por generación síncrona o fallback estático desbloqueará los pagos",
     "conv_base": 0,
-    "clics_base": 30
+    "clics_base": 47
   },
-  "cambio_activo_desde": "2026-08-02T12:04:28.791Z"
+  "cambio_activo_desde": "2026-08-04T13:04:06.014Z"
 }
