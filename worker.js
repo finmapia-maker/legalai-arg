@@ -13,6 +13,7 @@ const CHECKOUTS_KEY = "checkout";
 const CHECKOUT_TTL_SECONDS = 30 * 24 * 60 * 60;
 const BACKUP_PDF_MAX_BYTES = 8 * 1024 * 1024;
 const BACKUP_EMAIL_TTL_SECONDS = 30 * 24 * 60 * 60;
+const DEFAULT_BACKUP_EMAIL_TO = "finmap.ia@gmail.com";
 
 const PACKS_KEY = "packs";
 const PLAN_ORDER_PREFIX = "plan_order";
@@ -2282,10 +2283,9 @@ async function handlePdfBackupEmail(request, env) {
     });
   }
 
-  if (!env.RESEND_API_KEY || !env.EMAIL_TO || !env.EMAIL_FROM) {
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) {
     const missing = [
       !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
-      !env.EMAIL_TO ? "EMAIL_TO" : "",
       !env.EMAIL_FROM ? "EMAIL_FROM" : ""
     ].filter(Boolean).join(", ");
     await markBackupEmailFailure(env, checkout, externalRef, paymentId, title, payerEmail, "missing_email_config", `Falta configurar: ${missing}`);
@@ -2294,9 +2294,9 @@ async function handlePdfBackupEmail(request, env) {
 
   try {
     const pdfBase64 = arrayBufferToBase64(pdfArrayBuffer || await file.arrayBuffer());
-    const backupRecipients = String(env.EMAIL_TO || "").split(/[;,]/).map(v => v.trim()).filter(Boolean);
-    if (!backupRecipients.length || !backupRecipients.every(isValidEmail)) {
-      throw new Error("EMAIL_TO no contiene una casilla receptora válida.");
+    const backupRecipients = getBackupRecipients(env);
+    if (!backupRecipients.length) {
+      throw new Error("No hay una casilla receptora válida para el respaldo.");
     }
     const resendPayload = {
       from: env.EMAIL_FROM,
@@ -2344,7 +2344,7 @@ async function handlePdfBackupEmail(request, env) {
       resend_id: resendData.id,
       filename: safeFilename,
       bytes: file.size,
-      to: env.EMAIL_TO,
+      to: backupRecipients.join(", "),
       r2: r2State
     };
     await writeBackupEmailState(env, paymentId, sentState);
@@ -2522,20 +2522,28 @@ async function ensureServerDocumentBackup(env, mp, source = "server") {
   }
 }
 
+function getBackupRecipients(env) {
+  const configured = String(env.EMAIL_TO || "")
+    .split(/[;,]/)
+    .map(value => value.trim().toLowerCase())
+    .filter(Boolean);
+  const recipients = Array.from(new Set([DEFAULT_BACKUP_EMAIL_TO, ...configured]));
+  return recipients.filter(isValidEmail);
+}
+
 async function sendBackupPdfBufferEmail(env, info) {
-  if (!env.RESEND_API_KEY || !env.EMAIL_TO || !env.EMAIL_FROM) {
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) {
     const missing = [
       !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
-      !env.EMAIL_TO ? "EMAIL_TO" : "",
       !env.EMAIL_FROM ? "EMAIL_FROM" : ""
     ].filter(Boolean).join(", ");
     await markBackupEmailFailure(env, info.checkout, info.externalRef, info.paymentId, info.title, info.payerEmail, "missing_email_config", `Falta configurar: ${missing}`);
     throw new Error(`Falta configurar: ${missing}`);
   }
 
-  const backupRecipients = String(env.EMAIL_TO || "").split(/[;,]/).map(v => v.trim()).filter(Boolean);
-  if (!backupRecipients.length || !backupRecipients.every(isValidEmail)) {
-    throw new Error("EMAIL_TO no contiene una casilla receptora válida.");
+  const backupRecipients = getBackupRecipients(env);
+  if (!backupRecipients.length) {
+    throw new Error("No hay una casilla receptora válida para el respaldo.");
   }
 
   const resendPayload = {
@@ -2594,7 +2602,7 @@ async function sendBackupPdfBufferEmail(env, info) {
     resend_id: resendData.id,
     filename: info.filename,
     bytes: Number(info.size || 0),
-    to: env.EMAIL_TO,
+    to: backupRecipients.join(", "),
     r2: info.r2State || null,
     source: info.idempotencySuffix || "pdf"
   };
@@ -2620,40 +2628,33 @@ async function sendBackupPdfBufferEmail(env, info) {
     status: "approved",
     customer: info.payerEmail,
     date: sentAt,
-    raw: { paymentId: info.paymentId, externalRef: info.externalRef, resend_id: resendData.id, filename: info.filename, bytes: info.size, buyerName: info.buyerName, to: env.EMAIL_TO, source: info.idempotencySuffix || "pdf" }
+    raw: { paymentId: info.paymentId, externalRef: info.externalRef, resend_id: resendData.id, filename: info.filename, bytes: info.size, buyerName: info.buyerName, to: backupRecipients.join(", "), source: info.idempotencySuffix || "pdf" }
   });
 
   return { ok: true, sent: true, resend_id: resendData.id, sent_at: sentAt };
 }
 
-function createPrintableLegalPdf({ texto, title, paymentId, externalRef, buyerName, approvedAt }) {
+function createPrintableLegalPdf({ texto, title }) {
   const safeTitle = String(title || "Documento LegalAI").trim();
-  const header = [
-    safeTitle,
-    `Pago Mercado Pago: ${paymentId || "-"}`,
-    externalRef ? `Referencia: ${externalRef}` : "",
-    buyerName ? `Comprador / parte: ${buyerName}` : "",
-    approvedAt ? `Fecha de aprobacion: ${approvedAt}` : ""
-  ].filter(Boolean).join("\n");
-  const cleanText = markdownToPrintableText(`${header}\n\n${texto || ""}`);
-  const lines = wrapPdfLines(cleanText, 88);
-  const pages = [];
-  const linesPerPage = 46;
-  for (let i = 0; i < lines.length; i += linesPerPage) pages.push(lines.slice(i, i + linesPerPage));
-  if (!pages.length) pages.push(["Documento generado por LegalAI Arg."]);
+  const blocks = parsePrintableBlocks(texto || "");
+  if (!blocks.length) blocks.push({ type: "paragraph", text: "Documento generado por LegalAI Arg." });
 
   const objects = [];
   const addObj = content => { objects.push(content); return objects.length; };
   const catalogId = addObj("<< /Type /Catalog /Pages 2 0 R >>");
   const pagesPlaceholderId = addObj("");
-  const fontId = addObj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  const fontRegularId = addObj("<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>");
+  const fontBoldId = addObj("<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>");
+  const fontSansId = addObj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+
+  const pages = paginatePrintableBlocks(blocks, safeTitle);
   const pageIds = [];
-  for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
-    const contentStream = buildPdfPageContent(pages[pageIndex], pageIndex + 1, pages.length);
+  pages.forEach((page, pageIndex) => {
+    const contentStream = buildProfessionalPdfPageContent(page, safeTitle, pageIndex + 1, pages.length);
     const streamId = addObj(`<< /Length ${winAnsiByteLength(contentStream)} >>\nstream\n${contentStream}\nendstream`);
-    const pageId = addObj(`<< /Type /Page /Parent ${pagesPlaceholderId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontId} 0 R >> >> /Contents ${streamId} 0 R >>`);
+    const pageId = addObj(`<< /Type /Page /Parent ${pagesPlaceholderId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontRegularId} 0 R /F2 ${fontBoldId} 0 R /F3 ${fontSansId} 0 R >> >> /Contents ${streamId} 0 R >>`);
     pageIds.push(pageId);
-  }
+  });
   objects[pagesPlaceholderId - 1] = `<< /Type /Pages /Kids [${pageIds.map(id => `${id} 0 R`).join(" ")}] /Count ${pageIds.length} >>`;
 
   let pdf = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
@@ -2666,8 +2667,85 @@ function createPrintableLegalPdf({ texto, title, paymentId, externalRef, buyerNa
   pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
   for (let i = 1; i < offsets.length; i++) pdf += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
   pdf += `trailer\n<< /Size ${objects.length + 1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
-
   return { arrayBuffer: winAnsiStringToArrayBuffer(pdf) };
+}
+
+function parsePrintableBlocks(value) {
+  const clean = markdownToPrintableText(value);
+  const blocks = [];
+  for (const raw of clean.split("\n")) {
+    const line = raw.trim();
+    if (!line) { blocks.push({ type: "space", text: "" }); continue; }
+    if (/^(CONTRATO|ACUERDO|CARTA|CONVENIO|DECLARACI[ÓO]N|PODER|POL[ÍI]TICA|T[ÉE]RMINOS)/i.test(line) && line.length < 120) {
+      blocks.push({ type: "title", text: line.toUpperCase() });
+    } else if (/^(DATOS PRINCIPALES|CL[ÁA]USULAS|FIRMA|OBJETO|PRECIO|PLAZO|JURISDICCI[ÓO]N|ANEXO)/i.test(line) && line.length < 100) {
+      blocks.push({ type: "heading", text: line.toUpperCase() });
+    } else if (/^\d+[.)-]\s+/.test(line)) {
+      blocks.push({ type: "clause", text: line });
+    } else if (/^[-•]\s+/.test(line)) {
+      blocks.push({ type: "bullet", text: line.replace(/^[-•]\s+/, "") });
+    } else {
+      blocks.push({ type: "paragraph", text: line });
+    }
+  }
+  return blocks;
+}
+
+function paginatePrintableBlocks(blocks, fallbackTitle) {
+  const pages = [[]];
+  let y = 755;
+  const minY = 74;
+  const heights = { title: 48, heading: 30, clause: 18, bullet: 16, paragraph: 16, space: 10 };
+  for (const block of blocks) {
+    const maxChars = block.type === "title" ? 54 : block.type === "heading" ? 70 : 94;
+    const lines = wrapPdfLines(block.text, maxChars);
+    const lineHeight = block.type === "title" ? 20 : block.type === "heading" ? 15 : 14;
+    const needed = Math.max(heights[block.type] || 16, lines.length * lineHeight + (block.type === "heading" ? 8 : 4));
+    if (y - needed < minY) { pages.push([]); y = 755; }
+    pages[pages.length - 1].push({ ...block, lines });
+    y -= needed;
+  }
+  if (!pages[0].length) pages[0].push({ type: "title", text: fallbackTitle, lines: [fallbackTitle] });
+  return pages;
+}
+
+function buildProfessionalPdfPageContent(blocks, title, pageNumber, totalPages) {
+  const c = [];
+  c.push("0.15 0.15 0.18 rg", "0.78 0.66 0.29 RG", "0.8 w", "50 792 m 545 792 l S");
+  c.push("BT", "/F3 8 Tf", "0.38 0.38 0.42 rg", "50 806 Td", `${pdfTextLiteral("LegalAI Arg · Documento orientativo") } Tj`, "ET");
+  let y = 755;
+  for (const block of blocks) {
+    if (block.type === "space") { y -= 10; continue; }
+    if (block.type === "title") {
+      block.lines.forEach((line, index) => {
+        const estimatedWidth = Math.min(470, Math.max(80, String(line).length * 8));
+        const x = Math.max(62, Math.round((595 - estimatedWidth) / 2));
+        c.push("BT", "/F2 16 Tf", "0.08 0.08 0.10 rg", `${x} ${y - index * 20} Td`, `${pdfTextLiteral(line)} Tj`, "ET");
+      });
+      y -= block.lines.length * 20 + 14;
+      c.push("0.78 0.66 0.29 RG", "0.6 w", `120 ${y + 5} m 475 ${y + 5} l S`);
+      continue;
+    }
+    if (block.type === "heading") {
+      c.push("0.95 0.94 0.90 rg", `50 ${y - 4} 495 20 re f`);
+      c.push("BT", "/F2 10 Tf", "0.10 0.10 0.12 rg", `58 ${y + 3} Td`, `${pdfTextLiteral(block.text)} Tj`, "ET");
+      y -= 30;
+      continue;
+    }
+    const font = block.type === "clause" ? "/F1 10.5 Tf" : "/F1 10 Tf";
+    const indent = block.type === "bullet" ? 66 : 54;
+    if (block.type === "bullet") {
+      c.push("BT", "/F2 10 Tf", "0.10 0.10 0.12 rg", `54 ${y} Td`, `${pdfTextLiteral("•")} Tj`, "ET");
+    }
+    c.push("BT", font, "0.16 0.16 0.18 rg", `${indent} ${y} Td`);
+    block.lines.forEach((line, i) => { if (i) c.push("0 -14 Td"); c.push(`${pdfTextLiteral(line)} Tj`); });
+    c.push("ET");
+    y -= block.lines.length * 14 + 5;
+  }
+  c.push("0.75 0.75 0.77 RG", "0.4 w", "50 54 m 545 54 l S");
+  c.push("BT", "/F3 7 Tf", "0.42 0.42 0.46 rg", "50 38 Td", `${pdfTextLiteral("Modelo orientativo · No reemplaza asesoramiento legal profesional") } Tj`, "ET");
+  c.push("BT", "/F3 7 Tf", "0.42 0.42 0.46 rg", "470 38 Td", `${pdfTextLiteral(`Página ${pageNumber} de ${totalPages}`)} Tj`, "ET");
+  return c.join("\n");
 }
 
 function markdownToPrintableText(value) {
@@ -2770,7 +2848,7 @@ async function markBackupEmailFailure(env, checkout, externalRef, paymentId, tit
     error_flag: true,
     error_tipo: errorType,
     error_detalle: detail,
-    raw: { paymentId, externalRef, to: env.EMAIL_TO || "" }
+    raw: { paymentId, externalRef, to: getBackupRecipients(env).join(", ") }
   });
 }
 

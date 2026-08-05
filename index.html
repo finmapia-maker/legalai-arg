@@ -2421,26 +2421,84 @@ function irAlPagoDesdePreview() {
 }
 
 async function iniciarPagoMP({ tipo, montoARS, descripcion, externalRef, datosPago, onError }) {
+  const btnPagar = document.getElementById('btnPagar');
+  const originalText = btnPagar?.textContent || '';
   try {
+    if (btnPagar) {
+      btnPagar.disabled = true;
+      btnPagar.textContent = 'Conectando con MercadoPago…';
+    }
+    track('mp_preference_request', {
+      ...getCurrentDocTracking(), status: 'pending', external_reference: externalRef,
+      monto_ars: montoARS, client_time: new Date().toISOString()
+    });
     const ref = sessionStorage.getItem('legalai_ref') || localStorage.getItem('legalai_ref') || null;
     const datosDoc = parseEstadoPago('legalai_datos', null);
     const metadata = parseEstadoPago('legalai_meta', null);
     const previewId = leerEstadoPago('legalai_previewId', null);
     guardarEstadoPago('legalai_external_reference', externalRef);
-    const res  = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    const res = await fetch(`${CONFIG.WORKER_URL}/mp/preferencia`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
       body: JSON.stringify({
         tipo, montoARS, descripcion, externalRef, ref, datosDoc, metadata, previewId,
-        datosPago: Object.assign({}, datosPago, {utm_src:sessionStorage.getItem('legalai_utm_source')||'',utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',utm_med:sessionStorage.getItem('legalai_utm_medium')||'',utm_cnt:sessionStorage.getItem('legalai_utm_content')||'',gclid:sessionStorage.getItem('legalai_gclid')||'',device:sessionStorage.getItem('legalai_device')||''})
+        datosPago: Object.assign({}, datosPago, {
+          utm_src:sessionStorage.getItem('legalai_utm_source')||'',
+          utm_cmp:sessionStorage.getItem('legalai_utm_campaign')||'',
+          utm_med:sessionStorage.getItem('legalai_utm_medium')||'',
+          utm_cnt:sessionStorage.getItem('legalai_utm_content')||'',
+          gclid:sessionStorage.getItem('legalai_gclid')||'',
+          device:sessionStorage.getItem('legalai_device')||''
+        })
       }),
     });
-    const data = await res.json();
-    if (!data.init_point) throw new Error(data.detalle || data.error || 'Error al crear el pago');
-    window.location.href = data.init_point;
+    clearTimeout(timer);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.init_point) throw new Error(data.detalle || data.error || `MercadoPago no respondió correctamente (${res.status})`);
+    track('mp_preference_ok', {
+      ...getCurrentDocTracking(), status: 'approved', external_reference: externalRef,
+      preference_id: data.preference_id || data.id || '', client_time: new Date().toISOString()
+    });
+    window.location.assign(data.init_point);
   } catch(err) {
-    if (onError) onError(err.message);
-    else alert('Error al iniciar el pago: ' + err.message);
+    const message = err?.name === 'AbortError'
+      ? 'MercadoPago tardó demasiado en responder. Intentá nuevamente.'
+      : (err?.message || 'No se pudo iniciar el pago.');
+    track('mp_preference_error', {
+      ...getCurrentDocTracking(), status: 'failed', external_reference: externalRef,
+      error_flag: true, error_tipo: err?.name || 'mp_preference_error',
+      error_detalle: message, client_time: new Date().toISOString()
+    });
+    mostrarFallbackPago(message);
+    if (onError) onError(message);
+    else alert('Error al iniciar el pago: ' + message);
+  } finally {
+    if (btnPagar) {
+      btnPagar.disabled = false;
+      btnPagar.textContent = originalText || 'Pagar con MercadoPago →';
+    }
   }
+}
+
+function mostrarFallbackPago(message) {
+  let box = document.getElementById('paymentFallbackBox');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'paymentFallbackBox';
+    box.className = 'alert info alert-show';
+    box.style.marginTop = '12px';
+    box.innerHTML = `
+      <strong>No se pudo abrir MercadoPago.</strong><br>
+      <span id="paymentFallbackMessage"></span>
+      <button type="button" class="btn ghost" style="margin-top:10px" onclick="procesarPago()">Reintentar conexión con MercadoPago</button>`;
+    const btn = document.getElementById('btnPagar');
+    (btn || document.getElementById('alert3')).insertAdjacentElement('afterend', box);
+  }
+  const msg = document.getElementById('paymentFallbackMessage');
+  if (msg) msg.textContent = message || 'Reintentá en unos segundos.';
 }
 
 async function procesarPago() {
