@@ -184,19 +184,24 @@
       "descripcion": "Reemplazar el botón de pago actual por un link directo hardcodeado a MercadoPago (init_point estático de prueba) para aislar si el problema es la generación dinámica del init_point. Simultáneamente revisar y corregir los 7 errores de JS en consola que pueden estar bloqueando el evento de click del botón de pago. Agregar un fallback visible: si init_point tarda más de 2s en cargar, mostrar botón alternativo con URL directa.",
       "fecha": "2026-08-04T13:04:06.014Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Abandonar el init_point dinámico por completo. Implementar flujo alternativo con MercadoPago Checkout Bricks (SDK oficial client-side) que no dependa del backend para generar la preferencia en el momento del click. La preferencia debe crearse al cargar la página del documento seleccionado, no al hacer click en pagar. Loggear en servidor cada intento de creación de preferencia con su respuesta completa de MercadoPago. Si Bricks falla, mostrar botón de transferencia bancaria manual como fallback de emergencia para no perder las visitas actuales.",
+      "fecha": "2026-08-07T11:48:25.125Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-06T12:57:50.055Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-07T11:48:25.125Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads inicio pago → Ads venta",
   "cambio_activo": {
-    "descripcion": "Reemplazar el botón de pago actual por un link directo hardcodeado a MercadoPago (init_point estático de prueba) para aislar si el problema es la generación dinámica del init_point. Simultáneamente revisar y corregir los 7 errores de JS en consola que pueden estar bloqueando el evento de click del botón de pago. Agregar un fallback visible: si init_point tarda más de 2s en cargar, mostrar botón alternativo con URL directa.",
+    "descripcion": "Abandonar el init_point dinámico por completo. Implementar flujo alternativo con MercadoPago Checkout Bricks (SDK oficial client-side) que no dependa del backend para generar la preferencia en el momento del click. La preferencia debe crearse al cargar la página del documento seleccionado, no al hacer click en pagar. Loggear en servidor cada intento de creación de preferencia con su respuesta completa de MercadoPago. Si Bricks falla, mostrar botón de transferencia bancaria manual como fallback de emergencia para no perder las visitas actuales.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el init_point dinámico falla silenciosamente por error de JS o timeout del endpoint → reemplazarlo por generación síncrona o fallback estático desbloqueará los pagos",
+    "hipotesis": "Si la preferencia se pre-genera al cargar la página en vez de al hacer click, el init_point estará listo cuando el usuario presione pagar y se elimina el punto de falla silencioso actual",
     "conv_base": 0,
-    "clics_base": 47
+    "clics_base": 55
   },
-  "cambio_activo_desde": "2026-08-04T13:04:06.014Z"
+  "cambio_activo_desde": "2026-08-07T11:48:25.125Z"
 }
