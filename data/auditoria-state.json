@@ -189,19 +189,24 @@
       "descripcion": "Abandonar el init_point dinámico por completo. Implementar flujo alternativo con MercadoPago Checkout Bricks (SDK oficial client-side) que no dependa del backend para generar la preferencia en el momento del click. La preferencia debe crearse al cargar la página del documento seleccionado, no al hacer click en pagar. Loggear en servidor cada intento de creación de preferencia con su respuesta completa de MercadoPago. Si Bricks falla, mostrar botón de transferencia bancaria manual como fallback de emergencia para no perder las visitas actuales.",
       "fecha": "2026-08-07T11:48:25.125Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Activar inmediatamente el botón de transferencia bancaria manual como flujo de pago principal y único visible, desplazando Bricks/MercadoPago a posición secundaria o invisible. Mostrar alias/CBU, monto exacto y whatsapp para confirmar pago. Loggear cada intento de transferencia con timestamp. El objetivo es capturar al menos 1 venta real para validar que el problema es exclusivamente técnico de MP y no de precio o confianza.",
+      "fecha": "2026-08-10T11:49:24.651Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-09T11:31:27.429Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-10T11:49:24.651Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Abandonar el init_point dinámico por completo. Implementar flujo alternativo con MercadoPago Checkout Bricks (SDK oficial client-side) que no dependa del backend para generar la preferencia en el momento del click. La preferencia debe crearse al cargar la página del documento seleccionado, no al hacer click en pagar. Loggear en servidor cada intento de creación de preferencia con su respuesta completa de MercadoPago. Si Bricks falla, mostrar botón de transferencia bancaria manual como fallback de emergencia para no perder las visitas actuales.",
-    "archivo": "checkout.html",
+    "descripcion": "Activar inmediatamente el botón de transferencia bancaria manual como flujo de pago principal y único visible, desplazando Bricks/MercadoPago a posición secundaria o invisible. Mostrar alias/CBU, monto exacto y whatsapp para confirmar pago. Loggear cada intento de transferencia con timestamp. El objetivo es capturar al menos 1 venta real para validar que el problema es exclusivamente técnico de MP y no de precio o confianza.",
+    "archivo": "pago.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si la preferencia se pre-genera al cargar la página en vez de al hacer click, el init_point estará listo cuando el usuario presione pagar y se elimina el punto de falla silencioso actual",
+    "hipotesis": "Si se elimina la fricción del checkout de MP como bloqueante principal → al menos 1 usuario completa pago por transferencia en 48h, confirmando que el tráfico tiene intención real de compra",
     "conv_base": 0,
-    "clics_base": 55
+    "clics_base": 28
   },
-  "cambio_activo_desde": "2026-08-07T11:48:25.125Z"
+  "cambio_activo_desde": "2026-08-10T11:49:24.651Z"
 }
