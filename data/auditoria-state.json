@@ -196,10 +196,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-08-10T11:49:24.651Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-08-11T11:45:32.520Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Activar inmediatamente el botón de transferencia bancaria manual como flujo de pago principal y único visible, desplazando Bricks/MercadoPago a posición secundaria o invisible. Mostrar alias/CBU, monto exacto y whatsapp para confirmar pago. Loggear cada intento de transferencia con timestamp. El objetivo es capturar al menos 1 venta real para validar que el problema es exclusivamente técnico de MP y no de precio o confianza.",
     "archivo": "pago.html",
