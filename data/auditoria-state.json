@@ -194,19 +194,24 @@
       "descripcion": "Activar inmediatamente el botón de transferencia bancaria manual como flujo de pago principal y único visible, desplazando Bricks/MercadoPago a posición secundaria o invisible. Mostrar alias/CBU, monto exacto y whatsapp para confirmar pago. Loggear cada intento de transferencia con timestamp. El objetivo es capturar al menos 1 venta real para validar que el problema es exclusivamente técnico de MP y no de precio o confianza.",
       "fecha": "2026-08-10T11:49:24.651Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reducir precio del documento al 50% por tiempo limitado (urgencia real, 24h) y agregar prueba social visible antes del formulario: cantidad de documentos descargados, testimonio corto, sello de seguridad. Mostrar precio tachado + precio nuevo en rojo antes del botón de pago. Mantener transferencia manual como único flujo.",
+      "fecha": "2026-08-13T11:49:36.444Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-12T11:48:30.808Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-13T11:49:36.444Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Activar inmediatamente el botón de transferencia bancaria manual como flujo de pago principal y único visible, desplazando Bricks/MercadoPago a posición secundaria o invisible. Mostrar alias/CBU, monto exacto y whatsapp para confirmar pago. Loggear cada intento de transferencia con timestamp. El objetivo es capturar al menos 1 venta real para validar que el problema es exclusivamente técnico de MP y no de precio o confianza.",
-    "archivo": "pago.html",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si se elimina la fricción del checkout de MP como bloqueante principal → al menos 1 usuario completa pago por transferencia en 48h, confirmando que el tráfico tiene intención real de compra",
+    "descripcion": "Reducir precio del documento al 50% por tiempo limitado (urgencia real, 24h) y agregar prueba social visible antes del formulario: cantidad de documentos descargados, testimonio corto, sello de seguridad. Mostrar precio tachado + precio nuevo en rojo antes del botón de pago. Mantener transferencia manual como único flujo.",
+    "archivo": "index.html",
+    "tipo": "precio",
+    "hipotesis": "Si el precio percibido baja y aparece prueba social → al menos 1 venta en 48h confirma que el bloqueo era precio/confianza y no técnico",
     "conv_base": 0,
-    "clics_base": 28
+    "clics_base": 44
   },
-  "cambio_activo_desde": "2026-08-10T11:49:24.651Z"
+  "cambio_activo_desde": "2026-08-13T11:49:36.444Z"
 }
