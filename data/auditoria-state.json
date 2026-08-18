@@ -204,19 +204,24 @@
       "descripcion": "Eliminar el formulario como paso previo al pago. Mostrar directamente el alias/CBU, monto y WhatsApp en pantalla completa apenas el usuario elige el documento, sin fricción intermedia. Agregar CTA único: 'Transferí y recibilo en 5 minutos'. Eliminar campos no esenciales. Si hay 2+ campos en el formulario, reducir a solo email o solo WhatsApp.",
       "fecha": "2026-08-16T11:22:25.215Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar transferencia manual por un botón de pago digital real: integrar MercadoPago (link de pago o checkout pro) como método principal. Eliminar alias/CBU. El usuario debe poder pagar con tarjeta o dinero en cuenta en menos de 3 clicks. Mantener WhatsApp solo como soporte, no como canal de confirmación de pago.",
+      "fecha": "2026-08-18T11:27:05.362Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-17T11:28:16.306Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-18T11:27:05.362Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Eliminar el formulario como paso previo al pago. Mostrar directamente el alias/CBU, monto y WhatsApp en pantalla completa apenas el usuario elige el documento, sin fricción intermedia. Agregar CTA único: 'Transferí y recibilo en 5 minutos'. Eliminar campos no esenciales. Si hay 2+ campos en el formulario, reducir a solo email o solo WhatsApp.",
-    "archivo": "index.html",
+    "descripcion": "Reemplazar transferencia manual por un botón de pago digital real: integrar MercadoPago (link de pago o checkout pro) como método principal. Eliminar alias/CBU. El usuario debe poder pagar con tarjeta o dinero en cuenta en menos de 3 clicks. Mantener WhatsApp solo como soporte, no como canal de confirmación de pago.",
+    "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si eliminamos el formulario como barrera antes del pago → al menos 1 usuario completa la transferencia en las próximas 48h",
+    "hipotesis": "Si el pago es instantáneo y no requiere transferencia manual → al menos 1 venta en 48h con el volumen actual de tráfico",
     "conv_base": 0,
-    "clics_base": 23
+    "clics_base": 30
   },
-  "cambio_activo_desde": "2026-08-16T11:22:25.215Z"
+  "cambio_activo_desde": "2026-08-18T11:27:05.362Z"
 }
