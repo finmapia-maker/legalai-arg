@@ -209,19 +209,24 @@
       "descripcion": "Reemplazar transferencia manual por un botón de pago digital real: integrar MercadoPago (link de pago o checkout pro) como método principal. Eliminar alias/CBU. El usuario debe poder pagar con tarjeta o dinero en cuenta en menos de 3 clicks. Mantener WhatsApp solo como soporte, no como canal de confirmación de pago.",
       "fecha": "2026-08-18T11:27:05.362Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar técnicamente que el botón de MercadoPago responde y redirige correctamente. Si funciona, agregar una pantalla de confirmación explícita post-pago con descarga inmediata del documento sin intervención manual. Si el botón no está operativo, mostrar un link de pago directo de MercadoPago (URL fija generada desde el panel) como fallback inmediato. Eliminar cualquier paso intermedio entre 'pagar' y 'recibir el documento'.",
+      "fecha": "2026-08-20T11:28:45.553Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-19T11:27:16.498Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-08-20T11:28:45.553Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Reemplazar transferencia manual por un botón de pago digital real: integrar MercadoPago (link de pago o checkout pro) como método principal. Eliminar alias/CBU. El usuario debe poder pagar con tarjeta o dinero en cuenta en menos de 3 clicks. Mantener WhatsApp solo como soporte, no como canal de confirmación de pago.",
+    "descripcion": "Verificar técnicamente que el botón de MercadoPago responde y redirige correctamente. Si funciona, agregar una pantalla de confirmación explícita post-pago con descarga inmediata del documento sin intervención manual. Si el botón no está operativo, mostrar un link de pago directo de MercadoPago (URL fija generada desde el panel) como fallback inmediato. Eliminar cualquier paso intermedio entre 'pagar' y 'recibir el documento'.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el pago es instantáneo y no requiere transferencia manual → al menos 1 venta en 48h con el volumen actual de tráfico",
+    "hipotesis": "Si el flujo post-pago entrega el documento automáticamente y sin fricción → primera venta confirmada en menos de 24h",
     "conv_base": 0,
-    "clics_base": 30
+    "clics_base": 59
   },
-  "cambio_activo_desde": "2026-08-18T11:27:05.362Z"
+  "cambio_activo_desde": "2026-08-20T11:28:45.553Z"
 }
