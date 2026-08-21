@@ -216,10 +216,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-08-20T11:28:45.553Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-08-21T11:28:53.462Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar técnicamente que el botón de MercadoPago responde y redirige correctamente. Si funciona, agregar una pantalla de confirmación explícita post-pago con descarga inmediata del documento sin intervención manual. Si el botón no está operativo, mostrar un link de pago directo de MercadoPago (URL fija generada desde el panel) como fallback inmediato. Eliminar cualquier paso intermedio entre 'pagar' y 'recibir el documento'.",
     "archivo": "checkout.html",
