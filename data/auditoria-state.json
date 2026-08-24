@@ -221,10 +221,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-08-23T11:22:47.295Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada (drop 100%)",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-08-24T11:30:51.410Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reducir el precio del documento a un valor de entrada (ej: 30-50% menos) por tiempo limitado con etiqueta 'Oferta de lanzamiento'. Agregar prueba social mínima (ej: '12 personas lo descargaron esta semana') y garantía explícita ('Si no es lo que buscás, te devolvemos el pago'). Si el precio ya es bajo, mostrar el desglose de valor ('Evitás contratar un escribano por $X').",
     "archivo": "checkout.html",
