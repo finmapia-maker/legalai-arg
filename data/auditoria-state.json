@@ -226,10 +226,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-08-26T11:31:56.776Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "OBSERVAR",
+  "fecha": "2026-08-27T20:55:44.172Z",
+  "ultima_prioridad": "media",
+  "ultimo_embudo": "Ads inicio pago → Ads venta (drop 100%)",
   "cambio_activo": {
     "descripcion": "Auditar los 2 errores frontend en consola y reproducirlos en mobile. Verificar que el callback de pago exitoso de MercadoPago dispara correctamente la confirmación y entrega del documento. Agregar log explícito en el retorno de pago para saber si el usuario llega pero el evento no se registra. Si el flujo falla en mobile, forzar redirección a URL de pago directo de MercadoPago como fallback sin JS intermedio.",
     "archivo": "checkout.html",
