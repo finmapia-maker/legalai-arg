@@ -1,21 +1,27 @@
 {
-  "fecha": "2026-08-30T15:13:38.545Z",
+  "fecha": "2026-08-31T17:56:31.718Z",
   "periodo_48h": {
-    "visitas": 10,
-    "clics": 24,
+    "visitas": 12,
+    "clics": 25,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 100,
+    "total_eventos": 111,
     "por_fuente": {
       "google_ads": {
         "visitas": 10,
-        "clics": 24,
+        "clics": 25,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      "directo": {
+        "visitas": 0,
+        "clics": 0,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 0,
+        "visitas": 2,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
@@ -24,13 +30,19 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 53,
+        "eventos": 49,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 35,
+        "eventos": 46,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de vivienda",
+        "eventos": 7,
         "ventas": 0,
         "total_ars": 0
       },
@@ -41,8 +53,14 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler de vivienda",
-        "eventos": 5,
+        "documento": "Notificación MercadoPago",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Política de privacidad para sitio web",
+        "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       }
@@ -50,78 +68,78 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 60,
-    "clics": 160,
+    "visitas": 56,
+    "clics": 145,
     "ventas": 2,
-    "tasa_conv": "1.3%",
+    "tasa_conv": "1.4%",
     "total_ars": 17000,
-    "total_eventos": 577,
+    "total_eventos": 541,
     "por_fuente": {
       "google_ads": {
-        "visitas": 44,
-        "clics": 155,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      "DIRECTO": {
-        "visitas": 16,
-        "clics": 2,
+        "visitas": 41,
+        "clics": 142,
         "ventas": 0,
         "total_ars": 0
       },
       "directo": {
         "visitas": 0,
-        "clics": 3,
+        "clics": 2,
         "ventas": 2,
         "total_ars": 17000
+      },
+      "DIRECTO": {
+        "visitas": 15,
+        "clics": 1,
+        "ventas": 0,
+        "total_ars": 0
       }
     },
     "top_documentos": [
       {
         "documento": "Documento legal: Contrato de alquiler de vivienda",
-        "eventos": 5,
+        "eventos": 4,
         "ventas": 2,
         "total_ars": 17000
       },
       {
         "documento": "index",
-        "eventos": 269,
+        "eventos": 247,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 190,
+        "eventos": 189,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 80,
+        "eventos": 69,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 15,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 9,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "planes",
-        "eventos": 4,
+        "eventos": 19,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Notificación MercadoPago",
-        "eventos": 2,
+        "eventos": 3,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 3,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de compraventa de inmueble",
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
@@ -132,7 +150,7 @@
         "total_ars": 0
       },
       {
-        "documento": "Error al verificar pago MercadoPago",
+        "documento": "Política de privacidad para sitio web",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -630,41 +648,42 @@
     ]
   },
   "embudo_eventos": {
-    "ads_landing_view": 32,
-    "scroll_75pct": 14,
-    "doc_selected": 3,
-    "scroll_25pct": 10,
-    "page_view": 10,
+    "scroll_25pct": 12,
+    "page_view": 12,
+    "ads_landing_view": 41,
+    "scroll_75pct": 12,
     "scroll_50pct": 8,
-    "cta_generador": 9,
-    "inicio_formulario": 2,
-    "preview_live_ok": 5,
-    "click_residencial": 1,
-    "form_first_input": 2,
+    "doc_selected": 3,
+    "cta_doc_inline": 4,
+    "cta_generador": 5,
+    "form_first_input": 1,
     "click_comercial": 2,
-    "frontend_error": 2
+    "preview_live_ok": 3,
+    "payment_webhook_received": 1,
+    "click_residencial": 3,
+    "inicio_formulario": 4
   },
-  "total_eventos": 100,
+  "total_eventos": 111,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 10,
+      "count": 12,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 6,
-      "drop_pct": 40
+      "count": 12,
+      "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 4,
-      "drop_pct": 33
+      "count": 5,
+      "drop_pct": 58
     },
     {
       "label": "Preview live OK",
-      "count": 5,
-      "drop_pct": 0
+      "count": 3,
+      "drop_pct": 40
     },
     {
       "label": "Pago iniciado",
@@ -702,23 +721,23 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 41,
+      "count": 51,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 6,
-      "drop_pct": 85
+      "count": 12,
+      "drop_pct": 76
     },
     {
       "label": "Ads inicio formulario",
-      "count": 4,
-      "drop_pct": 33
+      "count": 9,
+      "drop_pct": 25
     },
     {
       "label": "Ads preview OK",
-      "count": 5,
-      "drop_pct": 0
+      "count": 3,
+      "drop_pct": 67
     },
     {
       "label": "Ads inicio pago",
@@ -737,11 +756,11 @@
     }
   ],
   "alertas_tracking": {
-    "frontend_errors": 2,
+    "frontend_errors": 0,
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 2,
+    "form_first_input": 1,
     "doc_selected": 3
   },
   "cuello_botella": {
@@ -752,11 +771,10 @@
   },
   "diagnostico": {
     "problemas": [
-      "Google Ads: 4 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
-      "Errores frontend detectados: 2 → revisar consola/compatibilidad mobile.",
+      "Google Ads: 9 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 24 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 25 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
