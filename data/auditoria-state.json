@@ -236,10 +236,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-08-31T17:56:31.718Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-09-01T15:24:42.519Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Eliminar el paso intermedio de preview antes del pago. Mostrar botón de pago de MercadoPago directamente al completar el formulario, sin depender de JS para generar la URL. El preview actúa como fricción final: 3 usuarios lo ven pero ninguno paga. Implementar redirección directa a preferencia de pago de MP creada server-side al submit del formulario, sin paso de confirmación visual previo.",
     "archivo": "checkout.html",
