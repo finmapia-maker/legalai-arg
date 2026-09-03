@@ -234,19 +234,24 @@
       "descripcion": "Eliminar el paso intermedio de preview antes del pago. Mostrar botón de pago de MercadoPago directamente al completar el formulario, sin depender de JS para generar la URL. El preview actúa como fricción final: 3 usuarios lo ven pero ninguno paga. Implementar redirección directa a preferencia de pago de MP creada server-side al submit del formulario, sin paso de confirmación visual previo.",
       "fecha": "2026-08-31T17:56:31.718Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar que la preferencia de MP creada server-side al submit tenga precio, descripción y URLs de retorno correctos. Revisar que la URL generada no expire antes de que el usuario llegue al checkout de MP. Agregar logging server-side del estado de la preferencia creada (id, status, init_point) para confirmar que se genera bien. Si la preferencia es válida, agregar en la página pre-pago un resumen claro del documento + precio + sello de seguridad MP para reducir abandono por desconfianza.",
+      "fecha": "2026-09-03T14:54:48.461Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-09-02T15:00:35.381Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-03T14:54:48.461Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Eliminar el paso intermedio de preview antes del pago. Mostrar botón de pago de MercadoPago directamente al completar el formulario, sin depender de JS para generar la URL. El preview actúa como fricción final: 3 usuarios lo ven pero ninguno paga. Implementar redirección directa a preferencia de pago de MP creada server-side al submit del formulario, sin paso de confirmación visual previo.",
+    "descripcion": "Verificar que la preferencia de MP creada server-side al submit tenga precio, descripción y URLs de retorno correctos. Revisar que la URL generada no expire antes de que el usuario llegue al checkout de MP. Agregar logging server-side del estado de la preferencia creada (id, status, init_point) para confirmar que se genera bien. Si la preferencia es válida, agregar en la página pre-pago un resumen claro del documento + precio + sello de seguridad MP para reducir abandono por desconfianza.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si se elimina el paso preview→pago y se redirige directo a MP checkout → al menos 1 de cada 3 usuarios que completan formulario inicia pago",
+    "hipotesis": "Si la preferencia de MP se genera correctamente y se agrega contexto de confianza previo al redirect → al menos 1 de cada 2 pagos iniciados se completa",
     "conv_base": 0,
-    "clics_base": 25
+    "clics_base": 56
   },
-  "cambio_activo_desde": "2026-08-31T17:56:31.718Z"
+  "cambio_activo_desde": "2026-09-03T14:54:48.461Z"
 }
