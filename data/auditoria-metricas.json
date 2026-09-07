@@ -1,54 +1,54 @@
 {
-  "fecha": "2026-09-06T14:00:44.886Z",
+  "fecha": "2026-09-07T16:18:47.983Z",
   "periodo_48h": {
-    "visitas": 11,
-    "clics": 54,
-    "ventas": 3,
-    "tasa_conv": "5.6%",
-    "total_ars": 25200,
-    "total_eventos": 185,
+    "visitas": 9,
+    "clics": 39,
+    "ventas": 1,
+    "tasa_conv": "2.6%",
+    "total_ars": 8400,
+    "total_eventos": 149,
     "por_fuente": {
+      "directo": {
+        "visitas": 0,
+        "clics": 1,
+        "ventas": 1,
+        "total_ars": 8400
+      },
       "google_ads": {
-        "visitas": 9,
-        "clics": 50,
+        "visitas": 6,
+        "clics": 38,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 2,
+        "visitas": 3,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
-      },
-      "directo": {
-        "visitas": 0,
-        "clics": 4,
-        "ventas": 3,
-        "total_ars": 25200
       }
     },
     "top_documentos": [
       {
         "documento": "Documento legal: Contrato de alquiler de vivienda",
-        "eventos": 17,
-        "ventas": 3,
-        "total_ars": 25200
+        "eventos": 6,
+        "ventas": 1,
+        "total_ars": 8400
       },
       {
         "documento": "index",
-        "eventos": 73,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de vivienda",
-        "eventos": 47,
+        "eventos": 61,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 36,
+        "eventos": 50,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de vivienda",
+        "eventos": 24,
         "ventas": 0,
         "total_ars": 0
       },
@@ -66,18 +66,6 @@
       },
       {
         "documento": "Error al verificar pago MercadoPago",
-        "eventos": 2,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 2,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de local comercial",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -85,8 +73,8 @@
     ],
     "ultimas_conversiones": [
       {
-        "id": "SALE-176456345543",
-        "date": "2026-09-05T10:11:28.000-04:00",
+        "id": "SALE-176789530387",
+        "date": "2026-09-07T12:13:37.000-04:00",
         "type": "payment_approved",
         "product": "Documento legal: Contrato de alquiler de vivienda",
         "category": "mercadopago",
@@ -94,10 +82,10 @@
         "currency": "ARS",
         "amount_ars": 8400,
         "payment_method": "MercadoPago",
-        "payment_id": "176456345543",
-        "order_id": "doc_sess_1788617466765",
+        "payment_id": "176789530387",
+        "order_id": "doc_sess_1788797404217",
         "status": "approved",
-        "customer": "ferrematconcordia@hotmail.com",
+        "customer": "gvdolera@gmail.com",
         "affiliate": "",
         "affiliate_source": "",
         "commission_amount": 0,
@@ -109,9 +97,9 @@
         "error_tipo": "",
         "error_detalle": "",
         "raw": {
-          "id": "SALE-176456345543",
-          "payment_id": "176456345543",
-          "order_id": "doc_sess_1788617466765",
+          "id": "SALE-176789530387",
+          "payment_id": "176789530387",
+          "order_id": "doc_sess_1788797404217",
           "type": "payment_approved",
           "product": "Documento legal: Contrato de alquiler de vivienda",
           "category": "mercadopago",
@@ -120,21 +108,21 @@
           "currency": "ARS",
           "payment_method": "MercadoPago",
           "status": "approved",
-          "customer": "ferrematconcordia@hotmail.com",
+          "customer": "gvdolera@gmail.com",
           "affiliate": "",
-          "date": "2026-09-05T10:11:28.000-04:00",
+          "date": "2026-09-07T12:13:37.000-04:00",
           "raw": {
             "source": "generation_validation",
-            "paymentId": "176456345543",
-            "externalRef": "doc_sess_1788617466765",
+            "paymentId": "176789530387",
+            "externalRef": "doc_sess_1788797404217",
             "payment_status": "approved",
-            "approved_at": "2026-09-05T10:11:28.000-04:00",
+            "approved_at": "2026-09-07T12:13:37.000-04:00",
             "preference_id": "",
             "mp": {
               "accounts_info": null,
               "acquirer_reconciliation": [],
               "additional_info": {
-                "ip_address": "45.234.34.152",
+                "ip_address": "45.7.254.253",
                 "items": [
                   {
                     "quantity": "1",
@@ -147,7 +135,7 @@
               "authorization_code": null,
               "binary_mode": false,
               "brand_id": null,
-              "build_version": "3.172.2-hotfix-2",
+              "build_version": "3.173.0-rc-9",
               "call_for_authorize_id": null,
               "captured": true,
               "card": {},
@@ -163,10 +151,10 @@
                   },
                   "base_amount": 8400,
                   "client_id": 0,
-                  "date_created": "2026-09-05T10:11:27.000-04:00",
-                  "external_charge_id": "01M1RYHXBR6WKKFJ3P0E73V2GG",
-                  "id": "176456345543-001",
-                  "last_updated": "2026-09-05T10:11:27.000-04:00",
+                  "date_created": "2026-09-07T12:13:37.000-04:00",
+                  "external_charge_id": "01M1YAB0VFYARXQCNMFAQ3N25Q",
+                  "id": "176789530387-001",
+                  "last_updated": "2026-09-07T12:13:37.000-04:00",
                   "metadata": {
                     "reason": "",
                     "source": "proc-svc-charges",
@@ -182,8 +170,8 @@
               ],
               "charges_execution_info": {
                 "internal_execution": {
-                  "date": "2026-09-05T10:11:27.747-04:00",
-                  "execution_id": "01M1RYHXB0WQB81YAAQZF45RKM"
+                  "date": "2026-09-07T12:13:37.019-04:00",
+                  "execution_id": "01M1YAB0TS1DBRS9382YTMQRM8"
                 }
               },
               "collector_id": 616777369,
@@ -191,14 +179,14 @@
               "counter_currency": null,
               "coupon_amount": 0,
               "currency_id": "ARS",
-              "date_approved": "2026-09-05T10:11:28.000-04:00",
-              "date_created": "2026-09-05T10:11:27.000-04:00",
-              "date_last_updated": "2026-09-05T10:11:29.000-04:00",
+              "date_approved": "2026-09-07T12:13:37.000-04:00",
+              "date_created": "2026-09-07T12:13:37.000-04:00",
+              "date_last_updated": "2026-09-07T12:13:39.000-04:00",
               "date_of_expiration": null,
               "deduction_schema": null,
               "description": "Documento legal: Contrato de alquiler de vivienda",
               "differential_pricing_id": null,
-              "external_reference": "doc_sess_1788617466765",
+              "external_reference": "doc_sess_1788797404217",
               "fee_details": [
                 {
                   "amount": 151.2,
@@ -207,8 +195,8 @@
                 }
               ],
               "financing_group": null,
-              "id": 176456345543,
-              "idempotency_key": "idempotencyKeyPostPay_cd984507-136a-4afa-9cbb-bb88e99aa5b4account_money_536647448220284",
+              "id": 176789530387,
+              "idempotency_key": "idempotencyKeyPostPay_5df40d92-1931-418f-b997-63a415087910account_money_536647448220284",
               "installments": 1,
               "integrator_id": null,
               "issuer_id": "2005",
@@ -217,35 +205,35 @@
               "merchant_account_id": null,
               "merchant_number": null,
               "metadata": {
-                "gclid": "EAIaIQobChMI-MS2sMjXlgMVQUhIAB0NjSpGEAAYAiAAEgLR3_D_BwE",
+                "gclid": "CjwKCAjwwfnUBhAtEiwAfQpAYnOFEyekJxkV6o1Sh67RAgitkK0RGKFdM0JZwblBksQhzNHRSCXqGxoC41AQAvD_BwE",
                 "legalai_tipo": "doc",
                 "utm_cmp": "",
                 "utm_med": "",
-                "legalai_external_ref": "doc_sess_1788617466765",
+                "legalai_external_ref": "doc_sess_1788797404217",
                 "titulo": "Contrato de alquiler de vivienda",
                 "origen": "index",
                 "utm_src": "",
-                "device": "Desktop",
-                "dolar_rate": "1525.3",
+                "device": "Mobile",
+                "dolar_rate": "1526.6",
                 "legalai_ref": "",
                 "utm_cnt": ""
               },
-              "money_release_date": "2026-10-10T10:11:28.000-04:00",
+              "money_release_date": "2026-10-12T12:13:37.000-04:00",
               "money_release_schema": null,
               "money_release_status": "pending",
               "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
               "operation_type": "regular_payment",
               "order": {
-                "id": "44220586980",
+                "id": "44278573634",
                 "type": "mercadopago"
               },
               "payer": {
-                "email": "ferrematconcordia@hotmail.com",
+                "email": "gvdolera@gmail.com",
                 "entity_type": null,
                 "first_name": null,
-                "id": "491932095",
+                "id": "195206171",
                 "identification": {
-                  "number": "20231439758",
+                  "number": "27163555773",
                   "type": "CUIT"
                 },
                 "last_name": null,
@@ -278,479 +266,7 @@
                 },
                 "location": {
                   "source": "Payer",
-                  "state_id": "AR-E"
-                },
-                "transaction_data": {
-                  "e2e_id": null
-                },
-                "type": "CHECKOUT"
-              },
-              "pos_id": null,
-              "processing_mode": "aggregator",
-              "refunds": [],
-              "release_info": {
-                "advance_provider": null,
-                "advance_provider_user": null,
-                "events": null,
-                "new_payments_release_model": true
-              },
-              "shipping_amount": 0,
-              "sponsor_id": null,
-              "statement_descriptor": null,
-              "status": "approved",
-              "status_detail": "accredited",
-              "store_id": null,
-              "tags": null,
-              "taxes_amount": 0,
-              "tenant_context": "mp",
-              "transaction_amount": 8400,
-              "transaction_amount_refunded": 0,
-              "transaction_details": {
-                "acquirer_reference": null,
-                "external_resource_url": null,
-                "financial_institution": null,
-                "installment_amount": 0,
-                "net_received_amount": 8248.8,
-                "overpaid_amount": 0,
-                "payable_deferral_period": null,
-                "payment_method_reference_id": null,
-                "total_paid_amount": 8400
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "SALE-177330381108",
-        "date": "2026-09-04T19:00:33.000-04:00",
-        "type": "payment_approved",
-        "product": "Documento legal: Contrato de alquiler de vivienda",
-        "category": "mercadopago",
-        "amount": 8400,
-        "currency": "ARS",
-        "amount_ars": 8400,
-        "payment_method": "MercadoPago",
-        "payment_id": "177330381108",
-        "order_id": "doc_sess_1788562807522",
-        "status": "approved",
-        "customer": "ferrematconcordia@hotmail.com",
-        "affiliate": "",
-        "affiliate_source": "",
-        "commission_amount": 0,
-        "commission_currency": "",
-        "commission_status": "",
-        "plan_name": "",
-        "active_code": false,
-        "error_flag": false,
-        "error_tipo": "",
-        "error_detalle": "",
-        "raw": {
-          "id": "SALE-177330381108",
-          "payment_id": "177330381108",
-          "order_id": "doc_sess_1788562807522",
-          "type": "payment_approved",
-          "product": "Documento legal: Contrato de alquiler de vivienda",
-          "category": "mercadopago",
-          "amount": 8400,
-          "amount_ars": 8400,
-          "currency": "ARS",
-          "payment_method": "MercadoPago",
-          "status": "approved",
-          "customer": "ferrematconcordia@hotmail.com",
-          "affiliate": "",
-          "date": "2026-09-04T19:00:33.000-04:00",
-          "raw": {
-            "source": "webhook",
-            "paymentId": "177330381108",
-            "externalRef": "doc_sess_1788562807522",
-            "payment_status": "approved",
-            "approved_at": "2026-09-04T19:00:33.000-04:00",
-            "preference_id": "",
-            "mp": {
-              "accounts_info": null,
-              "acquirer_reconciliation": [],
-              "additional_info": {
-                "ip_address": "45.234.34.152",
-                "items": [
-                  {
-                    "quantity": "1",
-                    "title": "Documento legal: Contrato de alquiler de vivienda",
-                    "unit_price": "8400"
-                  }
-                ],
-                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
-              },
-              "authorization_code": null,
-              "binary_mode": false,
-              "brand_id": null,
-              "build_version": "3.172.2-hotfix-2",
-              "call_for_authorize_id": null,
-              "captured": true,
-              "card": {},
-              "charges_details": [
-                {
-                  "accounts": {
-                    "from": "collector",
-                    "to": "mp"
-                  },
-                  "amounts": {
-                    "original": 151.2,
-                    "refunded": 0
-                  },
-                  "base_amount": 8400,
-                  "client_id": 0,
-                  "date_created": "2026-09-04T19:00:33.000-04:00",
-                  "external_charge_id": "01M1QAE03Z1CQJXQCSKHG09W8E",
-                  "id": "177330381108-001",
-                  "last_updated": "2026-09-04T19:00:33.000-04:00",
-                  "metadata": {
-                    "reason": "",
-                    "source": "proc-svc-charges",
-                    "source_detail": "processing_fee_charge"
-                  },
-                  "name": "mercadopago_fee",
-                  "rate": 1.8,
-                  "refund_charges": [],
-                  "reserve_id": null,
-                  "type": "fee",
-                  "update_charges": []
-                }
-              ],
-              "charges_execution_info": {
-                "internal_execution": {
-                  "date": "2026-09-04T19:00:33.546-04:00",
-                  "execution_id": "01M1QAE03BACZ15BVNK357NWW8"
-                }
-              },
-              "collector_id": 616777369,
-              "corporation_id": null,
-              "counter_currency": null,
-              "coupon_amount": 0,
-              "currency_id": "ARS",
-              "date_approved": "2026-09-04T19:00:33.000-04:00",
-              "date_created": "2026-09-04T19:00:33.000-04:00",
-              "date_last_updated": "2026-09-04T19:00:34.000-04:00",
-              "date_of_expiration": null,
-              "deduction_schema": null,
-              "description": "Documento legal: Contrato de alquiler de vivienda",
-              "differential_pricing_id": null,
-              "external_reference": "doc_sess_1788562807522",
-              "fee_details": [
-                {
-                  "amount": 151.2,
-                  "fee_payer": "collector",
-                  "type": "mercadopago_fee"
-                }
-              ],
-              "financing_group": null,
-              "id": 177330381108,
-              "idempotency_key": "idempotencyKeyPostPay_be56c03d-13e1-4522-bff3-7a63777bab54account_money_536647448220284",
-              "installments": 1,
-              "integrator_id": null,
-              "issuer_id": "2005",
-              "live_mode": true,
-              "marketplace_owner": null,
-              "merchant_account_id": null,
-              "merchant_number": null,
-              "metadata": {
-                "gclid": "EAIaIQobChMIlPCZqIPWlgMVg1NIAB3K9QJHEAAYAiAAEgKH0vD_BwE",
-                "legalai_tipo": "doc",
-                "utm_cmp": "",
-                "utm_med": "",
-                "legalai_external_ref": "doc_sess_1788562807522",
-                "titulo": "Contrato de alquiler de vivienda",
-                "origen": "index",
-                "utm_src": "",
-                "device": "Desktop",
-                "dolar_rate": "1525.3",
-                "legalai_ref": "",
-                "utm_cnt": ""
-              },
-              "money_release_date": "2026-10-09T19:00:33.000-04:00",
-              "money_release_schema": null,
-              "money_release_status": "pending",
-              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
-              "operation_type": "regular_payment",
-              "order": {
-                "id": "44205087624",
-                "type": "mercadopago"
-              },
-              "payer": {
-                "email": "ferrematconcordia@hotmail.com",
-                "entity_type": null,
-                "first_name": null,
-                "id": "491932095",
-                "identification": {
-                  "number": "20231439758",
-                  "type": "CUIT"
-                },
-                "last_name": null,
-                "operator_id": null,
-                "phone": {
-                  "number": null,
-                  "extension": null,
-                  "area_code": null
-                },
-                "type": null
-              },
-              "payment_method": {
-                "id": "account_money",
-                "issuer_id": "2005",
-                "type": "account_money"
-              },
-              "payment_method_id": "account_money",
-              "payment_type_id": "account_money",
-              "platform_id": null,
-              "point_of_interaction": {
-                "application_data": {
-                  "name": "checkout-off",
-                  "operating_system": null,
-                  "version": "v2"
-                },
-                "business_info": {
-                  "branch": "Merchant Services",
-                  "sub_unit": "checkout_pro",
-                  "unit": "online_payments"
-                },
-                "location": {
-                  "source": "Payer",
-                  "state_id": "AR-E"
-                },
-                "transaction_data": {
-                  "e2e_id": null
-                },
-                "type": "CHECKOUT"
-              },
-              "pos_id": null,
-              "processing_mode": "aggregator",
-              "refunds": [],
-              "release_info": {
-                "advance_provider": null,
-                "advance_provider_user": null,
-                "events": null,
-                "new_payments_release_model": true
-              },
-              "shipping_amount": 0,
-              "sponsor_id": null,
-              "statement_descriptor": null,
-              "status": "approved",
-              "status_detail": "accredited",
-              "store_id": null,
-              "tags": null,
-              "taxes_amount": 0,
-              "tenant_context": "mp",
-              "transaction_amount": 8400,
-              "transaction_amount_refunded": 0,
-              "transaction_details": {
-                "acquirer_reference": null,
-                "external_resource_url": null,
-                "financial_institution": null,
-                "installment_amount": 0,
-                "net_received_amount": 8248.8,
-                "overpaid_amount": 0,
-                "payable_deferral_period": null,
-                "payment_method_reference_id": null,
-                "total_paid_amount": 8400
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "SALE-177312001974",
-        "date": "2026-09-04T17:45:02.000-04:00",
-        "type": "payment_approved",
-        "product": "Documento legal: Contrato de alquiler de vivienda",
-        "category": "mercadopago",
-        "amount": 8400,
-        "currency": "ARS",
-        "amount_ars": 8400,
-        "payment_method": "MercadoPago",
-        "payment_id": "177312001974",
-        "order_id": "doc_sess_1788558276587",
-        "status": "approved",
-        "customer": "ferrematconcordia@hotmail.com",
-        "affiliate": "",
-        "affiliate_source": "",
-        "commission_amount": 0,
-        "commission_currency": "",
-        "commission_status": "",
-        "plan_name": "",
-        "active_code": false,
-        "error_flag": false,
-        "error_tipo": "",
-        "error_detalle": "",
-        "raw": {
-          "id": "SALE-177312001974",
-          "payment_id": "177312001974",
-          "order_id": "doc_sess_1788558276587",
-          "type": "payment_approved",
-          "product": "Documento legal: Contrato de alquiler de vivienda",
-          "category": "mercadopago",
-          "amount": 8400,
-          "amount_ars": 8400,
-          "currency": "ARS",
-          "payment_method": "MercadoPago",
-          "status": "approved",
-          "customer": "ferrematconcordia@hotmail.com",
-          "affiliate": "",
-          "date": "2026-09-04T17:45:02.000-04:00",
-          "raw": {
-            "source": "generation_validation",
-            "paymentId": "177312001974",
-            "externalRef": "doc_sess_1788558276587",
-            "payment_status": "approved",
-            "approved_at": "2026-09-04T17:45:02.000-04:00",
-            "preference_id": "",
-            "mp": {
-              "accounts_info": null,
-              "acquirer_reconciliation": [],
-              "additional_info": {
-                "ip_address": "45.234.34.152",
-                "items": [
-                  {
-                    "quantity": "1",
-                    "title": "Documento legal: Contrato de alquiler de vivienda",
-                    "unit_price": "8400"
-                  }
-                ],
-                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
-              },
-              "authorization_code": null,
-              "binary_mode": false,
-              "brand_id": null,
-              "build_version": "3.172.2-hotfix-2",
-              "call_for_authorize_id": null,
-              "captured": true,
-              "card": {},
-              "charges_details": [
-                {
-                  "accounts": {
-                    "from": "collector",
-                    "to": "mp"
-                  },
-                  "amounts": {
-                    "original": 151.2,
-                    "refunded": 0
-                  },
-                  "base_amount": 8400,
-                  "client_id": 0,
-                  "date_created": "2026-09-04T17:45:02.000-04:00",
-                  "external_charge_id": "01M1Q63QAZW2CJB552TVXV9SAW",
-                  "id": "177312001974-001",
-                  "last_updated": "2026-09-04T17:45:02.000-04:00",
-                  "metadata": {
-                    "reason": "",
-                    "source": "proc-svc-charges",
-                    "source_detail": "processing_fee_charge"
-                  },
-                  "name": "mercadopago_fee",
-                  "rate": 1.8,
-                  "refund_charges": [],
-                  "reserve_id": null,
-                  "type": "fee",
-                  "update_charges": []
-                }
-              ],
-              "charges_execution_info": {
-                "internal_execution": {
-                  "date": "2026-09-04T17:45:02.571-04:00",
-                  "execution_id": "01M1Q63QABJ7ZHDBPV6M281KRH"
-                }
-              },
-              "collector_id": 616777369,
-              "corporation_id": null,
-              "counter_currency": null,
-              "coupon_amount": 0,
-              "currency_id": "ARS",
-              "date_approved": "2026-09-04T17:45:02.000-04:00",
-              "date_created": "2026-09-04T17:45:02.000-04:00",
-              "date_last_updated": "2026-09-04T17:45:06.000-04:00",
-              "date_of_expiration": null,
-              "deduction_schema": null,
-              "description": "Documento legal: Contrato de alquiler de vivienda",
-              "differential_pricing_id": null,
-              "external_reference": "doc_sess_1788558276587",
-              "fee_details": [
-                {
-                  "amount": 151.2,
-                  "fee_payer": "collector",
-                  "type": "mercadopago_fee"
-                }
-              ],
-              "financing_group": null,
-              "id": 177312001974,
-              "idempotency_key": "idempotencyKeyPostPay_45819a03-309e-4115-85c8-df077982ebb1account_money_536647448220284",
-              "installments": 1,
-              "integrator_id": null,
-              "issuer_id": "2005",
-              "live_mode": true,
-              "marketplace_owner": null,
-              "merchant_account_id": null,
-              "merchant_number": null,
-              "metadata": {
-                "gclid": "EAIaIQobChMIiv-qovHVlgMV_lVIAB1aHw9BEAMYASAAEgJy8PD_BwE",
-                "legalai_tipo": "doc",
-                "utm_cmp": "",
-                "utm_med": "",
-                "legalai_external_ref": "doc_sess_1788558276587",
-                "titulo": "Contrato de alquiler de vivienda",
-                "origen": "index",
-                "utm_src": "",
-                "device": "Desktop",
-                "dolar_rate": "1525.3",
-                "legalai_ref": "",
-                "utm_cnt": ""
-              },
-              "money_release_date": "2026-10-09T17:45:02.000-04:00",
-              "money_release_schema": null,
-              "money_release_status": "pending",
-              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
-              "operation_type": "regular_payment",
-              "order": {
-                "id": "44170919673",
-                "type": "mercadopago"
-              },
-              "payer": {
-                "email": "ferrematconcordia@hotmail.com",
-                "entity_type": null,
-                "first_name": null,
-                "id": "491932095",
-                "identification": {
-                  "number": "20231439758",
-                  "type": "CUIT"
-                },
-                "last_name": null,
-                "operator_id": null,
-                "phone": {
-                  "number": null,
-                  "extension": null,
-                  "area_code": null
-                },
-                "type": null
-              },
-              "payment_method": {
-                "id": "account_money",
-                "issuer_id": "2005",
-                "type": "account_money"
-              },
-              "payment_method_id": "account_money",
-              "payment_type_id": "account_money",
-              "platform_id": null,
-              "point_of_interaction": {
-                "application_data": {
-                  "name": "checkout-off",
-                  "operating_system": null,
-                  "version": "v2"
-                },
-                "business_info": {
-                  "branch": "Merchant Services",
-                  "sub_unit": "checkout_pro",
-                  "unit": "online_payments"
-                },
-                "location": {
-                  "source": "Payer",
-                  "state_id": "AR-E"
+                  "state_id": "AR-B"
                 },
                 "transaction_data": {
                   "e2e_id": null
@@ -795,66 +311,66 @@
     ]
   },
   "periodo_7d": {
-    "visitas": 51,
-    "clics": 182,
-    "ventas": 5,
-    "tasa_conv": "2.7%",
-    "total_ars": 42200,
-    "total_eventos": 683,
+    "visitas": 49,
+    "clics": 191,
+    "ventas": 6,
+    "tasa_conv": "3.1%",
+    "total_ars": 50600,
+    "total_eventos": 729,
     "por_fuente": {
+      "directo": {
+        "visitas": 0,
+        "clics": 7,
+        "ventas": 6,
+        "total_ars": 50600
+      },
       "google_ads": {
-        "visitas": 39,
-        "clics": 175,
+        "visitas": 38,
+        "clics": 183,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 12,
+        "visitas": 11,
         "clics": 1,
         "ventas": 0,
         "total_ars": 0
-      },
-      "directo": {
-        "visitas": 0,
-        "clics": 6,
-        "ventas": 5,
-        "total_ars": 42200
       }
     },
     "top_documentos": [
       {
         "documento": "Documento legal: Contrato de alquiler de vivienda",
-        "eventos": 21,
-        "ventas": 5,
-        "total_ars": 42200
+        "eventos": 27,
+        "ventas": 6,
+        "total_ars": 50600
       },
       {
         "documento": "index",
-        "eventos": 296,
+        "eventos": 315,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 212,
+        "eventos": 220,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 110,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 15,
+        "eventos": 126,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Notificación MercadoPago",
-        "eventos": 10,
+        "eventos": 13,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 9,
         "ventas": 0,
         "total_ars": 0
       },
@@ -865,13 +381,13 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler temporario turístico",
-        "eventos": 4,
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 5,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Error al verificar pago MercadoPago",
+        "documento": "Contrato de alquiler temporario turístico",
         "eventos": 4,
         "ventas": 0,
         "total_ars": 0
@@ -884,6 +400,242 @@
       }
     ],
     "ultimas_conversiones": [
+      {
+        "id": "SALE-176789530387",
+        "date": "2026-09-07T12:13:37.000-04:00",
+        "type": "payment_approved",
+        "product": "Documento legal: Contrato de alquiler de vivienda",
+        "category": "mercadopago",
+        "amount": 8400,
+        "currency": "ARS",
+        "amount_ars": 8400,
+        "payment_method": "MercadoPago",
+        "payment_id": "176789530387",
+        "order_id": "doc_sess_1788797404217",
+        "status": "approved",
+        "customer": "gvdolera@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "SALE-176789530387",
+          "payment_id": "176789530387",
+          "order_id": "doc_sess_1788797404217",
+          "type": "payment_approved",
+          "product": "Documento legal: Contrato de alquiler de vivienda",
+          "category": "mercadopago",
+          "amount": 8400,
+          "amount_ars": 8400,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "gvdolera@gmail.com",
+          "affiliate": "",
+          "date": "2026-09-07T12:13:37.000-04:00",
+          "raw": {
+            "source": "generation_validation",
+            "paymentId": "176789530387",
+            "externalRef": "doc_sess_1788797404217",
+            "payment_status": "approved",
+            "approved_at": "2026-09-07T12:13:37.000-04:00",
+            "preference_id": "",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "ip_address": "45.7.254.253",
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Documento legal: Contrato de alquiler de vivienda",
+                    "unit_price": "8400"
+                  }
+                ],
+                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": null,
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.173.0-rc-9",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {},
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 151.2,
+                    "refunded": 0
+                  },
+                  "base_amount": 8400,
+                  "client_id": 0,
+                  "date_created": "2026-09-07T12:13:37.000-04:00",
+                  "external_charge_id": "01M1YAB0VFYARXQCNMFAQ3N25Q",
+                  "id": "176789530387-001",
+                  "last_updated": "2026-09-07T12:13:37.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-09-07T12:13:37.019-04:00",
+                  "execution_id": "01M1YAB0TS1DBRS9382YTMQRM8"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-09-07T12:13:37.000-04:00",
+              "date_created": "2026-09-07T12:13:37.000-04:00",
+              "date_last_updated": "2026-09-07T12:13:39.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Documento legal: Contrato de alquiler de vivienda",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1788797404217",
+              "fee_details": [
+                {
+                  "amount": 151.2,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 176789530387,
+              "idempotency_key": "idempotencyKeyPostPay_5df40d92-1931-418f-b997-63a415087910account_money_536647448220284",
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "2005",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "gclid": "CjwKCAjwwfnUBhAtEiwAfQpAYnOFEyekJxkV6o1Sh67RAgitkK0RGKFdM0JZwblBksQhzNHRSCXqGxoC41AQAvD_BwE",
+                "legalai_tipo": "doc",
+                "utm_cmp": "",
+                "utm_med": "",
+                "legalai_external_ref": "doc_sess_1788797404217",
+                "titulo": "Contrato de alquiler de vivienda",
+                "origen": "index",
+                "utm_src": "",
+                "device": "Mobile",
+                "dolar_rate": "1526.6",
+                "legalai_ref": "",
+                "utm_cnt": ""
+              },
+              "money_release_date": "2026-10-12T12:13:37.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "44278573634",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "gvdolera@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "195206171",
+                "identification": {
+                  "number": "27163555773",
+                  "type": "CUIT"
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "id": "account_money",
+                "issuer_id": "2005",
+                "type": "account_money"
+              },
+              "payment_method_id": "account_money",
+              "payment_type_id": "account_money",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": "checkout-off",
+                  "operating_system": null,
+                  "version": "v2"
+                },
+                "business_info": {
+                  "branch": "Merchant Services",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Payer",
+                  "state_id": "AR-B"
+                },
+                "transaction_data": {
+                  "e2e_id": null
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": {
+                "advance_provider": null,
+                "advance_provider_user": null,
+                "events": null,
+                "new_payments_release_model": true
+              },
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": null,
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 8400,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 0,
+                "net_received_amount": 8248.8,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": null,
+                "total_paid_amount": 8400
+              }
+            }
+          }
+        }
+      },
       {
         "id": "SALE-176456345543",
         "date": "2026-09-05T10:11:28.000-04:00",
@@ -1827,310 +1579,68 @@
             }
           }
         }
-      },
-      {
-        "id": "SALE-176131196351",
-        "date": "2026-09-03T15:08:27.000-04:00",
-        "type": "payment_approved",
-        "product": "Documento legal: Contrato de alquiler de vivienda",
-        "category": "mercadopago",
-        "amount": 8500,
-        "currency": "ARS",
-        "amount_ars": 8500,
-        "payment_method": "MercadoPago",
-        "payment_id": "176131196351",
-        "order_id": "doc_sess_1788462463967",
-        "status": "approved",
-        "customer": "luisrameri0@gmail.com",
-        "affiliate": "",
-        "affiliate_source": "",
-        "commission_amount": 0,
-        "commission_currency": "",
-        "commission_status": "",
-        "plan_name": "",
-        "active_code": false,
-        "error_flag": false,
-        "error_tipo": "",
-        "error_detalle": "",
-        "raw": {
-          "id": "SALE-176131196351",
-          "payment_id": "176131196351",
-          "order_id": "doc_sess_1788462463967",
-          "type": "payment_approved",
-          "product": "Documento legal: Contrato de alquiler de vivienda",
-          "category": "mercadopago",
-          "amount": 8500,
-          "amount_ars": 8500,
-          "currency": "ARS",
-          "payment_method": "MercadoPago",
-          "status": "approved",
-          "customer": "luisrameri0@gmail.com",
-          "affiliate": "",
-          "date": "2026-09-03T15:08:27.000-04:00",
-          "raw": {
-            "source": "webhook",
-            "paymentId": "176131196351",
-            "externalRef": "doc_sess_1788462463967",
-            "payment_status": "approved",
-            "approved_at": "2026-09-03T15:08:27.000-04:00",
-            "preference_id": "",
-            "mp": {
-              "accounts_info": null,
-              "acquirer_reconciliation": [],
-              "additional_info": {
-                "ip_address": "201.219.167.248",
-                "items": [
-                  {
-                    "quantity": "1",
-                    "title": "Documento legal: Contrato de alquiler de vivienda",
-                    "unit_price": "8500"
-                  }
-                ],
-                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
-              },
-              "authorization_code": null,
-              "binary_mode": false,
-              "brand_id": null,
-              "build_version": "3.172.2-hotfix-2",
-              "call_for_authorize_id": null,
-              "captured": true,
-              "card": {},
-              "charges_details": [
-                {
-                  "accounts": {
-                    "from": "collector",
-                    "to": "mp"
-                  },
-                  "amounts": {
-                    "original": 153,
-                    "refunded": 0
-                  },
-                  "base_amount": 8500,
-                  "client_id": 0,
-                  "date_created": "2026-09-03T15:08:27.000-04:00",
-                  "external_charge_id": "01M1MAR92JBFSM6YN0P4J6NQFD",
-                  "id": "176131196351-001",
-                  "last_updated": "2026-09-03T15:08:27.000-04:00",
-                  "metadata": {
-                    "reason": "",
-                    "source": "proc-svc-charges",
-                    "source_detail": "processing_fee_charge"
-                  },
-                  "name": "mercadopago_fee",
-                  "rate": 1.8,
-                  "refund_charges": [],
-                  "reserve_id": null,
-                  "type": "fee",
-                  "update_charges": []
-                }
-              ],
-              "charges_execution_info": {
-                "internal_execution": {
-                  "date": "2026-09-03T15:08:27.100-04:00",
-                  "execution_id": "01M1MAR91Y23WDMFT3HY78JMFQ"
-                }
-              },
-              "collector_id": 616777369,
-              "corporation_id": null,
-              "counter_currency": null,
-              "coupon_amount": 0,
-              "currency_id": "ARS",
-              "date_approved": "2026-09-03T15:08:27.000-04:00",
-              "date_created": "2026-09-03T15:08:27.000-04:00",
-              "date_last_updated": "2026-09-03T15:08:29.000-04:00",
-              "date_of_expiration": null,
-              "deduction_schema": null,
-              "description": "Documento legal: Contrato de alquiler de vivienda",
-              "differential_pricing_id": null,
-              "external_reference": "doc_sess_1788462463967",
-              "fee_details": [
-                {
-                  "amount": 153,
-                  "fee_payer": "collector",
-                  "type": "mercadopago_fee"
-                }
-              ],
-              "financing_group": null,
-              "id": 176131196351,
-              "idempotency_key": "idempotencyKeyPostPay_ee83b66f-330a-4842-97e2-274768d39cc8account_money_536647448220284",
-              "installments": 1,
-              "integrator_id": null,
-              "issuer_id": "2005",
-              "live_mode": true,
-              "marketplace_owner": null,
-              "merchant_account_id": null,
-              "merchant_number": null,
-              "metadata": {
-                "gclid": "Cj0KCQjwteTUBhD4ARIsAEYjs3opH_JE8nnYiXo1hRFoE5uO85rw4on1lIQM4xcevFmjF9t4an-w77EaAhFAEALw_wcB",
-                "legalai_tipo": "doc",
-                "utm_cmp": "",
-                "utm_med": "",
-                "legalai_external_ref": "doc_sess_1788462463967",
-                "titulo": "Contrato de alquiler de vivienda",
-                "origen": "index",
-                "utm_src": "",
-                "device": "Mobile",
-                "dolar_rate": "1528.9",
-                "legalai_ref": "",
-                "utm_cnt": ""
-              },
-              "money_release_date": "2026-10-08T15:08:27.000-04:00",
-              "money_release_schema": null,
-              "money_release_status": "pending",
-              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
-              "operation_type": "regular_payment",
-              "order": {
-                "id": "44166471978",
-                "type": "mercadopago"
-              },
-              "payer": {
-                "email": "luisrameri0@gmail.com",
-                "entity_type": null,
-                "first_name": null,
-                "id": "1627453197",
-                "identification": {
-                  "number": "23239076599",
-                  "type": "CUIT"
-                },
-                "last_name": null,
-                "operator_id": null,
-                "phone": {
-                  "number": null,
-                  "extension": null,
-                  "area_code": null
-                },
-                "type": null
-              },
-              "payment_method": {
-                "id": "account_money",
-                "issuer_id": "2005",
-                "type": "account_money"
-              },
-              "payment_method_id": "account_money",
-              "payment_type_id": "account_money",
-              "platform_id": null,
-              "point_of_interaction": {
-                "application_data": {
-                  "name": "checkout-off",
-                  "operating_system": null,
-                  "version": "v2"
-                },
-                "business_info": {
-                  "branch": "Merchant Services",
-                  "sub_unit": "checkout_pro",
-                  "unit": "online_payments"
-                },
-                "location": {
-                  "source": "Payer",
-                  "state_id": "AR-E"
-                },
-                "transaction_data": {
-                  "e2e_id": null
-                },
-                "type": "CHECKOUT"
-              },
-              "pos_id": null,
-              "processing_mode": "aggregator",
-              "refunds": [],
-              "release_info": {
-                "advance_provider": null,
-                "advance_provider_user": null,
-                "events": null,
-                "new_payments_release_model": true
-              },
-              "shipping_amount": 0,
-              "sponsor_id": null,
-              "statement_descriptor": null,
-              "status": "approved",
-              "status_detail": "accredited",
-              "store_id": null,
-              "tags": null,
-              "taxes_amount": 0,
-              "tenant_context": "mp",
-              "transaction_amount": 8500,
-              "transaction_amount_refunded": 0,
-              "transaction_details": {
-                "acquirer_reference": null,
-                "external_resource_url": null,
-                "financial_institution": null,
-                "installment_amount": 0,
-                "net_received_amount": 8347,
-                "overpaid_amount": 0,
-                "payable_deferral_period": null,
-                "payment_method_reference_id": null,
-                "total_paid_amount": 8500
-              }
-            }
-          }
-        }
       }
     ]
   },
   "embudo_eventos": {
-    "scroll_75pct": 16,
-    "scroll_50pct": 20,
-    "doc_selected": 5,
-    "page_view": 11,
-    "ads_landing_view": 32,
-    "scroll_25pct": 10,
-    "cta_generador": 13,
-    "form_first_input": 7,
-    "preview_live_ok": 9,
-    "click_residencial": 3,
-    "cta_doc_inline": 8,
-    "error": 2,
-    "payment_webhook_received": 4,
-    "server_document_generation_failed": 2,
-    "payment_approved": 3,
-    "mp_preference_ok": 4,
-    "checkout_start": 4,
-    "mp_preference_request": 1,
-    "click_pagar": 4,
-    "payment_status_updated": 1,
-    "click_comercial": 1,
+    "stored_pdf_download_started": 3,
+    "scroll_75pct": 12,
+    "scroll_25pct": 13,
     "payment_returned": 1,
-    "frontend_error": 3,
-    "stored_pdf_download_requested": 2,
-    "document_generated": 2,
-    "document_generation_failed": 2,
-    "document_generation_started": 2,
-    "backup_email_error": 1,
-    "server_document_generated": 1,
-    "stored_pdf_saved": 1,
+    "document_generation_started": 1,
+    "document_generation_failed": 1,
+    "document_generated": 1,
+    "scroll_50pct": 16,
+    "payment_approved": 1,
     "server_document_generation_started": 1,
-    "stored_pdf_download_started": 9
+    "error": 1,
+    "payment_webhook_received": 4,
+    "mp_preference_ok": 1,
+    "checkout_start": 1,
+    "click_pagar": 2,
+    "form_first_input": 4,
+    "doc_selected": 3,
+    "cta_generador": 11,
+    "ads_landing_view": 44,
+    "preview_live_ok": 6,
+    "click_residencial": 5,
+    "page_view": 9,
+    "cta_doc_inline": 5,
+    "click_temporario": 1,
+    "payment_status_updated": 1,
+    "inicio_formulario": 1
   },
-  "total_eventos": 185,
+  "total_eventos": 149,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 11,
-      "drop_pct": 0
-    },
-    {
-      "label": "Documento elegido",
-      "count": 17,
-      "drop_pct": 0
-    },
-    {
-      "label": "Inicio formulario",
-      "count": 7,
-      "drop_pct": 59
-    },
-    {
-      "label": "Preview live OK",
       "count": 9,
       "drop_pct": 0
     },
     {
+      "label": "Documento elegido",
+      "count": 14,
+      "drop_pct": 0
+    },
+    {
+      "label": "Inicio formulario",
+      "count": 5,
+      "drop_pct": 64
+    },
+    {
+      "label": "Preview live OK",
+      "count": 6,
+      "drop_pct": 0
+    },
+    {
       "label": "Pago iniciado",
-      "count": 8,
-      "drop_pct": 11
+      "count": 3,
+      "drop_pct": 50
     },
     {
       "label": "Venta confirmada",
-      "count": 3,
-      "drop_pct": 63
+      "count": 1,
+      "drop_pct": 67
     }
   ],
   "funnel_plan": [
@@ -2158,28 +1668,28 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 39,
+      "count": 48,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 17,
-      "drop_pct": 56
+      "count": 14,
+      "drop_pct": 71
     },
     {
       "label": "Ads inicio formulario",
-      "count": 15,
-      "drop_pct": 12
+      "count": 10,
+      "drop_pct": 29
     },
     {
       "label": "Ads preview OK",
-      "count": 9,
+      "count": 6,
       "drop_pct": 40
     },
     {
       "label": "Ads inicio pago",
-      "count": 4,
-      "drop_pct": 56
+      "count": 2,
+      "drop_pct": 67
     },
     {
       "label": "Ads vuelta sin pago",
@@ -2193,12 +1703,12 @@
     }
   ],
   "alertas_tracking": {
-    "frontend_errors": 3,
+    "frontend_errors": 0,
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 7,
-    "doc_selected": 5
+    "form_first_input": 4,
+    "doc_selected": 3
   },
   "cuello_botella": {
     "funnel": "ads",
@@ -2208,12 +1718,11 @@
   },
   "diagnostico": {
     "problemas": [
-      "Errores frontend detectados: 3 → revisar consola/compatibilidad mobile.",
-      "Fuente \"google_ads\": 50 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 38 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [
-      "3 venta(s) confirmada(s) en 48h → analizar fuente/documento y escalar lo que convirtió.",
-      "Fuente más rentable: \"directo\" (3 ventas)"
+      "1 venta(s) confirmada(s) en 48h → analizar fuente/documento y escalar lo que convirtió.",
+      "Fuente más rentable: \"directo\" (1 ventas)"
     ],
     "estado": "PROBLEMA"
   }
