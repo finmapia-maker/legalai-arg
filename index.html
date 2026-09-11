@@ -2558,7 +2558,7 @@ async function generarDocumento(paymentId, externalRef = '') {
     if (G.externalRef) guardarEstadoPago('legalai_external_reference', G.externalRef);
     document.getElementById('loadingDoc').classList.remove('visible');
     const tituloFinal = leerEstadoPago('legalai_titulo', data.metadata?.titulo || 'documento-legal');
-    LEGALAI_FINAL_PDF = _generarPDF(data.texto, tituloFinal, true, false, { descargar: false });
+    LEGALAI_FINAL_PDF = _generarPDF(data.texto, tituloFinal, true, false);
     showCard(4);
     track('pdf_generated', {
       ...getCurrentDocTracking(), status: 'approved', payment_id: G.paymentId,
@@ -2600,8 +2600,8 @@ async function generarDocumento(paymentId, externalRef = '') {
   }
 }
 
-async function enviarRespaldoPDF({ paymentId, externalRef, pdf, datosDoc, metadata }) {
-  if (LEGALAI_BACKUP_EMAIL_SENT) return true;
+async function enviarRespaldoPDF({ paymentId, externalRef, pdf, datosDoc, metadata }, forzar = false) {
+  if (!forzar && LEGALAI_BACKUP_EMAIL_SENT) return true;
   if (!paymentId || !/^\d+$/.test(String(paymentId)) || !pdf?.blob) return false;
   let lastError = null;
   for (let attempt = 1; attempt <= 3; attempt++) {
@@ -2618,7 +2618,7 @@ async function enviarRespaldoPDF({ paymentId, externalRef, pdf, datosDoc, metada
       clearTimeout(timer);
       const data = await response.json().catch(() => ({}));
       if (!response.ok || data.error) throw new Error(data.message || data.error || `Error del servidor (${response.status})`);
-      LEGALAI_BACKUP_EMAIL_SENT = true;
+      if (!forzar) LEGALAI_BACKUP_EMAIL_SENT = true;
       return true;
     } catch (err) {
       lastError = err;
@@ -2632,58 +2632,6 @@ async function enviarRespaldoPDF({ paymentId, externalRef, pdf, datosDoc, metada
     client_time: new Date().toISOString()
   });
   return false;
-}
-
-function descargarPDF() {
-  const texto  = G.texto || leerEstadoPago('legalai_texto', '');
-  const titulo = leerEstadoPago('legalai_titulo', 'documento-legal');
-  const paymentId = G.paymentId || leerEstadoPago('legalai_paymentId', '');
-  const externalRef = G.externalRef || leerEstadoPago('legalai_external_reference', '');
-  track('download_click', {
-    ...getCurrentDocTracking(), status: 'pending', payment_id: paymentId,
-    external_reference: externalRef, client_time: new Date().toISOString()
-  });
-  if (!LEGALAI_BACKUP_EMAIL_SENT && LEGALAI_BACKUP_EMAIL_CONTEXT) {
-    enviarRespaldoPDF(LEGALAI_BACKUP_EMAIL_CONTEXT).catch(function(){});
-  }
-  try {
-    if (!texto && paymentId && /^\d+$/.test(String(paymentId))) {
-      track('stored_pdf_download_requested', {
-        ...getCurrentDocTracking(), status: 'pending', payment_id: paymentId,
-        external_reference: externalRef, client_time: new Date().toISOString()
-      });
-      window.location.href = `${CONFIG.WORKER_URL}/documento/descargar?payment_id=${encodeURIComponent(paymentId)}`;
-      return;
-    }
-    if (!texto) throw new Error('No se encontró el documento. Generalo de nuevo.');
-    if (!LEGALAI_FINAL_PDF) LEGALAI_FINAL_PDF = _generarPDF(texto, titulo, true, false, { descargar: false });
-    iniciarDescargaBlob(LEGALAI_FINAL_PDF.blob, LEGALAI_FINAL_PDF.filename);
-    track('download_started', {
-      ...getCurrentDocTracking(), status: 'approved', payment_id: paymentId,
-      external_reference: externalRef, filename: LEGALAI_FINAL_PDF.filename,
-      bytes: LEGALAI_FINAL_PDF.blob.size, client_time: new Date().toISOString()
-    });
-  } catch (err) {
-    track('download_error', {
-      ...getCurrentDocTracking(), status: 'failed', payment_id: paymentId,
-      external_reference: externalRef, error_flag: true,
-      error_tipo: 'pdf_download_error', error_detalle: err.message || String(err),
-      client_time: new Date().toISOString()
-    });
-    alert(err.message || 'No se pudo iniciar la descarga.');
-  }
-}
-
-function iniciarDescargaBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.style.display = 'none';
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
 function abrirModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -2723,11 +2671,11 @@ async function confirmarSinMarca() {
   });
 }
 
-function descargarPDFSinMarca(mantenerAdvertencia = false) {
+function generarPDFSinMarca(mantenerAdvertencia = false) {
   const texto  = G.texto || leerEstadoPago('legalai_texto', '');
   const titulo = leerEstadoPago('legalai_titulo', 'documento-legal');
   if (!texto) { alert('No se encontró el documento.'); return; }
-  _generarPDF(texto, titulo, false, mantenerAdvertencia);
+  return _generarPDF(texto, titulo, false, mantenerAdvertencia);
 }
 
 function abrirModalGuia() {
@@ -2756,11 +2704,11 @@ async function confirmarGuia() {
   });
 }
 
-async function generarYDescargarGuia(paymentIdGuia) {
+async function generarYRespaldarGuia(paymentIdGuia) {
   const paymentIdOriginal = G.paymentId || sessionStorage.getItem('legalai_paymentId');
   if (!paymentIdOriginal) { alert('No se encontró el documento base.'); return; }
   const btnGuia = document.querySelector('.upsell-btn-guia');
-  if (btnGuia) { btnGuia.disabled = true; btnGuia.textContent = 'Generando guía...'; }
+  if (btnGuia) { btnGuia.disabled = true; btnGuia.textContent = 'Preparando guía...'; }
   try {
     const res  = await fetch(`${CONFIG.WORKER_URL}/guia`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2768,10 +2716,18 @@ async function generarYDescargarGuia(paymentIdGuia) {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    _generarPDF(data.guia || data.texto, (data.titulo || 'documento') + ' - Guía de uso', true, false);
+    const tituloGuia = (data.titulo || leerEstadoPago('legalai_titulo', 'documento')) + ' - Guía de uso';
+    const pdfGuia = _generarPDF(data.guia || data.texto, tituloGuia, true, false);
+    await enviarRespaldoPDF({
+      paymentId: paymentIdGuia,
+      externalRef: `guia_${paymentIdOriginal}`,
+      pdf: pdfGuia,
+      datosDoc: parseEstadoPago('legalai_datos', {}) || {},
+      metadata: { titulo: tituloGuia, tipo: 'guia', paymentIdOriginal }
+    }, true);
     limpiarRetornoMercadoPago();
   } catch(err) {
-    alert('Error al generar la guía: ' + err.message);
+    alert('La guía quedó paga, pero hubo un inconveniente al prepararla. No vuelvas a pagar. Escribinos a finmap.ia@gmail.com para solicitar el envío.');
   } finally {
     if (btnGuia) { btnGuia.disabled = false; btnGuia.textContent = 'Obtener guía de uso →'; }
   }
@@ -2911,7 +2867,14 @@ async function habilitarUpgrade(paymentIdUpgrade, paymentIdOriginal) {
     G.paymentId = paymentIdOriginal;
     const meta = JSON.parse(sessionStorage.getItem('legalai_meta') || '{}');
     showCard(4);
-    descargarPDFSinMarca(data.requiere_advertencia_legal || meta.requiere_advertencia_legal || false);
+    const pdfSinMarca = generarPDFSinMarca(data.requiere_advertencia_legal || meta.requiere_advertencia_legal || false);
+    await enviarRespaldoPDF({
+      paymentId: paymentIdUpgrade,
+      externalRef: `upgrade_${paymentIdOriginal}`,
+      pdf: pdfSinMarca,
+      datosDoc: parseEstadoPago('legalai_datos', {}) || {},
+      metadata: { ...meta, titulo: (leerEstadoPago('legalai_titulo', 'documento') + ' - Versión sin marca'), tipo: 'upgrade', paymentIdOriginal }
+    }, true);
     borrarEstadoPago('legalai_upgrade_pendiente');
     limpiarRetornoMercadoPago();
   } catch(err) {
@@ -2945,7 +2908,7 @@ async function crearPackTrasRetornoMP(paymentIdPack, cot) {
   }
 }
 
-function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal, opciones = {}) {
+function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ format: 'a4', unit: 'mm' });
   const PW=210, PH=297, ML=25, MR=25, MT= conMarca ? 28 : 20, MB=20;
@@ -3016,7 +2979,6 @@ function _generarPDF(texto, titulo, conMarca, mantenerAdvertenciaLegal, opciones
   }
   const filename = titulo.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')+'.pdf';
   const blob = doc.output('blob');
-  if (opciones.descargar !== false) iniciarDescargaBlob(blob, filename);
   return { doc, blob, filename };
 }
 
@@ -3198,7 +3160,7 @@ window.addEventListener('load', () => {
         G.texto = leerEstadoPago('legalai_texto', '');
         G.paymentId = paymentIdOriginal;
         showCard(4);
-        generarYDescargarGuia(paymentIdGuia);
+        generarYRespaldarGuia(paymentIdGuia);
       }
     } else if (tipo === 'pack') {
       const paymentIdPack = obtenerPaymentIdReal(p);
