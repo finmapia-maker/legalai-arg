@@ -249,19 +249,24 @@
       "descripcion": "Pausar o restringir la campaña de Google Ads actual y redireccionar presupuesto: la landing diferenciada no mejoró conversión Ads. Revisar palabras clave y audiencia para alinear intención real con la oferta. Analizar la única venta confirmada (fuente directa) para identificar documento, horario y flujo exacto, y replicarlo como referencia. Si se mantiene la campaña, reducir puja y acotar segmentación a términos de alta intención transaccional.",
       "fecha": "2026-09-08T14:58:50.873Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Auditar el init_point de Mercado Pago: verificar que la URL de retorno y webhook estén configurados correctamente, que el ítem enviado tenga precio y descripción válidos, y que no haya error de sesión o token expirado entre preview y pago. Agregar log explícito del response de MP al iniciar pago para detectar fallo silencioso. Si el flujo técnico está OK, mostrar precio total con desglose antes del botón de pago para reducir abandono por sorpresa de precio.",
+      "fecha": "2026-09-11T14:53:46.359Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-09-10T14:54:44.357Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-11T14:53:46.359Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Pausar o restringir la campaña de Google Ads actual y redireccionar presupuesto: la landing diferenciada no mejoró conversión Ads. Revisar palabras clave y audiencia para alinear intención real con la oferta. Analizar la única venta confirmada (fuente directa) para identificar documento, horario y flujo exacto, y replicarlo como referencia. Si se mantiene la campaña, reducir puja y acotar segmentación a términos de alta intención transaccional.",
-    "archivo": "google_ads_campaign",
-    "tipo": "ads",
-    "hipotesis": "Si se pausa o reorienta la segmentación Ads hacia intención transaccional alta → se eliminan clics sin conversión y mejora el CPV general mientras se escala la fuente directa que sí convierte.",
-    "conv_base": 1,
-    "clics_base": 65
+    "descripcion": "Auditar el init_point de Mercado Pago: verificar que la URL de retorno y webhook estén configurados correctamente, que el ítem enviado tenga precio y descripción válidos, y que no haya error de sesión o token expirado entre preview y pago. Agregar log explícito del response de MP al iniciar pago para detectar fallo silencioso. Si el flujo técnico está OK, mostrar precio total con desglose antes del botón de pago para reducir abandono por sorpresa de precio.",
+    "archivo": "checkout.html",
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el init_point falla silenciosamente o el precio no es visible antes del checkout → los usuarios que inician pago no completan porque encuentran error o precio inesperado → corregir genera las primeras ventas desde Ads",
+    "conv_base": 0,
+    "clics_base": 64
   },
-  "cambio_activo_desde": "2026-09-08T14:58:50.873Z"
+  "cambio_activo_desde": "2026-09-11T14:53:46.359Z"
 }
