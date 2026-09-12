@@ -256,10 +256,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-09-11T14:53:46.359Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-09-12T13:55:01.619Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Auditar el init_point de Mercado Pago: verificar que la URL de retorno y webhook estén configurados correctamente, que el ítem enviado tenga precio y descripción válidos, y que no haya error de sesión o token expirado entre preview y pago. Agregar log explícito del response de MP al iniciar pago para detectar fallo silencioso. Si el flujo técnico está OK, mostrar precio total con desglose antes del botón de pago para reducir abandono por sorpresa de precio.",
     "archivo": "checkout.html",
