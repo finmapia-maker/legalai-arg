@@ -254,19 +254,24 @@
       "descripcion": "Auditar el init_point de Mercado Pago: verificar que la URL de retorno y webhook estén configurados correctamente, que el ítem enviado tenga precio y descripción válidos, y que no haya error de sesión o token expirado entre preview y pago. Agregar log explícito del response de MP al iniciar pago para detectar fallo silencioso. Si el flujo técnico está OK, mostrar precio total con desglose antes del botón de pago para reducir abandono por sorpresa de precio.",
       "fecha": "2026-09-11T14:53:46.359Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Insertar pantalla intermedia entre preview y botón de pago que muestre: precio total desglosado, sello de pago seguro con logo Mercado Pago, y un testimonio o garantía de entrega inmediata. Si ya existe esa pantalla, reemplazar el botón de pago por un botón que primero muestre un modal de confirmación con precio y método antes de redirigir a MP.",
+      "fecha": "2026-09-14T16:49:35.453Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-09-13T14:50:31.536Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-14T16:49:35.453Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Auditar el init_point de Mercado Pago: verificar que la URL de retorno y webhook estén configurados correctamente, que el ítem enviado tenga precio y descripción válidos, y que no haya error de sesión o token expirado entre preview y pago. Agregar log explícito del response de MP al iniciar pago para detectar fallo silencioso. Si el flujo técnico está OK, mostrar precio total con desglose antes del botón de pago para reducir abandono por sorpresa de precio.",
+    "descripcion": "Insertar pantalla intermedia entre preview y botón de pago que muestre: precio total desglosado, sello de pago seguro con logo Mercado Pago, y un testimonio o garantía de entrega inmediata. Si ya existe esa pantalla, reemplazar el botón de pago por un botón que primero muestre un modal de confirmación con precio y método antes de redirigir a MP.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el init_point falla silenciosamente o el precio no es visible antes del checkout → los usuarios que inician pago no completan porque encuentran error o precio inesperado → corregir genera las primeras ventas desde Ads",
+    "hipotesis": "Si el usuario ve el precio total y una señal de confianza antes de ir a MP → al menos 1 pago iniciado en 48h",
     "conv_base": 0,
-    "clics_base": 64
+    "clics_base": 40
   },
-  "cambio_activo_desde": "2026-09-11T14:53:46.359Z"
+  "cambio_activo_desde": "2026-09-14T16:49:35.453Z"
 }
