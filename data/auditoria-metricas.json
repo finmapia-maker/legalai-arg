@@ -1,21 +1,21 @@
 {
-  "fecha": "2026-09-14T16:49:35.453Z",
+  "fecha": "2026-09-15T15:28:17.738Z",
   "periodo_48h": {
-    "visitas": 23,
-    "clics": 40,
+    "visitas": 13,
+    "clics": 48,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 176,
+    "total_eventos": 180,
     "por_fuente": {
       "google_ads": {
-        "visitas": 14,
-        "clics": 40,
+        "visitas": 9,
+        "clics": 48,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 9,
+        "visitas": 4,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
@@ -24,31 +24,37 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 98,
+        "eventos": 93,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 53,
+        "eventos": 61,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 17,
+        "eventos": 19,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "planes",
-        "eventos": 5,
+        "documento": "Contrato de compraventa de inmueble",
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 3,
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       }
@@ -56,21 +62,21 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 72,
-    "clics": 218,
+    "visitas": 63,
+    "clics": 207,
     "ventas": 1,
     "tasa_conv": "0.5%",
     "total_ars": 8500,
-    "total_eventos": 759,
+    "total_eventos": 724,
     "por_fuente": {
       "google_ads": {
-        "visitas": 53,
-        "clics": 209,
+        "visitas": 45,
+        "clics": 198,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 19,
+        "visitas": 18,
         "clics": 3,
         "ventas": 0,
         "total_ars": 0
@@ -91,19 +97,19 @@
       },
       {
         "documento": "index",
-        "eventos": 368,
+        "eventos": 347,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 236,
+        "eventos": 233,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 103,
+        "eventos": 91,
         "ventas": 0,
         "total_ars": 0
       },
@@ -126,14 +132,14 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler temporario turístico",
+        "documento": "Contrato de compraventa de inmueble",
         "eventos": 5,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 3,
+        "documento": "Contrato de alquiler temporario turístico",
+        "eventos": 4,
         "ventas": 0,
         "total_ars": 0
       },
@@ -410,40 +416,40 @@
     ]
   },
   "embudo_eventos": {
+    "ads_landing_view": 56,
+    "scroll_50pct": 20,
+    "inicio_formulario": 3,
+    "scroll_25pct": 21,
+    "cta_generador": 19,
+    "scroll_75pct": 22,
+    "page_view": 13,
+    "cta_doc_inline": 6,
+    "form_first_input": 4,
     "preview_live_ok": 5,
-    "cta_generador": 18,
-    "ads_landing_view": 51,
-    "scroll_75pct": 27,
-    "scroll_50pct": 18,
-    "cta_doc_inline": 4,
-    "scroll_25pct": 17,
-    "form_first_input": 2,
-    "doc_selected": 8,
-    "page_view": 23,
-    "inicio_formulario": 1,
-    "click_residencial": 2
+    "doc_selected": 6,
+    "click_residencial": 5
   },
-  "total_eventos": 176,
+  "total_eventos": 180,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 23,
+      "count": 13,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 14,
-      "drop_pct": 39
+      "count": 17,
+      "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 3,
-      "drop_pct": 79
+      "count": 7,
+      "drop_pct": 59
     },
     {
       "label": "Preview live OK",
       "count": 5,
-      "drop_pct": 0
+      "drop_pct": 29
     },
     {
       "label": "Pago iniciado",
@@ -459,12 +465,12 @@
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 5,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 5,
+      "count": 2,
       "drop_pct": 0
     },
     {
@@ -486,18 +492,18 @@
     },
     {
       "label": "Ads click documento",
-      "count": 14,
-      "drop_pct": 78
+      "count": 17,
+      "drop_pct": 73
     },
     {
       "label": "Ads inicio formulario",
-      "count": 7,
-      "drop_pct": 50
+      "count": 13,
+      "drop_pct": 24
     },
     {
       "label": "Ads preview OK",
       "count": 5,
-      "drop_pct": 29
+      "drop_pct": 62
     },
     {
       "label": "Ads inicio pago",
@@ -520,8 +526,8 @@
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 2,
-    "doc_selected": 8
+    "form_first_input": 4,
+    "doc_selected": 6
   },
   "cuello_botella": {
     "funnel": "doc",
@@ -531,10 +537,10 @@
   },
   "diagnostico": {
     "problemas": [
-      "Google Ads: 7 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
+      "Google Ads: 13 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 40 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 48 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
