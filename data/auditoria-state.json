@@ -259,19 +259,24 @@
       "descripcion": "Insertar pantalla intermedia entre preview y botón de pago que muestre: precio total desglosado, sello de pago seguro con logo Mercado Pago, y un testimonio o garantía de entrega inmediata. Si ya existe esa pantalla, reemplazar el botón de pago por un botón que primero muestre un modal de confirmación con precio y método antes de redirigir a MP.",
       "fecha": "2026-09-14T16:49:35.453Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reducir fricción de precio: aplicar descuento temporal visible (ej: -20% por tiempo limitado con contador regresivo) directamente en la pantalla de confirmación antes del redirect a MP. Si el precio actual supera ARS 3000, testear un precio menor o un pago en cuotas sin interés destacado. Además, auditar si el redirect a MP falla silenciosamente en mobile revisando el frontend_error detectado.",
+      "fecha": "2026-09-17T15:27:43.835Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-09-16T15:21:12.924Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-17T15:27:43.835Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Insertar pantalla intermedia entre preview y botón de pago que muestre: precio total desglosado, sello de pago seguro con logo Mercado Pago, y un testimonio o garantía de entrega inmediata. Si ya existe esa pantalla, reemplazar el botón de pago por un botón que primero muestre un modal de confirmación con precio y método antes de redirigir a MP.",
+    "descripcion": "Reducir fricción de precio: aplicar descuento temporal visible (ej: -20% por tiempo limitado con contador regresivo) directamente en la pantalla de confirmación antes del redirect a MP. Si el precio actual supera ARS 3000, testear un precio menor o un pago en cuotas sin interés destacado. Además, auditar si el redirect a MP falla silenciosamente en mobile revisando el frontend_error detectado.",
     "archivo": "checkout.html",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si el usuario ve el precio total y una señal de confianza antes de ir a MP → al menos 1 pago iniciado en 48h",
+    "tipo": "precio",
+    "hipotesis": "Si el precio percibido baja o se presenta en cuotas → el usuario completa el pago en MP y conv% sube de 0%",
     "conv_base": 0,
-    "clics_base": 40
+    "clics_base": 55
   },
-  "cambio_activo_desde": "2026-09-14T16:49:35.453Z"
+  "cambio_activo_desde": "2026-09-17T15:27:43.835Z"
 }
