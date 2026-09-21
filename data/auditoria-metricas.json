@@ -1,42 +1,48 @@
 {
-  "fecha": "2026-09-20T14:36:08.322Z",
+  "fecha": "2026-09-21T16:50:54.082Z",
   "periodo_48h": {
-    "visitas": 11,
-    "clics": 20,
+    "visitas": 7,
+    "clics": 31,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 111,
+    "total_eventos": 145,
     "por_fuente": {
       "google_ads": {
-        "visitas": 9,
-        "clics": 20,
+        "visitas": 7,
+        "clics": 29,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 2,
-        "clics": 0,
+        "visitas": 0,
+        "clics": 2,
         "ventas": 0,
         "total_ars": 0
       }
     },
     "top_documentos": [
       {
-        "documento": "index",
-        "eventos": 51,
+        "documento": "contrato-alquiler",
+        "eventos": 66,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "contrato-alquiler",
-        "eventos": 50,
+        "documento": "index",
+        "eventos": 64,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 8,
+        "eventos": 12,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
@@ -45,33 +51,27 @@
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 1,
-        "ventas": 0,
-        "total_ars": 0
       }
     ],
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 48,
-    "clics": 156,
+    "visitas": 42,
+    "clics": 153,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 611,
+    "total_eventos": 600,
     "por_fuente": {
       "google_ads": {
-        "visitas": 38,
-        "clics": 153,
+        "visitas": 36,
+        "clics": 148,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 10,
-        "clics": 2,
+        "visitas": 6,
+        "clics": 4,
         "ventas": 0,
         "total_ars": 0
       },
@@ -85,31 +85,31 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 305,
+        "eventos": 287,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 228,
+        "eventos": 239,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 49,
+        "eventos": 45,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 15,
+        "eventos": 16,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 7,
+        "eventos": 8,
         "ventas": 0,
         "total_ars": 0
       },
@@ -120,13 +120,13 @@
         "total_ars": 0
       },
       {
-        "documento": "planes",
-        "eventos": 3,
+        "documento": "pagar_mp",
+        "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "pagar_mp",
+        "documento": "planes",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -135,40 +135,39 @@
     "ultimas_conversiones": []
   },
   "embudo_eventos": {
-    "ads_landing_view": 46,
-    "scroll_75pct": 11,
-    "preview_live_ok": 7,
+    "ads_landing_view": 65,
+    "scroll_75pct": 14,
+    "preview_live_ok": 8,
+    "scroll_50pct": 12,
     "scroll_25pct": 14,
-    "scroll_50pct": 7,
-    "cta_generador": 6,
-    "frontend_error": 2,
-    "cta_doc_inline": 2,
-    "page_view": 11,
-    "click_comercial": 2,
+    "cta_generador": 15,
+    "click_temporario": 1,
+    "doc_selected": 3,
+    "page_view": 7,
     "form_first_input": 1,
-    "click_residencial": 1,
-    "click_temporario": 1
+    "cta_doc_inline": 3,
+    "frontend_error": 2
   },
-  "total_eventos": 111,
+  "total_eventos": 145,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 11,
+      "count": 7,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 6,
-      "drop_pct": 45
+      "count": 7,
+      "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
       "count": 1,
-      "drop_pct": 83
+      "drop_pct": 86
     },
     {
       "label": "Preview live OK",
-      "count": 7,
+      "count": 8,
       "drop_pct": 0
     },
     {
@@ -207,18 +206,18 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 54,
+      "count": 70,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 6,
-      "drop_pct": 89
+      "count": 7,
+      "drop_pct": 90
     },
     {
       "label": "Ads inicio formulario",
-      "count": 3,
-      "drop_pct": 50
+      "count": 4,
+      "drop_pct": 43
     },
     {
       "label": "Ads preview OK",
@@ -247,7 +246,7 @@
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
     "form_first_input": 1,
-    "doc_selected": 0
+    "doc_selected": 3
   },
   "cuello_botella": {
     "funnel": "doc",
@@ -257,10 +256,11 @@
   },
   "diagnostico": {
     "problemas": [
-      "Google Ads: 3 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
+      "Google Ads: 4 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
       "Errores frontend detectados: 2 → revisar consola/compatibilidad mobile.",
+      "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 20 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 29 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
