@@ -1,48 +1,78 @@
 {
-  "fecha": "2026-09-21T16:50:54.082Z",
+  "fecha": "2026-09-22T15:26:51.804Z",
   "periodo_48h": {
-    "visitas": 7,
-    "clics": 31,
-    "ventas": 0,
-    "tasa_conv": "0.0%",
-    "total_ars": 0,
-    "total_eventos": 145,
+    "visitas": 5,
+    "clics": 55,
+    "ventas": 1,
+    "tasa_conv": "1.8%",
+    "total_ars": 10000,
+    "total_eventos": 197,
     "por_fuente": {
-      "google_ads": {
-        "visitas": 7,
-        "clics": 29,
-        "ventas": 0,
-        "total_ars": 0
+      "directo": {
+        "visitas": 0,
+        "clics": 2,
+        "ventas": 1,
+        "total_ars": 10000
       },
       "DIRECTO": {
         "visitas": 0,
         "clics": 2,
         "ventas": 0,
         "total_ars": 0
+      },
+      "google_ads": {
+        "visitas": 5,
+        "clics": 51,
+        "ventas": 0,
+        "total_ars": 0
       }
     },
     "top_documentos": [
       {
-        "documento": "contrato-alquiler",
-        "eventos": 66,
-        "ventas": 0,
-        "total_ars": 0
+        "documento": "Documento legal: Contrato de alquiler de local comercial",
+        "eventos": 3,
+        "ventas": 1,
+        "total_ars": 10000
       },
       {
         "documento": "index",
-        "eventos": 64,
+        "eventos": 82,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler de vivienda",
-        "eventos": 12,
+        "documento": "contrato-alquiler",
+        "eventos": 72,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
+        "eventos": 21,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de vivienda",
+        "eventos": 14,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Notificación MercadoPago",
         "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de compraventa de vehículo automotor",
+        "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       },
@@ -53,21 +83,285 @@
         "total_ars": 0
       }
     ],
-    "ultimas_conversiones": []
+    "ultimas_conversiones": [
+      {
+        "id": "SALE-179324381643",
+        "date": "2026-09-22T10:17:02.000-04:00",
+        "type": "payment_approved",
+        "product": "Documento legal: Contrato de alquiler de local comercial",
+        "category": "mercadopago",
+        "amount": 10000,
+        "currency": "ARS",
+        "amount_ars": 10000,
+        "payment_method": "MercadoPago",
+        "payment_id": "179324381643",
+        "order_id": "doc_sess_1790086463432",
+        "status": "approved",
+        "customer": "daniantonietta@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "SALE-179324381643",
+          "payment_id": "179324381643",
+          "order_id": "doc_sess_1790086463432",
+          "type": "payment_approved",
+          "product": "Documento legal: Contrato de alquiler de local comercial",
+          "category": "mercadopago",
+          "amount": 10000,
+          "amount_ars": 10000,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "daniantonietta@gmail.com",
+          "affiliate": "",
+          "date": "2026-09-22T10:17:02.000-04:00",
+          "raw": {
+            "source": "webhook",
+            "paymentId": "179324381643",
+            "externalRef": "doc_sess_1790086463432",
+            "payment_status": "approved",
+            "approved_at": "2026-09-22T10:17:02.000-04:00",
+            "preference_id": "",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "ip_address": "45.6.5.19",
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Documento legal: Contrato de alquiler de local comercial",
+                    "unit_price": "10000"
+                  }
+                ],
+                "tracking_id": "platform:v1-whitelabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": "646540",
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.176.0-rc-2",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {
+                "bin": "55919800",
+                "cardholder": {
+                  "identification": {
+                    "number": "27210354",
+                    "type": "DNI"
+                  },
+                  "name": "antonietta claudio"
+                },
+                "country": "ARG",
+                "date_created": "2026-09-22T10:16:57.000-04:00",
+                "date_last_updated": "2026-09-22T10:16:57.000-04:00",
+                "expiration_month": null,
+                "expiration_year": null,
+                "first_six_digits": "559198",
+                "id": null,
+                "last_four_digits": "3240",
+                "tags": [
+                  "credit",
+                  "invalid_card_art"
+                ]
+              },
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 180,
+                    "refunded": 0
+                  },
+                  "base_amount": 10000,
+                  "client_id": 0,
+                  "date_created": "2026-09-22T10:16:57.000-04:00",
+                  "external_charge_id": "01M34QM6SWA70HJEVWDZD97E4Q",
+                  "id": "179324381643-001",
+                  "last_updated": "2026-09-22T10:16:57.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-09-22T10:16:57.929-04:00",
+                  "execution_id": "01M34QM6S5D8ERJWTQZFRTWDX7"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-09-22T10:17:02.000-04:00",
+              "date_created": "2026-09-22T10:16:57.000-04:00",
+              "date_last_updated": "2026-09-22T10:17:02.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Documento legal: Contrato de alquiler de local comercial",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1790086463432",
+              "fee_details": [
+                {
+                  "amount": 180,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 179324381643,
+              "idempotency_key": "idempotencyKeyPostPay_194633f4-eaf7-4e07-bd08-90b837865ba0master4b0812ff92ceebfe1be72cbb0d62e0de_536647448220284",
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "692",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "gclid": "EAIaIQobChMItovjrqmClwMVt15IAB2bvgD_EAAYASAAEgJpFvD_BwE",
+                "legalai_tipo": "doc",
+                "utm_cmp": "",
+                "utm_med": "",
+                "legalai_external_ref": "doc_sess_1790086463432",
+                "titulo": "Contrato de alquiler de local comercial",
+                "origen": "index",
+                "utm_src": "",
+                "device": "Desktop",
+                "dolar_rate": "1534.3",
+                "legalai_ref": "",
+                "utm_cnt": ""
+              },
+              "money_release_date": "2026-10-27T10:17:02.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "44649543999",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "daniantonietta@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "2572149711",
+                "identification": {
+                  "number": null,
+                  "type": null
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "data": {
+                  "routing_data": {
+                    "merchant_account_id": "5932228809444"
+                  }
+                },
+                "id": "master",
+                "issuer_id": "692",
+                "type": "credit_card"
+              },
+              "payment_method_id": "master",
+              "payment_type_id": "credit_card",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": "checkout-off",
+                  "operating_system": null,
+                  "version": "v2"
+                },
+                "business_info": {
+                  "branch": "Merchant Services",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Collector",
+                  "state_id": "NN"
+                },
+                "transaction_data": {
+                  "e2e_id": null,
+                  "ticket_id": "1329"
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": {
+                "advance_provider": null,
+                "advance_provider_user": null,
+                "events": null,
+                "new_payments_release_model": true
+              },
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": "MERPAGO*LEGALAI",
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 10000,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 10000,
+                "net_received_amount": 9820,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": "646540",
+                "total_paid_amount": 10000
+              }
+            }
+          }
+        }
+      }
+    ]
   },
   "periodo_7d": {
-    "visitas": 42,
-    "clics": 153,
-    "ventas": 0,
-    "tasa_conv": "0.0%",
-    "total_ars": 0,
-    "total_eventos": 600,
+    "visitas": 40,
+    "clics": 162,
+    "ventas": 1,
+    "tasa_conv": "0.6%",
+    "total_ars": 10000,
+    "total_eventos": 627,
     "por_fuente": {
-      "google_ads": {
-        "visitas": 36,
-        "clics": 148,
-        "ventas": 0,
-        "total_ars": 0
+      "directo": {
+        "visitas": 0,
+        "clics": 3,
+        "ventas": 1,
+        "total_ars": 10000
       },
       "DIRECTO": {
         "visitas": 6,
@@ -75,23 +369,29 @@
         "ventas": 0,
         "total_ars": 0
       },
-      "directo": {
-        "visitas": 0,
-        "clics": 1,
+      "google_ads": {
+        "visitas": 34,
+        "clics": 155,
         "ventas": 0,
         "total_ars": 0
       }
     },
     "top_documentos": [
       {
+        "documento": "Documento legal: Contrato de alquiler de local comercial",
+        "eventos": 3,
+        "ventas": 1,
+        "total_ars": 10000
+      },
+      {
         "documento": "index",
-        "eventos": 287,
+        "eventos": 295,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 239,
+        "eventos": 236,
         "ventas": 0,
         "total_ars": 0
       },
@@ -103,13 +403,13 @@
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 16,
+        "eventos": 34,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 8,
+        "eventos": 5,
         "ventas": 0,
         "total_ars": 0
       },
@@ -120,65 +420,349 @@
         "total_ars": 0
       },
       {
-        "documento": "pagar_mp",
+        "documento": "Notificación MercadoPago",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Error al verificar pago MercadoPago",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "planes",
+        "documento": "Contrato de compraventa de vehículo automotor",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       }
     ],
-    "ultimas_conversiones": []
+    "ultimas_conversiones": [
+      {
+        "id": "SALE-179324381643",
+        "date": "2026-09-22T10:17:02.000-04:00",
+        "type": "payment_approved",
+        "product": "Documento legal: Contrato de alquiler de local comercial",
+        "category": "mercadopago",
+        "amount": 10000,
+        "currency": "ARS",
+        "amount_ars": 10000,
+        "payment_method": "MercadoPago",
+        "payment_id": "179324381643",
+        "order_id": "doc_sess_1790086463432",
+        "status": "approved",
+        "customer": "daniantonietta@gmail.com",
+        "affiliate": "",
+        "affiliate_source": "",
+        "commission_amount": 0,
+        "commission_currency": "",
+        "commission_status": "",
+        "plan_name": "",
+        "active_code": false,
+        "error_flag": false,
+        "error_tipo": "",
+        "error_detalle": "",
+        "raw": {
+          "id": "SALE-179324381643",
+          "payment_id": "179324381643",
+          "order_id": "doc_sess_1790086463432",
+          "type": "payment_approved",
+          "product": "Documento legal: Contrato de alquiler de local comercial",
+          "category": "mercadopago",
+          "amount": 10000,
+          "amount_ars": 10000,
+          "currency": "ARS",
+          "payment_method": "MercadoPago",
+          "status": "approved",
+          "customer": "daniantonietta@gmail.com",
+          "affiliate": "",
+          "date": "2026-09-22T10:17:02.000-04:00",
+          "raw": {
+            "source": "webhook",
+            "paymentId": "179324381643",
+            "externalRef": "doc_sess_1790086463432",
+            "payment_status": "approved",
+            "approved_at": "2026-09-22T10:17:02.000-04:00",
+            "preference_id": "",
+            "mp": {
+              "accounts_info": null,
+              "acquirer_reconciliation": [],
+              "additional_info": {
+                "ip_address": "45.6.5.19",
+                "items": [
+                  {
+                    "quantity": "1",
+                    "title": "Documento legal: Contrato de alquiler de local comercial",
+                    "unit_price": "10000"
+                  }
+                ],
+                "tracking_id": "platform:v1-whitelabel,so:ALL,type:N/A,security:none"
+              },
+              "authorization_code": "646540",
+              "binary_mode": false,
+              "brand_id": null,
+              "build_version": "3.176.0-rc-2",
+              "call_for_authorize_id": null,
+              "captured": true,
+              "card": {
+                "bin": "55919800",
+                "cardholder": {
+                  "identification": {
+                    "number": "27210354",
+                    "type": "DNI"
+                  },
+                  "name": "antonietta claudio"
+                },
+                "country": "ARG",
+                "date_created": "2026-09-22T10:16:57.000-04:00",
+                "date_last_updated": "2026-09-22T10:16:57.000-04:00",
+                "expiration_month": null,
+                "expiration_year": null,
+                "first_six_digits": "559198",
+                "id": null,
+                "last_four_digits": "3240",
+                "tags": [
+                  "credit",
+                  "invalid_card_art"
+                ]
+              },
+              "charges_details": [
+                {
+                  "accounts": {
+                    "from": "collector",
+                    "to": "mp"
+                  },
+                  "amounts": {
+                    "original": 180,
+                    "refunded": 0
+                  },
+                  "base_amount": 10000,
+                  "client_id": 0,
+                  "date_created": "2026-09-22T10:16:57.000-04:00",
+                  "external_charge_id": "01M34QM6SWA70HJEVWDZD97E4Q",
+                  "id": "179324381643-001",
+                  "last_updated": "2026-09-22T10:16:57.000-04:00",
+                  "metadata": {
+                    "reason": "",
+                    "source": "proc-svc-charges",
+                    "source_detail": "processing_fee_charge"
+                  },
+                  "name": "mercadopago_fee",
+                  "rate": 1.8,
+                  "refund_charges": [],
+                  "reserve_id": null,
+                  "type": "fee",
+                  "update_charges": []
+                }
+              ],
+              "charges_execution_info": {
+                "internal_execution": {
+                  "date": "2026-09-22T10:16:57.929-04:00",
+                  "execution_id": "01M34QM6S5D8ERJWTQZFRTWDX7"
+                }
+              },
+              "collector_id": 616777369,
+              "corporation_id": null,
+              "counter_currency": null,
+              "coupon_amount": 0,
+              "currency_id": "ARS",
+              "date_approved": "2026-09-22T10:17:02.000-04:00",
+              "date_created": "2026-09-22T10:16:57.000-04:00",
+              "date_last_updated": "2026-09-22T10:17:02.000-04:00",
+              "date_of_expiration": null,
+              "deduction_schema": null,
+              "description": "Documento legal: Contrato de alquiler de local comercial",
+              "differential_pricing_id": null,
+              "external_reference": "doc_sess_1790086463432",
+              "fee_details": [
+                {
+                  "amount": 180,
+                  "fee_payer": "collector",
+                  "type": "mercadopago_fee"
+                }
+              ],
+              "financing_group": null,
+              "id": 179324381643,
+              "idempotency_key": "idempotencyKeyPostPay_194633f4-eaf7-4e07-bd08-90b837865ba0master4b0812ff92ceebfe1be72cbb0d62e0de_536647448220284",
+              "installments": 1,
+              "integrator_id": null,
+              "issuer_id": "692",
+              "live_mode": true,
+              "marketplace_owner": null,
+              "merchant_account_id": null,
+              "merchant_number": null,
+              "metadata": {
+                "gclid": "EAIaIQobChMItovjrqmClwMVt15IAB2bvgD_EAAYASAAEgJpFvD_BwE",
+                "legalai_tipo": "doc",
+                "utm_cmp": "",
+                "utm_med": "",
+                "legalai_external_ref": "doc_sess_1790086463432",
+                "titulo": "Contrato de alquiler de local comercial",
+                "origen": "index",
+                "utm_src": "",
+                "device": "Desktop",
+                "dolar_rate": "1534.3",
+                "legalai_ref": "",
+                "utm_cnt": ""
+              },
+              "money_release_date": "2026-10-27T10:17:02.000-04:00",
+              "money_release_schema": null,
+              "money_release_status": "pending",
+              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
+              "operation_type": "regular_payment",
+              "order": {
+                "id": "44649543999",
+                "type": "mercadopago"
+              },
+              "payer": {
+                "email": "daniantonietta@gmail.com",
+                "entity_type": null,
+                "first_name": null,
+                "id": "2572149711",
+                "identification": {
+                  "number": null,
+                  "type": null
+                },
+                "last_name": null,
+                "operator_id": null,
+                "phone": {
+                  "number": null,
+                  "extension": null,
+                  "area_code": null
+                },
+                "type": null
+              },
+              "payment_method": {
+                "data": {
+                  "routing_data": {
+                    "merchant_account_id": "5932228809444"
+                  }
+                },
+                "id": "master",
+                "issuer_id": "692",
+                "type": "credit_card"
+              },
+              "payment_method_id": "master",
+              "payment_type_id": "credit_card",
+              "platform_id": null,
+              "point_of_interaction": {
+                "application_data": {
+                  "name": "checkout-off",
+                  "operating_system": null,
+                  "version": "v2"
+                },
+                "business_info": {
+                  "branch": "Merchant Services",
+                  "sub_unit": "checkout_pro",
+                  "unit": "online_payments"
+                },
+                "location": {
+                  "source": "Collector",
+                  "state_id": "NN"
+                },
+                "transaction_data": {
+                  "e2e_id": null,
+                  "ticket_id": "1329"
+                },
+                "type": "CHECKOUT"
+              },
+              "pos_id": null,
+              "processing_mode": "aggregator",
+              "refunds": [],
+              "release_info": {
+                "advance_provider": null,
+                "advance_provider_user": null,
+                "events": null,
+                "new_payments_release_model": true
+              },
+              "shipping_amount": 0,
+              "sponsor_id": null,
+              "statement_descriptor": "MERPAGO*LEGALAI",
+              "status": "approved",
+              "status_detail": "accredited",
+              "store_id": null,
+              "tags": null,
+              "taxes_amount": 0,
+              "tenant_context": "mp",
+              "transaction_amount": 10000,
+              "transaction_amount_refunded": 0,
+              "transaction_details": {
+                "acquirer_reference": null,
+                "external_resource_url": null,
+                "financial_institution": null,
+                "installment_amount": 10000,
+                "net_received_amount": 9820,
+                "overpaid_amount": 0,
+                "payable_deferral_period": null,
+                "payment_method_reference_id": "646540",
+                "total_paid_amount": 10000
+              }
+            }
+          }
+        }
+      }
+    ]
   },
   "embudo_eventos": {
-    "ads_landing_view": 65,
-    "scroll_75pct": 14,
-    "preview_live_ok": 8,
-    "scroll_50pct": 12,
-    "scroll_25pct": 14,
-    "cta_generador": 15,
-    "click_temporario": 1,
-    "doc_selected": 3,
-    "page_view": 7,
-    "form_first_input": 1,
-    "cta_doc_inline": 3,
-    "frontend_error": 2
+    "document_generation_started": 3,
+    "mp_preference_ok": 2,
+    "checkout_start": 2,
+    "click_pagar": 4,
+    "scroll_75pct": 20,
+    "scroll_50pct": 19,
+    "form_first_input": 5,
+    "scroll_25pct": 15,
+    "cta_generador": 21,
+    "ads_landing_view": 68,
+    "cta_doc_inline": 6,
+    "click_residencial": 2,
+    "document_generated": 1,
+    "backup_email_error": 1,
+    "server_document_generated": 1,
+    "stored_pdf_saved": 1,
+    "server_document_generation_started": 1,
+    "payment_approved": 1,
+    "payment_webhook_received": 2,
+    "error": 1,
+    "preview_live_ok": 9,
+    "click_comercial": 1,
+    "page_view": 5,
+    "frontend_error": 1,
+    "doc_selected": 4,
+    "click_temporario": 1
   },
-  "total_eventos": 145,
+  "total_eventos": 197,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 7,
+      "count": 5,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 7,
+      "count": 14,
       "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 1,
-      "drop_pct": 86
+      "count": 5,
+      "drop_pct": 64
     },
     {
       "label": "Preview live OK",
-      "count": 8,
+      "count": 9,
       "drop_pct": 0
     },
     {
       "label": "Pago iniciado",
-      "count": 0,
-      "drop_pct": 100
+      "count": 6,
+      "drop_pct": 33
     },
     {
       "label": "Venta confirmada",
-      "count": 0,
-      "drop_pct": 0
+      "count": 1,
+      "drop_pct": 83
     }
   ],
   "funnel_plan": [
@@ -206,33 +790,33 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 70,
+      "count": 72,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 7,
-      "drop_pct": 90
+      "count": 14,
+      "drop_pct": 81
     },
     {
       "label": "Ads inicio formulario",
-      "count": 4,
-      "drop_pct": 43
+      "count": 11,
+      "drop_pct": 21
     },
     {
       "label": "Ads preview OK",
-      "count": 7,
-      "drop_pct": 0
+      "count": 8,
+      "drop_pct": 27
     },
     {
       "label": "Ads inicio pago",
-      "count": 0,
-      "drop_pct": 100
+      "count": 4,
+      "drop_pct": 50
     },
     {
       "label": "Ads vuelta sin pago",
       "count": 0,
-      "drop_pct": 0
+      "drop_pct": 100
     },
     {
       "label": "Ads venta",
@@ -241,28 +825,28 @@
     }
   ],
   "alertas_tracking": {
-    "frontend_errors": 2,
+    "frontend_errors": 1,
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 1,
-    "doc_selected": 3
+    "form_first_input": 5,
+    "doc_selected": 4
   },
   "cuello_botella": {
-    "funnel": "doc",
-    "etapa": "Pago iniciado",
+    "funnel": "ads",
+    "etapa": "Ads vuelta sin pago",
     "drop_pct": 100,
     "count": 0
   },
   "diagnostico": {
     "problemas": [
-      "Google Ads: 4 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
-      "Errores frontend detectados: 2 → revisar consola/compatibilidad mobile.",
-      "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
-      "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 29 clics y 0 ventas → landing o segmentación"
+      "Errores frontend detectados: 1 → revisar consola/compatibilidad mobile.",
+      "Fuente \"google_ads\": 51 clics y 0 ventas → landing o segmentación"
     ],
-    "oportunidades": [],
+    "oportunidades": [
+      "1 venta(s) confirmada(s) en 48h → analizar fuente/documento y escalar lo que convirtió.",
+      "Fuente más rentable: \"directo\" (1 ventas)"
+    ],
     "estado": "PROBLEMA"
   }
 }
