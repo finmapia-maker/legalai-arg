@@ -269,19 +269,24 @@
       "descripcion": "1) Instrumentar log explícito del click en botón de pago: registrar si el redirect a MP se ejecuta correctamente o falla silenciosamente (especialmente en mobile). 2) Agregar fallback: si el redirect falla, mostrar un link directo copiable a MP. 3) Auditar los 2 errores frontend en consola y resolverlos. 4) Si el redirect funciona correctamente, bajar el precio a un valor de prueba (ej: ARS 999) por 48h para aislar si el problema es precio o técnico.",
       "fecha": "2026-09-20T14:36:08.322Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar si el redirect a MercadoPago se completa exitosamente para los 3 usuarios que iniciaron pago: revisar logs de preferencia de pago creada vs completada, confirmar que la URL de retorno y webhook están activos, y testear el flujo completo en mobile con precio de prueba ARS 999 si aún no se hizo. Si el redirect funciona, agregar pantalla intermedia de confirmación con beneficios del documento antes del botón de pago para reducir abandono.",
+      "fecha": "2026-09-24T15:44:31.664Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "OBSERVAR",
-  "fecha": "2026-09-23T15:21:06.671Z",
-  "ultima_prioridad": "media",
-  "ultimo_embudo": "Ads inicio pago → Ads venta (drop 100%)",
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-24T15:44:31.664Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "1) Instrumentar log explícito del click en botón de pago: registrar si el redirect a MP se ejecuta correctamente o falla silenciosamente (especialmente en mobile). 2) Agregar fallback: si el redirect falla, mostrar un link directo copiable a MP. 3) Auditar los 2 errores frontend en consola y resolverlos. 4) Si el redirect funciona correctamente, bajar el precio a un valor de prueba (ej: ARS 999) por 48h para aislar si el problema es precio o técnico.",
+    "descripcion": "Verificar si el redirect a MercadoPago se completa exitosamente para los 3 usuarios que iniciaron pago: revisar logs de preferencia de pago creada vs completada, confirmar que la URL de retorno y webhook están activos, y testear el flujo completo en mobile con precio de prueba ARS 999 si aún no se hizo. Si el redirect funciona, agregar pantalla intermedia de confirmación con beneficios del documento antes del botón de pago para reducir abandono.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el redirect a MP falla silenciosamente en mobile → 0 pagos iniciados aunque haya intención de compra; resolverlo debería generar los primeros pagos en 48h",
+    "hipotesis": "Si el redirect a MP falla silenciosamente en algún dispositivo o el precio genera fricción final, reducir precio de prueba y confirmar flujo técnico → al menos 1 venta en 48h",
     "conv_base": 0,
-    "clics_base": 20
+    "clics_base": 54
   },
-  "cambio_activo_desde": "2026-09-20T14:36:08.322Z"
+  "cambio_activo_desde": "2026-09-24T15:44:31.664Z"
 }
