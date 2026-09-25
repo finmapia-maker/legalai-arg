@@ -276,10 +276,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-09-24T15:44:31.664Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-09-25T15:44:58.218Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar si el redirect a MercadoPago se completa exitosamente para los 3 usuarios que iniciaron pago: revisar logs de preferencia de pago creada vs completada, confirmar que la URL de retorno y webhook están activos, y testear el flujo completo en mobile con precio de prueba ARS 999 si aún no se hizo. Si el redirect funciona, agregar pantalla intermedia de confirmación con beneficios del documento antes del botón de pago para reducir abandono.",
     "archivo": "checkout.html",
