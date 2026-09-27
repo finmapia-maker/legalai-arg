@@ -274,19 +274,24 @@
       "descripcion": "Verificar si el redirect a MercadoPago se completa exitosamente para los 3 usuarios que iniciaron pago: revisar logs de preferencia de pago creada vs completada, confirmar que la URL de retorno y webhook están activos, y testear el flujo completo en mobile con precio de prueba ARS 999 si aún no se hizo. Si el redirect funciona, agregar pantalla intermedia de confirmación con beneficios del documento antes del botón de pago para reducir abandono.",
       "fecha": "2026-09-24T15:44:31.664Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Eliminar o simplificar el formulario entre la selección de documento y el pago: reemplazar el formulario actual por un flujo de 1 solo campo (email) directo al botón de pago, reduciendo fricción máxima en el punto de caída del 100%. Si el formulario captura datos necesarios para generar el doc, moverlos al post-pago.",
+      "fecha": "2026-09-27T15:33:14.126Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-09-26T14:55:20.554Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-27T15:33:14.126Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Inicio formulario",
   "cambio_activo": {
-    "descripcion": "Verificar si el redirect a MercadoPago se completa exitosamente para los 3 usuarios que iniciaron pago: revisar logs de preferencia de pago creada vs completada, confirmar que la URL de retorno y webhook están activos, y testear el flujo completo en mobile con precio de prueba ARS 999 si aún no se hizo. Si el redirect funciona, agregar pantalla intermedia de confirmación con beneficios del documento antes del botón de pago para reducir abandono.",
-    "archivo": "checkout.html",
+    "descripcion": "Eliminar o simplificar el formulario entre la selección de documento y el pago: reemplazar el formulario actual por un flujo de 1 solo campo (email) directo al botón de pago, reduciendo fricción máxima en el punto de caída del 100%. Si el formulario captura datos necesarios para generar el doc, moverlos al post-pago.",
+    "archivo": "index.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el redirect a MP falla silenciosamente en algún dispositivo o el precio genera fricción final, reducir precio de prueba y confirmar flujo técnico → al menos 1 venta en 48h",
+    "hipotesis": "Si se reduce el formulario a 1 campo obligatorio pre-pago → al menos 1-2 usuarios de cada 4 que eligen documento llegan al checkout → primera conversión en 48h",
     "conv_base": 0,
-    "clics_base": 54
+    "clics_base": 11
   },
-  "cambio_activo_desde": "2026-09-24T15:44:31.664Z"
+  "cambio_activo_desde": "2026-09-27T15:33:14.126Z"
 }
