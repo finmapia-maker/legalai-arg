@@ -1,27 +1,21 @@
 {
-  "fecha": "2026-09-27T15:33:14.127Z",
+  "fecha": "2026-09-28T18:31:18.842Z",
   "periodo_48h": {
-    "visitas": 12,
-    "clics": 11,
+    "visitas": 9,
+    "clics": 17,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 62,
+    "total_eventos": 74,
     "por_fuente": {
       "google_ads": {
-        "visitas": 6,
-        "clics": 11,
+        "visitas": 7,
+        "clics": 17,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 6,
-        "clics": 0,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      "directo": {
-        "visitas": 0,
+        "visitas": 2,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
@@ -30,36 +24,24 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 25,
+        "eventos": 39,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 25,
+        "eventos": 29,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 7,
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 2,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "planes",
-        "eventos": 1,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Notificación MercadoPago",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -69,27 +51,33 @@
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
+      },
+      {
+        "documento": "planes",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
       }
     ],
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 34,
-    "clics": 138,
+    "visitas": 37,
+    "clics": 128,
     "ventas": 2,
-    "tasa_conv": "1.4%",
+    "tasa_conv": "1.6%",
     "total_ars": 20000,
-    "total_eventos": 531,
+    "total_eventos": 497,
     "por_fuente": {
       "google_ads": {
-        "visitas": 24,
-        "clics": 134,
+        "visitas": 26,
+        "clics": 126,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 10,
-        "clics": 2,
+        "visitas": 11,
+        "clics": 0,
         "ventas": 0,
         "total_ars": 0
       },
@@ -109,25 +97,25 @@
       },
       {
         "documento": "index",
-        "eventos": 229,
+        "eventos": 222,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 187,
+        "eventos": 167,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 45,
+        "eventos": 40,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 34,
+        "eventos": 32,
         "ventas": 0,
         "total_ars": 0
       },
@@ -139,7 +127,13 @@
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 6,
+        "eventos": 5,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler temporario turístico",
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
@@ -152,12 +146,6 @@
       {
         "documento": "Error al verificar pago MercadoPago",
         "eventos": 3,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler temporario turístico",
-        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       }
@@ -721,42 +709,38 @@
     ]
   },
   "embudo_eventos": {
-    "page_view": 12,
-    "ads_landing_view": 23,
-    "preview_live_ok": 4,
-    "scroll_25pct": 5,
-    "scroll_75pct": 3,
-    "scroll_50pct": 3,
-    "doc_selected": 1,
+    "scroll_75pct": 9,
+    "scroll_25pct": 7,
+    "cta_generador": 10,
+    "ads_landing_view": 27,
+    "scroll_50pct": 5,
+    "inicio_formulario": 1,
+    "page_view": 9,
     "click_residencial": 2,
-    "server_document_generation_failed": 1,
-    "backup_email_error": 1,
-    "stored_pdf_saved": 1,
-    "server_document_generation_started": 1,
-    "payment_webhook_received": 1,
-    "cta_generador": 3,
+    "preview_live_ok": 2,
+    "doc_selected": 1,
     "cta_doc_inline": 1
   },
-  "total_eventos": 62,
+  "total_eventos": 74,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 12,
+      "count": 9,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
       "count": 4,
-      "drop_pct": 67
+      "drop_pct": 56
     },
     {
       "label": "Inicio formulario",
-      "count": 0,
-      "drop_pct": 100
+      "count": 1,
+      "drop_pct": 75
     },
     {
       "label": "Preview live OK",
-      "count": 4,
+      "count": 2,
       "drop_pct": 0
     },
     {
@@ -795,22 +779,22 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 29,
+      "count": 34,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
       "count": 4,
-      "drop_pct": 86
+      "drop_pct": 88
     },
     {
       "label": "Ads inicio formulario",
-      "count": 1,
-      "drop_pct": 75
+      "count": 2,
+      "drop_pct": 50
     },
     {
       "label": "Ads preview OK",
-      "count": 4,
+      "count": 2,
       "drop_pct": 0
     },
     {
@@ -839,14 +823,14 @@
   },
   "cuello_botella": {
     "funnel": "doc",
-    "etapa": "Inicio formulario",
+    "etapa": "Pago iniciado",
     "drop_pct": 100,
     "count": 0
   },
   "diagnostico": {
     "problemas": [
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 11 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 17 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
