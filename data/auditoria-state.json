@@ -281,10 +281,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-09-28T18:31:18.842Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "OBSERVAR",
+  "fecha": "2026-09-29T16:49:22.479Z",
+  "ultima_prioridad": "media",
+  "ultimo_embudo": "Ads click documento",
   "cambio_activo": {
     "descripcion": "Eliminar o simplificar el formulario entre la selección de documento y el pago: reemplazar el formulario actual por un flujo de 1 solo campo (email) directo al botón de pago, reduciendo fricción máxima en el punto de caída del 100%. Si el formulario captura datos necesarios para generar el doc, moverlos al post-pago.",
     "archivo": "index.html",
