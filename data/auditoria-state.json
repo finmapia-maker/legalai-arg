@@ -279,19 +279,24 @@
       "descripcion": "Eliminar o simplificar el formulario entre la selección de documento y el pago: reemplazar el formulario actual por un flujo de 1 solo campo (email) directo al botón de pago, reduciendo fricción máxima en el punto de caída del 100%. Si el formulario captura datos necesarios para generar el doc, moverlos al post-pago.",
       "fecha": "2026-09-27T15:33:14.126Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Crear o separar una landing page dedicada para el tráfico de Google Ads que replique el flujo que convierte en tráfico directo: mostrar directamente los documentos más vendidos sin fricción adicional, eliminar pasos intermedios, y alinear el mensaje del anuncio con lo que el usuario ve al aterrizar. Adicionalmente, revisar la segmentación de los ads para asegurar que la intención de búsqueda coincide con el producto (documentos legales/administrativos listos para pagar). Pausar audiencias o keywords con CTR alto pero 0 conversiones.",
+      "fecha": "2026-09-30T16:43:17.895Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "OBSERVAR",
-  "fecha": "2026-09-29T16:49:22.479Z",
-  "ultima_prioridad": "media",
-  "ultimo_embudo": "Ads click documento",
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-09-30T16:43:17.895Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads click documento (↓85%)",
   "cambio_activo": {
-    "descripcion": "Eliminar o simplificar el formulario entre la selección de documento y el pago: reemplazar el formulario actual por un flujo de 1 solo campo (email) directo al botón de pago, reduciendo fricción máxima en el punto de caída del 100%. Si el formulario captura datos necesarios para generar el doc, moverlos al post-pago.",
-    "archivo": "index.html",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si se reduce el formulario a 1 campo obligatorio pre-pago → al menos 1-2 usuarios de cada 4 que eligen documento llegan al checkout → primera conversión en 48h",
-    "conv_base": 0,
-    "clics_base": 11
+    "descripcion": "Crear o separar una landing page dedicada para el tráfico de Google Ads que replique el flujo que convierte en tráfico directo: mostrar directamente los documentos más vendidos sin fricción adicional, eliminar pasos intermedios, y alinear el mensaje del anuncio con lo que el usuario ve al aterrizar. Adicionalmente, revisar la segmentación de los ads para asegurar que la intención de búsqueda coincide con el producto (documentos legales/administrativos listos para pagar). Pausar audiencias o keywords con CTR alto pero 0 conversiones.",
+    "archivo": "landing_ads.html",
+    "tipo": "ads",
+    "hipotesis": "Si el tráfico de ads aterriza en una página alineada con su intención y sin fricción extra → la tasa de click a documento sube del 15% actual y se generan conversiones similares al tráfico directo.",
+    "conv_base": 2,
+    "clics_base": 66
   },
-  "cambio_activo_desde": "2026-09-27T15:33:14.126Z"
+  "cambio_activo_desde": "2026-09-30T16:43:17.895Z"
 }
