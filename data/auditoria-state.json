@@ -286,10 +286,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-09-30T16:43:17.895Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Ads click documento (↓85%)",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-10-01T17:17:47.703Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Crear o separar una landing page dedicada para el tráfico de Google Ads que replique el flujo que convierte en tráfico directo: mostrar directamente los documentos más vendidos sin fricción adicional, eliminar pasos intermedios, y alinear el mensaje del anuncio con lo que el usuario ve al aterrizar. Adicionalmente, revisar la segmentación de los ads para asegurar que la intención de búsqueda coincide con el producto (documentos legales/administrativos listos para pagar). Pausar audiencias o keywords con CTR alto pero 0 conversiones.",
     "archivo": "landing_ads.html",
