@@ -284,19 +284,24 @@
       "descripcion": "Crear o separar una landing page dedicada para el tráfico de Google Ads que replique el flujo que convierte en tráfico directo: mostrar directamente los documentos más vendidos sin fricción adicional, eliminar pasos intermedios, y alinear el mensaje del anuncio con lo que el usuario ve al aterrizar. Adicionalmente, revisar la segmentación de los ads para asegurar que la intención de búsqueda coincide con el producto (documentos legales/administrativos listos para pagar). Pausar audiencias o keywords con CTR alto pero 0 conversiones.",
       "fecha": "2026-09-30T16:43:17.895Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Auditar y simplificar el paso final de pago: verificar que el gateway no tenga errores silenciosos, que el precio mostrado coincida con lo que se cobra, que haya métodos de pago alternativos visibles (tarjeta, transferencia, etc.) y que el botón de confirmar compra sea el elemento más prominente de la pantalla. Agregar social proof (ej: '320 documentos descargados esta semana') justo antes del botón de pago para reducir abandono por desconfianza.",
+      "fecha": "2026-10-03T15:04:55.055Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-02T16:32:49.400Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-10-03T15:04:55.055Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Crear o separar una landing page dedicada para el tráfico de Google Ads que replique el flujo que convierte en tráfico directo: mostrar directamente los documentos más vendidos sin fricción adicional, eliminar pasos intermedios, y alinear el mensaje del anuncio con lo que el usuario ve al aterrizar. Adicionalmente, revisar la segmentación de los ads para asegurar que la intención de búsqueda coincide con el producto (documentos legales/administrativos listos para pagar). Pausar audiencias o keywords con CTR alto pero 0 conversiones.",
-    "archivo": "landing_ads.html",
-    "tipo": "ads",
-    "hipotesis": "Si el tráfico de ads aterriza en una página alineada con su intención y sin fricción extra → la tasa de click a documento sube del 15% actual y se generan conversiones similares al tráfico directo.",
-    "conv_base": 2,
-    "clics_base": 66
+    "descripcion": "Auditar y simplificar el paso final de pago: verificar que el gateway no tenga errores silenciosos, que el precio mostrado coincida con lo que se cobra, que haya métodos de pago alternativos visibles (tarjeta, transferencia, etc.) y que el botón de confirmar compra sea el elemento más prominente de la pantalla. Agregar social proof (ej: '320 documentos descargados esta semana') justo antes del botón de pago para reducir abandono por desconfianza.",
+    "archivo": "checkout.html",
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el checkout elimina fricción técnica y visual en el último paso → al menos 1 de los 2 usuarios que inician pago completa la compra en las próximas 48h",
+    "conv_base": 0,
+    "clics_base": 43
   },
-  "cambio_activo_desde": "2026-09-30T16:43:17.895Z"
+  "cambio_activo_desde": "2026-10-03T15:04:55.055Z"
 }

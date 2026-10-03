@@ -1,54 +1,36 @@
 {
-  "fecha": "2026-10-02T16:32:49.401Z",
+  "fecha": "2026-10-03T15:04:55.055Z",
   "periodo_48h": {
-    "visitas": 15,
-    "clics": 52,
-    "ventas": 1,
-    "tasa_conv": "1.9%",
-    "total_ars": 8500,
-    "total_eventos": 187,
+    "visitas": 8,
+    "clics": 43,
+    "ventas": 0,
+    "tasa_conv": "0.0%",
+    "total_ars": 0,
+    "total_eventos": 150,
     "por_fuente": {
       "google_ads": {
-        "visitas": 12,
-        "clics": 50,
+        "visitas": 8,
+        "clics": 43,
         "ventas": 0,
         "total_ars": 0
-      },
-      "DIRECTO": {
-        "visitas": 3,
-        "clics": 1,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      "directo": {
-        "visitas": 0,
-        "clics": 1,
-        "ventas": 1,
-        "total_ars": 8500
       }
     },
     "top_documentos": [
       {
-        "documento": "Documento legal: Contrato de alquiler de vivienda",
-        "eventos": 2,
-        "ventas": 1,
-        "total_ars": 8500
-      },
-      {
         "documento": "index",
-        "eventos": 84,
+        "eventos": 74,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 61,
+        "eventos": 53,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 28,
+        "eventos": 16,
         "ventas": 0,
         "total_ars": 0
       },
@@ -59,285 +41,36 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 3,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Notificación MercadoPago",
-        "eventos": 2,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "planes",
+        "documento": "Contrato de alquiler temporario turístico",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Error al verificar pago MercadoPago",
+        "documento": "Contrato de alquiler de local comercial",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
       }
     ],
-    "ultimas_conversiones": [
-      {
-        "id": "SALE-180657060709",
-        "date": "2026-09-30T14:57:46.000-04:00",
-        "type": "payment_approved",
-        "product": "Documento legal: Contrato de alquiler de vivienda",
-        "category": "mercadopago",
-        "amount": 8500,
-        "currency": "ARS",
-        "amount_ars": 8500,
-        "payment_method": "MercadoPago",
-        "payment_id": "180657060709",
-        "order_id": "doc_sess_1790794640034",
-        "status": "approved",
-        "customer": "mirnacristaldo847@gmail.com",
-        "affiliate": "",
-        "affiliate_source": "",
-        "commission_amount": 0,
-        "commission_currency": "",
-        "commission_status": "",
-        "plan_name": "",
-        "active_code": false,
-        "error_flag": false,
-        "error_tipo": "",
-        "error_detalle": "",
-        "raw": {
-          "id": "SALE-180657060709",
-          "payment_id": "180657060709",
-          "order_id": "doc_sess_1790794640034",
-          "type": "payment_approved",
-          "product": "Documento legal: Contrato de alquiler de vivienda",
-          "category": "mercadopago",
-          "amount": 8500,
-          "amount_ars": 8500,
-          "currency": "ARS",
-          "payment_method": "MercadoPago",
-          "status": "approved",
-          "customer": "mirnacristaldo847@gmail.com",
-          "affiliate": "",
-          "date": "2026-09-30T14:57:46.000-04:00",
-          "raw": {
-            "source": "webhook",
-            "paymentId": "180657060709",
-            "externalRef": "doc_sess_1790794640034",
-            "payment_status": "approved",
-            "approved_at": "2026-09-30T14:57:46.000-04:00",
-            "preference_id": "",
-            "mp": {
-              "accounts_info": null,
-              "acquirer_reconciliation": [],
-              "additional_info": {
-                "ip_address": "38.50.112.155",
-                "items": [
-                  {
-                    "quantity": "1",
-                    "title": "Documento legal: Contrato de alquiler de vivienda",
-                    "unit_price": "8500"
-                  }
-                ],
-                "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
-              },
-              "authorization_code": null,
-              "binary_mode": false,
-              "brand_id": null,
-              "build_version": "3.178.0-rc-1",
-              "call_for_authorize_id": null,
-              "captured": true,
-              "card": {},
-              "charges_details": [
-                {
-                  "accounts": {
-                    "from": "collector",
-                    "to": "mp"
-                  },
-                  "amounts": {
-                    "original": 153,
-                    "refunded": 0
-                  },
-                  "base_amount": 8500,
-                  "client_id": 0,
-                  "date_created": "2026-09-30T14:57:46.000-04:00",
-                  "external_charge_id": "01M3STW3ZMKA3MYHNTSSZ4EGC6",
-                  "id": "180657060709-001",
-                  "last_updated": "2026-09-30T14:57:46.000-04:00",
-                  "metadata": {
-                    "reason": "",
-                    "source": "proc-svc-charges",
-                    "source_detail": "processing_fee_charge"
-                  },
-                  "name": "mercadopago_fee",
-                  "rate": 1.8,
-                  "refund_charges": [],
-                  "reserve_id": null,
-                  "type": "fee",
-                  "update_charges": []
-                }
-              ],
-              "charges_execution_info": {
-                "internal_execution": {
-                  "date": "2026-09-30T14:57:45.984-04:00",
-                  "execution_id": "01M3STW3YYYE9BHND867Q55ZSV"
-                }
-              },
-              "collector_id": 616777369,
-              "corporation_id": null,
-              "counter_currency": null,
-              "coupon_amount": 0,
-              "currency_id": "ARS",
-              "date_approved": "2026-09-30T14:57:46.000-04:00",
-              "date_created": "2026-09-30T14:57:46.000-04:00",
-              "date_last_updated": "2026-09-30T14:57:48.000-04:00",
-              "date_of_expiration": null,
-              "deduction_schema": null,
-              "description": "Documento legal: Contrato de alquiler de vivienda",
-              "differential_pricing_id": null,
-              "external_reference": "doc_sess_1790794640034",
-              "fee_details": [
-                {
-                  "amount": 153,
-                  "fee_payer": "collector",
-                  "type": "mercadopago_fee"
-                }
-              ],
-              "financing_group": null,
-              "id": 180657060709,
-              "idempotency_key": "idempotencyKeyPostPay_845c040f-acbd-4b97-9c9b-3cad51474be0account_money_536647448220284",
-              "installments": 1,
-              "integrator_id": null,
-              "issuer_id": "2005",
-              "live_mode": true,
-              "marketplace_owner": null,
-              "merchant_account_id": null,
-              "merchant_number": null,
-              "metadata": {
-                "gclid": "Cj0KCQjw5vLVBhCiARIsAD56SFI17kdkhzWkPrV-TIV3GiFBAKsfGKFJNSOInPXac4zl56DqJoONu0saAo-iEALw_wcB",
-                "legalai_tipo": "doc",
-                "utm_cmp": "",
-                "utm_med": "",
-                "legalai_external_ref": "doc_sess_1790794640034",
-                "titulo": "Contrato de alquiler de vivienda",
-                "origen": "index",
-                "utm_src": "",
-                "device": "Mobile",
-                "dolar_rate": "1544.2",
-                "legalai_ref": "",
-                "utm_cnt": ""
-              },
-              "money_release_date": "2026-11-04T14:57:46.000-04:00",
-              "money_release_schema": null,
-              "money_release_status": "pending",
-              "notification_url": "https://legalai-worker.finmap-ia.workers.dev/mp/webhook",
-              "operation_type": "regular_payment",
-              "order": {
-                "id": "44861098687",
-                "type": "mercadopago"
-              },
-              "payer": {
-                "email": "mirnacristaldo847@gmail.com",
-                "entity_type": null,
-                "first_name": null,
-                "id": "344758284",
-                "identification": {
-                  "number": "27951519524",
-                  "type": "CUIL"
-                },
-                "last_name": null,
-                "operator_id": null,
-                "phone": {
-                  "number": null,
-                  "extension": null,
-                  "area_code": null
-                },
-                "type": null
-              },
-              "payment_method": {
-                "id": "account_money",
-                "issuer_id": "2005",
-                "type": "account_money"
-              },
-              "payment_method_id": "account_money",
-              "payment_type_id": "account_money",
-              "platform_id": null,
-              "point_of_interaction": {
-                "application_data": {
-                  "name": "checkout-off",
-                  "operating_system": null,
-                  "version": "v2"
-                },
-                "business_info": {
-                  "branch": "Merchant Services",
-                  "sub_unit": "checkout_pro",
-                  "unit": "online_payments"
-                },
-                "location": {
-                  "source": "Payer",
-                  "state_id": "AR-B"
-                },
-                "transaction_data": {
-                  "e2e_id": null
-                },
-                "type": "CHECKOUT"
-              },
-              "pos_id": null,
-              "processing_mode": "aggregator",
-              "refunds": [],
-              "release_info": {
-                "advance_provider": null,
-                "advance_provider_user": null,
-                "events": null,
-                "new_payments_release_model": true
-              },
-              "shipping_amount": 0,
-              "sponsor_id": null,
-              "statement_descriptor": null,
-              "status": "approved",
-              "status_detail": "accredited",
-              "store_id": null,
-              "tags": null,
-              "taxes_amount": 0,
-              "tenant_context": "mp",
-              "transaction_amount": 8500,
-              "transaction_amount_refunded": 0,
-              "transaction_details": {
-                "acquirer_reference": null,
-                "external_resource_url": null,
-                "financial_institution": null,
-                "installment_amount": 0,
-                "net_received_amount": 8347,
-                "overpaid_amount": 0,
-                "payable_deferral_period": null,
-                "payment_method_reference_id": null,
-                "total_paid_amount": 8500
-              }
-            }
-          }
-        }
-      }
-    ]
+    "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 48,
-    "clics": 137,
+    "visitas": 45,
+    "clics": 148,
     "ventas": 3,
-    "tasa_conv": "2.2%",
+    "tasa_conv": "2.0%",
     "total_ars": 27300,
-    "total_eventos": 542,
+    "total_eventos": 566,
     "por_fuente": {
       "google_ads": {
-        "visitas": 35,
-        "clics": 128,
+        "visitas": 36,
+        "clics": 139,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 13,
+        "visitas": 9,
         "clics": 5,
         "ventas": 0,
         "total_ars": 0
@@ -364,13 +97,13 @@
       },
       {
         "documento": "index",
-        "eventos": 252,
+        "eventos": 267,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 183,
+        "eventos": 191,
         "ventas": 0,
         "total_ars": 0
       },
@@ -382,30 +115,30 @@
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 20,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Notificación MercadoPago",
-        "eventos": 7,
+        "eventos": 21,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 5,
+        "eventos": 6,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "planes",
+        "documento": "Notificación MercadoPago",
+        "eventos": 6,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler temporario turístico",
         "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Error al verificar pago MercadoPago",
+        "documento": "planes",
         "eventos": 2,
         "ventas": 0,
         "total_ars": 0
@@ -1149,79 +882,68 @@
     ]
   },
   "embudo_eventos": {
-    "click_pagar": 3,
-    "scroll_75pct": 21,
-    "form_first_input": 4,
-    "cta_doc_inline": 4,
-    "scroll_50pct": 17,
+    "scroll_50pct": 18,
+    "doc_selected": 3,
+    "cta_generador": 17,
+    "ads_landing_view": 50,
+    "click_residencial": 3,
     "scroll_25pct": 14,
-    "page_view": 15,
-    "ads_landing_view": 58,
-    "doc_selected": 4,
-    "cta_generador": 18,
-    "preview_live_ok": 12,
-    "inicio_formulario": 3,
-    "click_residencial": 2,
-    "click_comercial": 1,
-    "error": 1,
-    "payment_webhook_received": 2,
-    "server_document_generation_failed": 1,
-    "backup_email_error": 1,
-    "server_document_generated": 1,
-    "stored_pdf_saved": 1,
-    "server_document_generation_started": 1,
-    "payment_approved": 1,
-    "mp_preference_ok": 1,
-    "checkout_start": 1
+    "page_view": 8,
+    "scroll_75pct": 17,
+    "preview_live_ok": 7,
+    "inicio_formulario": 6,
+    "click_pagar": 2,
+    "form_first_input": 3,
+    "cta_doc_inline": 2
   },
-  "total_eventos": 187,
+  "total_eventos": 150,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 15,
+      "count": 8,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 11,
-      "drop_pct": 27
-    },
-    {
-      "label": "Inicio formulario",
-      "count": 7,
-      "drop_pct": 36
-    },
-    {
-      "label": "Preview live OK",
-      "count": 12,
+      "count": 8,
       "drop_pct": 0
     },
     {
+      "label": "Inicio formulario",
+      "count": 9,
+      "drop_pct": 0
+    },
+    {
+      "label": "Preview live OK",
+      "count": 7,
+      "drop_pct": 22
+    },
+    {
       "label": "Pago iniciado",
-      "count": 4,
-      "drop_pct": 67
+      "count": 2,
+      "drop_pct": 71
     },
     {
       "label": "Venta confirmada",
-      "count": 1,
-      "drop_pct": 75
+      "count": 0,
+      "drop_pct": 100
     }
   ],
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 1,
+      "count": 0,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 1,
+      "count": 0,
       "drop_pct": 0
     },
     {
       "label": "Pago plan iniciado",
       "count": 0,
-      "drop_pct": 100
+      "drop_pct": 0
     },
     {
       "label": "Plan activo",
@@ -1232,13 +954,13 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 69,
+      "count": 58,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 11,
-      "drop_pct": 84
+      "count": 8,
+      "drop_pct": 86
     },
     {
       "label": "Ads inicio formulario",
@@ -1247,13 +969,13 @@
     },
     {
       "label": "Ads preview OK",
-      "count": 12,
-      "drop_pct": 0
+      "count": 7,
+      "drop_pct": 36
     },
     {
       "label": "Ads inicio pago",
-      "count": 3,
-      "drop_pct": 75
+      "count": 2,
+      "drop_pct": 71
     },
     {
       "label": "Ads vuelta sin pago",
@@ -1271,23 +993,22 @@
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 4,
-    "doc_selected": 4
+    "form_first_input": 3,
+    "doc_selected": 3
   },
   "cuello_botella": {
-    "funnel": "planes",
-    "etapa": "Pago plan iniciado",
+    "funnel": "doc",
+    "etapa": "Venta confirmada",
     "drop_pct": 100,
     "count": 0
   },
   "diagnostico": {
     "problemas": [
-      "Fuente \"google_ads\": 50 clics y 0 ventas → landing o segmentación"
+      "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
+      "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
+      "Fuente \"google_ads\": 43 clics y 0 ventas → landing o segmentación"
     ],
-    "oportunidades": [
-      "1 venta(s) confirmada(s) en 48h → analizar fuente/documento y escalar lo que convirtió.",
-      "Fuente más rentable: \"directo\" (1 ventas)"
-    ],
+    "oportunidades": [],
     "estado": "PROBLEMA"
   }
 }
