@@ -289,19 +289,24 @@
       "descripcion": "Auditar y simplificar el paso final de pago: verificar que el gateway no tenga errores silenciosos, que el precio mostrado coincida con lo que se cobra, que haya métodos de pago alternativos visibles (tarjeta, transferencia, etc.) y que el botón de confirmar compra sea el elemento más prominente de la pantalla. Agregar social proof (ej: '320 documentos descargados esta semana') justo antes del botón de pago para reducir abandono por desconfianza.",
       "fecha": "2026-10-03T15:04:55.055Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Implementar oferta de precio reducido temporal visible antes del botón de pago (ej: precio tachado + precio con descuento del 30-40%), agregar garantía explícita ('Si no sirve, te devolvemos el dinero') y mostrar métodos de pago con íconos grandes. Paralelamente revisar y corregir el frontend_error detectado en consola que puede estar bloqueando el flujo de pago silenciosamente.",
+      "fecha": "2026-10-05T19:37:19.466Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-04T15:41:45.926Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-10-05T19:37:19.466Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads inicio pago → Venta confirmada (drop 100%)",
   "cambio_activo": {
-    "descripcion": "Auditar y simplificar el paso final de pago: verificar que el gateway no tenga errores silenciosos, que el precio mostrado coincida con lo que se cobra, que haya métodos de pago alternativos visibles (tarjeta, transferencia, etc.) y que el botón de confirmar compra sea el elemento más prominente de la pantalla. Agregar social proof (ej: '320 documentos descargados esta semana') justo antes del botón de pago para reducir abandono por desconfianza.",
+    "descripcion": "Implementar oferta de precio reducido temporal visible antes del botón de pago (ej: precio tachado + precio con descuento del 30-40%), agregar garantía explícita ('Si no sirve, te devolvemos el dinero') y mostrar métodos de pago con íconos grandes. Paralelamente revisar y corregir el frontend_error detectado en consola que puede estar bloqueando el flujo de pago silenciosamente.",
     "archivo": "checkout.html",
-    "tipo": "flujo_pago",
-    "hipotesis": "Si el checkout elimina fricción técnica y visual en el último paso → al menos 1 de los 2 usuarios que inician pago completa la compra en las próximas 48h",
+    "tipo": "precio",
+    "hipotesis": "Si el precio percibido baja y el error frontend se elimina → al menos 1-2 ventas en 48h desde tráfico ads existente",
     "conv_base": 0,
-    "clics_base": 43
+    "clics_base": 50
   },
-  "cambio_activo_desde": "2026-10-03T15:04:55.055Z"
+  "cambio_activo_desde": "2026-10-05T19:37:19.466Z"
 }
