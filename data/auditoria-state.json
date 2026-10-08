@@ -294,19 +294,24 @@
       "descripcion": "Implementar oferta de precio reducido temporal visible antes del botón de pago (ej: precio tachado + precio con descuento del 30-40%), agregar garantía explícita ('Si no sirve, te devolvemos el dinero') y mostrar métodos de pago con íconos grandes. Paralelamente revisar y corregir el frontend_error detectado en consola que puede estar bloqueando el flujo de pago silenciosamente.",
       "fecha": "2026-10-05T19:37:19.466Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar el flujo de pago actual por un checkout de un solo paso: eliminar redirecciones intermedias, mostrar resumen del documento elegido + precio final + métodos de pago en una sola pantalla sin scroll. Agregar botón CTA con texto 'Descargar ahora por $X' en lugar de 'Confirmar pago'. Validar en consola que el gateway no devuelve errores silenciosos al iniciar la transacción. Si el gateway falla, redirigir a método alternativo (transferencia manual o link de pago directo).",
+      "fecha": "2026-10-08T17:46:22.250Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-07T17:42:00.032Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-10-08T17:46:22.250Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Implementar oferta de precio reducido temporal visible antes del botón de pago (ej: precio tachado + precio con descuento del 30-40%), agregar garantía explícita ('Si no sirve, te devolvemos el dinero') y mostrar métodos de pago con íconos grandes. Paralelamente revisar y corregir el frontend_error detectado en consola que puede estar bloqueando el flujo de pago silenciosamente.",
+    "descripcion": "Reemplazar el flujo de pago actual por un checkout de un solo paso: eliminar redirecciones intermedias, mostrar resumen del documento elegido + precio final + métodos de pago en una sola pantalla sin scroll. Agregar botón CTA con texto 'Descargar ahora por $X' en lugar de 'Confirmar pago'. Validar en consola que el gateway no devuelve errores silenciosos al iniciar la transacción. Si el gateway falla, redirigir a método alternativo (transferencia manual o link de pago directo).",
     "archivo": "checkout.html",
-    "tipo": "precio",
-    "hipotesis": "Si el precio percibido baja y el error frontend se elimina → al menos 1-2 ventas en 48h desde tráfico ads existente",
+    "tipo": "flujo_pago",
+    "hipotesis": "Si el checkout es de un solo paso sin redirecciones y el CTA es específico → la tasa de pago completado sube de 0% a al menos 5% en 48h",
     "conv_base": 0,
-    "clics_base": 50
+    "clics_base": 49
   },
-  "cambio_activo_desde": "2026-10-05T19:37:19.466Z"
+  "cambio_activo_desde": "2026-10-08T17:46:22.250Z"
 }
