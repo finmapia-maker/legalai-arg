@@ -301,10 +301,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-10-08T17:46:22.250Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-10-09T17:22:16.185Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar el flujo de pago actual por un checkout de un solo paso: eliminar redirecciones intermedias, mostrar resumen del documento elegido + precio final + métodos de pago en una sola pantalla sin scroll. Agregar botón CTA con texto 'Descargar ahora por $X' en lugar de 'Confirmar pago'. Validar en consola que el gateway no devuelve errores silenciosos al iniciar la transacción. Si el gateway falla, redirigir a método alternativo (transferencia manual o link de pago directo).",
     "archivo": "checkout.html",
