@@ -306,10 +306,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-10-11T16:34:53.149Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-10-12T20:10:09.903Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Desactivar el gateway actual completamente y reemplazarlo por un link de pago directo (MercadoPago link fijo, Stripe Payment Link o transferencia manual con instrucciones). Eliminar cualquier JS que inicialice el gateway dinámicamente. El botón 'Descargar ahora por $X' debe redirigir directo a una URL de pago externa ya generada, sin lógica JS intermedia. Corregir el frontend_error en consola antes de cualquier otra acción: inspeccionar qué script falla y si bloquea el evento click del CTA de pago.",
     "archivo": "checkout.html",
