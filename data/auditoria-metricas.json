@@ -1,16 +1,16 @@
 {
-  "fecha": "2026-10-13T18:02:15.779Z",
+  "fecha": "2026-10-14T15:43:41.570Z",
   "periodo_48h": {
     "visitas": 4,
-    "clics": 37,
+    "clics": 42,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 127,
+    "total_eventos": 158,
     "por_fuente": {
       "google_ads": {
         "visitas": 4,
-        "clics": 37,
+        "clics": 42,
         "ventas": 0,
         "total_ars": 0
       },
@@ -24,25 +24,25 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 63,
+        "eventos": 78,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 46,
+        "eventos": 64,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 17,
+        "eventos": 13,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 1,
+        "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       }
@@ -50,16 +50,16 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 29,
-    "clics": 119,
+    "visitas": 27,
+    "clics": 123,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 415,
+    "total_eventos": 433,
     "por_fuente": {
       "google_ads": {
-        "visitas": 21,
-        "clics": 114,
+        "visitas": 19,
+        "clics": 118,
         "ventas": 0,
         "total_ars": 0
       },
@@ -73,31 +73,25 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 192,
+        "eventos": 201,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 160,
+        "eventos": 168,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 47,
+        "eventos": 48,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler temporario turístico",
-        "eventos": 5,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de alquiler de local comercial",
-        "eventos": 5,
+        "documento": "Contrato de compraventa de inmueble",
+        "eventos": 4,
         "ventas": 0,
         "total_ars": 0
       },
@@ -108,8 +102,14 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 2,
+        "documento": "Contrato de alquiler temporario turístico",
+        "eventos": 4,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 4,
         "ventas": 0,
         "total_ars": 0
       }
@@ -117,23 +117,23 @@
     "ultimas_conversiones": []
   },
   "embudo_eventos": {
-    "ads_landing_view": 42,
-    "scroll_75pct": 16,
-    "scroll_50pct": 12,
-    "preview_live_ok": 4,
-    "scroll_25pct": 13,
-    "page_view": 4,
-    "doc_selected": 3,
-    "cta_generador": 15,
-    "click_residencial": 3,
-    "frontend_error": 3,
-    "cta_doc_inline": 2,
+    "ads_landing_view": 59,
+    "scroll_50pct": 14,
+    "scroll_25pct": 20,
+    "cta_generador": 21,
+    "scroll_75pct": 18,
     "inicio_formulario": 5,
-    "click_pagar": 2,
-    "form_first_input": 2,
+    "page_view": 4,
+    "click_residencial": 4,
+    "preview_live_ok": 6,
+    "cta_doc_inline": 2,
+    "doc_selected": 1,
+    "frontend_error": 1,
+    "click_pagar": 1,
+    "form_first_input": 1,
     "click_temporario": 1
   },
-  "total_eventos": 127,
+  "total_eventos": 158,
   "funnel_doc": [
     {
       "label": "Visitas",
@@ -142,23 +142,23 @@
     },
     {
       "label": "Documento elegido",
-      "count": 9,
+      "count": 8,
       "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 7,
-      "drop_pct": 22
+      "count": 6,
+      "drop_pct": 25
     },
     {
       "label": "Preview live OK",
-      "count": 4,
-      "drop_pct": 43
+      "count": 6,
+      "drop_pct": 0
     },
     {
       "label": "Pago iniciado",
-      "count": 2,
-      "drop_pct": 50
+      "count": 1,
+      "drop_pct": 83
     },
     {
       "label": "Venta confirmada",
@@ -191,28 +191,28 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 45,
+      "count": 61,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 9,
-      "drop_pct": 80
+      "count": 8,
+      "drop_pct": 87
     },
     {
       "label": "Ads inicio formulario",
-      "count": 9,
+      "count": 8,
       "drop_pct": 0
     },
     {
       "label": "Ads preview OK",
-      "count": 4,
-      "drop_pct": 56
+      "count": 6,
+      "drop_pct": 25
     },
     {
       "label": "Ads inicio pago",
-      "count": 2,
-      "drop_pct": 50
+      "count": 1,
+      "drop_pct": 83
     },
     {
       "label": "Ads vuelta sin pago",
@@ -226,12 +226,12 @@
     }
   ],
   "alertas_tracking": {
-    "frontend_errors": 3,
+    "frontend_errors": 1,
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 2,
-    "doc_selected": 3
+    "form_first_input": 1,
+    "doc_selected": 1
   },
   "cuello_botella": {
     "funnel": "doc",
@@ -241,10 +241,10 @@
   },
   "diagnostico": {
     "problemas": [
-      "Errores frontend detectados: 3 → revisar consola/compatibilidad mobile.",
+      "Errores frontend detectados: 1 → revisar consola/compatibilidad mobile.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 37 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 42 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
