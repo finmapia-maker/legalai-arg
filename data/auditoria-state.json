@@ -309,19 +309,24 @@
       "descripcion": "Identificar y corregir los 3 errores frontend en consola que ocurren durante el flujo de pago. Verificar que el link de pago directo cargue correctamente en mobile (donde probablemente ocurren los errores). Implementar una página de confirmación post-pago que dispare el evento 'venta confirmada' correctamente. Si el link de pago externo ya funciona pero no registra la venta, revisar el webhook o redirección de retorno que marca la conversión. Agregar log explícito cuando el usuario regresa del pago exitoso.",
       "fecha": "2026-10-13T18:02:15.779Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Abandonar enfoque de corrección técnica incremental. Reemplazar flujo completo de pago por una solución mínima verificable: (1) Crear una página de pago alternativa ultra-simple sin JS dinámico, solo HTML estático con link directo a MercadoPago/Stripe ya configurado. (2) Hacer una compra de prueba real con tarjeta propia para confirmar si el gateway procesa o falla silenciosamente. (3) Si el gateway procesa pero no redirige, hardcodear la URL de retorno directamente en el dashboard de MercadoPago/Stripe apuntando a /gracias.html. (4) Crear /gracias.html con evento 'venta confirmada' disparado on-load sin condiciones. El objetivo es confirmar si el problema es el gateway o el tracking post-pago.",
+      "fecha": "2026-10-16T15:17:18.335Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-15T15:31:11.166Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-10-16T15:17:18.335Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Identificar y corregir los 3 errores frontend en consola que ocurren durante el flujo de pago. Verificar que el link de pago directo cargue correctamente en mobile (donde probablemente ocurren los errores). Implementar una página de confirmación post-pago que dispare el evento 'venta confirmada' correctamente. Si el link de pago externo ya funciona pero no registra la venta, revisar el webhook o redirección de retorno que marca la conversión. Agregar log explícito cuando el usuario regresa del pago exitoso.",
+    "descripcion": "Abandonar enfoque de corrección técnica incremental. Reemplazar flujo completo de pago por una solución mínima verificable: (1) Crear una página de pago alternativa ultra-simple sin JS dinámico, solo HTML estático con link directo a MercadoPago/Stripe ya configurado. (2) Hacer una compra de prueba real con tarjeta propia para confirmar si el gateway procesa o falla silenciosamente. (3) Si el gateway procesa pero no redirige, hardcodear la URL de retorno directamente en el dashboard de MercadoPago/Stripe apuntando a /gracias.html. (4) Crear /gracias.html con evento 'venta confirmada' disparado on-load sin condiciones. El objetivo es confirmar si el problema es el gateway o el tracking post-pago.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si se corrigen los 3 errores frontend y se valida el flujo completo post-pago en mobile → las 2 intenciones de pago actuales se convierten en ventas confirmadas",
+    "hipotesis": "Si el gateway procesa pagos reales pero el tracking nunca recibe el retorno → la URL de redirección post-pago está mal configurada en el proveedor, no en el código frontend",
     "conv_base": 0,
-    "clics_base": 37
+    "clics_base": 38
   },
-  "cambio_activo_desde": "2026-10-13T18:02:15.779Z"
+  "cambio_activo_desde": "2026-10-16T15:17:18.335Z"
 }
