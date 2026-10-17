@@ -316,10 +316,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-10-16T15:17:18.335Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-10-17T14:05:43.800Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Abandonar enfoque de corrección técnica incremental. Reemplazar flujo completo de pago por una solución mínima verificable: (1) Crear una página de pago alternativa ultra-simple sin JS dinámico, solo HTML estático con link directo a MercadoPago/Stripe ya configurado. (2) Hacer una compra de prueba real con tarjeta propia para confirmar si el gateway procesa o falla silenciosamente. (3) Si el gateway procesa pero no redirige, hardcodear la URL de retorno directamente en el dashboard de MercadoPago/Stripe apuntando a /gracias.html. (4) Crear /gracias.html con evento 'venta confirmada' disparado on-load sin condiciones. El objetivo es confirmar si el problema es el gateway o el tracking post-pago.",
     "archivo": "checkout.html",
