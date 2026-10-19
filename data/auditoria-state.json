@@ -314,19 +314,24 @@
       "descripcion": "Abandonar enfoque de corrección técnica incremental. Reemplazar flujo completo de pago por una solución mínima verificable: (1) Crear una página de pago alternativa ultra-simple sin JS dinámico, solo HTML estático con link directo a MercadoPago/Stripe ya configurado. (2) Hacer una compra de prueba real con tarjeta propia para confirmar si el gateway procesa o falla silenciosamente. (3) Si el gateway procesa pero no redirige, hardcodear la URL de retorno directamente en el dashboard de MercadoPago/Stripe apuntando a /gracias.html. (4) Crear /gracias.html con evento 'venta confirmada' disparado on-load sin condiciones. El objetivo es confirmar si el problema es el gateway o el tracking post-pago.",
       "fecha": "2026-10-16T15:17:18.335Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Escalar diagnóstico: si la compra de prueba real con tarjeta propia no se realizó aún, ejecutarla ahora como prioridad absoluta. Si ya se realizó y el gateway falló silenciosamente, reemplazar MercadoPago/Stripe por un botón de pago generado desde el dashboard oficial (link de cobro nativo, sin integración custom) apuntando directo al producto. Eliminar cualquier JS intermedio entre el CTA y el gateway. Si el gateway procesó pero no redirigió, confirmar que la URL de retorno /gracias.html está hardcodeada en el dashboard y que /gracias.html existe y dispara el evento venta_confirmada on-load sin condiciones. Agregar WhatsApp/email como canal de pago alternativo visible en la misma página para capturar conversiones mientras se resuelve el técnico.",
+      "fecha": "2026-10-19T17:22:02.041Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-18T14:20:43.743Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-10-19T17:22:02.041Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Abandonar enfoque de corrección técnica incremental. Reemplazar flujo completo de pago por una solución mínima verificable: (1) Crear una página de pago alternativa ultra-simple sin JS dinámico, solo HTML estático con link directo a MercadoPago/Stripe ya configurado. (2) Hacer una compra de prueba real con tarjeta propia para confirmar si el gateway procesa o falla silenciosamente. (3) Si el gateway procesa pero no redirige, hardcodear la URL de retorno directamente en el dashboard de MercadoPago/Stripe apuntando a /gracias.html. (4) Crear /gracias.html con evento 'venta confirmada' disparado on-load sin condiciones. El objetivo es confirmar si el problema es el gateway o el tracking post-pago.",
+    "descripcion": "Escalar diagnóstico: si la compra de prueba real con tarjeta propia no se realizó aún, ejecutarla ahora como prioridad absoluta. Si ya se realizó y el gateway falló silenciosamente, reemplazar MercadoPago/Stripe por un botón de pago generado desde el dashboard oficial (link de cobro nativo, sin integración custom) apuntando directo al producto. Eliminar cualquier JS intermedio entre el CTA y el gateway. Si el gateway procesó pero no redirigió, confirmar que la URL de retorno /gracias.html está hardcodeada en el dashboard y que /gracias.html existe y dispara el evento venta_confirmada on-load sin condiciones. Agregar WhatsApp/email como canal de pago alternativo visible en la misma página para capturar conversiones mientras se resuelve el técnico.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el gateway procesa pagos reales pero el tracking nunca recibe el retorno → la URL de redirección post-pago está mal configurada en el proveedor, no en el código frontend",
+    "hipotesis": "Si el gateway recibe el pago pero no redirige correctamente → las ventas ocurren sin registrarse; si el gateway nunca recibe el pago → el botón o el flujo previo está roto silenciosamente",
     "conv_base": 0,
-    "clics_base": 38
+    "clics_base": 27
   },
-  "cambio_activo_desde": "2026-10-16T15:17:18.335Z"
+  "cambio_activo_desde": "2026-10-19T17:22:02.041Z"
 }
