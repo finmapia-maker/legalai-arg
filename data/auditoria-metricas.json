@@ -1,21 +1,21 @@
 {
-  "fecha": "2026-10-19T17:22:02.042Z",
+  "fecha": "2026-10-20T15:34:22.770Z",
   "periodo_48h": {
-    "visitas": 14,
-    "clics": 27,
+    "visitas": 16,
+    "clics": 50,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 104,
+    "total_eventos": 183,
     "por_fuente": {
       "google_ads": {
-        "visitas": 8,
-        "clics": 27,
+        "visitas": 13,
+        "clics": 50,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 6,
+        "visitas": 3,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
@@ -24,37 +24,37 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 47,
+        "eventos": 86,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 38,
+        "eventos": 68,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 11,
+        "eventos": 23,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "planes",
-        "eventos": 4,
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler temporario turístico",
-        "eventos": 3,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 1,
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       }
@@ -62,16 +62,16 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 45,
-    "clics": 113,
+    "visitas": 50,
+    "clics": 115,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 482,
+    "total_eventos": 492,
     "por_fuente": {
       "google_ads": {
-        "visitas": 30,
-        "clics": 109,
+        "visitas": 35,
+        "clics": 111,
         "ventas": 0,
         "total_ars": 0
       },
@@ -91,19 +91,19 @@
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 191,
+        "eventos": 198,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 37,
+        "eventos": 39,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 7,
+        "documento": "Contrato de alquiler de local comercial",
+        "eventos": 8,
         "ventas": 0,
         "total_ars": 0
       },
@@ -114,7 +114,7 @@
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler de local comercial",
+        "documento": "Contrato de compraventa de inmueble",
         "eventos": 6,
         "ventas": 0,
         "total_ars": 0
@@ -135,40 +135,41 @@
     "ultimas_conversiones": []
   },
   "embudo_eventos": {
-    "ads_landing_view": 36,
-    "scroll_75pct": 9,
-    "scroll_50pct": 11,
-    "scroll_25pct": 7,
-    "page_view": 14,
-    "cta_generador": 10,
-    "doc_selected": 3,
-    "inicio_formulario": 3,
-    "click_residencial": 2,
-    "cta_doc_inline": 5,
-    "form_first_input": 2,
-    "preview_live_ok": 2
+    "scroll_75pct": 21,
+    "scroll_50pct": 20,
+    "form_first_input": 3,
+    "preview_live_ok": 8,
+    "page_view": 16,
+    "ads_landing_view": 62,
+    "cta_doc_inline": 6,
+    "doc_selected": 5,
+    "scroll_25pct": 14,
+    "cta_generador": 17,
+    "click_residencial": 5,
+    "inicio_formulario": 5,
+    "click_comercial": 1
   },
-  "total_eventos": 104,
+  "total_eventos": 183,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 14,
+      "count": 16,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 10,
-      "drop_pct": 29
+      "count": 17,
+      "drop_pct": 0
     },
     {
       "label": "Inicio formulario",
-      "count": 5,
-      "drop_pct": 50
+      "count": 8,
+      "drop_pct": 53
     },
     {
       "label": "Preview live OK",
-      "count": 2,
-      "drop_pct": 60
+      "count": 8,
+      "drop_pct": 0
     },
     {
       "label": "Pago iniciado",
@@ -184,12 +185,12 @@
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 4,
+      "count": 2,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 4,
+      "count": 2,
       "drop_pct": 0
     },
     {
@@ -206,23 +207,23 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 41,
+      "count": 72,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 10,
+      "count": 17,
       "drop_pct": 76
     },
     {
       "label": "Ads inicio formulario",
-      "count": 10,
-      "drop_pct": 0
+      "count": 14,
+      "drop_pct": 18
     },
     {
       "label": "Ads preview OK",
-      "count": 2,
-      "drop_pct": 80
+      "count": 8,
+      "drop_pct": 43
     },
     {
       "label": "Ads inicio pago",
@@ -245,8 +246,8 @@
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 2,
-    "doc_selected": 3
+    "form_first_input": 3,
+    "doc_selected": 5
   },
   "cuello_botella": {
     "funnel": "doc",
@@ -256,10 +257,10 @@
   },
   "diagnostico": {
     "problemas": [
-      "Google Ads: 10 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
+      "Google Ads: 14 formulario(s) iniciados sin pago → revisar confianza, precio visible o fricción de formulario.",
       "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 27 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 50 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
