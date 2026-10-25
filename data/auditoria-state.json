@@ -324,19 +324,24 @@
       "descripcion": "Desactivar completamente el flujo de pago custom. Reemplazar el botón de pago por un link nativo generado desde el dashboard de MercadoPago (botón de cobro sin JS intermediario). Verificar que /gracias.html existe y dispara venta_confirmada on-load. Publicar en la landing un canal alternativo visible (WhatsApp o email con precio y producto) como bypass inmediato. Revisar el frontend_error en consola mobile antes de cualquier otra acción.",
       "fecha": "2026-10-22T15:48:33.427Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "1) Reemplazar AHORA el botón de pago por un link directo de WhatsApp con mensaje pre-cargado (producto + precio) como canal de conversión inmediato. 2) Eliminar cualquier JS custom entre CTA y gateway. 3) Verificar en dashboard de MercadoPago que el link nativo de cobro existe, está activo y apunta a /gracias.html como URL de retorno. 4) Realizar compra de prueba real con tarjeta propia y confirmar que venta_confirmada se dispara en /gracias.html. Si falla, el problema es técnico bloqueante y el único canal viable en este momento es WhatsApp/email visible.",
+      "fecha": "2026-10-25T14:53:39.731Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-24T14:20:04.364Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-10-25T14:53:39.731Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "Desactivar completamente el flujo de pago custom. Reemplazar el botón de pago por un link nativo generado desde el dashboard de MercadoPago (botón de cobro sin JS intermediario). Verificar que /gracias.html existe y dispara venta_confirmada on-load. Publicar en la landing un canal alternativo visible (WhatsApp o email con precio y producto) como bypass inmediato. Revisar el frontend_error en consola mobile antes de cualquier otra acción.",
-    "archivo": "checkout.html",
+    "descripcion": "1) Reemplazar AHORA el botón de pago por un link directo de WhatsApp con mensaje pre-cargado (producto + precio) como canal de conversión inmediato. 2) Eliminar cualquier JS custom entre CTA y gateway. 3) Verificar en dashboard de MercadoPago que el link nativo de cobro existe, está activo y apunta a /gracias.html como URL de retorno. 4) Realizar compra de prueba real con tarjeta propia y confirmar que venta_confirmada se dispara en /gracias.html. Si falla, el problema es técnico bloqueante y el único canal viable en este momento es WhatsApp/email visible.",
+    "archivo": "index.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el gateway custom se reemplaza por link nativo y se agrega canal alternativo visible → al menos 1 venta en 48h confirma que el problema era técnico y no de demanda",
+    "hipotesis": "Si se bypasea el checkout roto con un CTA de WhatsApp visible → al menos 1 conversión asistida en 48h mientras se resuelve el técnico",
     "conv_base": 0,
-    "clics_base": 37
+    "clics_base": 16
   },
-  "cambio_activo_desde": "2026-10-22T15:48:33.427Z"
+  "cambio_activo_desde": "2026-10-25T14:53:39.731Z"
 }
