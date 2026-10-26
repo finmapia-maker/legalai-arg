@@ -331,10 +331,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-10-25T14:53:39.731Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-10-26T17:09:38.875Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "1) Reemplazar AHORA el botón de pago por un link directo de WhatsApp con mensaje pre-cargado (producto + precio) como canal de conversión inmediato. 2) Eliminar cualquier JS custom entre CTA y gateway. 3) Verificar en dashboard de MercadoPago que el link nativo de cobro existe, está activo y apunta a /gracias.html como URL de retorno. 4) Realizar compra de prueba real con tarjeta propia y confirmar que venta_confirmada se dispara en /gracias.html. Si falla, el problema es técnico bloqueante y el único canal viable en este momento es WhatsApp/email visible.",
     "archivo": "index.html",
