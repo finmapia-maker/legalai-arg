@@ -336,10 +336,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-10-27T16:15:10.742Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-10-28T17:01:34.667Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "ACCIÓN BLOQUEANTE: 1) Confirmar manualmente si el botón de WhatsApp o link de MercadoPago nativo fue publicado en producción. 2) Si NO fue implementado: publicar HOY un botón de WhatsApp visible con mensaje pre-cargado como único CTA de pago. 3) Si FUE implementado y sigue sin ventas: realizar compra de prueba real ahora mismo para determinar si el problema es técnico (gateway) o de confianza/precio. 4) Agregar en la landing precio visible, garantía y medio de contacto antes del CTA. Sin esta validación manual, el funnel seguirá en 0.",
     "archivo": "index.html",
