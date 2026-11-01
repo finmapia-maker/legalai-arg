@@ -1,12 +1,12 @@
 {
-  "fecha": "2026-10-31T15:58:03.016Z",
+  "fecha": "2026-11-01T17:01:21.265Z",
   "periodo_48h": {
     "visitas": 10,
     "clics": 19,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 88,
+    "total_eventos": 86,
     "por_fuente": {
       "google_ads": {
         "visitas": 7,
@@ -36,7 +36,7 @@
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 9,
+        "eventos": 7,
         "ventas": 0,
         "total_ars": 0
       },
@@ -56,21 +56,21 @@
     "ultimas_conversiones": []
   },
   "periodo_7d": {
-    "visitas": 47,
-    "clics": 108,
+    "visitas": 44,
+    "clics": 113,
     "ventas": 1,
     "tasa_conv": "0.9%",
     "total_ars": 8700,
-    "total_eventos": 424,
+    "total_eventos": 431,
     "por_fuente": {
       "google_ads": {
-        "visitas": 31,
-        "clics": 106,
+        "visitas": 32,
+        "clics": 111,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 16,
+        "visitas": 12,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
@@ -91,31 +91,31 @@
       },
       {
         "documento": "index",
-        "eventos": 198,
+        "eventos": 200,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 151,
+        "eventos": 153,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 52,
+        "eventos": 55,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 7,
+        "eventos": 8,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de compraventa de inmueble",
-        "eventos": 5,
+        "eventos": 4,
         "ventas": 0,
         "total_ars": 0
       },
@@ -386,18 +386,18 @@
   "embudo_eventos": {
     "ads_landing_view": 32,
     "scroll_75pct": 10,
-    "scroll_50pct": 9,
-    "preview_live_ok": 2,
     "page_view": 10,
+    "scroll_50pct": 7,
     "scroll_25pct": 8,
-    "cta_generador": 6,
-    "doc_selected": 4,
+    "cta_generador": 8,
+    "click_pagar": 1,
     "form_first_input": 1,
-    "click_residencial": 2,
-    "cta_doc_inline": 3,
-    "click_pagar": 1
+    "inicio_formulario": 1,
+    "preview_live_ok": 3,
+    "click_comercial": 2,
+    "doc_selected": 3
   },
-  "total_eventos": 88,
+  "total_eventos": 86,
   "funnel_doc": [
     {
       "label": "Visitas",
@@ -406,23 +406,23 @@
     },
     {
       "label": "Documento elegido",
-      "count": 9,
-      "drop_pct": 10
+      "count": 5,
+      "drop_pct": 50
     },
     {
       "label": "Inicio formulario",
-      "count": 1,
-      "drop_pct": 89
+      "count": 2,
+      "drop_pct": 60
     },
     {
       "label": "Preview live OK",
-      "count": 2,
+      "count": 3,
       "drop_pct": 0
     },
     {
       "label": "Pago iniciado",
       "count": 1,
-      "drop_pct": 50
+      "drop_pct": 67
     },
     {
       "label": "Venta confirmada",
@@ -455,28 +455,28 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 39,
+      "count": 38,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 9,
-      "drop_pct": 77
+      "count": 5,
+      "drop_pct": 87
     },
     {
       "label": "Ads inicio formulario",
-      "count": 4,
-      "drop_pct": 56
+      "count": 2,
+      "drop_pct": 60
     },
     {
       "label": "Ads preview OK",
-      "count": 2,
-      "drop_pct": 50
+      "count": 3,
+      "drop_pct": 0
     },
     {
       "label": "Ads inicio pago",
       "count": 1,
-      "drop_pct": 50
+      "drop_pct": 67
     },
     {
       "label": "Ads vuelta sin pago",
@@ -495,7 +495,7 @@
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
     "form_first_input": 1,
-    "doc_selected": 4
+    "doc_selected": 3
   },
   "cuello_botella": {
     "funnel": "doc",

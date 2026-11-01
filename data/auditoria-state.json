@@ -339,19 +339,24 @@
       "descripcion": "Aislar completamente el flujo de Ads del flujo orgánico. Crear una landing dedicada para tráfico pago con: precio visible arriba del fold, un solo CTA (WhatsApp o link MercadoPago nativo sin JS intermediario), sin preview step que genera drop del 46%. Corregir el frontend_error detectado en consola antes de invertir más en Ads. Analizar qué documento y fuente generó la venta directa y replicar ese flujo simplificado.",
       "fecha": "2026-10-29T17:19:57.110Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Publicar HOY una página mínima para tráfico Ads: (1) precio visible sin scroll, (2) botón único de WhatsApp con mensaje pre-cargado que incluya el documento de interés, (3) eliminar el paso de preview y el formulario JS del flujo Ads, (4) realizar una compra de prueba real para confirmar que el gateway de MercadoPago procesa correctamente. Si el gateway falla en prueba → escalar a soporte técnico antes de seguir invirtiendo en Ads.",
+      "fecha": "2026-11-01T17:01:21.265Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-10-31T15:58:03.015Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-01T17:01:21.265Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Aislar completamente el flujo de Ads del flujo orgánico. Crear una landing dedicada para tráfico pago con: precio visible arriba del fold, un solo CTA (WhatsApp o link MercadoPago nativo sin JS intermediario), sin preview step que genera drop del 46%. Corregir el frontend_error detectado en consola antes de invertir más en Ads. Analizar qué documento y fuente generó la venta directa y replicar ese flujo simplificado.",
-    "archivo": "index.html",
+    "descripcion": "Publicar HOY una página mínima para tráfico Ads: (1) precio visible sin scroll, (2) botón único de WhatsApp con mensaje pre-cargado que incluya el documento de interés, (3) eliminar el paso de preview y el formulario JS del flujo Ads, (4) realizar una compra de prueba real para confirmar que el gateway de MercadoPago procesa correctamente. Si el gateway falla en prueba → escalar a soporte técnico antes de seguir invirtiendo en Ads.",
+    "archivo": "landing_ads.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si se elimina el paso de preview y se simplifica el CTA en la landing de Ads → la tasa de inicio de pago sube y se registran ventas desde canal pago en <48h.",
-    "conv_base": 1,
-    "clics_base": 41
+    "hipotesis": "Si el usuario de Ads llega a una página sin fricción técnica con CTA de WhatsApp directo → al menos 1 contacto o venta en las próximas 48h.",
+    "conv_base": 0,
+    "clics_base": 19
   },
-  "cambio_activo_desde": "2026-10-29T17:19:57.110Z"
+  "cambio_activo_desde": "2026-11-01T17:01:21.265Z"
 }
