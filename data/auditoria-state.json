@@ -346,10 +346,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-01T17:01:21.265Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-02T20:39:04.440Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Publicar HOY una página mínima para tráfico Ads: (1) precio visible sin scroll, (2) botón único de WhatsApp con mensaje pre-cargado que incluya el documento de interés, (3) eliminar el paso de preview y el formulario JS del flujo Ads, (4) realizar una compra de prueba real para confirmar que el gateway de MercadoPago procesa correctamente. Si el gateway falla en prueba → escalar a soporte técnico antes de seguir invirtiendo en Ads.",
     "archivo": "landing_ads.html",

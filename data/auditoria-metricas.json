@@ -1,21 +1,27 @@
 {
-  "fecha": "2026-11-01T17:01:21.265Z",
+  "fecha": "2026-11-02T20:39:04.440Z",
   "periodo_48h": {
-    "visitas": 10,
-    "clics": 19,
+    "visitas": 11,
+    "clics": 31,
     "ventas": 0,
     "tasa_conv": "0.0%",
     "total_ars": 0,
-    "total_eventos": 86,
+    "total_eventos": 132,
     "por_fuente": {
       "google_ads": {
-        "visitas": 7,
-        "clics": 19,
+        "visitas": 10,
+        "clics": 31,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      "directo": {
+        "visitas": 0,
+        "clics": 0,
         "ventas": 0,
         "total_ars": 0
       },
       "DIRECTO": {
-        "visitas": 3,
+        "visitas": 1,
         "clics": 0,
         "ventas": 0,
         "total_ars": 0
@@ -24,19 +30,25 @@
     "top_documentos": [
       {
         "documento": "index",
-        "eventos": 42,
+        "eventos": 56,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 34,
+        "eventos": 55,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 7,
+        "eventos": 14,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Notificación MercadoPago",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
@@ -47,7 +59,19 @@
         "total_ars": 0
       },
       {
-        "documento": "planes",
+        "documento": "Contrato de alquiler temporario turístico",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 1,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de compraventa de inmueble",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -57,29 +81,29 @@
   },
   "periodo_7d": {
     "visitas": 44,
-    "clics": 113,
+    "clics": 111,
     "ventas": 1,
     "tasa_conv": "0.9%",
     "total_ars": 8700,
-    "total_eventos": 431,
+    "total_eventos": 439,
     "por_fuente": {
       "google_ads": {
-        "visitas": 32,
-        "clics": 111,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      "DIRECTO": {
-        "visitas": 12,
-        "clics": 0,
+        "visitas": 35,
+        "clics": 110,
         "ventas": 0,
         "total_ars": 0
       },
       "directo": {
         "visitas": 0,
-        "clics": 2,
+        "clics": 1,
         "ventas": 1,
         "total_ars": 8700
+      },
+      "DIRECTO": {
+        "visitas": 9,
+        "clics": 0,
+        "ventas": 0,
+        "total_ars": 0
       }
     },
     "top_documentos": [
@@ -97,48 +121,48 @@
       },
       {
         "documento": "contrato-alquiler",
-        "eventos": 153,
+        "eventos": 160,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de vivienda",
-        "eventos": 55,
+        "eventos": 57,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Contrato de alquiler de local comercial",
-        "eventos": 8,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "Contrato de compraventa de inmueble",
-        "eventos": 4,
-        "ventas": 0,
-        "total_ars": 0
-      },
-      {
-        "documento": "planes",
-        "eventos": 3,
+        "eventos": 7,
         "ventas": 0,
         "total_ars": 0
       },
       {
         "documento": "Notificación MercadoPago",
+        "eventos": 5,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "Contrato de compraventa de inmueble",
         "eventos": 3,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Error al verificar pago MercadoPago",
-        "eventos": 1,
+        "documento": "Contrato de alquiler temporario turístico",
+        "eventos": 2,
         "ventas": 0,
         "total_ars": 0
       },
       {
-        "documento": "Contrato de alquiler temporario turístico",
+        "documento": "Error al verificar pago MercadoPago",
+        "eventos": 2,
+        "ventas": 0,
+        "total_ars": 0
+      },
+      {
+        "documento": "planes",
         "eventos": 1,
         "ventas": 0,
         "total_ars": 0
@@ -384,45 +408,50 @@
     ]
   },
   "embudo_eventos": {
-    "ads_landing_view": 32,
-    "scroll_75pct": 10,
-    "page_view": 10,
-    "scroll_50pct": 7,
-    "scroll_25pct": 8,
-    "cta_generador": 8,
-    "click_pagar": 1,
-    "form_first_input": 1,
-    "inicio_formulario": 1,
+    "scroll_75pct": 12,
+    "doc_selected": 3,
+    "scroll_50pct": 12,
+    "click_residencial": 4,
+    "ads_landing_view": 50,
+    "payment_webhook_received": 2,
+    "error": 1,
+    "inicio_formulario": 6,
+    "scroll_25pct": 11,
+    "page_view": 11,
     "preview_live_ok": 3,
-    "click_comercial": 2,
-    "doc_selected": 3
+    "cta_doc_inline": 1,
+    "cta_generador": 8,
+    "click_pagar": 2,
+    "form_first_input": 3,
+    "click_temporario": 1,
+    "frontend_error": 2
   },
-  "total_eventos": 86,
+  "total_eventos": 132,
   "funnel_doc": [
     {
       "label": "Visitas",
-      "count": 10,
+      "count": 11,
       "drop_pct": 0
     },
     {
       "label": "Documento elegido",
-      "count": 5,
-      "drop_pct": 50
+      "count": 9,
+      "drop_pct": 18
     },
     {
       "label": "Inicio formulario",
-      "count": 2,
-      "drop_pct": 60
+      "count": 9,
+      "drop_pct": 0
     },
     {
       "label": "Preview live OK",
       "count": 3,
-      "drop_pct": 0
+      "drop_pct": 67
     },
     {
       "label": "Pago iniciado",
-      "count": 1,
-      "drop_pct": 67
+      "count": 2,
+      "drop_pct": 33
     },
     {
       "label": "Venta confirmada",
@@ -433,18 +462,18 @@
   "funnel_plan": [
     {
       "label": "Visitas planes",
-      "count": 1,
+      "count": 0,
       "drop_pct": 0
     },
     {
       "label": "Click plan",
-      "count": 1,
+      "count": 0,
       "drop_pct": 0
     },
     {
       "label": "Pago plan iniciado",
       "count": 0,
-      "drop_pct": 100
+      "drop_pct": 0
     },
     {
       "label": "Plan activo",
@@ -455,28 +484,28 @@
   "funnel_ads": [
     {
       "label": "Ads visitas",
-      "count": 38,
+      "count": 60,
       "drop_pct": 0
     },
     {
       "label": "Ads click documento",
-      "count": 5,
-      "drop_pct": 87
+      "count": 9,
+      "drop_pct": 85
     },
     {
       "label": "Ads inicio formulario",
-      "count": 2,
-      "drop_pct": 60
+      "count": 10,
+      "drop_pct": 0
     },
     {
       "label": "Ads preview OK",
       "count": 3,
-      "drop_pct": 0
+      "drop_pct": 70
     },
     {
       "label": "Ads inicio pago",
-      "count": 1,
-      "drop_pct": 67
+      "count": 2,
+      "drop_pct": 33
     },
     {
       "label": "Ads vuelta sin pago",
@@ -490,11 +519,11 @@
     }
   ],
   "alertas_tracking": {
-    "frontend_errors": 0,
+    "frontend_errors": 2,
     "preview_live_errors": 0,
     "payment_return_failed": 0,
     "obsolete_url_views": 0,
-    "form_first_input": 1,
+    "form_first_input": 3,
     "doc_selected": 3
   },
   "cuello_botella": {
@@ -505,8 +534,10 @@
   },
   "diagnostico": {
     "problemas": [
+      "Errores frontend detectados: 2 → revisar consola/compatibilidad mobile.",
+      "Muchos clics sin ventas → problema probable en precio, checkout o confianza.",
       "Tasa de conv muy baja (0.0%) → revisar copy, precio o flujo de pago",
-      "Fuente \"google_ads\": 19 clics y 0 ventas → landing o segmentación"
+      "Fuente \"google_ads\": 31 clics y 0 ventas → landing o segmentación"
     ],
     "oportunidades": [],
     "estado": "PROBLEMA"
