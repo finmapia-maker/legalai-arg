@@ -344,19 +344,24 @@
       "descripcion": "Publicar HOY una página mínima para tráfico Ads: (1) precio visible sin scroll, (2) botón único de WhatsApp con mensaje pre-cargado que incluya el documento de interés, (3) eliminar el paso de preview y el formulario JS del flujo Ads, (4) realizar una compra de prueba real para confirmar que el gateway de MercadoPago procesa correctamente. Si el gateway falla en prueba → escalar a soporte técnico antes de seguir invirtiendo en Ads.",
       "fecha": "2026-11-01T17:01:21.265Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar si la landing mínima Ads fue publicada realmente. Si sí: hacer compra de prueba real en MercadoPago ahora mismo y registrar resultado. Si falla → pausar Ads y escalar a soporte técnico de MercadoPago. Si la landing NO fue publicada → publicarla hoy con: precio visible sin scroll, botón WhatsApp con mensaje pre-cargado, sin preview ni formulario JS. No invertir más en Ads hasta confirmar que una compra de prueba pasa exitosamente.",
+      "fecha": "2026-11-03T18:15:21.811Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-02T20:39:04.440Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-03T18:15:21.811Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Publicar HOY una página mínima para tráfico Ads: (1) precio visible sin scroll, (2) botón único de WhatsApp con mensaje pre-cargado que incluya el documento de interés, (3) eliminar el paso de preview y el formulario JS del flujo Ads, (4) realizar una compra de prueba real para confirmar que el gateway de MercadoPago procesa correctamente. Si el gateway falla en prueba → escalar a soporte técnico antes de seguir invirtiendo en Ads.",
+    "descripcion": "Verificar si la landing mínima Ads fue publicada realmente. Si sí: hacer compra de prueba real en MercadoPago ahora mismo y registrar resultado. Si falla → pausar Ads y escalar a soporte técnico de MercadoPago. Si la landing NO fue publicada → publicarla hoy con: precio visible sin scroll, botón WhatsApp con mensaje pre-cargado, sin preview ni formulario JS. No invertir más en Ads hasta confirmar que una compra de prueba pasa exitosamente.",
     "archivo": "landing_ads.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el usuario de Ads llega a una página sin fricción técnica con CTA de WhatsApp directo → al menos 1 contacto o venta en las próximas 48h.",
+    "hipotesis": "Si el gateway procesa correctamente una compra de prueba → se recuperan conversiones en <48h. Si falla → el problema es técnico, no de copy ni precio.",
     "conv_base": 0,
-    "clics_base": 19
+    "clics_base": 41
   },
-  "cambio_activo_desde": "2026-11-01T17:01:21.265Z"
+  "cambio_activo_desde": "2026-11-03T18:15:21.811Z"
 }
