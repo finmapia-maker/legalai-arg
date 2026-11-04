@@ -351,10 +351,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-03T18:15:21.811Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-04T18:29:56.442Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar si la landing mínima Ads fue publicada realmente. Si sí: hacer compra de prueba real en MercadoPago ahora mismo y registrar resultado. Si falla → pausar Ads y escalar a soporte técnico de MercadoPago. Si la landing NO fue publicada → publicarla hoy con: precio visible sin scroll, botón WhatsApp con mensaje pre-cargado, sin preview ni formulario JS. No invertir más en Ads hasta confirmar que una compra de prueba pasa exitosamente.",
     "archivo": "landing_ads.html",
