@@ -349,19 +349,24 @@
       "descripcion": "Verificar si la landing mínima Ads fue publicada realmente. Si sí: hacer compra de prueba real en MercadoPago ahora mismo y registrar resultado. Si falla → pausar Ads y escalar a soporte técnico de MercadoPago. Si la landing NO fue publicada → publicarla hoy con: precio visible sin scroll, botón WhatsApp con mensaje pre-cargado, sin preview ni formulario JS. No invertir más en Ads hasta confirmar que una compra de prueba pasa exitosamente.",
       "fecha": "2026-11-03T18:15:21.811Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "PAUSAR Ads inmediatamente. Realizar compra de prueba real en MercadoPago con tarjeta de test y registrar el resultado exacto (error, código, pantalla). Si falla: escalar a soporte MercadoPago con evidencia. Si pasa: revisar si la URL de retorno post-pago no está trackeando la conversión (venta técnicamente ocurre pero no se registra). En paralelo, activar botón WhatsApp como único CTA alternativo hasta confirmar que el gateway funciona.",
+      "fecha": "2026-11-05T18:33:33.430Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-04T18:29:56.442Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-05T18:33:33.430Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Venta confirmada",
   "cambio_activo": {
-    "descripcion": "Verificar si la landing mínima Ads fue publicada realmente. Si sí: hacer compra de prueba real en MercadoPago ahora mismo y registrar resultado. Si falla → pausar Ads y escalar a soporte técnico de MercadoPago. Si la landing NO fue publicada → publicarla hoy con: precio visible sin scroll, botón WhatsApp con mensaje pre-cargado, sin preview ni formulario JS. No invertir más en Ads hasta confirmar que una compra de prueba pasa exitosamente.",
-    "archivo": "landing_ads.html",
+    "descripcion": "PAUSAR Ads inmediatamente. Realizar compra de prueba real en MercadoPago con tarjeta de test y registrar el resultado exacto (error, código, pantalla). Si falla: escalar a soporte MercadoPago con evidencia. Si pasa: revisar si la URL de retorno post-pago no está trackeando la conversión (venta técnicamente ocurre pero no se registra). En paralelo, activar botón WhatsApp como único CTA alternativo hasta confirmar que el gateway funciona.",
+    "archivo": null,
     "tipo": "flujo_pago",
-    "hipotesis": "Si el gateway procesa correctamente una compra de prueba → se recuperan conversiones en <48h. Si falla → el problema es técnico, no de copy ni precio.",
+    "hipotesis": "Si el checkout de MercadoPago está roto o la URL de retorno no registra la venta → 0 conversiones aunque haya intentos reales de pago",
     "conv_base": 0,
-    "clics_base": 41
+    "clics_base": 48
   },
-  "cambio_activo_desde": "2026-11-03T18:15:21.811Z"
+  "cambio_activo_desde": "2026-11-05T18:33:33.430Z"
 }
