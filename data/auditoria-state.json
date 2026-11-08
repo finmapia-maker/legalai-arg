@@ -354,19 +354,24 @@
       "descripcion": "PAUSAR Ads inmediatamente. Realizar compra de prueba real en MercadoPago con tarjeta de test y registrar el resultado exacto (error, código, pantalla). Si falla: escalar a soporte MercadoPago con evidencia. Si pasa: revisar si la URL de retorno post-pago no está trackeando la conversión (venta técnicamente ocurre pero no se registra). En paralelo, activar botón WhatsApp como único CTA alternativo hasta confirmar que el gateway funciona.",
       "fecha": "2026-11-05T18:33:33.430Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar integración MercadoPago actual por link de pago estático manual (MP Checkout Pro prearmado sin SDK JS) y agregar botón WhatsApp como CTA primario con precio y documento incluidos en el mensaje pre-cargado. Desactivar cualquier JS de preview o formulario dinámico que pueda estar bloqueando el redirect al gateway. Registrar en consola cada step: form_submit → mp_redirect → return_url. Verificar que return_url esté en whitelist de MercadoPago.",
+      "fecha": "2026-11-08T16:56:42.003Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-07T16:45:49.464Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-08T16:56:42.003Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado",
   "cambio_activo": {
-    "descripcion": "PAUSAR Ads inmediatamente. Realizar compra de prueba real en MercadoPago con tarjeta de test y registrar el resultado exacto (error, código, pantalla). Si falla: escalar a soporte MercadoPago con evidencia. Si pasa: revisar si la URL de retorno post-pago no está trackeando la conversión (venta técnicamente ocurre pero no se registra). En paralelo, activar botón WhatsApp como único CTA alternativo hasta confirmar que el gateway funciona.",
-    "archivo": null,
+    "descripcion": "Reemplazar integración MercadoPago actual por link de pago estático manual (MP Checkout Pro prearmado sin SDK JS) y agregar botón WhatsApp como CTA primario con precio y documento incluidos en el mensaje pre-cargado. Desactivar cualquier JS de preview o formulario dinámico que pueda estar bloqueando el redirect al gateway. Registrar en consola cada step: form_submit → mp_redirect → return_url. Verificar que return_url esté en whitelist de MercadoPago.",
+    "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el checkout de MercadoPago está roto o la URL de retorno no registra la venta → 0 conversiones aunque haya intentos reales de pago",
+    "hipotesis": "Si el SDK JS de MercadoPago está fallando silenciosamente o la return_url no está aprobada → el usuario llega al checkout pero no puede pagar o la venta no trackea; reemplazar por link estático elimina la fricción técnica y genera la primera venta confirmada",
     "conv_base": 0,
-    "clics_base": 48
+    "clics_base": 34
   },
-  "cambio_activo_desde": "2026-11-05T18:33:33.430Z"
+  "cambio_activo_desde": "2026-11-08T16:56:42.003Z"
 }
