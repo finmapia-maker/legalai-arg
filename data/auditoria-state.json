@@ -361,10 +361,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-08T16:56:42.003Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-09T21:19:37.605Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar integración MercadoPago actual por link de pago estático manual (MP Checkout Pro prearmado sin SDK JS) y agregar botón WhatsApp como CTA primario con precio y documento incluidos en el mensaje pre-cargado. Desactivar cualquier JS de preview o formulario dinámico que pueda estar bloqueando el redirect al gateway. Registrar en consola cada step: form_submit → mp_redirect → return_url. Verificar que return_url esté en whitelist de MercadoPago.",
     "archivo": "checkout.html",
