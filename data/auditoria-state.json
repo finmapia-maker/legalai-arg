@@ -366,10 +366,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-10T18:30:10.223Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-11T18:26:49.142Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "ACCIÓN TÉCNICA URGENTE: (1) Pausar Google Ads inmediatamente para no quemar más presupuesto con 0% conversión. (2) Eliminar completamente el botón/integración MercadoPago actual del front. (3) Reemplazar CTA de pago por botón WhatsApp hardcodeado con mensaje pre-cargado que incluya nombre del documento y precio, derivando al operador humano para cerrar la venta manualmente. (4) Paralelamente, en entorno de staging, hacer compra de prueba real con tarjeta de test de MP y capturar screenshot del resultado exacto. (5) Si el checkout de MP falla en staging: abrir ticket en soporte MP con evidencia. (6) No reactivar Ads hasta confirmar que al menos una transacción de prueba pasa end-to-end.",
     "archivo": "checkout.html",
