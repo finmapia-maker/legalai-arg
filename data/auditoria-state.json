@@ -364,19 +364,24 @@
       "descripcion": "ACCIÓN TÉCNICA URGENTE: (1) Pausar Google Ads inmediatamente para no quemar más presupuesto con 0% conversión. (2) Eliminar completamente el botón/integración MercadoPago actual del front. (3) Reemplazar CTA de pago por botón WhatsApp hardcodeado con mensaje pre-cargado que incluya nombre del documento y precio, derivando al operador humano para cerrar la venta manualmente. (4) Paralelamente, en entorno de staging, hacer compra de prueba real con tarjeta de test de MP y capturar screenshot del resultado exacto. (5) Si el checkout de MP falla en staging: abrir ticket en soporte MP con evidencia. (6) No reactivar Ads hasta confirmar que al menos una transacción de prueba pasa end-to-end.",
       "fecha": "2026-11-10T18:30:10.223Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "EJECUTAR YA: (1) Desactivar completamente SDK MercadoPago del frontend. (2) Reemplazar botón de pago por link de pago estático generado desde el panel de MP (sin JS, sin SDK, URL directa). (3) Poner botón WhatsApp como CTA primario visible con texto 'Comprar por WhatsApp' y mensaje pre-cargado con nombre + precio. (4) Revisar y corregir los 2 errores frontend en consola antes de reactivar cualquier tráfico pago. (5) Pausar Google Ads hasta confirmar una transacción real exitosa end-to-end. (6) Si el link estático de MP también falla en prueba con tarjeta de test real: abandonar MP temporalmente y operar 100% por WhatsApp hasta resolver.",
+      "fecha": "2026-11-12T18:43:54.186Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-11T18:26:49.142Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-12T18:43:54.186Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada (drop 100%)",
   "cambio_activo": {
-    "descripcion": "ACCIÓN TÉCNICA URGENTE: (1) Pausar Google Ads inmediatamente para no quemar más presupuesto con 0% conversión. (2) Eliminar completamente el botón/integración MercadoPago actual del front. (3) Reemplazar CTA de pago por botón WhatsApp hardcodeado con mensaje pre-cargado que incluya nombre del documento y precio, derivando al operador humano para cerrar la venta manualmente. (4) Paralelamente, en entorno de staging, hacer compra de prueba real con tarjeta de test de MP y capturar screenshot del resultado exacto. (5) Si el checkout de MP falla en staging: abrir ticket en soporte MP con evidencia. (6) No reactivar Ads hasta confirmar que al menos una transacción de prueba pasa end-to-end.",
+    "descripcion": "EJECUTAR YA: (1) Desactivar completamente SDK MercadoPago del frontend. (2) Reemplazar botón de pago por link de pago estático generado desde el panel de MP (sin JS, sin SDK, URL directa). (3) Poner botón WhatsApp como CTA primario visible con texto 'Comprar por WhatsApp' y mensaje pre-cargado con nombre + precio. (4) Revisar y corregir los 2 errores frontend en consola antes de reactivar cualquier tráfico pago. (5) Pausar Google Ads hasta confirmar una transacción real exitosa end-to-end. (6) Si el link estático de MP también falla en prueba con tarjeta de test real: abandonar MP temporalmente y operar 100% por WhatsApp hasta resolver.",
     "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si se elimina el checkout roto y se activa WhatsApp como único CTA → al menos 1 venta manual en 48h, validando que el problema es el gateway y no el producto/precio.",
+    "hipotesis": "Si se elimina el SDK roto y se usa link estático de MP + WhatsApp como fallback → al menos 1 venta real en las próximas 48h",
     "conv_base": 0,
-    "clics_base": 31
+    "clics_base": 67
   },
-  "cambio_activo_desde": "2026-11-10T18:30:10.223Z"
+  "cambio_activo_desde": "2026-11-12T18:43:54.186Z"
 }
