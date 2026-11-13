@@ -371,10 +371,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-12T18:43:54.186Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada (drop 100%)",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-13T18:25:47.810Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "EJECUTAR YA: (1) Desactivar completamente SDK MercadoPago del frontend. (2) Reemplazar botón de pago por link de pago estático generado desde el panel de MP (sin JS, sin SDK, URL directa). (3) Poner botón WhatsApp como CTA primario visible con texto 'Comprar por WhatsApp' y mensaje pre-cargado con nombre + precio. (4) Revisar y corregir los 2 errores frontend en consola antes de reactivar cualquier tráfico pago. (5) Pausar Google Ads hasta confirmar una transacción real exitosa end-to-end. (6) Si el link estático de MP también falla en prueba con tarjeta de test real: abandonar MP temporalmente y operar 100% por WhatsApp hasta resolver.",
     "archivo": "checkout.html",
