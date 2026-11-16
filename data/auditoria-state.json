@@ -376,10 +376,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-15T17:36:22.393Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago plan iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-16T20:50:29.519Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "El funnel de planes tiene 100% drop en pago iniciado: revisar si el botón de pago de planes apunta a un link válido o si hereda el SDK de MP roto. Reemplazar botón de pago de planes por link estático de MP o botón WhatsApp idéntico al que generó la única venta confirmada. Paralelamente, analizar qué documento/fuente cerró la venta directa y replicar ese flujo exacto en la landing de Ads antes de reactivar campañas.",
     "archivo": "planes.html",
