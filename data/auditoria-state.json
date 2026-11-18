@@ -381,10 +381,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-17T19:39:56.742Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Ads preview → pago / Planes pago iniciado",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-18T19:15:49.816Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "EJECUTAR INMEDIATAMENTE: (1) Identificar el documento y fuente exacta que generó la única venta confirmada (fuente 'directo') y replicar ese flujo completo como plantilla base. (2) En landing de Ads: reemplazar el flujo actual por el flujo exacto que convirtió, incluyendo mismo CTA, mismo botón de pago y mismo copy. (3) En planes.html: reemplazar botón de pago de planes por link estático de MP generado manualmente desde el panel (sin SDK, sin JS) o botón WhatsApp con mensaje pre-cargado. (4) Corregir el error frontend detectado en consola antes de reactivar Ads. (5) Hacer prueba end-to-end real (no test) del flujo de pago de planes antes de enviar tráfico. (6) Si en 48h el flujo de Ads replicado no genera al menos 1 venta adicional con mínimo 50 visitas: pausar Ads y operar 100% por tráfico directo/WhatsApp hasta optimizar landing.",
     "archivo": "index.html / planes.html",
