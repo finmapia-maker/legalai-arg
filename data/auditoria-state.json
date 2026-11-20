@@ -379,19 +379,24 @@
       "descripcion": "EJECUTAR INMEDIATAMENTE: (1) Identificar el documento y fuente exacta que generó la única venta confirmada (fuente 'directo') y replicar ese flujo completo como plantilla base. (2) En landing de Ads: reemplazar el flujo actual por el flujo exacto que convirtió, incluyendo mismo CTA, mismo botón de pago y mismo copy. (3) En planes.html: reemplazar botón de pago de planes por link estático de MP generado manualmente desde el panel (sin SDK, sin JS) o botón WhatsApp con mensaje pre-cargado. (4) Corregir el error frontend detectado en consola antes de reactivar Ads. (5) Hacer prueba end-to-end real (no test) del flujo de pago de planes antes de enviar tráfico. (6) Si en 48h el flujo de Ads replicado no genera al menos 1 venta adicional con mínimo 50 visitas: pausar Ads y operar 100% por tráfico directo/WhatsApp hasta optimizar landing.",
       "fecha": "2026-11-17T19:39:56.742Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar el flujo de preview/pago actual por un botón directo a link estático de MercadoPago (generado manualmente desde el panel, sin SDK ni JS dinámico). Eliminar la pantalla de preview intermedia que tiene 83% de abandono. El CTA post-formulario debe ir directo al link de pago sin pasos adicionales. Corregir el error frontend detectado en consola (frontend_errors:1) antes de cualquier otra acción.",
+      "fecha": "2026-11-20T18:59:26.181Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-19T19:23:24.609Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-20T18:59:26.181Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads preview OK → Ads inicio pago (83% drop)",
   "cambio_activo": {
-    "descripcion": "EJECUTAR INMEDIATAMENTE: (1) Identificar el documento y fuente exacta que generó la única venta confirmada (fuente 'directo') y replicar ese flujo completo como plantilla base. (2) En landing de Ads: reemplazar el flujo actual por el flujo exacto que convirtió, incluyendo mismo CTA, mismo botón de pago y mismo copy. (3) En planes.html: reemplazar botón de pago de planes por link estático de MP generado manualmente desde el panel (sin SDK, sin JS) o botón WhatsApp con mensaje pre-cargado. (4) Corregir el error frontend detectado en consola antes de reactivar Ads. (5) Hacer prueba end-to-end real (no test) del flujo de pago de planes antes de enviar tráfico. (6) Si en 48h el flujo de Ads replicado no genera al menos 1 venta adicional con mínimo 50 visitas: pausar Ads y operar 100% por tráfico directo/WhatsApp hasta optimizar landing.",
-    "archivo": "index.html / planes.html",
+    "descripcion": "Reemplazar el flujo de preview/pago actual por un botón directo a link estático de MercadoPago (generado manualmente desde el panel, sin SDK ni JS dinámico). Eliminar la pantalla de preview intermedia que tiene 83% de abandono. El CTA post-formulario debe ir directo al link de pago sin pasos adicionales. Corregir el error frontend detectado en consola (frontend_errors:1) antes de cualquier otra acción.",
+    "archivo": "index.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si se replica el flujo exacto que convirtió en tráfico directo hacia la landing de Ads y se corrige el botón de planes → al menos 1 venta adicional en 48h",
-    "conv_base": 1,
-    "clics_base": 55
+    "hipotesis": "Si se elimina la pantalla de preview y se usa link de pago estático sin JS → al menos 1 venta en las próximas 48h con el tráfico de Ads activo",
+    "conv_base": 0,
+    "clics_base": 42
   },
-  "cambio_activo_desde": "2026-11-17T19:39:56.742Z"
+  "cambio_activo_desde": "2026-11-20T18:59:26.181Z"
 }
