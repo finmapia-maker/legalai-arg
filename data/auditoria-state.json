@@ -384,19 +384,24 @@
       "descripcion": "Reemplazar el flujo de preview/pago actual por un botón directo a link estático de MercadoPago (generado manualmente desde el panel, sin SDK ni JS dinámico). Eliminar la pantalla de preview intermedia que tiene 83% de abandono. El CTA post-formulario debe ir directo al link de pago sin pasos adicionales. Corregir el error frontend detectado en consola (frontend_errors:1) antes de cualquier otra acción.",
       "fecha": "2026-11-20T18:59:26.181Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Verificar si el link estático de MercadoPago fue realmente implementado y es funcional. Hacer prueba end-to-end real con pago de $1 o monto mínimo. Si el link existe pero no convierte, reemplazarlo por botón WhatsApp con mensaje pre-cargado como único CTA de cierre. Corregir los 3 errores frontend activos que pueden estar bloqueando el render del botón de pago en mobile.",
+      "fecha": "2026-11-23T22:28:50.515Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-22T18:18:37.023Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-23T22:28:50.515Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Pago iniciado → Venta confirmada (drop 100%)",
   "cambio_activo": {
-    "descripcion": "Reemplazar el flujo de preview/pago actual por un botón directo a link estático de MercadoPago (generado manualmente desde el panel, sin SDK ni JS dinámico). Eliminar la pantalla de preview intermedia que tiene 83% de abandono. El CTA post-formulario debe ir directo al link de pago sin pasos adicionales. Corregir el error frontend detectado en consola (frontend_errors:1) antes de cualquier otra acción.",
-    "archivo": "index.html",
+    "descripcion": "Verificar si el link estático de MercadoPago fue realmente implementado y es funcional. Hacer prueba end-to-end real con pago de $1 o monto mínimo. Si el link existe pero no convierte, reemplazarlo por botón WhatsApp con mensaje pre-cargado como único CTA de cierre. Corregir los 3 errores frontend activos que pueden estar bloqueando el render del botón de pago en mobile.",
+    "archivo": "checkout.html o flujo post-formulario",
     "tipo": "flujo_pago",
-    "hipotesis": "Si se elimina la pantalla de preview y se usa link de pago estático sin JS → al menos 1 venta en las próximas 48h con el tráfico de Ads activo",
+    "hipotesis": "Si el checkout real es accesible y sin errores JS → al menos 1 venta en próximas 48h con tráfico actual",
     "conv_base": 0,
-    "clics_base": 42
+    "clics_base": 51
   },
-  "cambio_activo_desde": "2026-11-20T18:59:26.181Z"
+  "cambio_activo_desde": "2026-11-23T22:28:50.515Z"
 }
