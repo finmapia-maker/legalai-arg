@@ -391,10 +391,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-23T22:28:50.515Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Pago iniciado → Venta confirmada (drop 100%)",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-24T21:00:57.059Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Verificar si el link estático de MercadoPago fue realmente implementado y es funcional. Hacer prueba end-to-end real con pago de $1 o monto mínimo. Si el link existe pero no convierte, reemplazarlo por botón WhatsApp con mensaje pre-cargado como único CTA de cierre. Corregir los 3 errores frontend activos que pueden estar bloqueando el render del botón de pago en mobile.",
     "archivo": "checkout.html o flujo post-formulario",
