@@ -389,19 +389,24 @@
       "descripcion": "Verificar si el link estático de MercadoPago fue realmente implementado y es funcional. Hacer prueba end-to-end real con pago de $1 o monto mínimo. Si el link existe pero no convierte, reemplazarlo por botón WhatsApp con mensaje pre-cargado como único CTA de cierre. Corregir los 3 errores frontend activos que pueden estar bloqueando el render del botón de pago en mobile.",
       "fecha": "2026-11-23T22:28:50.515Z",
       "resultado_pendiente": true
+    },
+    {
+      "descripcion": "Reemplazar inmediatamente el botón/link de MercadoPago por un botón único de WhatsApp con mensaje pre-cargado que incluya el documento elegido y el precio. Eliminar la pantalla de preview intermedia. El flujo debe ser: formulario completado → botón WhatsApp → cierre manual. Paralelamente corregir el frontend_error:1 que puede estar bloqueando el render del CTA en mobile.",
+      "fecha": "2026-11-26T20:00:47.276Z",
+      "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "NO_CAMBIAR",
-  "fecha": "2026-11-25T20:23:47.936Z",
-  "ultima_prioridad": "baja",
-  "ultimo_embudo": null,
+  "ultima_decision": "PROPONER_CAMBIO",
+  "fecha": "2026-11-26T20:00:47.276Z",
+  "ultima_prioridad": "alta",
+  "ultimo_embudo": "Ads inicio pago → Ads venta",
   "cambio_activo": {
-    "descripcion": "Verificar si el link estático de MercadoPago fue realmente implementado y es funcional. Hacer prueba end-to-end real con pago de $1 o monto mínimo. Si el link existe pero no convierte, reemplazarlo por botón WhatsApp con mensaje pre-cargado como único CTA de cierre. Corregir los 3 errores frontend activos que pueden estar bloqueando el render del botón de pago en mobile.",
-    "archivo": "checkout.html o flujo post-formulario",
+    "descripcion": "Reemplazar inmediatamente el botón/link de MercadoPago por un botón único de WhatsApp con mensaje pre-cargado que incluya el documento elegido y el precio. Eliminar la pantalla de preview intermedia. El flujo debe ser: formulario completado → botón WhatsApp → cierre manual. Paralelamente corregir el frontend_error:1 que puede estar bloqueando el render del CTA en mobile.",
+    "archivo": "checkout.html",
     "tipo": "flujo_pago",
-    "hipotesis": "Si el checkout real es accesible y sin errores JS → al menos 1 venta en próximas 48h con tráfico actual",
+    "hipotesis": "Si se elimina la dependencia del link de MercadoPago y se reemplaza por cierre vía WhatsApp → al menos 1 venta en las próximas 48h con el volumen actual de tráfico (76 visitas Ads cada 48h).",
     "conv_base": 0,
-    "clics_base": 51
+    "clics_base": 69
   },
-  "cambio_activo_desde": "2026-11-23T22:28:50.515Z"
+  "cambio_activo_desde": "2026-11-26T20:00:47.276Z"
 }
