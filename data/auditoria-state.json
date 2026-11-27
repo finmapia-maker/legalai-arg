@@ -396,10 +396,10 @@
       "resultado_pendiente": true
     }
   ],
-  "ultima_decision": "PROPONER_CAMBIO",
-  "fecha": "2026-11-26T20:00:47.276Z",
-  "ultima_prioridad": "alta",
-  "ultimo_embudo": "Ads inicio pago → Ads venta",
+  "ultima_decision": "NO_CAMBIAR",
+  "fecha": "2026-11-27T19:49:43.209Z",
+  "ultima_prioridad": "baja",
+  "ultimo_embudo": null,
   "cambio_activo": {
     "descripcion": "Reemplazar inmediatamente el botón/link de MercadoPago por un botón único de WhatsApp con mensaje pre-cargado que incluya el documento elegido y el precio. Eliminar la pantalla de preview intermedia. El flujo debe ser: formulario completado → botón WhatsApp → cierre manual. Paralelamente corregir el frontend_error:1 que puede estar bloqueando el render del CTA en mobile.",
     "archivo": "checkout.html",
